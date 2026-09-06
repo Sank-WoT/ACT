@@ -7436,21 +7436,17 @@
   if (encOptSlide) {
     const panel = document.getElementById('encOptPanel');
     const fig = document.getElementById('encOptFig');
-    const figDisk = `<svg class="enc-opt-svg" viewBox="0 0 520 215" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="Схема оптического энкодера">
-<rect width="520" height="215" fill="#fafafa"/>
-<g class="enc-opt-hit" data-info="det" style="cursor:pointer">
-<rect x="246" y="6" width="28" height="16" rx="2" fill="#dbeafe" stroke="#1e40af" stroke-width="1.5"/>
-<line x1="274" y1="10" x2="392" y2="10" stroke="#1e40af" stroke-width="1.3"/>
-<line x1="274" y1="14" x2="392" y2="14" stroke="#1e40af" stroke-width="1.3"/>
-<line x1="274" y1="18" x2="392" y2="18" stroke="#1e40af" stroke-width="1.3"/>
-<text x="400" y="18" font-size="14" font-weight="700" fill="#1e40af">фотодетектор</text>
+    const figDisk = `<svg class="enc-opt-svg" viewBox="0 0 520 232" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="Схема оптического энкодера">
+<rect width="520" height="232" fill="#fafafa"/>
+<g class="enc-opt-hit" data-info="shaft" style="cursor:pointer">
+<rect x="18" y="93" width="132" height="14" rx="7" fill="#cbd5e1" stroke="#334155" stroke-width="1.5"/>
+<rect x="370" y="93" width="132" height="14" rx="7" fill="#cbd5e1" stroke="#334155" stroke-width="1.5"/>
+<text x="496" y="82" text-anchor="end" font-size="14" font-weight="700" fill="#334155">вал</text>
 </g>
 <g class="enc-opt-hit" data-info="disk" style="cursor:pointer">
 <ellipse cx="260" cy="100" rx="110" ry="68" fill="#f8fafc" stroke="#1e293b" stroke-width="1.8"/>
-<ellipse cx="260" cy="100" rx="90" ry="54" fill="none" stroke="#64748b" stroke-width="1.2"/>
-<ellipse cx="260" cy="100" rx="70" ry="40" fill="none" stroke="#64748b" stroke-width="1.2"/>
-<ellipse cx="260" cy="100" rx="50" ry="26" fill="none" stroke="#64748b" stroke-width="1.2"/>
-<g class="enc-anim-spin-ell" stroke="#1e293b" stroke-width="5" style="transform-origin:260px 100px">
+<ellipse cx="260" cy="100" rx="88" ry="52" fill="none" stroke="#94a3b8" stroke-width="1.1"/>
+<g class="enc-anim-spin-ell" stroke="#1e293b" stroke-width="5" stroke-linecap="butt">
 <line x1="260" y1="32" x2="260" y2="46"/>
 <line x1="328" y1="50" x2="316" y2="58"/>
 <line x1="364" y1="88" x2="348" y2="92"/>
@@ -7460,25 +7456,28 @@
 <line x1="156" y1="112" x2="172" y2="108"/>
 <line x1="180" y1="56" x2="192" y2="64"/>
 </g>
-<circle cx="260" cy="100" r="9" fill="#94a3b8" stroke="#334155" stroke-width="1.4"/>
-<text x="78" y="104" text-anchor="middle" font-size="15" font-weight="700" fill="#1e40af">диск</text>
+<circle cx="260" cy="100" r="10" fill="#94a3b8" stroke="#334155" stroke-width="1.4"/>
+<text x="128" y="72" text-anchor="end" font-size="15" font-weight="700" fill="#1e40af">диск</text>
 </g>
-<g class="enc-opt-hit" data-info="shaft" style="cursor:pointer">
-<rect x="28" y="92" width="464" height="16" rx="8" fill="#cbd5e1" stroke="#334155" stroke-width="1.5"/>
-<text x="470" y="84" text-anchor="end" font-size="14" font-weight="700" fill="#334155">вал</text>
+<g class="enc-opt-hit" data-info="det" style="cursor:pointer">
+<rect x="246" y="8" width="28" height="16" rx="2" fill="#dbeafe" stroke="#1e40af" stroke-width="1.5"/>
+<line x1="274" y1="12" x2="392" y2="12" stroke="#1e40af" stroke-width="1.3"/>
+<line x1="274" y1="16" x2="392" y2="16" stroke="#1e40af" stroke-width="1.3"/>
+<line x1="274" y1="20" x2="392" y2="20" stroke="#1e40af" stroke-width="1.3"/>
+<text x="400" y="20" font-size="14" font-weight="700" fill="#1e40af">фотодетектор</text>
 </g>
 <g class="enc-opt-hit" data-info="led" style="cursor:pointer">
-<circle cx="260" cy="188" r="10" fill="#fde68a" stroke="#b45309" stroke-width="1.5"/>
-<path d="M252 176 L260 164 L268 176" fill="none" stroke="#d97706" stroke-width="1.6"/>
-<text x="280" y="194" font-size="14" font-weight="700" fill="#b45309">светодиод</text>
+<circle cx="260" cy="190" r="10" fill="#fde68a" stroke="#b45309" stroke-width="1.5"/>
+<path d="M252 178 L260 168 L268 178" fill="none" stroke="#d97706" stroke-width="1.6"/>
+<text x="278" y="194" font-size="14" font-weight="700" fill="#b45309">светодиод</text>
 </g>
-<text x="260" y="212" text-anchor="middle" font-size="14" fill="#475569">свет через шкалу → импульсы на фотодетекторе</text>
+<text x="260" y="222" text-anchor="middle" font-size="14" fill="#475569">свет через шкалу → импульсы на фотодетекторе</text>
 </svg>`;
     const figWave = `<svg class="enc-opt-svg enc-opt-wave-anim" viewBox="0 0 520 248" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="Анимация формирования меандра">
 <rect width="520" height="248" fill="#fafafa"/>
-<text x="260" y="18" text-anchor="middle" font-size="13" font-weight="700" fill="#1e40af">диск крутится → свет прерывается → меандр</text>
+<text x="136" y="20" font-size="13" font-weight="700" fill="#1e40af">диск крутится → свет прерывается → меандр</text>
 <!-- rotating disk (side schematic) -->
-<g transform="translate(110 108)">
+<g transform="translate(110 112)">
   <circle r="62" fill="#f1f5f9" stroke="#1e293b" stroke-width="1.6"/>
   <g class="enc-anim-spin" transform-origin="0 0">
     <g stroke="#1e293b" stroke-width="7" stroke-linecap="butt">
@@ -7494,19 +7493,19 @@
     </g>
   </g>
   <circle r="14" fill="#94a3b8" stroke="#334155" stroke-width="1.3"/>
-  <text x="0" y="88" text-anchor="middle" font-size="12" fill="#475569">диск</text>
+  <text x="-78" y="5" text-anchor="middle" font-size="12" fill="#475569">диск</text>
 </g>
 <!-- LED + beam + detector -->
 <g class="enc-anim-led">
-  <circle cx="110" cy="200" r="10" fill="#fde68a" stroke="#b45309" stroke-width="1.5"/>
-  <text x="110" y="222" text-anchor="middle" font-size="11" fill="#b45309">LED</text>
+  <circle cx="110" cy="204" r="10" fill="#fde68a" stroke="#b45309" stroke-width="1.5"/>
+  <text x="126" y="208" font-size="11" fill="#b45309">LED</text>
 </g>
 <g class="enc-anim-beam">
-  <path d="M110 190 L110 170" stroke="#f59e0b" stroke-width="3" stroke-linecap="round" opacity="0.85"/>
-  <path d="M110 46 L110 28" stroke="#f59e0b" stroke-width="3" stroke-linecap="round" opacity="0.85"/>
+  <path d="M110 194 L110 174" stroke="#f59e0b" stroke-width="3" stroke-linecap="round" opacity="0.85"/>
+  <path d="M110 50 L110 30" stroke="#f59e0b" stroke-width="3" stroke-linecap="round" opacity="0.85"/>
 </g>
-<rect x="96" y="8" width="28" height="16" rx="2" fill="#dbeafe" stroke="#1e40af" stroke-width="1.4"/>
-<text x="110" y="20" text-anchor="middle" font-size="10" fill="#1e40af">фото</text>
+<rect x="96" y="10" width="28" height="16" rx="2" fill="#dbeafe" stroke="#1e40af" stroke-width="1.4"/>
+<text x="110" y="22" text-anchor="middle" font-size="10" fill="#1e40af">фото</text>
 <!-- waveforms -->
 <defs>
   <clipPath id="encWaveClipSine"><rect x="252" y="50" width="242" height="50"/></clipPath>
@@ -7821,7 +7820,6 @@ ${absDiskTracks(grayCodes, 'код Грея на диске', '#1e40af')}
     const fig = document.getElementById('encMagFig');
     const figMag = `<svg class="enc-mag-svg" viewBox="0 0 480 210" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="Магнитный энкодер">
 <rect width="480" height="210" fill="#fafafa"/>
-<text x="240" y="22" text-anchor="middle" font-size="13" font-weight="700" fill="#1e40af">магнитный энкодер</text>
 <rect x="40" y="92" width="200" height="18" rx="6" fill="#cbd5e1" stroke="#334155" stroke-width="1.4"/>
 <text x="140" y="84" text-anchor="middle" font-size="13" fill="#475569">вал</text>
 <g class="enc-mag-rotor" transform="translate(280 110)">
@@ -7845,7 +7843,6 @@ ${absDiskTracks(grayCodes, 'код Грея на диске', '#1e40af')}
 </svg>`;
     const figMr = `<svg class="enc-mag-svg" viewBox="0 0 480 210" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="Магниторезистивный энкодер">
 <rect width="480" height="210" fill="#fafafa"/>
-<text x="240" y="22" text-anchor="middle" font-size="13" font-weight="700" fill="#1e40af">магниторезистивный энкодер</text>
 <path d="M80 50 L80 170 L140 170 L140 130 L200 130 L200 170 L260 170 L260 50 L200 50 L200 90 L140 90 L140 50 Z" fill="none" stroke="#1e293b" stroke-width="2.2"/>
 <text x="70" y="115" text-anchor="end" font-size="16" font-weight="700" fill="#ef4444">N</text>
 <text x="270" y="115" font-size="16" font-weight="700" fill="#3b82f6">S</text>
