@@ -7821,7 +7821,7 @@ ${absDiskTracks(grayCodes, 'код Грея на диске', '#1e40af')}
     const fig = document.getElementById('encMagFig');
     const figMag = `<svg class="enc-mag-svg" viewBox="0 0 480 210" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="Магнитный энкодер">
 <rect width="480" height="210" fill="#fafafa"/>
-<text x="240" y="22" text-anchor="middle" font-size="13" font-weight="700" fill="#1e40af">рис. 2.27 — магнитный энкодер</text>
+<text x="240" y="22" text-anchor="middle" font-size="13" font-weight="700" fill="#1e40af">магнитный энкодер</text>
 <rect x="40" y="92" width="200" height="18" rx="6" fill="#cbd5e1" stroke="#334155" stroke-width="1.4"/>
 <text x="140" y="84" text-anchor="middle" font-size="13" fill="#475569">вал</text>
 <g class="enc-mag-rotor" transform="translate(280 110)">
@@ -7845,7 +7845,7 @@ ${absDiskTracks(grayCodes, 'код Грея на диске', '#1e40af')}
 </svg>`;
     const figMr = `<svg class="enc-mag-svg" viewBox="0 0 480 210" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="Магниторезистивный энкодер">
 <rect width="480" height="210" fill="#fafafa"/>
-<text x="240" y="22" text-anchor="middle" font-size="13" font-weight="700" fill="#1e40af">рис. 2.28 — магниторезистивный энкодер</text>
+<text x="240" y="22" text-anchor="middle" font-size="13" font-weight="700" fill="#1e40af">магниторезистивный энкодер</text>
 <path d="M80 50 L80 170 L140 170 L140 130 L200 130 L200 170 L260 170 L260 50 L200 50 L200 90 L140 90 L140 50 Z" fill="none" stroke="#1e293b" stroke-width="2.2"/>
 <text x="70" y="115" text-anchor="end" font-size="16" font-weight="700" fill="#ef4444">N</text>
 <text x="270" y="115" font-size="16" font-weight="700" fill="#3b82f6">S</text>
@@ -7865,12 +7865,12 @@ ${absDiskTracks(grayCodes, 'код Грея на диске', '#1e40af')}
     const info = {
       mag: {
         title: 'Магнитный энкодер',
-        html: '<p>На валу — магнит с чередующимися полюсами <strong>N/S</strong>, рядом — датчик Холла (рис. 2.27).</p><p>При вращении полюса проходят мимо сенсора: считают скорость и направление вращения. Конструкции без оптики — устойчивее к пыли и маслу.</p>',
+        html: '<p>На валу — магнит с чередующимися полюсами <strong>N/S</strong>, рядом — датчик Холла.</p><p>При вращении полюса проходят мимо сенсора: считают скорость и направление вращения. Конструкции без оптики — устойчивее к пыли и маслу.</p>',
         fig: figMag
       },
       mr: {
         title: 'Магниторезистивный',
-        html: '<p>Катушка закреплена на валу и находится в магнитном поле (рис. 2.28).</p><p>При повороте меняется ориентация витков относительно линий поля → меняются наводимая ЭДС и ток в зависимости от угла.</p>',
+        html: '<p>Катушка закреплена на валу и находится в магнитном поле.</p><p>При повороте меняется ориентация витков относительно линий поля → меняются наводимая ЭДС и ток в зависимости от угла.</p>',
         fig: figMr
       }
     };
