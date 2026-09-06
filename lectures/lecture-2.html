@@ -1,0 +1,1873 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="UTF-8"><title>Лекция 2</title>
+<link rel="stylesheet" href="../css/presentation.css"></head><body>
+<div class="deck">
+<section class="slide slide-title active"><span class="tag">Лекция 2</span>
+<h1>Электрические датчики физических величин и параметров ТП</h1>
+<p>Средства автоматизации и управления</p></section>
+
+<section class="slide slide-agenda"><h2>Содержание</h2><div class="slide-body"><ol>
+<li>Роль датчиков в АСУ</li><li>Цепочка в САУ</li><li>Определения. Датчик и сенсор</li>
+<li>Структурная схема ИП</li><li>Требования</li><li>Классификация</li><li>Электрические контакты</li><li>Контактные</li>
+<li>Реостатные и потенциометрические</li><li>Схема потенциометра</li>
+<li>Ламельный</li><li>Характеристики</li><li>Пьезоэлектрические</li><li>Тензометрические</li><li>Индуктивные</li>
+<li>Зависимость U<sub>н</sub>(δ)</li><li>Дифференциальный</li><li>Характеристика и погрешности</li>
+<li>Трансформаторные</li><li>Свойства трансформаторных</li><li>Ёмкостные</li>
+<li>Линейное перемещение</li><li>Угловое перемещение</li><li>Дифференциальный мост</li>
+<li>Резонансная схема</li><li>Применение ёмкостных</li>
+</ol></div></section>
+
+<section class="slide">
+<h2>Роль датчиков в АСУ</h2>
+<div class="slide-body asutp-interactive">
+<div class="asutp-main">
+<p class="asutp-hint">Датчик — первичное звено: измеряет состояние объекта</p>
+<div class="asutp-diagram-wrap" style="padding:0.65em 0.75em">
+<svg viewBox="0 0 560 100" style="width:100%;max-height:22vh" xmlns="http://www.w3.org/2000/svg" aria-label="Цепочка управления">
+  <defs><marker id="l2-arr" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#1e293b"/></marker></defs>
+  <rect x="8" y="22" width="96" height="52" fill="#fff" stroke="#1e293b" stroke-width="1.5"/>
+  <text x="56" y="53" text-anchor="middle" font-size="13" font-weight="700" fill="#0f172a">датчик</text>
+  <line x1="104" y1="48" x2="126" y2="48" stroke="#1e293b" stroke-width="1.5" marker-end="url(#l2-arr)"/>
+  <rect x="126" y="22" width="118" height="52" fill="#fff" stroke="#1e293b" stroke-width="1.5"/>
+  <text x="185" y="44" text-anchor="middle" font-size="12" font-weight="700" fill="#0f172a">устройство</text>
+  <text x="185" y="60" text-anchor="middle" font-size="12" font-weight="700" fill="#0f172a">управления</text>
+  <line x1="244" y1="48" x2="266" y2="48" stroke="#1e293b" stroke-width="1.5" marker-end="url(#l2-arr)"/>
+  <rect x="266" y="22" width="124" height="52" fill="#fff" stroke="#1e293b" stroke-width="1.5"/>
+  <text x="328" y="44" text-anchor="middle" font-size="12" font-weight="700" fill="#0f172a">исполнительный</text>
+  <text x="328" y="60" text-anchor="middle" font-size="12" font-weight="700" fill="#0f172a">механизм</text>
+  <line x1="390" y1="48" x2="412" y2="48" stroke="#1e293b" stroke-width="1.5" marker-end="url(#l2-arr)"/>
+  <rect x="412" y="22" width="140" height="52" fill="#fff" stroke="#1e293b" stroke-width="1.5"/>
+  <text x="482" y="44" text-anchor="middle" font-size="12" font-weight="700" fill="#0f172a">объект</text>
+  <text x="482" y="60" text-anchor="middle" font-size="12" font-weight="700" fill="#0f172a">управления</text>
+</svg>
+</div>
+<p style="margin:0.45em 0 0;font-size:0.92em;line-height:1.45">Автоматизация ТП требует <strong>измерений</strong> состояния устройств. Эту информацию дают <strong>датчики</strong> (измерительные преобразователи, сенсоры) — в САУ, АСУ, АСНИ.</p>
+</div>
+<aside class="asutp-panel">
+<h3>Где ещё нужны</h3>
+<p>Датчики используют в <strong>научно-исследовательских</strong> системах и экспериментах для регистрации параметров.</p>
+<p>Без измерения состояния объекта невозможны ни автоматическое регулирование, ни дистанционный контроль оператором.</p>
+<p>Датчик — <strong>первичное звено</strong>: он «видит» объект, всё остальное только обрабатывает и воздействует.</p>
+</aside>
+</div>
+</section>
+
+<section class="slide slide-sau-chain-interactive">
+<h2>Цепочка в САУ</h2>
+<div class="slide-body asutp-interactive">
+<div class="asutp-main">
+<p class="asutp-hint">Нажмите блок — замкнутый контур: уставка минус сигнал датчика</p>
+<div class="asutp-diagram-wrap">
+<svg class="sau-chain-svg" viewBox="0 0 560 200" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="Цепочка САУ">
+<defs><marker id="sau-arr" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#1e293b"/></marker></defs>
+<rect width="560" height="200" fill="#fafafa"/>
+<g class="scada-block" data-info="set" style="cursor:pointer">
+<rect x="8" y="28" width="88" height="52" fill="#fff" stroke="#1e293b" stroke-width="1.5"/>
+<text x="52" y="50" text-anchor="middle" font-size="13" font-weight="700" fill="#0f172a">уставка</text>
+<text x="52" y="68" text-anchor="middle" font-size="12" fill="#1e40af">Z</text>
+</g>
+<line x1="96" y1="54" x2="118" y2="54" stroke="#1e293b" stroke-width="1.5" marker-end="url(#sau-arr)"/>
+<g class="scada-block" data-info="cmp" style="cursor:pointer">
+<circle cx="148" cy="54" r="22" fill="#fff" stroke="#1e293b" stroke-width="1.6"/>
+<line x1="136" y1="54" x2="160" y2="54" stroke="#1e293b" stroke-width="1.3"/>
+<line x1="148" y1="42" x2="148" y2="66" stroke="#1e293b" stroke-width="1.3"/>
+<text x="148" y="92" text-anchor="middle" font-size="11" fill="#64748b">сравнение</text>
+</g>
+<line x1="170" y1="54" x2="198" y2="54" stroke="#1e293b" stroke-width="1.5" marker-end="url(#sau-arr)"/>
+<g class="scada-block" data-info="amp" style="cursor:pointer">
+<rect x="200" y="28" width="96" height="52" fill="#fff" stroke="#1e293b" stroke-width="1.5"/>
+<text x="248" y="50" text-anchor="middle" font-size="13" font-weight="700" fill="#0f172a">усилитель</text>
+<text x="248" y="68" text-anchor="middle" font-size="12" fill="#64748b">ошибки</text>
+</g>
+<line x1="296" y1="54" x2="318" y2="54" stroke="#1e293b" stroke-width="1.5" marker-end="url(#sau-arr)"/>
+<g class="scada-block" data-info="io" style="cursor:pointer">
+<rect x="320" y="28" width="88" height="52" fill="#fff" stroke="#1e293b" stroke-width="1.5"/>
+<text x="364" y="58" text-anchor="middle" font-size="14" font-weight="700" fill="#0f172a">ИО</text>
+</g>
+<line x1="408" y1="54" x2="430" y2="54" stroke="#1e293b" stroke-width="1.5" marker-end="url(#sau-arr)"/>
+<g class="scada-block" data-info="obj" style="cursor:pointer">
+<rect x="432" y="28" width="116" height="52" fill="#fff" stroke="#1e293b" stroke-width="1.5"/>
+<text x="490" y="50" text-anchor="middle" font-size="13" font-weight="700" fill="#0f172a">объект</text>
+<text x="490" y="68" text-anchor="middle" font-size="12" fill="#64748b">управления</text>
+</g>
+<path d="M490 80 V128 H248 V148" fill="none" stroke="#1e293b" stroke-width="1.5" marker-end="url(#sau-arr)"/>
+<g class="scada-block" data-info="sens" style="cursor:pointer">
+<rect x="196" y="148" width="104" height="40" fill="#fff" stroke="#1e293b" stroke-width="1.5"/>
+<text x="248" y="173" text-anchor="middle" font-size="13" font-weight="700" fill="#1e40af">датчик</text>
+</g>
+<path d="M196 168 H148 V76" fill="none" stroke="#1e293b" stroke-width="1.5" marker-end="url(#sau-arr)"/>
+<text x="168" y="124" font-size="12" fill="#1e40af">Y</text>
+<text x="280" y="18" font-size="12" fill="#64748b">прямая цепь</text>
+<text x="360" y="122" font-size="12" fill="#1e40af">обратная связь</text>
+</svg>
+</div>
+<div class="asutp-tabs">
+<button type="button" class="asutp-tab active" data-info="intro">Обзор</button>
+<button type="button" class="asutp-tab" data-info="sens">Датчик</button>
+<button type="button" class="asutp-tab" data-info="cmp">Сравнение</button>
+<button type="button" class="asutp-tab" data-info="amp">Усилитель</button>
+<button type="button" class="asutp-tab" data-info="io">ИО</button>
+</div>
+</div>
+<aside class="asutp-panel" id="sauChainPanel">
+<h3>Обзор</h3>
+<p>Сигнал датчика сравнивают с <strong>уставкой</strong>; разность усиливают и подают на <strong>исполнительный орган</strong>.</p>
+<p>Это замкнутый контур: объект → датчик → сравнение → воздействие снова на объект.</p>
+</aside>
+</div>
+</section>
+
+<section class="slide"><h2>Определения «датчик»</h2>
+<div class="slide-body slide-body-dense"><div class="grid-2">
+<div class="variant-mini"><h4>1. Чувствительный элемент</h4><p>Параметры среды → удобный сигнал (часто электрический).</p></div>
+<div class="variant-mini"><h4>2. Изделие</h4><p>Усиление, калибровка, АЦП, интерфейс. Элемент = <strong>сенсор</strong>.</p></div>
+<div class="variant-mini"><h4>3. Часть системы</h4><p>Набор измерительных преобразователей.</p></div>
+<div class="variant-mini"><h4>4. Модуль</h4><p>Обособленная часть с первичными преобразователями.</p></div>
+</div></div></section>
+
+<section class="slide">
+<h2>Преобразование сигнала</h2>
+<div class="slide-body slide-body-dense">
+<div class="highlight-box highlight-box-compact" style="margin:0">
+<strong>Задача датчика:</strong> преобразовать физическую величину <var>x</var> в сигнал <var>y</var>, удобный для передачи и обработки в САУ.
+</div>
+<div class="asutp-diagram-wrap" style="margin-top:0.5em;flex:0 0 auto;padding:0.65em 0.8em">
+<svg viewBox="0 0 700 120" style="width:100%;max-height:23vh" xmlns="http://www.w3.org/2000/svg" aria-label="Цепочка преобразования сигнала">
+  <defs>
+    <marker id="conv-arr" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 Z" fill="#1e293b"/>
+    </marker>
+  </defs>
+  <text x="42" y="51" text-anchor="middle" font-size="22" font-style="italic" font-weight="700" fill="#1e40af">x</text>
+  <text x="42" y="72" text-anchor="middle" font-size="10" fill="#64748b">физическая величина</text>
+  <line x1="76" y1="56" x2="120" y2="56" stroke="#1e293b" stroke-width="1.7" marker-end="url(#conv-arr)"/>
+  <rect x="122" y="28" width="170" height="56" rx="5" fill="#fff" stroke="#1e293b" stroke-width="1.6"/>
+  <text x="207" y="51" text-anchor="middle" font-size="13" font-weight="700" fill="#0f172a">чувствительный элемент</text>
+  <text x="207" y="69" text-anchor="middle" font-size="11" fill="#64748b">первичное преобразование</text>
+  <line x1="292" y1="56" x2="350" y2="56" stroke="#1e293b" stroke-width="1.7" marker-end="url(#conv-arr)"/>
+  <text x="321" y="45" text-anchor="middle" font-size="13" font-style="italic" fill="#1e40af">f(x)</text>
+  <rect x="352" y="28" width="170" height="56" rx="5" fill="#fff" stroke="#1e293b" stroke-width="1.6"/>
+  <text x="437" y="51" text-anchor="middle" font-size="13" font-weight="700" fill="#0f172a">обработка сигнала</text>
+  <text x="437" y="69" text-anchor="middle" font-size="11" fill="#64748b">усиление · фильтрация · АЦП</text>
+  <line x1="522" y1="56" x2="590" y2="56" stroke="#1e293b" stroke-width="1.7" marker-end="url(#conv-arr)"/>
+  <text x="556" y="45" text-anchor="middle" font-size="13" font-style="italic" fill="#1e40af">Z</text>
+  <text x="632" y="51" text-anchor="middle" font-size="22" font-style="italic" font-weight="700" fill="#1e40af">y</text>
+  <text x="632" y="72" text-anchor="middle" font-size="10" fill="#64748b">выходной сигнал</text>
+  <text x="350" y="108" text-anchor="middle" font-size="14" font-family="serif" font-weight="700" fill="#1e3a8a">y = Z(f(x))</text>
+</svg>
+</div>
+<div class="grid-3" style="margin-top:0.5em;gap:0.55em">
+<div class="variant-mini"><h4>Температура</h4><p><var>T</var> → ЭДС термопары → напряжение</p></div>
+<div class="variant-mini"><h4>Перемещение</h4><p><var>X</var> → сопротивление <var>R</var> → напряжение</p></div>
+<div class="variant-mini"><h4>Сила</h4><p><var>F</var> → заряд <var>q</var> → напряжение</p></div>
+</div>
+<p style="margin:0.4em 0 0;font-size:0.82em;color:#64748b;text-align:center">Погрешность и помехи на любом этапе искажают итоговый сигнал <var>y</var>.</p>
+</div>
+</section>
+
+<section class="slide slide-ip-interactive">
+<h2>Структурная схема датчика (ИП)</h2>
+<div class="slide-body asutp-interactive">
+<div class="asutp-main">
+<p class="asutp-hint">Нажмите на блок или стрелку схемы — справа появится пояснение</p>
+<div class="asutp-diagram-wrap">
+<svg class="asutp-svg" viewBox="0 0 520 220" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="Структурная схема ИП">
+  <g class="scada-block" data-info="ip">
+    <rect x="90" y="48" width="340" height="140" fill="#fff" stroke="#1e293b" stroke-width="1.6" stroke-dasharray="6 4" rx="2"/>
+    <text x="260" y="42" text-anchor="middle" font-size="15" font-weight="700" fill="#334155" pointer-events="none">ИП</text>
+  </g>
+  <g class="scada-block" data-info="x">
+    <rect x="8" y="98" width="82" height="40" fill="transparent"/>
+    <path d="M20 118 H88" fill="none" stroke="#1e293b" stroke-width="2" pointer-events="none"/>
+    <path d="M88 118 L78 112 L78 124 Z" fill="#1e293b" pointer-events="none"/>
+    <text x="40" y="108" font-size="16" font-weight="700" fill="#0f172a" pointer-events="none">X</text>
+  </g>
+  <g class="scada-block" data-info="che">
+    <rect x="110" y="88" width="90" height="60" fill="#fff" stroke="#1e293b" stroke-width="1.8"/>
+    <text x="155" y="124" text-anchor="middle" font-size="18" font-weight="700" fill="#0f172a" pointer-events="none">ЧЭ</text>
+  </g>
+  <g class="scada-block" data-info="noise">
+    <rect x="118" y="8" width="74" height="82" fill="transparent"/>
+    <path d="M155 28 V86" fill="none" stroke="#1e293b" stroke-width="1.6" pointer-events="none"/>
+    <path d="M155 86 L149 76 L161 76 Z" fill="#1e293b" pointer-events="none"/>
+    <text x="155" y="22" text-anchor="middle" font-size="14" fill="#64748b" pointer-events="none">Помехи</text>
+  </g>
+  <g class="scada-block" data-info="fx">
+    <rect x="188" y="98" width="72" height="40" fill="transparent"/>
+    <path d="M200 118 H248" fill="none" stroke="#1e293b" stroke-width="1.8" pointer-events="none"/>
+    <path d="M248 118 L238 112 L238 124 Z" fill="#1e293b" pointer-events="none"/>
+    <text x="224" y="108" text-anchor="middle" font-size="14" fill="#334155" pointer-events="none">F(x)</text>
+  </g>
+  <g class="scada-block" data-info="npu">
+    <rect x="250" y="88" width="100" height="60" fill="#fff" stroke="#1e293b" stroke-width="1.8"/>
+    <text x="300" y="124" text-anchor="middle" font-size="18" font-weight="700" fill="#0f172a" pointer-events="none">НП/У</text>
+  </g>
+  <g class="scada-block" data-info="y">
+    <rect x="338" y="98" width="150" height="40" fill="transparent"/>
+    <path d="M350 118 H480" fill="none" stroke="#1e293b" stroke-width="2" pointer-events="none"/>
+    <path d="M480 118 L470 112 L470 124 Z" fill="#1e293b" pointer-events="none"/>
+    <text x="455" y="108" font-size="16" font-weight="700" fill="#0f172a" pointer-events="none">Y</text>
+  </g>
+</svg>
+</div>
+<div class="asutp-tabs">
+<button type="button" class="asutp-tab active" data-info="intro">Обзор</button>
+<button type="button" class="asutp-tab" data-info="che">ЧЭ</button>
+<button type="button" class="asutp-tab" data-info="npu">НП/У</button>
+<button type="button" class="asutp-tab" data-info="noise">Помехи</button>
+<button type="button" class="asutp-tab" data-info="y">Выход Y</button>
+</div>
+</div>
+<aside class="asutp-panel" id="ipPanel">
+<h3>Обзор</h3>
+<p>Структурная схема показывает путь сигнала: <strong>X → ЧЭ → F(x) → НП/У → Y</strong>.</p>
+<p>Нажмите элемент схемы или кнопку внизу — здесь появится определение.</p>
+</aside>
+</div>
+</section>
+
+<section class="slide slide-req-interactive">
+<h2>Требования к датчикам</h2>
+<div class="slide-body asutp-interactive">
+<div class="asutp-main">
+<p class="asutp-hint">Нажмите требование — схема и пояснение меняются</p>
+<div class="asutp-diagram-wrap sensor-req-fig-wrap">
+<div id="sensorReqFig" class="sensor-req-fig"></div>
+</div>
+<div class="asutp-tabs">
+<button type="button" class="asutp-tab active" data-info="unique">1 · Однозначность</button>
+<button type="button" class="asutp-tab" data-info="select">2 · Избирательность</button>
+<button type="button" class="asutp-tab" data-info="linear">3 · Линейность</button>
+<button type="button" class="asutp-tab" data-info="sense">4 · Чувствительность</button>
+<button type="button" class="asutp-tab" data-info="direction">5 · Направленность</button>
+<button type="button" class="asutp-tab" data-info="speed">6 · Быстродействие</button>
+<button type="button" class="asutp-tab" data-info="resist">7 · Стойкость</button>
+</div>
+</div>
+<aside class="asutp-panel" id="sensorReqPanel">
+<h3>1. Однозначность</h3>
+<p>Каждому <var>X</var> — одно <var>Y</var>. Иначе контроллер не знает, какое состояние объекта.</p>
+</aside>
+</div>
+</section>
+
+<section class="slide slide-class-interactive">
+<h2>Классификация датчиков</h2>
+<div class="slide-body asutp-interactive">
+<div class="asutp-main">
+<p class="asutp-hint">Нажмите признак — справа примеры из этой лекции</p>
+<div class="class-axis-grid">
+<button type="button" class="class-axis-card active" data-info="out">
+<strong>По выходу</strong>
+<span>электрические · неэлектрические</span>
+</button>
+<button type="button" class="class-axis-card" data-info="energy">
+<strong>По энергии</strong>
+<span>генераторные · параметрические</span>
+</button>
+<button type="button" class="class-axis-card" data-info="meas">
+<strong>По величине</strong>
+<span>T · давление · перемещение · сила</span>
+</button>
+</div>
+<div class="asutp-diagram-wrap class-fig-wrap">
+<div id="classFig" class="class-fig"></div>
+</div>
+</div>
+<aside class="asutp-panel" id="classPanel">
+<h3>По выходу</h3>
+<p>Для АСУ удобны датчики с <strong>электрическим</strong> выходом: сигнал легко усиливать, передавать и обрабатывать.</p>
+</aside>
+</div>
+</section>
+
+<section class="slide slide-contact-pressure-interactive">
+<h2>Электрический контакт</h2>
+<div class="slide-body asutp-interactive">
+<div class="asutp-main">
+<div class="highlight-box highlight-box-compact contact-pressure-formula">
+<p><strong>Электрический контакт</strong> — соединение проводников, обеспечивающее прохождение тока.</p>
+<p class="contact-pressure-chain">Сила нажатия <var>F</var> ↑ → площадь касания ↑ → <var>R</var><sub>k</sub> ↓</p>
+</div>
+<div class="asutp-diagram-wrap">
+<svg class="contact-pressure-svg" viewBox="0 0 460 230" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="Влияние силы нажатия на контактное сопротивление">
+<rect width="460" height="230" fill="#fafafa"/>
+<path d="M100 48 H360" stroke="#1e293b" stroke-width="2"/>
+<rect x="155" y="48" width="150" height="34" fill="#e2e8f0" stroke="#1e293b" stroke-width="1.6"/>
+<text x="230" y="69" text-anchor="middle" font-size="11" fill="#334155">неподвижный контакт</text>
+<ellipse cx="230" cy="91" rx="48" ry="12" fill="#fbbf24" stroke="#92400e" stroke-width="1.6"/>
+<g class="contact-pressure-moving">
+<ellipse cx="230" cy="111" rx="48" ry="12" fill="#fbbf24" stroke="#92400e" stroke-width="1.6"/>
+<rect x="155" y="120" width="150" height="34" fill="#e2e8f0" stroke="#1e293b" stroke-width="1.6"/>
+<text x="230" y="141" text-anchor="middle" font-size="11" fill="#334155">подвижный контакт</text>
+</g>
+<g class="contact-pressure-spots" fill="#dc2626">
+<circle cx="206" cy="101" r="2.6"/>
+<circle cx="218" cy="101" r="2.6"/>
+<circle cx="230" cy="101" r="2.6"/>
+<circle cx="242" cy="101" r="2.6"/>
+<circle cx="254" cy="101" r="2.6"/>
+</g>
+<path class="contact-pressure-arrow" d="M230 202 V166" stroke="#1e293b" stroke-width="2.3"/>
+<path class="contact-pressure-head" d="M230 166 L223 177 L237 177 Z" fill="#1e293b"/>
+<text x="248" y="190" font-size="13" font-style="italic" font-weight="700" fill="#1e40af">F</text>
+<text class="contact-pressure-readout" x="230" y="220" text-anchor="middle" font-size="12" font-weight="700" fill="#1e40af">F = 55% · Rₖ ≈ 22 мОм</text>
+</svg>
+</div>
+<label class="contact-pressure-control">
+<span>сила нажатия <var>F</var></span>
+<input type="range" class="contact-pressure-range" min="0" max="100" value="55" aria-label="Сила нажатия контактов">
+<span class="contact-pressure-value">55%</span>
+</label>
+</div>
+<aside class="asutp-panel contact-pressure-panel">
+<h3>Почему возникает R<sub>k</sub></h3>
+<p>Поверхности выглядят гладкими, но ток проходит только через отдельные <strong>микропятна касания</strong> (красные точки).</p>
+<p>При увеличении силы <var>F</var> пятен становится больше, их площадь растёт — контактное сопротивление <var>R</var><sub>k</sub> уменьшается.</p>
+<p class="contact-pressure-live"><strong>Сейчас:</strong> среднее нажатие, устойчивый электрический контакт.</p>
+<div class="contact-kind-row">
+<span><strong>Дискретный:</strong> вкл / выкл</span>
+<span><strong>Скользящий:</strong> движок по дорожке</span>
+</div>
+</aside>
+</div>
+</section>
+
+<section class="slide slide-contact-type-interactive">
+<h2>Типы контактов</h2>
+<div class="slide-body asutp-interactive">
+<div class="asutp-main">
+<p class="asutp-hint">Двигайте ползунок или переключайте тип — схема оживает</p>
+<div class="asutp-diagram-wrap">
+<div id="contactTypeFig" class="contact-type-fig"></div>
+</div>
+<div class="contact-type-ctrl">
+<button type="button" class="contact-type-toggle">Покой</button>
+<label class="contact-type-slider">
+<span class="contact-type-ctrl-label">воздействие</span>
+<input type="range" class="contact-type-range" min="0" max="100" value="0" aria-label="Воздействие">
+<span class="contact-type-ctrl-val">0%</span>
+</label>
+</div>
+<div class="asutp-tabs">
+<button type="button" class="asutp-tab active" data-info="no">НО</button>
+<button type="button" class="asutp-tab" data-info="nc">НЗ</button>
+<button type="button" class="asutp-tab" data-info="co">Перекл.</button>
+<button type="button" class="asutp-tab" data-info="point">Форма</button>
+<button type="button" class="asutp-tab" data-info="ring">Кольцо</button>
+<button type="button" class="asutp-tab" data-info="slide">Скольжение</button>
+</div>
+</div>
+<aside class="asutp-panel" id="contactTypePanel">
+<h3>Замыкающий (НО)</h3>
+<p>В покое цепь разомкнута. При срабатывании замыкается.</p>
+</aside>
+</div>
+</section>
+
+<section class="slide slide-contact-const-interactive">
+<h2>Конструкция контактной пары</h2>
+<div class="slide-body asutp-interactive">
+<div class="asutp-main">
+<p class="asutp-hint">Нажмите узел схемы — неподвижный, подвижный, пружина, вывод или движок</p>
+<div class="asutp-diagram-wrap">
+<svg class="contact-const-svg" viewBox="0 0 480 220" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="Контактная пара">
+<rect width="480" height="220" fill="#fafafa"/>
+<g class="scada-block" data-info="fixed" style="cursor:pointer">
+<rect x="118" y="36" width="120" height="22" fill="#fff" stroke="#1e293b" stroke-width="1.6"/>
+<text x="178" y="52" text-anchor="middle" font-size="11" fill="#0f172a" pointer-events="none">неподвижный</text>
+</g>
+<g class="scada-block" data-info="move" style="cursor:pointer">
+<rect x="128" y="78" width="100" height="20" fill="#fff" stroke="#1e293b" stroke-width="1.6"/>
+<text x="178" y="92" text-anchor="middle" font-size="11" fill="#0f172a" pointer-events="none">подвижный</text>
+</g>
+<g class="scada-block" data-info="spring" style="cursor:pointer">
+<path d="M178 98 V108 M168 108 H188 M170 114 H186 M172 120 H184 M174 126 H182 M178 126 V142" fill="none" stroke="#1e293b" stroke-width="1.5"/>
+<text x="198" y="128" font-size="11" fill="#64748b" pointer-events="none">пружина</text>
+</g>
+<g class="scada-block" data-info="term" style="cursor:pointer">
+<line x1="118" y1="47" x2="72" y2="47" stroke="#1e293b" stroke-width="1.5"/>
+<line x1="128" y1="88" x2="72" y2="88" stroke="#1e293b" stroke-width="1.5"/>
+<circle cx="68" cy="47" r="5" fill="#fff" stroke="#1e293b" stroke-width="1.4"/>
+<circle cx="68" cy="88" r="5" fill="#fff" stroke="#1e293b" stroke-width="1.4"/>
+<text x="48" y="72" text-anchor="middle" font-size="11" fill="#64748b" pointer-events="none">выводы</text>
+</g>
+<g class="scada-block" data-info="wiper" style="cursor:pointer">
+<rect x="300" y="52" width="18" height="96" fill="#fff" stroke="#1e293b" stroke-width="1.5"/>
+<rect x="292" y="92" width="34" height="14" fill="#e2e8f0" stroke="#1e293b" stroke-width="1.4"/>
+<line x1="326" y1="99" x2="368" y2="99" stroke="#1e293b" stroke-width="1.4"/>
+<circle cx="372" cy="99" r="5" fill="#fff" stroke="#1e293b"/>
+<text x="354" y="48" text-anchor="middle" font-size="11" fill="#64748b" pointer-events="none">движок</text>
+<text x="354" y="168" text-anchor="middle" font-size="10" fill="#94a3b8" pointer-events="none">зона износа</text>
+<line x1="309" y1="150" x2="309" y2="158" stroke="#94a3b8" stroke-width="1"/>
+</g>
+<text x="178" y="198" text-anchor="middle" font-size="12" fill="#475569">размыкающая пара</text>
+<text x="354" y="198" text-anchor="middle" font-size="12" fill="#475569">скользящий контакт</text>
+</svg>
+</div>
+<div class="asutp-tabs">
+<button type="button" class="asutp-tab active" data-info="intro">Обзор</button>
+<button type="button" class="asutp-tab" data-info="fixed">Неподвижный</button>
+<button type="button" class="asutp-tab" data-info="move">Подвижный</button>
+<button type="button" class="asutp-tab" data-info="spring">Пружина</button>
+<button type="button" class="asutp-tab" data-info="wiper">Движок</button>
+</div>
+</div>
+<aside class="asutp-panel" id="contactConstPanel">
+<h3>Обзор</h3>
+<p>Слева — <strong>размыкающая пара</strong> (концевик, реле). Справа — <strong>скользящий</strong> контакт потенциометра.</p>
+<p>Нажмите элемент схемы или кнопку — здесь появится роль узла.</p>
+</aside>
+</div>
+</section>
+
+<section class="slide slide-contact-mode-interactive">
+<h2>Режимы работы контактов</h2>
+<div class="slide-body asutp-interactive">
+<div class="asutp-main">
+<p class="asutp-hint">Выберите режим — справа особенности для датчиков</p>
+<p class="contact-mode-live">Слаботочный: важны <var>R</var><sub>k</sub> и плёнка; дуга — у силовых контактов</p>
+<div class="app-purpose-grid contact-mode-grid">
+<button type="button" class="app-purpose-card active" data-info="low">Слаботочный</button>
+<button type="button" class="app-purpose-card" data-info="dc">Постоянный ток</button>
+<button type="button" class="app-purpose-card" data-info="ac">Переменный ток</button>
+<button type="button" class="app-purpose-card" data-info="slide">Скользящий</button>
+<button type="button" class="app-purpose-card" data-info="bounce">Дребезг</button>
+</div>
+</div>
+<aside class="asutp-panel" id="contactModePanel">
+<h3>Слаботочный</h3>
+<p>Токи датчиков малы. Главное — <strong>контактное сопротивление</strong> и плёнка, а не нагрев дугой.</p>
+<p><strong>Нагрев дугой</strong> — у силовых контактов: при размыкании большого тока вспыхивает плазма, металл подгорает.</p>
+<p>У датчика дуги почти нет. Окисел или грязь поднимают <var>R</var><sub>k</sub>: пара замкнута механически, а ПЛК видит «обрыв».</p>
+</aside>
+</div>
+</section>
+
+<section class="slide slide-rk-interactive">
+<h2>Контактное сопротивление</h2>
+<div class="slide-body asutp-interactive">
+<div class="asutp-main">
+<p class="asutp-hint">Двигайте ползунок — видно, из чего складывается <var>R</var><sub>k</sub></p>
+<div class="asutp-diagram-wrap">
+<div id="rkFig" class="rk-fig"></div>
+</div>
+<div class="contact-type-ctrl">
+<label class="contact-type-slider">
+<span class="contact-type-ctrl-label rk-ctrl-label">качество контакта</span>
+<input type="range" class="rk-range" min="0" max="100" value="45" aria-label="Параметр контакта">
+<span class="contact-type-ctrl-val rk-ctrl-val">45%</span>
+</label>
+</div>
+<div class="asutp-tabs">
+<button type="button" class="asutp-tab active" data-info="formula">Формула</button>
+<button type="button" class="asutp-tab" data-info="film">Плёнка</button>
+<button type="button" class="asutp-tab" data-info="spots">Пятна</button>
+<button type="button" class="asutp-tab" data-info="current">Ток</button>
+</div>
+</div>
+<aside class="asutp-panel" id="rkPanel">
+<h3>Два слагаемых</h3>
+<p><var>R</var><sub>k</sub> = <var>R</var><sub>пер</sub> + <var>R</var><sub>сж</sub>.</p>
+<p>Плёнка и пятна касания — не дуга.</p>
+</aside>
+</div>
+</section>
+
+<section class="slide slide-mat-interactive">
+<h2>Материалы контактов</h2>
+<div class="slide-body asutp-interactive">
+<div class="asutp-main">
+<p class="asutp-hint">Нажмите материал — где применяют и почему</p>
+<div class="asutp-diagram-wrap">
+<div id="matFig" class="rk-fig"></div>
+</div>
+<div class="asutp-tabs">
+<button type="button" class="asutp-tab active" data-info="ag">Ag</button>
+<button type="button" class="asutp-tab" data-info="cu">Cu · латунь</button>
+<button type="button" class="asutp-tab" data-info="graph">Графит</button>
+<button type="button" class="asutp-tab" data-info="pt">Pt · W</button>
+<button type="button" class="asutp-tab" data-info="wiper">Движок</button>
+</div>
+</div>
+<aside class="asutp-panel" id="matPanel">
+<h3>Серебро, сплавы Ag</h3>
+<p>Слаботочные пары датчиков и реле.</p>
+</aside>
+</div>
+</section>
+
+<section class="slide"><h2>Контактные датчики</h2>
+<div class="slide-body slide-body-dense">
+<p>Работают на постоянном и переменном токе; одно- и многопредельные. Скачкообразное изменение выхода при достижении порога (пример — реле).</p>
+<div class="grid-3">
+<div class="variant-mini"><h4>а) Концевые выключатели</h4><p>Крайние положения механизмов.</p></div>
+<div class="variant-mini"><h4>б) Контактные термометры</h4><p>Контроль температуры.</p></div>
+<div class="variant-mini"><h4>в) Электронные</h4><p>С электронной обработкой сигнала.</p></div>
+</div>
+<div class="grid-2" style="margin-top:0.4em">
+<div class="variant-mini"><h4>Преимущества</h4><p>Предельная простота; широкое применение в автоматике.</p></div>
+<div class="variant-mini"><h4>Недостатки</h4><p>Сложно вести непрерывный контроль; ограниченный ресурс контактной группы.</p></div>
+</div>
+</div></section>
+
+<section class="slide slide-contact-anim">
+<h2>Контактный датчик — принцип работы</h2>
+<div class="slide-body asutp-interactive">
+<div class="asutp-main">
+<p class="asutp-hint">Нажмите изделие, лампу или кнопку — штифт замыкает Б или М</p>
+<div class="asutp-diagram-wrap">
+<svg class="contact-anim-svg" viewBox="0 0 480 300" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="Анимация контактного датчика">
+<!-- guide -->
+<rect x="78" y="40" width="28" height="200" fill="#f8fafc" stroke="#94a3b8" stroke-width="1.2" stroke-dasharray="3 2"/>
+<!-- fixed contacts -->
+<g class="contact-hit" data-info="b" style="cursor:pointer">
+<circle cx="210" cy="75" r="8" fill="#fff" stroke="#1e293b" stroke-width="1.8"/>
+<text x="210" y="58" text-anchor="middle" font-size="11" fill="#64748b">контакт Б</text>
+</g>
+<g class="contact-hit" data-info="m" style="cursor:pointer">
+<circle cx="210" cy="130" r="8" fill="#fff" stroke="#1e293b" stroke-width="1.8"/>
+<text x="210" y="154" text-anchor="middle" font-size="11" fill="#64748b">контакт М</text>
+</g>
+<g class="lamp-b contact-hit" data-info="b" style="cursor:pointer">
+  <circle cx="320" cy="75" r="26" fill="#fbbf24" stroke="#d97706" stroke-width="1.8"/>
+  <text x="320" y="81" text-anchor="middle" font-size="18" font-weight="700" fill="#78350f">Б</text>
+</g>
+<g class="lamp-m contact-hit is-on" data-info="m" style="cursor:pointer">
+  <circle cx="320" cy="130" r="26" fill="#60a5fa" stroke="#2563eb" stroke-width="1.8"/>
+  <text x="320" y="136" text-anchor="middle" font-size="18" font-weight="700" fill="#1e3a8a">М</text>
+</g>
+<!-- wiring -->
+<path d="M218 75 H294" fill="none" stroke="#1e293b" stroke-width="1.4"/>
+<path d="M218 130 H294" fill="none" stroke="#1e293b" stroke-width="1.4"/>
+<path d="M346 75 H390 V270 H230" fill="none" stroke="#1e293b" stroke-width="1.3"/>
+<path d="M346 130 H372 V270" fill="none" stroke="#1e293b" stroke-width="1.3"/>
+<!-- bus always touches pin body -->
+<path d="M92 40 V240" fill="none" stroke="#1e293b" stroke-width="1.5"/>
+<path d="M92 240 H175 V261" fill="none" stroke="#1e293b" stroke-width="1.3"/>
+<circle cx="175" cy="270" r="10" fill="#fff" stroke="#1e293b" stroke-width="1.4"/><line x1="168" y1="263" x2="182" y2="277" stroke="#1e293b"/>
+<circle cx="230" cy="270" r="10" fill="#fff" stroke="#1e293b" stroke-width="1.4"/><line x1="223" y1="263" x2="237" y2="277" stroke="#1e293b"/>
+<!-- workpiece: top follows pin tip (low top=240, high top=185) -->
+<g class="contact-work contact-hit" data-info="toggle" style="cursor:pointer">
+  <rect class="contact-work-rect" x="48" y="240" width="88" height="28" fill="#cbd5e1" stroke="#1e293b" stroke-width="1.5"/>
+  <text class="work-label-m is-on" x="92" y="258" text-anchor="middle" font-size="12" fill="#334155">низкое</text>
+  <text class="work-label-b" x="92" y="230" text-anchor="middle" font-size="12" fill="#334155">высокое</text>
+</g>
+<g class="contact-mover contact-hit" data-info="toggle" style="cursor:pointer">
+  <rect x="82" y="130" width="20" height="110" fill="#f8fafc" stroke="#0f172a" stroke-width="1.6"/>
+  <path d="M102 130 H210" fill="none" stroke="#0f172a" stroke-width="3.2" stroke-linecap="square"/>
+  <circle cx="210" cy="130" r="6" fill="#0f172a"/>
+</g>
+<text class="status-m is-on" x="360" y="135" font-size="13" font-weight="700" fill="#1d4ed8">меньше → М</text>
+<text class="status-b" x="360" y="80" font-size="13" font-weight="700" fill="#b45309">больше → Б</text>
+</svg>
+</div>
+<div class="asutp-tabs">
+<button type="button" class="asutp-tab active" data-info="m">Низкое · М</button>
+<button type="button" class="asutp-tab" data-info="b">Высокое · Б</button>
+</div>
+</div>
+<aside class="asutp-panel" id="contactAnimPanel">
+<h3>Меньше · М</h3>
+<p>Изделие низкое. Штифт внизу, замкнут контакт <strong>М</strong>, горит лампа «меньше».</p>
+<p>Выход дискретный: только вкл/выкл, без непрерывного сигнала. Нажмите изделие или кнопку «Высокое».</p>
+</aside>
+</div>
+</section>
+<section class="slide slide-rheostat-interactive">
+<h2>Реостатные и потенциометрические датчики</h2>
+<div class="slide-body asutp-interactive">
+<div class="asutp-main">
+<p class="asutp-hint">Двигайте ползунок или перетаскивайте синий контакт — меняется R и U<sub>вых</sub></p>
+<div class="highlight-box highlight-box-compact" style="margin:0">
+<strong>R = ρ · l / S</strong> — сопротивление зависит от длины <strong>l</strong>, сечения <strong>S</strong> и материала (<strong>ρ</strong>). Скользящий контакт меняет, какая часть резистора «в работе».
+</div>
+<div class="grid-2 rheo-interactive-grid">
+<div class="variant-mini rheo-card">
+<h4>Реостатный</h4>
+<div class="card-illust rheo-illust">
+<svg class="rheo-demo-svg" viewBox="0 0 200 64" xmlns="http://www.w3.org/2000/svg" aria-label="Реостатный датчик">
+<rect class="rheo-track-inactive" x="24" y="28" width="152" height="10" rx="2" fill="#e2e8f0" stroke="#475569" stroke-width="1.3"/>
+<rect class="rheo-track-active" x="24" y="28" width="76" height="10" rx="2" fill="#64748b" stroke="#475569" stroke-width="1.3"/>
+<path d="M24 33 Q38 18 52 33 Q66 48 80 33 Q94 18 108 33 Q122 48 136 33 Q150 18 176 33" fill="none" stroke="#1e293b" stroke-width="1.5"/>
+<g class="rheo-wiper" transform="translate(100 0)" style="cursor:grab">
+<rect x="-4" y="16" width="8" height="34" rx="1" fill="#2563eb" stroke="#1e40af" stroke-width="1"/>
+</g>
+</svg>
+</div>
+<p class="rheo-svg-caption">скользящий контакт → меняет длину l</p>
+<p class="rheo-readout">R ≈ <strong class="rheo-r-pct">50</strong>% R<sub>max</sub></p>
+<p class="rheo-desc">Контакт связан с объектом. Сдвиг меняет <strong>R</strong> в цепи — на выходе меняется ток или падение напряжения.</p>
+</div>
+<div class="variant-mini rheo-card">
+<h4>Потенциометрический</h4>
+<div class="card-illust rheo-illust">
+<svg class="pot-demo-svg" viewBox="0 0 200 64" xmlns="http://www.w3.org/2000/svg" aria-label="Потенциометрический датчик">
+<rect x="92" y="6" width="16" height="48" fill="#fff" stroke="#1e293b" stroke-width="1.3"/>
+<rect class="pot-track-active" x="92" y="54" width="16" height="0" fill="#64748b" stroke="none"/>
+<path d="M44 8 H92 M44 52 H100" fill="none" stroke="#1e293b" stroke-width="1.2"/>
+<circle cx="40" cy="8" r="3" fill="#fff" stroke="#1e293b"/>
+<circle cx="40" cy="52" r="3" fill="#fff" stroke="#1e293b"/>
+<text x="28" y="10" font-size="8" fill="#64748b">Uпит</text>
+<path class="pot-wiper-lead" d="M108 54 H162 M100 52 H162" fill="none" stroke="#1e293b" stroke-width="1.2"/>
+<circle class="pot-out-top" cx="166" cy="54" r="3" fill="#fff" stroke="#1e293b"/>
+<circle cx="166" cy="52" r="3" fill="#fff" stroke="#1e293b"/>
+<text x="172" y="56" font-size="8" fill="#0f766e">Uвых</text>
+<g class="pot-wiper" style="cursor:grab">
+<path d="M108 54 L116 50 L116 58 Z" fill="#2563eb" stroke="#1e40af" stroke-width="0.6"/>
+<line x1="108" y1="54" x2="100" y2="54" stroke="#2563eb" stroke-width="2.2"/>
+</g>
+</svg>
+</div>
+<p class="rheo-svg-caption">делитель напряжения: Uвых ~ положению контакта</p>
+<p class="rheo-readout">U<sub>вых</sub> ≈ <strong class="pot-u-pct">50</strong>% U<sub>пит</sub></p>
+<p class="rheo-desc">Тот же резистор включён как <strong>делитель</strong>: с контакта снимают <strong>U<sub>вых</sub></strong>, пропорциональное перемещению.</p>
+</div>
+</div>
+<label class="rheo-slider-row">
+<span class="rheo-slider-label">Перемещение</span>
+<input type="range" class="rheo-range" min="0" max="100" value="50" step="1" aria-label="Положение скользящего контакта">
+<span class="rheo-slider-pct">50%</span>
+</label>
+</div>
+<aside class="asutp-panel" id="rheoPanel">
+<h3>Зачем это нужно</h3>
+<p><strong>1.</strong> Давление, уровень, расход часто сначала превращают в <strong>перемещение</strong> (мембрана, поплавок…).</p>
+<p><strong>2.</strong> Перемещение двигает контакт по резистору — сейчас задействовано <strong class="rheo-panel-pct">50</strong>% длины.</p>
+<p><strong>3.</strong> Реостат: меняется <strong>R</strong>; потенциометр: сразу получаем <strong>U<sub>вых</sub></strong> для САУ.</p>
+<p><strong>Отличие от контактных:</strong> сигнал <em>непрерывный</em>, а не только «вкл/выкл».</p>
+</aside>
+</div>
+</section>
+
+<section class="slide">
+<h2>Схема потенциометрического датчика</h2>
+<div class="slide-body asutp-interactive">
+<div class="asutp-main">
+<p class="asutp-hint">Делитель напряжения: скользящий контакт делит резистор → Uвых ~ перемещению</p>
+<div class="asutp-diagram-wrap">
+<svg class="contact-anim-svg" viewBox="0 0 480 280" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="Схема потенциометрического датчика">
+  <text x="70" y="28" text-anchor="middle" font-size="14" fill="#64748b">вход (Uпит)</text>
+  <text x="400" y="28" text-anchor="middle" font-size="14" fill="#64748b">выход (Uвых)</text>
+  <rect x="200" y="50" width="40" height="180" fill="#fff" stroke="#1e293b" stroke-width="2"/>
+  <path d="M210 62 V72 M230 72 V82 M210 82 V92 M230 92 V102 M210 102 V112 M230 112 V122 M210 122 V132 M230 132 V142 M210 142 V152 M230 152 V162 M210 162 V172 M230 172 V182 M210 182 V192 M230 192 V210" fill="none" stroke="#64748b" stroke-width="1.3"/>
+  <text x="220" y="248" text-anchor="middle" font-size="13" fill="#334155">резистор (обмотка)</text>
+  <circle cx="70" cy="50" r="7" fill="#fff" stroke="#1e293b" stroke-width="1.6"/>
+  <circle cx="70" cy="230" r="7" fill="#fff" stroke="#1e293b" stroke-width="1.6"/>
+  <path d="M77 50 H200" fill="none" stroke="#1e293b" stroke-width="1.6"/>
+  <path d="M77 230 H220" fill="none" stroke="#1e293b" stroke-width="1.6"/>
+  <path d="M220 230 H400" fill="none" stroke="#1e293b" stroke-width="1.6"/>
+  <circle cx="400" cy="140" r="7" fill="#fff" stroke="#1e293b" stroke-width="1.6"/>
+  <circle cx="400" cy="230" r="7" fill="#fff" stroke="#1e293b" stroke-width="1.6"/>
+  <g class="pot-wiper">
+    <animateTransform attributeName="transform" type="translate" values="0 50;0 0;0 -50;0 0;0 50" keyTimes="0;0.25;0.5;0.75;1" dur="6s" repeatCount="indefinite"/>
+    <path d="M240 140 H360" fill="none" stroke="#0f172a" stroke-width="2"/>
+    <path d="M240 140 L255 130 L255 150 Z" fill="#0f172a"/>
+    <path d="M360 140 H400" fill="none" stroke="#1e293b" stroke-width="1.6"/>
+    <text x="300" y="128" text-anchor="middle" font-size="13" font-weight="700" fill="#2563eb">скользящий контакт</text>
+  </g>
+  <path d="M175 90 V190" fill="none" stroke="#94a3b8" stroke-width="1.2"/>
+  <path d="M175 90 L170 100 L180 100 Z" fill="#94a3b8"/>
+  <path d="M175 190 L170 180 L180 180 Z" fill="#94a3b8"/>
+  <text x="155" y="145" text-anchor="middle" font-size="14" fill="#64748b">H</text>
+</svg>
+</div>
+</div>
+<aside class="asutp-panel">
+<h3>Как работает</h3>
+<p><strong>1.</strong> На весь резистор подают <strong>Uпит</strong> (слева).</p>
+<p><strong>2.</strong> Объект сдвигает <strong>скользящий контакт</strong> на величину <strong>H</strong>.</p>
+<p><strong>3.</strong> С контакта и нижнего вывода снимают <strong>Uвых</strong> — оно пропорционально H.</p>
+<p>Работает на постоянном и переменном токе. Это основная схема потенциометрического датчика.</p>
+</aside>
+</div>
+</section>
+<section class="slide">
+<h2>Ламельный потенциометр</h2>
+<div class="slide-body asutp-interactive">
+<div class="asutp-main">
+<p class="asutp-hint">Для грубых измерений: Uвых меняется ступенями</p>
+<div class="asutp-diagram-wrap">
+<svg class="contact-anim-svg" viewBox="0 0 440 260" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="Ламельный датчик">
+  <text x="90" y="24" text-anchor="middle" font-size="13" fill="#64748b">постоянные R</text>
+  <text x="220" y="24" text-anchor="middle" font-size="13" fill="#64748b">ламель</text>
+  <rect x="60" y="40" width="50" height="36" fill="#fff" stroke="#1e293b" stroke-width="1.6"/>
+  <rect x="60" y="90" width="50" height="36" fill="#fff" stroke="#1e293b" stroke-width="1.6"/>
+  <rect x="60" y="140" width="50" height="36" fill="#fff" stroke="#1e293b" stroke-width="1.6"/>
+  <text x="85" y="62" text-anchor="middle" font-size="14" fill="#475569">R</text>
+  <text x="85" y="112" text-anchor="middle" font-size="14" fill="#475569">R</text>
+  <text x="85" y="162" text-anchor="middle" font-size="14" fill="#475569">R</text>
+  <path d="M85 28 V40 M85 76 V90 M85 126 V140 M85 176 V210" fill="none" stroke="#1e293b" stroke-width="1.5"/>
+  <rect x="200" y="38" width="30" height="22" fill="#cbd5e1" stroke="#1e293b" stroke-width="1.3"/>
+  <rect x="200" y="62" width="30" height="18" fill="#fff" stroke="#1e293b" stroke-width="1.3"/>
+  <rect x="200" y="82" width="30" height="22" fill="#cbd5e1" stroke="#1e293b" stroke-width="1.3"/>
+  <rect x="200" y="106" width="30" height="18" fill="#fff" stroke="#1e293b" stroke-width="1.3"/>
+  <rect x="200" y="126" width="30" height="22" fill="#cbd5e1" stroke="#1e293b" stroke-width="1.3"/>
+  <rect x="200" y="150" width="30" height="18" fill="#fff" stroke="#1e293b" stroke-width="1.3"/>
+  <path d="M110 58 H200 M110 108 H200 M110 158 H200" fill="none" stroke="#1e293b" stroke-width="1.3"/>
+  <circle cx="85" cy="28" r="5" fill="#fff" stroke="#1e293b"/>
+  <circle cx="85" cy="210" r="5" fill="#fff" stroke="#1e293b"/>
+  <path d="M85 210 H360" fill="none" stroke="#1e293b" stroke-width="1.5"/>
+  <circle cx="360" cy="210" r="5" fill="#fff" stroke="#1e293b"/>
+  <circle cx="360" cy="120" r="5" fill="#fff" stroke="#1e293b"/>
+  <g class="lam-wiper">
+    <animateTransform attributeName="transform" type="translate" values="0 -36;0 -36;0 0;0 0;0 36;0 36;0 0;0 0;0 -36" keyTimes="0;0.12;0.25;0.37;0.5;0.62;0.75;0.87;1" dur="6s" calcMode="discrete" repeatCount="indefinite"/>
+    <path d="M230 120 H330" fill="none" stroke="#0f172a" stroke-width="2"/>
+    <path d="M230 120 L245 110 L245 130 Z" fill="#0f172a"/>
+    <path d="M330 120 H360" fill="none" stroke="#1e293b" stroke-width="1.5"/>
+    <line x1="250" y1="100" x2="250" y2="140" stroke="#64748b" stroke-width="1.3"/>
+    <path d="M250 94 L244 104 L256 104 Z" fill="#64748b"/>
+    <path d="M250 146 L244 136 L256 136 Z" fill="#64748b"/>
+    <text x="290" y="108" text-anchor="middle" font-size="12" fill="#2563eb">контакт</text>
+  </g>
+  <text x="215" y="188" font-size="12" fill="#64748b">серое — проводник</text>
+  <text x="215" y="205" font-size="12" fill="#64748b">белое — изоляция</text>
+  <text x="220" y="245" text-anchor="middle" font-size="14" fill="#334155">Uвых меняется скачками</text>
+</svg>
+</div>
+</div>
+<aside class="asutp-panel">
+<h3>Отличие</h3>
+<p>Постоянные резисторы припаяны к <strong>ламели</strong> — пластине с чередующимися проводящими и непроводящими полосами.</p>
+<p>Контакт перескакивает с секции на секцию → сигнал <strong>дискретный</strong> (ступенчатый).</p>
+<p>Применяют, когда не нужна высокая точность.</p>
+<p><strong>Ещё виды:</strong> проволочные (непрерывная обмотка) и с резистивным слоем.</p>
+</aside>
+</div>
+</section>
+
+<section class="slide slide-char-static">
+<h2>Устройство и статическая характеристика</h2>
+<div class="slide-body asutp-interactive">
+<div class="asutp-main">
+<p class="asutp-hint">Двигайте ползунок X — точка на обоих графиках покажет, как меняется r</p>
+<div class="highlight-box highlight-box-compact char-formula">
+<div class="char-formula-row">
+<div class="char-frac" aria-label="r делить на R">
+<span class="char-frac-part"><var>r</var></span>
+<span class="char-frac-bar"></span>
+<span class="char-frac-part"><var>R</var></span>
+</div>
+<span class="char-eq">=</span>
+<div class="char-frac" aria-label="X делить на l">
+<span class="char-frac-part"><var>X</var></span>
+<span class="char-frac-bar"></span>
+<span class="char-frac-part"><var>l</var></span>
+</div>
+<span class="char-formula-text">доля сопротивления = доля перемещения</span>
+</div>
+<dl class="char-formula-legend">
+<div><dt>R</dt><dd>вся обмотка</dd></div>
+<div><dt>r</dt><dd>рабочий участок</dd></div>
+<div><dt>l</dt><dd>длина обмотки</dd></div>
+<div><dt>X</dt><dd>перемещение</dd></div>
+</dl>
+</div>
+<div class="grid-2 char-graph-grid">
+<div class="variant-mini char-card">
+<h4>Нереверсивный</h4>
+<div class="char-graph-wrap">
+<svg class="char-nr-svg" viewBox="0 0 200 132" xmlns="http://www.w3.org/2000/svg" aria-label="Нереверсивная характеристика">
+<rect width="200" height="132" fill="#fafafa"/>
+<line x1="38" y1="108" x2="182" y2="108" stroke="#1e293b" stroke-width="1.4"/>
+<line x1="38" y1="108" x2="38" y2="28" stroke="#1e293b" stroke-width="1.4"/>
+<polygon points="182,108 176,105 176,111" fill="#1e293b"/>
+<polygon points="38,28 35,34 41,34" fill="#1e293b"/>
+<text x="186" y="112" font-size="11" fill="#334155">X</text>
+<text x="26" y="26" font-size="11" fill="#334155">r</text>
+<line x1="38" y1="108" x2="158" y2="38" stroke="#0f172a" stroke-width="2.2" stroke-linecap="round"/>
+<path d="M50 108 A12 12 0 0 0 48.3 102" fill="none" stroke="#fafafa" stroke-width="4" stroke-linecap="round"/>
+<path d="M50 108 A12 12 0 0 0 48.3 102" fill="none" stroke="#64748b" stroke-width="1.2" stroke-linecap="round"/>
+<text x="41" y="105" font-size="10" fill="#64748b">α</text>
+<g class="char-nr-proj">
+<line class="char-nr-dash-v" x1="110" y1="68" x2="110" y2="108" stroke="#94a3b8" stroke-width="1" stroke-dasharray="4 3"/>
+<line class="char-nr-dash-h" x1="38" y1="68" x2="110" y2="68" stroke="#94a3b8" stroke-width="1" stroke-dasharray="4 3"/>
+</g>
+<circle class="char-nr-point" cx="110" cy="68" r="5.5" fill="#2563eb" stroke="#fff" stroke-width="1.6"/>
+<text x="108" y="124" font-size="10" fill="#94a3b8">только I квадрант</text>
+</svg>
+</div>
+<p class="char-desc char-nr-desc">Линия только при X ≥ 0. <strong>Не реагирует</strong> на знак X (направление).</p>
+</div>
+<div class="variant-mini char-card">
+<h4>Реверсивный</h4>
+<div class="char-graph-wrap">
+<svg class="char-rev-svg" viewBox="0 0 200 132" xmlns="http://www.w3.org/2000/svg" aria-label="Реверсивная характеристика">
+<rect width="200" height="132" fill="#fafafa"/>
+<line x1="18" y1="72" x2="182" y2="72" stroke="#1e293b" stroke-width="1.4"/>
+<line x1="100" y1="118" x2="100" y2="18" stroke="#1e293b" stroke-width="1.4"/>
+<polygon points="182,72 176,69 176,75" fill="#1e293b"/>
+<polygon points="100,18 97,24 103,24" fill="#1e293b"/>
+<text x="186" y="76" font-size="11" fill="#334155">X</text>
+<text x="104" y="16" font-size="11" fill="#334155">r</text>
+<line x1="32" y1="112" x2="168" y2="32" stroke="#0f172a" stroke-width="2.2" stroke-linecap="round"/>
+<g class="char-rev-proj">
+<line class="char-rev-dash-v" x1="168" y1="32" x2="168" y2="72" stroke="#94a3b8" stroke-width="1" stroke-dasharray="4 3"/>
+<line class="char-rev-dash-h" x1="100" y1="32" x2="168" y2="32" stroke="#94a3b8" stroke-width="1" stroke-dasharray="4 3"/>
+</g>
+<circle class="char-rev-point" cx="168" cy="32" r="5.5" fill="#2563eb" stroke="#fff" stroke-width="1.6"/>
+<text x="108" y="124" font-size="10" fill="#94a3b8">I и III квадранты</text>
+</svg>
+</div>
+<p class="char-desc char-rev-desc">Линия через начало координат. <strong>Чувствителен</strong> к знаку X.</p>
+</div>
+</div>
+<label class="char-slider-row">
+<span class="char-slider-label">X</span>
+<input type="range" class="char-x-range" min="-100" max="100" value="60" step="1" aria-label="Перемещение X">
+<span class="char-x-readout">+60</span>
+</label>
+</div>
+<aside class="asutp-panel" id="charPanel">
+<h3>Точка на графике</h3>
+<p class="char-panel-values"><var>X</var> = <strong class="char-val-x">+60</strong><br>r<sub>нерев.</sub> = <strong class="char-val-nr">+60</strong> · r<sub>рев.</sub> = <strong class="char-val-r">+60</strong></p>
+<p class="char-panel-note">При X &gt; 0 оба датчика дают r &gt; 0 пропорционально X.</p>
+<p class="char-panel-divider">Из чего состоит</p>
+<p><strong>Каркас</strong> — непроводящий; обмотка из провода с большим <span class="math-sym">ρ</span> (константан, манганин; при высокой T — Fe–Ni–Cr).</p>
+<p><strong>Скользящий контакт</strong> — из более мягкого материала, чтобы не истирать обмотку.</p>
+<p><strong>Резистивный слой</strong> вместо провода → дешевле, свойства близкие.</p>
+<p>Наклон характеристики:</p>
+<div class="char-inline-formula"><span class="math-sym">α</span> = arctg <var>K</var></div>
+<p class="char-formula-hint"><var>K</var> — коэффициент преобразования</p>
+</aside>
+</div>
+</section>
+<section class="slide">
+<h2>Погрешности, плюсы и минусы</h2>
+<div class="slide-body slide-body-dense">
+<p>На статическую характеристику влияют:</p>
+<div class="grid-2" style="margin-top:0.35em">
+<div class="variant-mini"><h4>1. Зона нечувствительности</h4><p>Зависит от диаметра провода обмотки.</p></div>
+<div class="variant-mini"><h4>2. Неравномерность</h4><p>Разброс диаметра провода и шага намотки.</p></div>
+<div class="variant-mini"><h4>3. Люфт контакта</h4><p>Мёртвый ход подвижного (скользящего) контакта.</p></div>
+<div class="variant-mini"><h4>4. Ошибка от нагрузки</h4><p>Зависит от того, какая нагрузка подключена к выходу.</p></div>
+</div>
+<div class="grid-2" style="margin-top:0.45em">
+<div class="variant-mini"><h4>Достоинства</h4>
+<p>Простота; малые габариты и масса; высокая линейность; работа на постоянном и переменном токе.</p></div>
+<div class="variant-mini"><h4>Недостатки</h4>
+<p>Скользящий контакт (часто отказывает); ошибка под нагрузкой; малый коэффициент преобразования; высокий порог чувствительности; ВЧ-шум при движении контакта.</p></div>
+</div>
+</div>
+</section>
+
+<section class="slide slide-piezo-interactive">
+<h2>Пьезоэлектрические датчики</h2>
+<div class="slide-body asutp-interactive">
+<div class="asutp-main">
+<p class="asutp-hint">Двигайте <var>F</var> — видно сжатие кристалла, заряд <var>q</var> и напряжение <var>U</var></p>
+<div class="highlight-box highlight-box-compact piezo-formula-box">
+<div class="piezo-formula-header">
+<div class="piezo-formula-primary">
+<div class="piezo-formula-stack">
+<p class="piezo-formula-eq"><var>U</var> = <var>q</var> / <var>C</var></p>
+<p class="piezo-formula-eq"><var>S</var> = <var>n</var>·<var>K</var><sub>0</sub> / (<var>C</var><sub>вх</sub> + <var>n</var>·<var>C</var><sub>0</sub>)</p>
+</div>
+<p class="piezo-formula-note">деформация → заряд <var>q</var> → <var>U</var> = <var>q</var>/<var>C</var></p>
+</div>
+<button type="button" class="piezo-legend-toggle" aria-expanded="false" aria-controls="piezoLegend">
+<span>Обозначения</span>
+<span class="piezo-legend-chevron" aria-hidden="true">▾</span>
+</button>
+</div>
+<div class="piezo-legend-panel" id="piezoLegend" hidden>
+<div class="piezo-legend-cols">
+<ul class="piezo-legend-list">
+<li><span class="piezo-sym"><var>U</var></span><span class="piezo-desc">напряжение на электродах</span></li>
+<li><span class="piezo-sym"><var>q</var></span><span class="piezo-desc">заряд на обкладках</span></li>
+<li><span class="piezo-sym"><var>C</var></span><span class="piezo-desc">ёмкость между электродами</span></li>
+<li><span class="piezo-sym"><var>S</var></span><span class="piezo-desc">чувствительность Δ<var>U</var>/Δ<var>F</var></span></li>
+<li><span class="piezo-sym"><var>F</var></span><span class="piezo-desc">приложенная сила</span></li>
+</ul>
+<ul class="piezo-legend-list">
+<li><span class="piezo-sym"><var>n</var></span><span class="piezo-desc">число пьезопластин</span></li>
+<li><span class="piezo-sym"><var>K</var><sub>0</sub></span><span class="piezo-desc">пьезомодуль пластины</span></li>
+<li><span class="piezo-sym"><var>C</var><sub>вх</sub></span><span class="piezo-desc">ёмкость входа цепи</span></li>
+<li><span class="piezo-sym"><var>C</var><sub>0</sub></span><span class="piezo-desc">ёмкость одной пластины</span></li>
+<li><span class="piezo-sym">Δ<var>h</var></span><span class="piezo-desc">изменение высоты кристалла</span></li>
+</ul>
+</div>
+</div>
+</div>
+<div class="asutp-diagram-wrap">
+<svg class="piezo-svg" viewBox="0 0 500 200" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="Пьезоэффект">
+<rect class="piezo-rest-outline" x="145" y="54" width="170" height="70" fill="none" stroke="#94a3b8" stroke-width="1.2" stroke-dasharray="5 4" opacity="0"/>
+<rect class="piezo-electrode-bot" x="130" y="124" width="200" height="10" fill="#e2e8f0" stroke="#1e293b" stroke-width="1.4"/>
+<text class="piezo-label-bot" x="230" y="148" text-anchor="middle" font-size="10" fill="#64748b">электрод</text>
+<g class="piezo-block" data-info="crystal" style="cursor:pointer">
+<rect class="piezo-crystal" x="145" y="54" width="170" height="70" fill="#fef3c7" stroke="#1e293b" stroke-width="1.6"/>
+<text class="piezo-crystal-t1" x="230" y="84" text-anchor="middle" font-size="12" fill="#92400e">кристалл</text>
+<text class="piezo-crystal-t2" x="230" y="100" text-anchor="middle" font-size="11" fill="#92400e">пьезокерамика</text>
+</g>
+<g class="piezo-block" data-info="electrode" style="cursor:pointer">
+<rect class="piezo-electrode-top" x="130" y="44" width="200" height="10" fill="#e2e8f0" stroke="#1e293b" stroke-width="1.4"/>
+<text class="piezo-label-top" x="230" y="40" text-anchor="middle" font-size="10" fill="#64748b">электрод</text>
+<path class="piezo-c-bracket" d="M348 44 V124" fill="none" stroke="#94a3b8" stroke-width="1.2"/>
+<path class="piezo-c-bracket-ends" d="M342 44 H348 M342 124 H348" fill="none" stroke="#94a3b8" stroke-width="1.2"/>
+<text x="358" y="80" font-size="13" font-weight="700" fill="#1e40af">C</text>
+<text x="358" y="94" font-size="9" fill="#64748b">между</text>
+<text x="358" y="105" font-size="9" fill="#64748b">проводниками</text>
+</g>
+<g class="piezo-charges">
+<text class="piezo-ch-plus" x="56" y="50" text-anchor="middle" font-size="16" font-weight="700" fill="#94a3b8">+</text>
+<text class="piezo-ch-minus" x="56" y="132" text-anchor="middle" font-size="16" font-weight="700" fill="#94a3b8">−</text>
+<path class="piezo-lead-plus" d="M66 47 H130" stroke="#dc2626" stroke-width="1.4" opacity="0.35"/>
+<path class="piezo-lead-minus" d="M66 129 H130" stroke="#2563eb" stroke-width="1.4" opacity="0.35"/>
+</g>
+<g class="piezo-block" data-info="force" style="cursor:pointer">
+<g class="piezo-force-group">
+<path class="piezo-force-arrow" d="M108 14 V34" stroke="#1e293b" stroke-width="2.4"/>
+<path class="piezo-force-head" d="M108 34 L100 24 L116 24 Z" fill="#1e293b"/>
+</g>
+<text class="piezo-force-label" x="108" y="11" text-anchor="middle" font-size="11" fill="#334155">F ↓</text>
+</g>
+<text class="piezo-deform-readout" x="88" y="168" font-size="11" fill="#64748b">Δh = 0%</text>
+<text class="piezo-q-readout" x="230" y="168" text-anchor="middle" font-size="11" font-weight="600" fill="#475569">q ≈ 0 нКл</text>
+<text class="piezo-u-readout" x="372" y="168" text-anchor="end" font-size="12" font-weight="700" fill="#1e40af">U ≈ 0 мВ</text>
+</svg>
+</div>
+<div class="asutp-tabs">
+<button type="button" class="asutp-tab active" data-info="intro">Обзор</button>
+<button type="button" class="asutp-tab" data-info="direct">Прямой эффект</button>
+<button type="button" class="asutp-tab" data-info="inverse">Обратный</button>
+<button type="button" class="asutp-tab" data-info="apps">Применение</button>
+<button type="button" class="asutp-tab" data-info="materials">Материалы</button>
+</div>
+<div class="piezo-controls">
+<label class="piezo-ctrl">
+<span><var>F</var></span>
+<input type="range" class="piezo-f-range" min="0" max="100" value="0" aria-label="Сила F">
+<span class="piezo-f-val">0%</span>
+</label>
+<label class="piezo-ctrl">
+<span><var>n</var> пластин</span>
+<input type="range" class="piezo-n-range" min="1" max="5" value="1" step="1" aria-label="Число пластин">
+<span class="piezo-n-val">1</span>
+</label>
+<div class="piezo-mode-group" role="group" aria-label="Режим деформации">
+<button type="button" class="piezo-mode-btn active" data-mode="compress">Сжатие</button>
+<button type="button" class="piezo-mode-btn" data-mode="tension">Растяжение</button>
+</div>
+</div>
+</div>
+<aside class="asutp-panel" id="piezoPanel">
+<h3>Обзор</h3>
+<p>Пьезодатчик — <strong>генераторный</strong>: сигнал без внешнего питания. Как конденсатор: заряд <var>q</var> от деформации заряжает электроды до <var>U</var> = <var>q</var>/<var>C</var>, где <var>C</var> — <strong>ёмкость между проводниками</strong>.</p>
+<p>Заряд возникает <strong>там, где приложена сила</strong> → высокая избирательность.</p>
+<p>Двигайте <var>F</var> и переключайте сжатие/растяжение — меняется знак заряда и <var>U</var>.</p>
+</aside>
+</div>
+</section>
+
+<section class="slide slide-strain-interactive">
+<h2>Тензометрические датчики</h2>
+<div class="slide-body asutp-interactive">
+<div class="asutp-main">
+<p class="asutp-hint">Класс <strong>параметрических</strong> · деформация → изменение <var>R</var> · двигайте ползунок ε</p>
+<div class="highlight-box highlight-box-compact strain-formula-box">
+<div class="strain-formula-line">
+<span class="strain-formula-eq"><var>R</var> = <span class="math-sym">ρ</span> · <var>L</var> / <var>S</var></span>
+<span class="strain-formula-sep">·</span>
+<span class="strain-formula-eq"><var>k</var> = (Δ<var>R</var>/<var>R</var>) / (Δ<var>L</var>/<var>L</var>)</span>
+</div>
+<p class="strain-formula-note"><var>L</var>, <var>R</var> — длина и сопротивление в покое; <var>k</var> — коэффициент тензочувствительности (безразмерный)</p>
+</div>
+<div class="asutp-diagram-wrap">
+<svg class="strain-svg" viewBox="0 0 440 200" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="Тензорезистор">
+<rect class="strain-base" x="60" y="70" width="320" height="60" rx="4" fill="#f1f5f9" stroke="#1e293b" stroke-width="1.6"/>
+<g class="strain-grid">
+<path class="strain-wire" d="M80 100 H110 V82 H140 V118 H170 V82 H200 V118 H230 V82 H260 V118 H290 V82 H320 V118 H350 V100" fill="none" stroke="#b45309" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+<path class="strain-arrow-l" d="M30 100 H52" stroke="#1e293b" stroke-width="1.8"/>
+<path d="M52 100 L44 96 L44 104 Z" fill="#1e293b"/>
+<path class="strain-arrow-r" d="M388 100 H410" stroke="#1e293b" stroke-width="1.8"/>
+<path d="M388 100 L396 96 L396 104 Z" fill="#1e293b"/>
+<text class="strain-force-label" x="220" y="58" text-anchor="middle" font-size="12" fill="#334155">растяжение →</text>
+<circle class="strain-lead" cx="80" cy="100" r="4" fill="#fff" stroke="#1e293b"/>
+<circle class="strain-lead" cx="350" cy="100" r="4" fill="#fff" stroke="#1e293b"/>
+<text x="220" y="168" text-anchor="middle" font-size="12" fill="#475569">тензорезистор на основе (подложка + проводник)</text>
+<text class="strain-r-readout" x="220" y="188" text-anchor="middle" font-size="13" font-weight="700" fill="#1e40af">R ≈ 120 Ом (+2.0%)</text>
+</svg>
+</div>
+<div class="asutp-tabs">
+<button type="button" class="asutp-tab active" data-info="intro">Обзор</button>
+<button type="button" class="asutp-tab" data-info="principle">Принцип</button>
+<button type="button" class="asutp-tab" data-info="k">Коэфф. k</button>
+<button type="button" class="asutp-tab" data-info="types">Конструкции</button>
+<button type="button" class="asutp-tab" data-info="apps">Применение</button>
+<button type="button" class="asutp-tab" data-info="pros">Достоинства</button>
+<button type="button" class="asutp-tab" data-info="specs">Параметры</button>
+</div>
+<div class="strain-controls">
+<label class="strain-ctrl">
+<span>деформация ε</span>
+<input type="range" class="strain-e-range" min="-100" max="100" value="20" aria-label="Деформация">
+<span class="strain-e-val">+0.20%</span>
+</label>
+<button type="button" class="strain-mode-btn active" data-k="2">k = +2 (сталь)</button>
+<button type="button" class="strain-mode-btn" data-k="-1">k = −1</button>
+</div>
+</div>
+<aside class="asutp-panel" id="strainPanel">
+<h3>Обзор</h3>
+<p><strong>Тензодатчик</strong> измеряет деформацию объекта и исследует его поведение под механическими воздействиями.</p>
+<p>Это <strong>резистивный элемент</strong>: при растяжении или сжатии меняется <var>R</var>. Класс — <strong>параметрические</strong> датчики.</p>
+<p>Двигайте ε — меняется длина решётки и сопротивление на схеме.</p>
+</aside>
+</div>
+</section>
+
+<section class="slide slide-inductive-interactive">
+<h2>Индуктивные датчики</h2>
+<div class="slide-body asutp-interactive">
+<div class="asutp-main">
+<div class="highlight-box highlight-box-compact ind-formula-box">
+<div class="ind-formula-line">
+<span class="ind-formula-eq"><var>I</var> = <var>U</var> / √(<var>r</var><sub>д</sub>² + (<var>ω</var><var>L</var>)²)</span>
+<span class="ind-formula-sep">·</span>
+<span class="ind-formula-eq"><var>L</var> ~ 1 / <var>R</var><sub>м</sub></span>
+</div>
+<p class="ind-formula-note"><var>r</var><sub>д</sub> — активное сопротивление обмотки; <var>R</var><sub>м</sub> ~ δ/<var>S</var><sub>ст</sub> (отн. ед.)</p>
+<p class="ind-formula-chain">δ ↑ → <var>R</var><sub>м</sub> ↑ → <var>L</var> ↓ → <var>I</var> ↑</p>
+<p class="ind-effect-live"></p>
+</div>
+<div class="asutp-diagram-wrap">
+<svg class="ind-svg" viewBox="0 0 460 215" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="Индуктивный датчик">
+<rect width="460" height="215" fill="#fafafa"/>
+<g class="ind-flux" opacity="0.45">
+<path d="M152 90 C118 108 118 132 152 148" fill="none" stroke="#94a3b8" stroke-width="1.1" stroke-dasharray="4 3"/>
+<path d="M248 90 C282 108 282 132 248 148" fill="none" stroke="#94a3b8" stroke-width="1.1" stroke-dasharray="4 3"/>
+<path class="ind-flux-bot" d="M152 148 C118 166 118 190 152 168" fill="none" stroke="#94a3b8" stroke-width="1.1" stroke-dasharray="4 3"/>
+<path class="ind-flux-bot-r" d="M248 148 C282 166 282 190 248 168" fill="none" stroke="#94a3b8" stroke-width="1.1" stroke-dasharray="4 3"/>
+</g>
+<g class="ind-block" data-info="core" style="cursor:pointer">
+<path d="M110 50 H290 V90 H250 V148 H150 V90 H110 Z" fill="#fff" stroke="#1e293b" stroke-width="2"/>
+<line x1="96" y1="100" x2="108" y2="100" stroke="#cbd5e1" stroke-width="1"/>
+<text x="88" y="104" font-size="12" font-weight="700" fill="#1e40af">2</text>
+<text x="312" y="105" font-size="11" fill="#64748b">сердечник</text>
+</g>
+<g class="ind-block" data-info="coil" style="cursor:pointer">
+<ellipse cx="200" cy="44" rx="46" ry="11" fill="none" stroke="#b45309" stroke-width="2"/>
+<ellipse cx="200" cy="54" rx="46" ry="11" fill="none" stroke="#b45309" stroke-width="2"/>
+<path d="M154 44 V54 M246 44 V54" stroke="#b45309" stroke-width="1.2"/>
+<circle cx="154" cy="49" r="3.5" fill="#fff" stroke="#1e293b"/>
+<circle cx="246" cy="49" r="3.5" fill="#fff" stroke="#1e293b"/>
+<line x1="96" y1="49" x2="152" y2="49" stroke="#cbd5e1" stroke-width="1"/>
+<text x="88" y="53" font-size="12" font-weight="700" fill="#1e40af">1</text>
+<text x="262" y="46" font-size="10" fill="#64748b">~U</text>
+<text x="262" y="57" font-size="9" fill="#94a3b8">перем.</text>
+</g>
+<g class="ind-armature-wrap">
+<rect class="ind-armature" x="145" y="168" width="110" height="26" rx="2" fill="#e2e8f0" stroke="#1e293b" stroke-width="1.8"/>
+<line class="ind-lead-arm" x1="96" y1="181" x2="142" y2="181" stroke="#cbd5e1" stroke-width="1"/>
+<text class="ind-num-arm" x="88" y="185" font-size="12" font-weight="700" fill="#1e40af">3</text>
+<text class="ind-lbl-arm" x="312" y="185" font-size="11" fill="#64748b">якорь</text>
+</g>
+<g class="ind-gap-dim">
+<line class="ind-gap-line" x1="292" y1="148" x2="292" y2="168" stroke="#64748b" stroke-width="1.2"/>
+<line class="ind-gap-tick-top" x1="286" y1="148" x2="298" y2="148" stroke="#64748b" stroke-width="1.2"/>
+<line class="ind-gap-tick-bot" x1="286" y1="168" x2="298" y2="168" stroke="#64748b" stroke-width="1.2"/>
+<text class="ind-gap-label" x="304" y="161" font-size="13" font-weight="700" fill="#1e40af">δ</text>
+</g>
+<text class="ind-readout" x="230" y="208" text-anchor="middle" font-size="12" font-weight="700" fill="#1e40af">δ = 2.0 мм · L ≈ 12 мГн · I ≈ 48 мА</text>
+</svg>
+</div>
+<div class="asutp-tabs">
+<button type="button" class="asutp-tab active" data-info="intro">Обзор</button>
+<button type="button" class="asutp-tab" data-info="principle">Принцип</button>
+<button type="button" class="asutp-tab" data-info="formula">Формула</button>
+<button type="button" class="asutp-tab" data-info="parts">Части</button>
+</div>
+<div class="ind-controls">
+<label class="ind-ctrl">
+<span>зазор δ</span>
+<input type="range" class="ind-d-range" min="0" max="100" value="50" aria-label="Воздушный зазор">
+<span class="ind-d-val">2.0 мм</span>
+</label>
+<button type="button" class="ind-mode-btn active" data-mode="vertical">По δ (вертикально)</button>
+<button type="button" class="ind-mode-btn" data-mode="horizontal">По S (горизонтально)</button>
+</div>
+</div>
+<aside class="asutp-panel" id="indPanel">
+<h3>Обзор</h3>
+<p><strong>Индуктивный датчик</strong> — безконтактное измерение перемещения деталей машин, механизмов, роботов.</p>
+<p><strong>Цепочка:</strong> зазор δ → магнитное сопротивление <var>R</var><sub>м</sub> → индуктивность <var>L</var> → ток <var>I</var> в обмотке.</p>
+<p class="ind-effect-live"></p>
+<p>Двигайте ползунок δ — на схеме меняется зазор, внизу обновляются <var>L</var> и <var>I</var>.</p>
+</aside>
+</div>
+</section>
+
+<section class="slide slide-ind-char-interactive">
+<h2>Зависимость напряжения на нагрузке от зазора</h2>
+<div class="slide-body asutp-interactive">
+<div class="asutp-main">
+<p class="asutp-hint">Двигайте δ или нажмите график — синяя полоса это рабочий линейный участок</p>
+<div class="asutp-diagram-wrap ind-char-graph-wrap">
+<svg class="ind-char-svg" viewBox="0 0 452 216" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="ΔUн от δ" style="cursor:crosshair">
+<rect width="452" height="216" fill="#fafafa"/>
+<rect class="ind-char-lin-zone" x="110" y="36" width="188" height="152" fill="#dbeafe" opacity="0.4"/>
+<text class="ind-char-zone-label" x="204" y="50" text-anchor="middle" font-size="10" fill="#2563eb">линейный участок</text>
+<line class="ind-char-lin-left" x1="110" y1="36" x2="110" y2="188" stroke="#3b82f6" stroke-width="1" stroke-dasharray="5 4"/>
+<line class="ind-char-lin-right" x1="298" y1="36" x2="298" y2="188" stroke="#3b82f6" stroke-width="1" stroke-dasharray="5 4"/>
+<line class="ind-char-tangent" x1="110" y1="166" x2="298" y2="54" stroke="#94a3b8" stroke-width="1.2" stroke-dasharray="4 3"/>
+<path class="ind-char-curve" d="" fill="none" stroke="#1e40af" stroke-width="2.2"/>
+<line x1="56" y1="188" x2="400" y2="188" stroke="#1e293b" stroke-width="1.4"/>
+<line x1="56" y1="188" x2="56" y2="28" stroke="#1e293b" stroke-width="1.4"/>
+<polygon points="400,188 392,184 392,192" fill="#1e293b"/>
+<polygon points="56,28 52,36 60,36" fill="#1e293b"/>
+<text x="408" y="208" font-size="12" fill="#475569">δ, мм</text>
+<text x="8" y="20" font-size="13" fill="#475569">ΔUн, %</text>
+<g class="ind-char-ticks" font-size="10" fill="#64748b"></g>
+<circle class="ind-char-point" cx="190" cy="110" r="5" fill="#2563eb" stroke="#fff" stroke-width="1.5"/>
+<text class="ind-char-readout" x="248" y="20" text-anchor="middle" font-size="12" font-weight="700" fill="#1e40af">δ = 2.0 мм · ΔUн ≈ 45%</text>
+</svg>
+</div>
+<div class="asutp-tabs">
+<button type="button" class="asutp-tab active" data-info="intro">Обзор</button>
+<button type="button" class="asutp-tab" data-info="linear">Линейный участок</button>
+<button type="button" class="asutp-tab" data-info="cons">Недостатки</button>
+</div>
+<div class="ind-char-controls">
+<label class="ind-char-ctrl">
+<span>зазор δ</span>
+<input type="range" class="ind-char-d-range" min="0" max="100" value="45" aria-label="Зазор δ">
+<span class="ind-char-d-val">2.0 мм</span>
+<span class="ind-char-zone-hint">линейный участок</span>
+</label>
+</div>
+</div>
+<aside class="asutp-panel" id="indCharPanel">
+<h3>Обзор</h3>
+<p>Зависимость <strong>изменения напряжения на нагрузке</strong> Δ<var>U</var><sub>н</sub> от величины воздушного зазора δ.</p>
+<p>В рабочем диапазоне (между пунктирными линиями) характеристика близка к прямой — это удобно для измерения перемещения.</p>
+<p>Двигайте δ или нажмите график — точка показывает положение на характеристике.</p>
+</aside>
+</div>
+</section>
+
+<section class="slide slide-ind-diff-interactive">
+<h2>Дифференциальный индуктивный датчик</h2>
+<div class="slide-body asutp-interactive">
+<div class="asutp-main">
+<p class="asutp-hint">Двигайте якорь или нажмите узел — мост сравнивает два зазора</p>
+<div class="asutp-diagram-wrap">
+<svg class="ind-diff-svg" viewBox="0 0 520 232" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="Дифференциальный датчик">
+<rect width="520" height="232" fill="#fafafa"/>
+<path d="M156 46 H48 V94" fill="none" stroke="#94a3b8" stroke-width="1.3"/>
+<path d="M156 166 H48 V130" fill="none" stroke="#94a3b8" stroke-width="1.3"/>
+<path d="M324 46 H424 V36" fill="none" stroke="#94a3b8" stroke-width="1.3"/>
+<path d="M324 166 H372" fill="none" stroke="#94a3b8" stroke-width="1.3"/>
+<g class="ind-diff-block" data-info="coil1" style="cursor:pointer">
+<ellipse cx="240" cy="24" rx="38" ry="9" fill="none" stroke="#b45309" stroke-width="1.7"/>
+<text x="286" y="28" font-size="13" font-weight="700" fill="#1e40af">3′</text>
+</g>
+<g class="ind-diff-block" data-info="core1" style="cursor:pointer">
+<path d="M156 34 H324 V58 H288 V76 H192 V58 H156 Z" fill="#fff" stroke="#1e293b" stroke-width="1.7"/>
+<text x="240" y="52" text-anchor="middle" font-size="13" font-weight="700" fill="#1e40af">1′</text>
+</g>
+<g class="ind-diff-arm-g" data-info="armature" style="cursor:pointer">
+<rect class="ind-diff-arm" x="192" y="96" width="96" height="22" rx="2" fill="#e2e8f0" stroke="#1e293b" stroke-width="1.5"/>
+<text x="240" y="111" text-anchor="middle" font-size="13" font-weight="700" fill="#1e40af">2</text>
+</g>
+<g class="ind-diff-block" data-info="core2" style="cursor:pointer">
+<path d="M156 156 H192 V138 H288 V156 H324 V180 H156 Z" fill="#fff" stroke="#1e293b" stroke-width="1.7"/>
+<text x="240" y="170" text-anchor="middle" font-size="13" font-weight="700" fill="#1e40af">1</text>
+</g>
+<g class="ind-diff-block" data-info="coil2" style="cursor:pointer">
+<ellipse cx="240" cy="198" rx="38" ry="9" fill="none" stroke="#b45309" stroke-width="1.7"/>
+<text x="286" y="202" font-size="13" font-weight="700" fill="#1e40af">3</text>
+</g>
+<g class="ind-diff-gap-p">
+<line class="ind-diff-gap-p-line" x1="302" y1="76" x2="302" y2="96" stroke="#64748b" stroke-width="1.15"/>
+<line class="ind-diff-gap-p-a" x1="296" y1="76" x2="308" y2="76" stroke="#64748b" stroke-width="1.15"/>
+<line class="ind-diff-gap-p-b" x1="296" y1="96" x2="308" y2="96" stroke="#64748b" stroke-width="1.15"/>
+<text class="ind-diff-dprime" x="314" y="90" font-size="13" font-weight="700" fill="#1e40af">δ′</text>
+</g>
+<g class="ind-diff-gap-d">
+<line class="ind-diff-gap-d-line" x1="302" y1="118" x2="302" y2="138" stroke="#64748b" stroke-width="1.15"/>
+<line class="ind-diff-gap-d-a" x1="296" y1="118" x2="308" y2="118" stroke="#64748b" stroke-width="1.15"/>
+<line class="ind-diff-gap-d-b" x1="296" y1="138" x2="308" y2="138" stroke="#64748b" stroke-width="1.15"/>
+<text class="ind-diff-d" x="314" y="132" font-size="13" font-weight="700" fill="#1e40af">δ</text>
+</g>
+<g class="ind-diff-block" data-info="meter" style="cursor:pointer">
+<circle cx="48" cy="112" r="18" fill="#fff" stroke="#1e293b" stroke-width="1.5"/>
+<path class="ind-diff-meter-needle" d="M48 112 L48 98" stroke="#dc2626" stroke-width="1.6"/>
+<text x="48" y="86" text-anchor="middle" font-size="13" font-weight="700" fill="#1e40af">4</text>
+<text x="48" y="148" text-anchor="middle" font-size="11" fill="#64748b">прибор</text>
+</g>
+<g class="ind-diff-block" data-info="source" style="cursor:pointer">
+<rect x="372" y="28" width="108" height="76" fill="#fff" stroke="#1e293b" stroke-width="1.5"/>
+<path d="M392 48 C416 48 416 64 392 64 C420 64 420 80 392 80" fill="none" stroke="#b45309" stroke-width="1.4"/>
+<text x="426" y="22" text-anchor="middle" font-size="13" font-weight="700" fill="#1e40af">5</text>
+<text x="426" y="94" text-anchor="middle" font-size="12" fill="#64748b">~U</text>
+</g>
+<g class="ind-diff-block" data-info="blockB" style="cursor:pointer">
+<rect x="372" y="144" width="108" height="42" rx="3" fill="#fff" stroke="#1e293b" stroke-width="1.5"/>
+<text x="426" y="170" text-anchor="middle" font-size="16" font-weight="700" fill="#1e40af">B</text>
+</g>
+<text class="ind-diff-readout" x="260" y="222" text-anchor="middle" font-size="12" font-weight="700" fill="#1e40af">смещение 0% · I₄ ≈ 0 · мост сбалансирован</text>
+</svg>
+</div>
+<div class="asutp-tabs">
+<button type="button" class="asutp-tab active" data-info="intro">Обзор</button>
+<button type="button" class="asutp-tab" data-info="principle">Принцип</button>
+<button type="button" class="asutp-tab" data-info="parts">Состав</button>
+<button type="button" class="asutp-tab" data-info="cons">Зачем</button>
+</div>
+<div class="ind-diff-controls">
+<label class="ind-diff-ctrl">
+<span>смещение якоря</span>
+<input type="range" class="ind-diff-s-range" min="-100" max="100" value="0" aria-label="Смещение якоря">
+<span class="ind-diff-s-val">0%</span>
+</label>
+</div>
+</div>
+<aside class="asutp-panel" id="indDiffPanel">
+<h3>Обзор</h3>
+<p>Два одинаковых датчика в мостовой схеме с общим якорем (2).</p>
+<p>В среднем положении мост сбалансирован, ток через прибор 4 мал. Смещение якоря меняет зазоры δ и δ′ в противофазе.</p>
+</aside>
+</div>
+</section>
+
+<section class="slide slide-ind-diff-char-interactive">
+<h2>Характеристика и погрешности</h2>
+<div class="slide-body asutp-interactive">
+<div class="asutp-main">
+<p class="asutp-hint">Двигайте якорь или нажмите график — слева только модуль I, справа знак после ФЧВ</p>
+<div class="asutp-diagram-wrap">
+<svg class="ind-diff-char-svg" viewBox="0 0 460 200" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="Характеристики дифференциального датчика">
+<rect width="460" height="200" fill="#fafafa"/>
+<g class="ind-diff-char-plot" data-info="amp" style="cursor:pointer">
+<line x1="36" y1="168" x2="196" y2="168" stroke="#1e293b" stroke-width="1.3"/>
+<line x1="116" y1="168" x2="116" y2="28" stroke="#1e293b" stroke-width="1.3"/>
+<text x="200" y="172" font-size="11" fill="#475569">x</text>
+<text x="22" y="32" font-size="12" fill="#475569">I</text>
+<path class="ind-diff-char-curve-amp" d="" fill="none" stroke="#1e40af" stroke-width="2.2"/>
+<circle class="ind-diff-char-pt-amp" cx="116" cy="168" r="5" fill="#2563eb" stroke="#fff" stroke-width="1.4"/>
+<text x="116" y="192" text-anchor="middle" font-size="11" fill="#475569">статическая · только |I|</text>
+</g>
+<g class="ind-diff-char-plot" data-info="fchv" style="cursor:pointer">
+<line x1="248" y1="100" x2="432" y2="100" stroke="#1e293b" stroke-width="1.3"/>
+<line x1="340" y1="172" x2="340" y2="28" stroke="#1e293b" stroke-width="1.3"/>
+<text x="436" y="104" font-size="11" fill="#475569">x</text>
+<text x="348" y="32" font-size="12" fill="#475569">I</text>
+<path class="ind-diff-char-curve-fchv" d="" fill="none" stroke="#1e40af" stroke-width="2.2"/>
+<circle class="ind-diff-char-pt-fchv" cx="340" cy="100" r="5" fill="#2563eb" stroke="#fff" stroke-width="1.4"/>
+<text x="340" y="192" text-anchor="middle" font-size="11" fill="#475569">реверсивная · с ФЧВ</text>
+</g>
+<text class="ind-diff-char-readout" x="230" y="16" text-anchor="middle" font-size="12" font-weight="700" fill="#1e40af">x = 0 · I = 0</text>
+</svg>
+</div>
+<div class="asutp-tabs">
+<button type="button" class="asutp-tab active" data-info="amp">Статическая</button>
+<button type="button" class="asutp-tab" data-info="fchv">ФЧВ</button>
+<button type="button" class="asutp-tab" data-info="err">Погрешности</button>
+</div>
+<div class="app-purpose-grid ind-diff-err-grid" hidden>
+<button type="button" class="app-purpose-card" data-info="field">Поля</button>
+<button type="button" class="app-purpose-card" data-info="nl">Нелинейность</button>
+<button type="button" class="app-purpose-card" data-info="const">Конструкция</button>
+<button type="button" class="app-purpose-card" data-info="temp">T · технология</button>
+<button type="button" class="app-purpose-card" data-info="age">Старение</button>
+</div>
+<div class="ind-diff-controls ind-diff-char-controls">
+<label class="ind-diff-ctrl">
+<span>смещение якоря x</span>
+<input type="range" class="ind-diff-char-range" min="-100" max="100" value="0" aria-label="Смещение якоря">
+<span class="ind-diff-char-val">0</span>
+</label>
+</div>
+</div>
+<aside class="asutp-panel" id="indDiffCharPanel">
+<h3>Статическая</h3>
+<p>В среднем положении зазоры равны, <var>I</var> = 0. Отклонение якоря даёт <var>I</var> ≠ 0.</p>
+<p>По амплитуде тока видно только <strong>модуль</strong> смещения, не направление.</p>
+</aside>
+</div>
+</section>
+
+<section class="slide slide-xfmr-interactive">
+<h2>Трансформаторные датчики</h2>
+<div class="slide-body asutp-interactive">
+<div class="asutp-main">
+<p class="asutp-hint">Вращайте якорь — выход это разность ЭДС вторичных обмоток</p>
+<div class="asutp-diagram-wrap">
+<svg class="xfmr-svg" viewBox="0 0 540 236" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="Дифференциальный трансформаторный датчик угла">
+<rect width="540" height="236" fill="#fafafa"/>
+<line x1="270" y1="42" x2="270" y2="200" stroke="#cbd5e1" stroke-width="1" stroke-dasharray="4 3"/>
+<g class="xfmr-block" data-info="source" style="cursor:pointer">
+<rect x="8" y="40" width="70" height="54" fill="#fff" stroke="#1e293b" stroke-width="1.5"/>
+<path d="M22 56 C38 56 38 68 22 68 C40 68 40 80 22 80" fill="none" stroke="#b45309" stroke-width="1.4"/>
+<text x="43" y="32" text-anchor="middle" font-size="13" font-weight="700" fill="#1e40af">U</text>
+</g>
+<path d="M78 52 H230 M78 82 H230" fill="none" stroke="#94a3b8" stroke-width="1.25"/>
+<g class="xfmr-block" data-info="core" style="cursor:pointer">
+<rect x="140" y="20" width="260" height="22" fill="#fff" stroke="#1e293b" stroke-width="1.7"/>
+<rect x="140" y="42" width="50" height="64" fill="#fff" stroke="#1e293b" stroke-width="1.7"/>
+<rect x="230" y="42" width="80" height="64" fill="#fff" stroke="#1e293b" stroke-width="1.7"/>
+<rect x="350" y="42" width="50" height="64" fill="#fff" stroke="#1e293b" stroke-width="1.7"/>
+</g>
+<g class="xfmr-block" data-info="w1" style="cursor:pointer">
+<ellipse cx="270" cy="62" rx="46" ry="9" fill="none" stroke="#b45309" stroke-width="1.7"/>
+<ellipse cx="270" cy="74" rx="46" ry="9" fill="none" stroke="#b45309" stroke-width="1.7"/>
+<text x="270" y="36" text-anchor="middle" font-size="13" font-weight="700" fill="#1e40af">W₁</text>
+</g>
+<g class="xfmr-block" data-info="w2" style="cursor:pointer">
+<ellipse cx="165" cy="64" rx="30" ry="8" fill="none" stroke="#b45309" stroke-width="1.6"/>
+<ellipse cx="165" cy="76" rx="30" ry="8" fill="none" stroke="#b45309" stroke-width="1.6"/>
+<text x="165" y="36" text-anchor="middle" font-size="13" font-weight="700" fill="#1e40af">W₂</text>
+</g>
+<g class="xfmr-block" data-info="w2p" style="cursor:pointer">
+<ellipse cx="375" cy="64" rx="30" ry="8" fill="none" stroke="#b45309" stroke-width="1.6"/>
+<ellipse cx="375" cy="76" rx="30" ry="8" fill="none" stroke="#b45309" stroke-width="1.6"/>
+<text x="375" y="36" text-anchor="middle" font-size="13" font-weight="700" fill="#1e40af">W₂′</text>
+</g>
+<path class="xfmr-flux-l" d="M258 100 C240 124 200 132 176 116 C160 104 152 92 165 84" fill="none" stroke="#64748b" stroke-width="1.15" stroke-dasharray="4 3" opacity="0.45" pointer-events="none"/>
+<path class="xfmr-flux-r" d="M282 100 C300 124 340 132 364 116 C380 104 388 92 375 84" fill="none" stroke="#64748b" stroke-width="1.15" stroke-dasharray="4 3" opacity="0.45" pointer-events="none"/>
+<text x="292" y="96" font-size="12" font-weight="700" fill="#1e40af">Φ₁</text>
+<g class="xfmr-arm-g" data-info="armature" style="cursor:pointer">
+<path d="M270 210 L196.5 148.3 A96 96 0 0 1 343.5 148.3 Z" fill="#e2e8f0" stroke="#1e293b" stroke-width="1.6"/>
+<text x="270" y="172" text-anchor="middle" font-size="13" font-weight="700" fill="#1e40af">2</text>
+</g>
+<circle cx="270" cy="210" r="5" fill="#fff" stroke="#1e293b" stroke-width="1.4"/>
+<path d="M232 216 Q270 230 308 216" fill="none" stroke="#64748b" stroke-width="1.2"/>
+<polygon points="232,216 238,212 238,220" fill="#64748b"/>
+<polygon points="308,216 302,212 302,220" fill="#64748b"/>
+<text x="322" y="230" font-size="13" font-weight="700" fill="#1e40af">α</text>
+<g class="xfmr-block" data-info="out" style="cursor:pointer">
+<circle cx="478" cy="60" r="6" fill="#fff" stroke="#1e293b" stroke-width="1.4"/>
+<circle cx="478" cy="96" r="6" fill="#fff" stroke="#1e293b" stroke-width="1.4"/>
+<text x="498" y="72" font-size="13" font-weight="700" fill="#1e40af">Uвых</text>
+</g>
+<path d="M405 64 H478 M405 76 H460 V96 H478" fill="none" stroke="#94a3b8" stroke-width="1.2"/>
+<text class="xfmr-readout" x="270" y="14" text-anchor="middle" font-size="12" font-weight="700" fill="#1e40af">α = 0° · Uвых = 0 · потоки равны</text>
+</svg>
+</div>
+<div class="asutp-tabs">
+<button type="button" class="asutp-tab active" data-info="intro">Обзор</button>
+<button type="button" class="asutp-tab" data-info="principle">Принцип</button>
+<button type="button" class="asutp-tab" data-info="wind">Обмотки</button>
+<button type="button" class="asutp-tab" data-info="vs">Индуктивные</button>
+</div>
+<div class="xfmr-controls">
+<label class="xfmr-ctrl">
+<span>угол якоря α</span>
+<input type="range" class="xfmr-a-range" min="-30" max="30" value="0" aria-label="Угол якоря">
+<span class="xfmr-a-val">0°</span>
+</label>
+</div>
+</div>
+<aside class="asutp-panel" id="xfmrPanel">
+<h3>Обзор</h3>
+<p>Трансформаторный датчик меняет <strong>взаимную индуктивность</strong> обмоток — коэффициент трансформации зависит от положения якоря.</p>
+<p>На схеме — дифференциальный датчик <strong>угла</strong>: поворот якоря (2) меняет зазоры под крайними стержнями.</p>
+</aside>
+</div>
+</section>
+
+<section class="slide slide-xfmr-props-interactive">
+<h2>Свойства трансформаторных датчиков</h2>
+<div class="slide-body asutp-interactive">
+<div class="asutp-main">
+<p class="asutp-hint">Нажмите пункт — слева плюсы, справа минусы</p>
+<div class="highlight-box highlight-box-compact xfmr-props-formula">
+<p class="xfmr-props-eq"><var>U</var><sub>вых</sub> = <var>E</var><sub>2a</sub> − <var>E</var><sub>2b</sub></p>
+<p class="xfmr-props-eq-note">при симметрии якоря <var>E</var><sub>2a</sub> = <var>E</var><sub>2b</sub> → <var>U</var><sub>вых</sub> = 0</p>
+</div>
+<div class="xfmr-props-cols">
+<div class="xfmr-prop-col">
+<h3>Достоинства</h3>
+<button type="button" class="xfmr-prop-item active" data-info="power">
+<strong>Мощность</strong>
+<span>часто без усилителя</span>
+</button>
+<button type="button" class="xfmr-prop-item" data-info="simple">
+<strong>Простота</strong>
+<span>магнитопровод, обмотки, якорь</span>
+</button>
+<button type="button" class="xfmr-prop-item" data-info="rel">
+<strong>Надёжность</strong>
+<span>нет скользящего контакта</span>
+</button>
+<button type="button" class="xfmr-prop-item" data-info="cost">
+<strong>Цена</strong>
+<span>относительно недорого</span>
+</button>
+</div>
+<div class="xfmr-prop-col is-cons">
+<h3>Недостатки</h3>
+<button type="button" class="xfmr-prop-item" data-info="zero">
+<strong>Начальное Uвых</strong>
+<span>трудно скомпенсировать остаток</span>
+</button>
+<button type="button" class="xfmr-prop-item" data-info="ac">
+<strong>Только ~U</strong>
+<span>постоянный ток не подходит</span>
+</button>
+<button type="button" class="xfmr-prop-item" data-info="lin">
+<strong>Линейность</strong>
+<span>узкий рабочий участок</span>
+</button>
+</div>
+</div>
+</div>
+<aside class="asutp-panel" id="xfmrPropsPanel">
+<h3>Мощность</h3>
+<p><strong>Достоинство.</strong> Выходная мощность сравнительно высокая — часто можно работать <strong>без дополнительного усилителя</strong>.</p>
+</aside>
+</div>
+</section>
+
+<section class="slide slide-cap-interactive">
+<h2>Ёмкостные датчики</h2>
+<div class="slide-body asutp-interactive">
+<div class="asutp-main">
+<p class="asutp-hint">Двигайте зазор или площадь — ёмкость зависит от геометрии и диэлектрика</p>
+<div class="asutp-diagram-wrap">
+<svg class="cap-svg" viewBox="0 0 480 220" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="Плоский конденсатор">
+<rect width="480" height="220" fill="#fafafa"/>
+<text x="40" y="28" font-size="13" font-weight="700" fill="#1e40af">~U</text>
+<text x="40" y="44" font-size="11" fill="#64748b">высокая f</text>
+<g class="cap-block" data-info="plate" style="cursor:pointer">
+<rect class="cap-plate-l" x="150" y="48" width="16" height="120" fill="#fff" stroke="#1e293b" stroke-width="1.7"/>
+<rect class="cap-plate-r" x="214" y="48" width="16" height="120" fill="#fff" stroke="#1e293b" stroke-width="1.7"/>
+</g>
+<rect class="cap-diel" x="166" y="48" width="48" height="120" fill="#dbeafe" opacity="0.55" pointer-events="none"/>
+<g class="cap-block" data-info="gap" style="cursor:pointer">
+<line class="cap-l-line" x1="166" y1="184" x2="214" y2="184" stroke="#64748b" stroke-width="1.2"/>
+<text class="cap-l-label" x="190" y="202" text-anchor="middle" font-size="13" font-weight="700" fill="#1e40af">l</text>
+</g>
+<text class="cap-s-label" x="122" y="112" font-size="13" font-weight="700" fill="#1e40af">S</text>
+<text x="300" y="80" font-size="15" font-weight="700" fill="#1e3a8a">C = L₀ n S / l</text>
+<text class="cap-readout" x="270" y="22" text-anchor="middle" font-size="13" font-weight="700" fill="#1e40af">l = 1.0 мм · S = 100% · C ≈ 1.8 пФ</text>
+</svg>
+</div>
+<div class="asutp-tabs">
+<button type="button" class="asutp-tab active" data-info="intro">Обзор</button>
+<button type="button" class="asutp-tab" data-info="formula">Формула</button>
+<button type="button" class="asutp-tab" data-info="cl">C(l)</button>
+<button type="button" class="asutp-tab" data-info="cs">C(S)</button>
+<button type="button" class="asutp-tab" data-info="supply">Питание</button>
+</div>
+<div class="cap-controls">
+<label class="cap-ctrl">
+<span>зазор l</span>
+<input type="range" class="cap-l-range" min="0" max="100" value="40" aria-label="Зазор">
+<span class="cap-l-val">1.0 мм</span>
+</label>
+<label class="cap-ctrl">
+<span>площадь S</span>
+<input type="range" class="cap-s-range" min="30" max="100" value="100" aria-label="Площадь">
+<span class="cap-s-val">100%</span>
+</label>
+</div>
+</div>
+<aside class="asutp-panel" id="capPanel">
+<h3>Обзор</h3>
+<p>Ёмкость зависит от размеров обкладок, их взаимного положения и диэлектрической проницаемости среды между ними.</p>
+<p>Для измерений используют зависимости <var>C</var>(<var>S</var>) и <var>C</var>(<var>l</var>).</p>
+</aside>
+</div>
+</section>
+
+<section class="slide slide-cap-lin-interactive">
+<h2>Ёмкостный датчик линейного перемещения</h2>
+<div class="slide-body asutp-interactive">
+<div class="asutp-main">
+<p class="asutp-hint">Двигайте зазор или нажмите график — C падает гиперболой при росте l</p>
+<div class="asutp-diagram-wrap">
+<svg class="cap-lin-svg" viewBox="0 0 520 220" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="Ёмкостный датчик линейного перемещения">
+<rect width="520" height="220" fill="#fafafa"/>
+<g class="cap-lin-block" data-info="move" style="cursor:pointer">
+<rect class="cap-lin-top" x="42" y="56" width="148" height="14" fill="#fff" stroke="#1e293b" stroke-width="1.7"/>
+<text class="cap-lin-move-lab" x="116" y="48" text-anchor="middle" font-size="12" font-weight="700" fill="#1e40af">подвижная</text>
+</g>
+<g class="cap-lin-block" data-info="fix" style="cursor:pointer">
+<rect class="cap-lin-bot" x="42" y="148" width="148" height="14" fill="#fff" stroke="#1e293b" stroke-width="1.7"/>
+<text x="116" y="180" text-anchor="middle" font-size="12" font-weight="700" fill="#1e40af">неподвижная</text>
+</g>
+<g class="cap-lin-block" data-info="gap" style="cursor:pointer">
+<line class="cap-lin-gap-line" x1="202" y1="70" x2="202" y2="148" stroke="#64748b" stroke-width="1.2"/>
+<line class="cap-lin-gap-a" x1="196" y1="70" x2="208" y2="70" stroke="#64748b" stroke-width="1.2"/>
+<line x1="196" y1="148" x2="208" y2="148" stroke="#64748b" stroke-width="1.2"/>
+<text class="cap-lin-l-lab" x="214" y="114" font-size="14" font-weight="700" fill="#1e40af">l</text>
+</g>
+<path class="cap-lin-arrow" d="M24 92 V132" fill="none" stroke="#1e293b" stroke-width="1.5" marker-end="url(#cap-lin-arr)"/>
+<defs><marker id="cap-lin-arr" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#1e293b"/></marker></defs>
+<g class="cap-lin-plot" style="cursor:crosshair">
+<line x1="268" y1="188" x2="500" y2="188" stroke="#1e293b" stroke-width="1.4"/>
+<line x1="268" y1="188" x2="268" y2="28" stroke="#1e293b" stroke-width="1.4"/>
+<polygon points="500,188 492,184 492,192" fill="#1e293b"/>
+<polygon points="268,28 264,36 272,36" fill="#1e293b"/>
+<text x="506" y="208" font-size="12" fill="#475569">l</text>
+<text x="248" y="22" font-size="13" fill="#475569">C</text>
+<path class="cap-lin-curve" d="" fill="none" stroke="#1e40af" stroke-width="2.2"/>
+<circle class="cap-lin-point" cx="340" cy="90" r="5" fill="#2563eb" stroke="#fff" stroke-width="1.5"/>
+</g>
+<text class="cap-lin-readout" x="116" y="14" text-anchor="middle" font-size="13" font-weight="700" fill="#1e40af">l = 1,5 мм · C ≈ 2,9 пФ</text>
+</svg>
+</div>
+<div class="asutp-tabs">
+<button type="button" class="asutp-tab active" data-info="intro">Обзор</button>
+<button type="button" class="asutp-tab" data-info="cl">C(l)</button>
+<button type="button" class="asutp-tab" data-info="scheme">Схема</button>
+</div>
+<div class="cap-controls">
+<label class="cap-ctrl">
+<span>зазор l</span>
+<input type="range" class="cap-lin-range" min="0" max="100" value="30" aria-label="Зазор l">
+<span class="cap-lin-val">1,5 мм</span>
+</label>
+</div>
+</div>
+<aside class="asutp-panel" id="capLinPanel">
+<h3>Обзор</h3>
+<p>Механическое <strong>линейное перемещение</strong> преобразуется в изменение ёмкости: двигается одна пластина, меняется зазор <var>l</var>.</p>
+<p class="cap-eq" aria-label="C равно L нулевое n S на l"><span class="char-eq"><var>C</var> = <var>L</var><sub>0</sub> <var>n</var></span><span class="char-frac"><span class="char-frac-part"><var>S</var></span><span class="char-frac-bar"></span><span class="char-frac-part"><var>l</var></span></span></p>
+<ul class="cap-eq-legend">
+<li><var>L</var><sub>0</sub> — диэлектрическая постоянная (<var>L</var><sub>0</sub> = 8,85 · 10<sup>−12</sup> Ф/м)</li>
+<li><var>n</var> — относительная диэлектрическая проницаемость среды между обкладками</li>
+<li><var>S</var> — активная площадь обкладок</li>
+<li><var>l</var> — расстояние между обкладками конденсатора</li>
+</ul>
+<p>Справа — статическая характеристика <var>C</var>(<var>l</var>): гипербола, потому что <var>C</var> ∝ 1/<var>l</var>.</p>
+</aside>
+</div>
+</section>
+
+<section class="slide slide-cap-ang-interactive">
+<h2>Ёмкостный датчик углового перемещения</h2>
+<div class="slide-body asutp-interactive">
+<div class="asutp-main">
+<p class="asutp-hint">Поворачивайте пластину 1 — ёмкость меняется из‑за площади взаимного перекрытия</p>
+<div class="asutp-diagram-wrap">
+<svg class="cap-ang-svg" viewBox="0 0 540 242" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="Ёмкостный датчик углового перемещения">
+<rect width="540" height="242" fill="#fafafa"/>
+<defs>
+<pattern id="cap-ang-hatch" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+<line x1="0" y1="0" x2="0" y2="7" stroke="#1e3a8a" stroke-width="1.2"/>
+</pattern>
+<marker id="cap-ang-arr" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#334155"/></marker>
+<marker id="cap-ang-arr-start" markerWidth="8" markerHeight="6" refX="1" refY="3" orient="auto"><path d="M8,0 L0,3 L8,6 Z" fill="#334155"/></marker>
+</defs>
+<g class="cap-ang-block" data-info="fix" style="cursor:pointer">
+<path class="cap-ang-fixed" d="M128 120 L208 120 A80 80 0 0 1 48 120 Z" fill="#fff" stroke="#1e293b" stroke-width="1.9"/>
+<text x="86" y="178" font-size="17" font-weight="700" fill="#1e40af">2</text>
+</g>
+<path class="cap-ang-overlap-fill" d="" fill="#bfdbfe" opacity="0.4" pointer-events="none"/>
+<path class="cap-ang-overlap" d="" fill="url(#cap-ang-hatch)" opacity="0.9" pointer-events="none"/>
+<g class="cap-ang-rot" data-info="move" style="cursor:pointer">
+<path d="M128 120 L208 120 A80 80 0 0 1 48 120 Z" fill="#fff" fill-opacity="0.08" stroke="#1e40af" stroke-width="2"/>
+<text x="128" y="172" text-anchor="middle" font-size="17" font-weight="700" fill="#1e40af">1</text>
+</g>
+<circle cx="128" cy="120" r="6.5" fill="#fff" stroke="#1e293b" stroke-width="1.6"/>
+<path class="cap-ang-arc" d="" fill="none" stroke="#334155" stroke-width="1.5" marker-start="url(#cap-ang-arr-start)" marker-end="url(#cap-ang-arr)"/>
+<text class="cap-ang-alpha" x="210" y="108" font-size="17" font-weight="700" fill="#1e40af">α</text>
+<text class="cap-ang-readout" x="16" y="22" text-anchor="start" font-size="16" font-weight="700" fill="#1e40af">α = 55° · S ≈ 69% · C ≈ 5,7 пФ</text>
+<text x="128" y="232" text-anchor="middle" font-size="16" font-weight="700" fill="#334155">а</text>
+<g class="cap-ang-plot" style="cursor:crosshair">
+<line x1="286" y1="196" x2="518" y2="196" stroke="#1e293b" stroke-width="1.6"/>
+<line x1="286" y1="196" x2="286" y2="36" stroke="#1e293b" stroke-width="1.6"/>
+<polygon points="518,196 510,192 510,200" fill="#1e293b"/>
+<polygon points="286,36 282,44 290,44" fill="#1e293b"/>
+<text x="274" y="214" font-size="15" fill="#334155">0</text>
+<text x="526" y="220" font-size="17" fill="#334155">α</text>
+<text x="262" y="32" font-size="17" fill="#334155">C</text>
+<path class="cap-ang-curve" d="" fill="none" stroke="#1e40af" stroke-width="2.4"/>
+<circle class="cap-ang-point" cx="360" cy="90" r="5.5" fill="#2563eb" stroke="#fff" stroke-width="1.5"/>
+<text x="402" y="232" text-anchor="middle" font-size="16" font-weight="700" fill="#334155">б</text>
+</g>
+</svg>
+</div>
+<div class="asutp-tabs">
+<button type="button" class="asutp-tab active" data-info="intro">Обзор</button>
+<button type="button" class="asutp-tab" data-info="area">Площадь</button>
+<button type="button" class="asutp-tab" data-info="ca">C(α)</button>
+</div>
+<div class="cap-controls">
+<label class="cap-ctrl">
+<span>угол α</span>
+<input type="range" class="cap-ang-range" min="0" max="180" value="55" aria-label="Угол поворота">
+<span class="cap-ang-val">55°</span>
+</label>
+</div>
+</div>
+<aside class="asutp-panel" id="capAngPanel">
+<h3>Обзор</h3>
+<p>Ёмкость меняется из‑за изменения <strong>площади взаимного перекрытия</strong> пластин.</p>
+<p>Пластина <strong>1</strong> поворачивается на угол α, пластина <strong>2</strong> неподвижна. Штриховка — зона перекрытия. Справа — характеристика <var>C</var>(α).</p>
+</aside>
+</div>
+</section>
+
+<section class="slide slide-cap-diff-interactive">
+<h2>Дифференциальный ёмкостный датчик в мостовой схеме</h2>
+<div class="slide-body asutp-interactive">
+<div class="asutp-main">
+<p class="asutp-hint">Смещайте пластину 1 — одно плечо растёт, другое падает, мост даёт Uвых</p>
+<div class="asutp-diagram-wrap">
+<svg class="cap-diff-svg" viewBox="0 0 580 258" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="Дифференциальный ёмкостный датчик в мостовой схеме">
+<rect width="580" height="258" fill="#fafafa"/>
+<text class="cap-diff-readout" x="16" y="22" text-anchor="start" font-size="15" font-weight="700" fill="#1e40af">F = 0 · C₁₂ = C₁₃ · Uвых = 0</text>
+<rect x="40" y="38" width="196" height="192" fill="none" stroke="#94a3b8" stroke-width="1.4"/>
+<g class="cap-diff-block" data-info="insul" style="cursor:pointer">
+<rect x="62" y="42" width="120" height="9" fill="#e2e8f0" stroke="#64748b" stroke-width="1.1" stroke-dasharray="3 2"/>
+<text x="190" y="51" font-size="15" font-weight="700" fill="#1e40af">4</text>
+<rect x="62" y="217" width="120" height="9" fill="#e2e8f0" stroke="#64748b" stroke-width="1.1" stroke-dasharray="3 2"/>
+<text x="190" y="226" font-size="15" font-weight="700" fill="#1e40af">5</text>
+</g>
+<g class="cap-diff-block" data-info="p2" style="cursor:pointer">
+<rect x="56" y="58" width="132" height="14" fill="#fff" stroke="#1e293b" stroke-width="1.8"/>
+<text x="122" y="70" text-anchor="middle" font-size="16" font-weight="700" fill="#1e40af">2</text>
+</g>
+<g class="cap-diff-arm" data-info="p1" style="cursor:pointer">
+<rect class="cap-diff-p1" x="56" y="119" width="132" height="16" fill="#e2e8f0" stroke="#1e293b" stroke-width="1.8"/>
+<text class="cap-diff-p1-lab" x="122" y="132" text-anchor="middle" font-size="16" font-weight="700" fill="#1e40af">1</text>
+</g>
+<g class="cap-diff-block" data-info="p3" style="cursor:pointer">
+<rect x="56" y="190" width="132" height="14" fill="#fff" stroke="#1e293b" stroke-width="1.8"/>
+<text x="122" y="202" text-anchor="middle" font-size="16" font-weight="700" fill="#1e40af">3</text>
+</g>
+<g class="cap-diff-block" data-info="spring" style="cursor:pointer">
+<path class="cap-diff-spring" d="M14 127 L22 117 L30 137 L38 117 L48 127" fill="none" stroke="#b45309" stroke-width="1.8" stroke-linejoin="round"/>
+<text class="cap-diff-s6" x="8" y="112" font-size="16" font-weight="700" fill="#1e40af">6</text>
+</g>
+<g class="cap-diff-f" data-info="p1" style="cursor:pointer">
+<line class="cap-diff-f-line" x1="252" y1="119" x2="252" y2="151" stroke="#1e293b" stroke-width="1.7"/>
+<polygon class="cap-diff-f-head" points="245,151 252,163 259,151" fill="#1e293b"/>
+<text class="cap-diff-f-lab" x="264" y="144" font-size="16" font-weight="700" fill="#1e40af">F</text>
+</g>
+<text class="cap-diff-c12-lab" x="196" y="100" font-size="15" font-weight="700" fill="#1e40af">C₁₂</text>
+<text class="cap-diff-c13-lab" x="196" y="168" font-size="15" font-weight="700" fill="#1e40af">C₁₃</text>
+<text x="138" y="250" text-anchor="middle" font-size="16" font-weight="700" fill="#334155">а</text>
+<g class="cap-diff-block" data-info="bridge" style="cursor:pointer">
+<line x1="318" y1="56" x2="508" y2="56" stroke="#1e293b" stroke-width="1.6"/>
+<line x1="318" y1="56" x2="318" y2="200" stroke="#1e293b" stroke-width="1.6"/>
+<line x1="508" y1="56" x2="508" y2="200" stroke="#1e293b" stroke-width="1.6"/>
+<line x1="318" y1="200" x2="508" y2="200" stroke="#1e293b" stroke-width="1.6"/>
+<line class="cap-diff-arm-c12-a" x1="308" y1="84" x2="328" y2="84" stroke="#1e40af" stroke-width="2.4"/>
+<line class="cap-diff-arm-c12-b" x1="308" y1="94" x2="328" y2="94" stroke="#1e40af" stroke-width="2.4"/>
+<text class="cap-diff-arm-c12" x="300" y="94" text-anchor="end" font-size="15" font-weight="700" fill="#1e40af">C₁₂</text>
+<line class="cap-diff-arm-c13-a" x1="308" y1="162" x2="328" y2="162" stroke="#1e40af" stroke-width="2.4"/>
+<line class="cap-diff-arm-c13-b" x1="308" y1="172" x2="328" y2="172" stroke="#1e40af" stroke-width="2.4"/>
+<text class="cap-diff-arm-c13" x="300" y="172" text-anchor="end" font-size="15" font-weight="700" fill="#1e40af">C₁₃</text>
+<rect x="492" y="82" width="32" height="18" fill="#fff" stroke="#1e293b" stroke-width="1.4"/>
+<rect x="492" y="158" width="32" height="18" fill="#fff" stroke="#1e293b" stroke-width="1.4"/>
+</g>
+<g class="cap-diff-block" data-info="gvh" style="cursor:pointer">
+<rect x="368" y="110" width="90" height="36" fill="#fff" stroke="#1e293b" stroke-width="1.6"/>
+<text x="413" y="134" text-anchor="middle" font-size="16" font-weight="700" fill="#1e40af">ГВЧ</text>
+<line x1="318" y1="128" x2="368" y2="128" stroke="#1e293b" stroke-width="1.4"/>
+<line x1="458" y1="128" x2="508" y2="128" stroke="#1e293b" stroke-width="1.4"/>
+</g>
+<g class="cap-diff-block" data-info="out" style="cursor:pointer">
+<line x1="413" y1="56" x2="413" y2="40" stroke="#1e293b" stroke-width="1.4"/>
+<line x1="413" y1="200" x2="413" y2="216" stroke="#1e293b" stroke-width="1.4"/>
+<line x1="413" y1="40" x2="556" y2="40" stroke="#1e293b" stroke-width="1.4"/>
+<line x1="413" y1="216" x2="556" y2="216" stroke="#1e293b" stroke-width="1.4"/>
+<circle cx="556" cy="40" r="4.5" fill="#fff" stroke="#1e293b" stroke-width="1.4"/>
+<circle cx="556" cy="216" r="4.5" fill="#fff" stroke="#1e293b" stroke-width="1.4"/>
+<text x="548" y="132" text-anchor="middle" font-size="16" font-weight="700" fill="#1e40af">Uвых</text>
+</g>
+<text x="413" y="250" text-anchor="middle" font-size="16" font-weight="700" fill="#334155">б</text>
+</svg>
+</div>
+<div class="asutp-tabs">
+<button type="button" class="asutp-tab active" data-info="intro">Обзор</button>
+<button type="button" class="asutp-tab" data-info="parts">Состав</button>
+<button type="button" class="asutp-tab" data-info="bridge">Мост</button>
+<button type="button" class="asutp-tab" data-info="sym">Симметрия</button>
+</div>
+<div class="cap-controls">
+<label class="cap-ctrl">
+<span>сила F · смещение</span>
+<input type="range" class="cap-diff-range" min="-100" max="100" value="0" aria-label="Смещение пластины">
+<span class="cap-diff-val">0</span>
+</label>
+</div>
+</div>
+<aside class="asutp-panel" id="capDiffPanel">
+<h3>Обзор</h3>
+<p>В измерительных схемах чаще ставят <strong>дифференциальный</strong> датчик в мост. Сила <var>F</var> смещает пластину 1: одна ёмкость растёт, другая падает.</p>
+<p>На выходе — <var>U</var><sub>вых</sub>. Слева схема датчика, справа мост.</p>
+</aside>
+</div>
+</section>
+
+<section class="slide slide-cap-res-interactive">
+<h2>Резонансная схема включения</h2>
+<div class="slide-body asutp-interactive">
+<div class="asutp-main">
+<p class="asutp-hint">Двигайте Cд — пик fр едет, ГВЧ стоит на склоне, ΔU больше, чем у моста</p>
+<div class="asutp-diagram-wrap">
+<svg class="cap-res-svg" viewBox="0 0 540 220" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="Резонансная схема включения ёмкостного датчика">
+<rect width="540" height="220" fill="#fafafa"/>
+<g class="cap-res-block" data-info="gvh" style="cursor:pointer">
+<rect x="10" y="88" width="50" height="36" fill="#fff" stroke="#1e293b" stroke-width="1.5"/>
+<text x="35" y="111" text-anchor="middle" font-size="13" font-weight="700" fill="#1e40af">ГВЧ</text>
+</g>
+<line x1="60" y1="106" x2="74" y2="106" stroke="#1e293b" stroke-width="1.4"/>
+<g class="cap-res-block" data-info="xfmr" style="cursor:pointer">
+<ellipse cx="82" cy="106" rx="8" ry="20" fill="none" stroke="#b45309" stroke-width="1.6"/>
+<line x1="94" y1="82" x2="94" y2="130" stroke="#1e293b" stroke-width="1.4"/>
+<line x1="98" y1="82" x2="98" y2="130" stroke="#1e293b" stroke-width="1.4"/>
+<ellipse cx="110" cy="106" rx="8" ry="20" fill="none" stroke="#b45309" stroke-width="1.6"/>
+</g>
+<line x1="118" y1="94" x2="132" y2="94" stroke="#1e293b" stroke-width="1.4"/>
+<line x1="118" y1="118" x2="132" y2="118" stroke="#1e293b" stroke-width="1.4"/>
+<line x1="132" y1="56" x2="132" y2="158" stroke="#1e293b" stroke-width="1.4"/>
+<line x1="214" y1="56" x2="214" y2="158" stroke="#1e293b" stroke-width="1.4"/>
+<g class="cap-res-block" data-info="lk" style="cursor:pointer">
+<path d="M132 56 Q144 44 156 56 Q168 68 180 56 Q192 44 204 56 L214 56" fill="none" stroke="#b45309" stroke-width="1.7"/>
+<text x="173" y="32" text-anchor="middle" font-size="13" font-weight="700" fill="#1e40af">Lк</text>
+</g>
+<g class="cap-res-block" data-info="cd" style="cursor:pointer">
+<line x1="154" y1="118" x2="176" y2="118" stroke="#1e293b" stroke-width="1.3"/>
+<line class="cap-res-cd-a" x1="162" y1="106" x2="162" y2="130" stroke="#1e40af" stroke-width="2"/>
+<line class="cap-res-cd-b" x1="168" y1="106" x2="168" y2="130" stroke="#1e40af" stroke-width="2"/>
+<line x1="176" y1="118" x2="214" y2="118" stroke="#1e293b" stroke-width="1.3"/>
+<path d="M158 132 L174 102" fill="none" stroke="#1e293b" stroke-width="1.3"/>
+<polygon points="174,102 166,104 172,110" fill="#1e293b"/>
+<text x="192" y="108" text-anchor="middle" font-size="13" font-weight="700" fill="#1e40af">Cд</text>
+</g>
+<g class="cap-res-block" data-info="c0" style="cursor:pointer">
+<line x1="154" y1="158" x2="176" y2="158" stroke="#1e293b" stroke-width="1.3"/>
+<line x1="162" y1="148" x2="162" y2="168" stroke="#1e293b" stroke-width="2"/>
+<line x1="168" y1="148" x2="168" y2="168" stroke="#1e293b" stroke-width="2"/>
+<line x1="176" y1="158" x2="214" y2="158" stroke="#1e293b" stroke-width="1.3"/>
+<text x="173" y="184" text-anchor="middle" font-size="13" font-weight="700" fill="#1e40af">C₀</text>
+</g>
+<line x1="214" y1="106" x2="226" y2="106" stroke="#1e293b" stroke-width="1.4"/>
+<g class="cap-res-block" data-info="amp" style="cursor:pointer">
+<rect x="226" y="88" width="36" height="36" fill="#fff" stroke="#1e293b" stroke-width="1.5"/>
+<text x="244" y="111" text-anchor="middle" font-size="16" font-weight="700" fill="#1e40af">У</text>
+</g>
+<line x1="262" y1="106" x2="274" y2="106" stroke="#1e293b" stroke-width="1.4"/>
+<g class="cap-res-block" data-info="meter" style="cursor:pointer">
+<circle cx="290" cy="106" r="16" fill="#fff" stroke="#1e293b" stroke-width="1.5"/>
+<path class="cap-res-needle" d="M290 106 L290 94" stroke="#dc2626" stroke-width="1.6"/>
+<text x="290" y="138" text-anchor="middle" font-size="11" fill="#64748b">mV</text>
+</g>
+<g class="cap-res-plot" data-info="curve" style="cursor:pointer">
+<line x1="332" y1="188" x2="528" y2="188" stroke="#1e293b" stroke-width="1.4"/>
+<line x1="332" y1="188" x2="332" y2="28" stroke="#1e293b" stroke-width="1.4"/>
+<polygon points="528,188 520,184 520,192" fill="#1e293b"/>
+<polygon points="332,28 328,36 336,36" fill="#1e293b"/>
+<text x="532" y="208" font-size="12" fill="#475569">f</text>
+<text x="312" y="22" font-size="13" fill="#475569">U</text>
+<line class="cap-res-fg" x1="420" y1="36" x2="420" y2="188" stroke="#94a3b8" stroke-width="1.2" stroke-dasharray="5 4"/>
+<text class="cap-res-fg-lab" x="420" y="208" text-anchor="middle" font-size="12" fill="#64748b">fг</text>
+<path class="cap-res-curve" d="" fill="none" stroke="#1e40af" stroke-width="2.2"/>
+<circle class="cap-res-point" cx="420" cy="90" r="5" fill="#2563eb" stroke="#fff" stroke-width="1.5"/>
+<text class="cap-res-fr-lab" x="460" y="48" text-anchor="middle" font-size="12" font-weight="700" fill="#1e40af">fр</text>
+</g>
+<text class="cap-res-readout" x="150" y="208" text-anchor="middle" font-size="12" font-weight="700" fill="#1e40af">fр ≈ 800 кГц · U ≈ 80%</text>
+</svg>
+</div>
+<div class="asutp-tabs">
+<button type="button" class="asutp-tab active" data-info="intro">Обзор</button>
+<button type="button" class="asutp-tab" data-info="tank">Контур</button>
+<button type="button" class="asutp-tab" data-info="slope">Склон</button>
+<button type="button" class="asutp-tab" data-info="r">R контура</button>
+</div>
+<div class="cap-controls">
+<label class="cap-ctrl">
+<span>ёмкость Cд</span>
+<input type="range" class="cap-res-c-range" min="0" max="100" value="50" aria-label="Ёмкость датчика">
+<span class="cap-res-c-val">100%</span>
+</label>
+<label class="cap-ctrl">
+<span>сопротивление R</span>
+<input type="range" class="cap-res-r-range" min="0" max="100" value="25" aria-label="Активное сопротивление">
+<span class="cap-res-r-val">низкое</span>
+</label>
+</div>
+</div>
+<aside class="asutp-panel" id="capResPanel">
+<h3>Обзор</h3>
+<p>Резонансная схема даёт <strong>большую чувствительность</strong>, чем мост: работают на крутом склоне кривой <var>U</var>(<var>f</var>).</p>
+</aside>
+</div>
+</section>
+
+<section class="slide slide-cap-use-interactive">
+<h2>Где применяют ёмкостные датчики</h2>
+<div class="slide-body asutp-interactive">
+<div class="asutp-main">
+<p class="asutp-hint">Крутите скважину — инклинометр меряет зенитный угол, по точкам строят 3D-кривую</p>
+<div class="asutp-diagram-wrap">
+<svg class="well-3d-svg" viewBox="0 0 520 236" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="Трёхмерная кривизна скважины">
+<rect width="520" height="236" fill="#fafafa"/>
+<polygon class="well-3d-ground" points="0,0 0,0 0,0 0,0" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1"/>
+<path class="well-3d-proj-n" fill="none" stroke="#94a3b8" stroke-width="1.1" stroke-dasharray="4 4"/>
+<path class="well-3d-proj-e" fill="none" stroke="#cbd5e1" stroke-width="1.1" stroke-dasharray="4 4"/>
+<line class="well-3d-axis-n" x1="0" y1="0" x2="0" y2="0" stroke="#1e293b" stroke-width="1.4"/>
+<line class="well-3d-axis-e" x1="0" y1="0" x2="0" y2="0" stroke="#1e293b" stroke-width="1.4"/>
+<line class="well-3d-axis-h" x1="0" y1="0" x2="0" y2="0" stroke="#1e293b" stroke-width="1.4"/>
+<path class="well-3d-path" fill="none" stroke="#1e40af" stroke-width="2.5" stroke-linejoin="round"/>
+<path class="well-3d-hot" fill="none" stroke="#b45309" stroke-width="3.1" stroke-linejoin="round"/>
+<circle class="well-3d-head" cx="0" cy="0" r="4.5" fill="#fff" stroke="#1e293b" stroke-width="1.5"/>
+<circle class="well-3d-tool" cx="0" cy="0" r="5.5" fill="#2563eb" stroke="#fff" stroke-width="1.5"/>
+<circle class="well-3d-toe" cx="0" cy="0" r="4" fill="#1e293b"/>
+<text class="well-3d-lab-n" text-anchor="middle" font-size="14" font-weight="700" fill="#1e40af">N</text>
+<text class="well-3d-lab-e" text-anchor="middle" font-size="14" font-weight="700" fill="#1e40af">E</text>
+<text class="well-3d-lab-h" text-anchor="middle" font-size="14" font-weight="700" fill="#1e40af">H</text>
+<text class="well-3d-lab-head" text-anchor="middle" font-size="13" font-weight="700" fill="#334155">устье</text>
+<text class="well-3d-lab-toe" text-anchor="middle" font-size="13" font-weight="700" fill="#334155">забой</text>
+<text class="well-3d-lab-tool" text-anchor="start" font-size="13" font-weight="700" fill="#1e40af">И</text>
+<text class="well-3d-readout" x="260" y="226" text-anchor="middle" font-size="13" font-weight="700" fill="#1e40af">θ ≈ 45° · азимут 40°</text>
+</svg>
+</div>
+<div class="app-purpose-grid cap-use-grid">
+<button type="button" class="app-purpose-card" data-info="asu">АСУ и уровень</button>
+<button type="button" class="app-purpose-card" data-info="limit">Концевики</button>
+<button type="button" class="app-purpose-card" data-info="home">Умный дом</button>
+<button type="button" class="app-purpose-card" data-info="disp">Перемещения</button>
+<button type="button" class="app-purpose-card active" data-info="incl">Инклинометры</button>
+<button type="button" class="app-purpose-card" data-info="scale">Шкала прибора</button>
+</div>
+<div class="cap-controls">
+<label class="cap-ctrl">
+<span>поворот</span>
+<input type="range" class="well-yaw-range" min="0" max="100" value="28" aria-label="Поворот скважины">
+<span class="well-yaw-val">вид 3D</span>
+</label>
+<label class="cap-ctrl">
+<span>кривизна</span>
+<input type="range" class="well-curv-range" min="0" max="100" value="62" aria-label="Кривизна скважины">
+<span class="well-curv-val">средняя</span>
+</label>
+</div>
+</div>
+<aside class="asutp-panel" id="capUsePanel">
+<h3>Инклинометры</h3>
+<p>Ёмкостный инклинометр измеряет зенитный угол. По точкам вдоль ствола строят пространственную кривую скважины: азимут, глубина, кривизна.</p>
+</aside>
+</div>
+</section>
+
+<section class="slide slide-title"><span class="tag">Конец лекции 2</span>
+<h1>Спасибо за внимание!</h1>
+<p><a href="../index.html" class="link-home">← На главную</a></p></section>
+</div>
+
+<div class="controls">
+<div class="controls-left">
+<a href="../index.html" class="course-title-bar course-title-link">Средства автоматизации и управления</a>
+</div>
+<div class="controls-left">
+<a href="../index.html" class="btn-nav btn-home" title="На главную">⌂</a>
+<button class="btn-nav" id="prevBtn">← Назад</button>
+<button class="btn-nav" id="nextBtn">Вперёд →</button>
+</div>
+<div class="progress-wrap"><div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div></div>
+<span class="slide-counter" id="slideCounter">1 / 37</span>
+<div class="controls-right">
+<button class="btn-nav" id="overviewBtn">Обзор</button>
+<button class="btn-nav" id="fullscreenBtn">⛶</button>
+</div>
+</div>
+<script src="../js/presentation.js"></script>
+</body></html>

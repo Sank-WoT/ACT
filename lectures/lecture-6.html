@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="UTF-8"><title>Лекция 6</title>
+<link rel="stylesheet" href="../css/presentation.css"></head><body>
+<div class="deck">
+<section class="slide slide-title active"><span class="tag">Лекция 6</span>
+<h1>Автоматические выключатели низкого напряжения</h1>
+<p>Средства автоматизации и управления</p></section>
+
+<section class="slide slide-agenda"><h2>Содержание</h2><div class="slide-body"><ol>
+<li>Назначение</li><li>Конструкция</li><li>Принцип действия</li>
+<li>Электромагнитный расцепитель</li><li>Тепловой расцепитель</li>
+<li>Комбинированный</li><li>МЭК 60898</li><li>МЭК 60947-2</li>
+<li>Электронные расцепители</li><li>Минимальное U и независимый</li>
+<li>Дифференциальный</li><li>АВДТ и УЗО</li>
+<li>Выбор</li><li>Согласование характеристик</li><li>Где в САУ</li>
+</ol></div></section>
+
+<section class="slide slide-cb-purpose-interactive">
+<h2>Назначение</h2>
+<div class="slide-body asutp-interactive">
+<div class="asutp-main">
+<p class="asutp-hint">Нажмите функцию — автомат защищает цепь и сам отключает повреждение</p>
+<div class="app-purpose-grid em-fast-grid">
+<button type="button" class="app-purpose-card active" data-info="ovl">Перегрузка</button>
+<button type="button" class="app-purpose-card" data-info="sc">КЗ</button>
+<button type="button" class="app-purpose-card" data-info="sw">Коммутация</button>
+<button type="button" class="app-purpose-card" data-info="vs">Не пускатель</button>
+</div>
+</div>
+<aside class="asutp-panel" id="cbPurposePanel">
+<h3>Перегрузка</h3>
+<p>Длительный ток выше допустимого греет кабель. Тепловой (или электронный) расцепитель отключает с выдержкой — даёт двигателю пуститься, но не даёт проводам гореть.</p>
+</aside>
+</div>
+</section>
+
+<section class="slide slide-cb-core-interactive">
+<h2>Конструкция</h2>
+<div class="slide-body asutp-interactive">
+<div class="asutp-main">
+<p class="asutp-hint">Нажмите узел — рукоятка взводит механизм, расцепители срывают защёлку</p>
+<div class="asutp-diagram-wrap">
+<svg class="cb-svg" viewBox="0 0 520 220" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="Конструкция автоматического выключателя">
+<rect width="520" height="220" fill="#fafafa"/>
+<rect x="150" y="16" width="200" height="188" fill="#fff" stroke="#1e293b" stroke-width="1.6"/>
+<g class="cb-block" data-info="handle" style="cursor:pointer">
+<rect x="218" y="24" width="64" height="18" rx="2" fill="#e2e8f0" stroke="#1e293b" stroke-width="1.5"/>
+<text x="360" y="38" font-size="13" font-weight="700" fill="#1e40af">рукоятка</text>
+</g>
+<g class="cb-block" data-info="latch" style="cursor:pointer">
+<rect x="200" y="52" width="100" height="28" fill="#fff" stroke="#1e293b" stroke-width="1.5"/>
+<text x="250" y="70" text-anchor="middle" font-size="12" font-weight="700" fill="#1e40af">защёлка</text>
+<text x="360" y="70" font-size="13" font-weight="700" fill="#1e40af">механизм</text>
+</g>
+<g class="cb-block" data-info="contact" style="cursor:pointer">
+<rect x="188" y="92" width="44" height="16" fill="#fff" stroke="#1e293b" stroke-width="1.5"/>
+<rect x="268" y="92" width="44" height="16" fill="#fff" stroke="#1e293b" stroke-width="1.5"/>
+<line x1="232" y1="100" x2="268" y2="100" stroke="#1e293b" stroke-width="1.6"/>
+<text x="110" y="104" text-anchor="end" font-size="13" font-weight="700" fill="#1e40af">контакты</text>
+</g>
+<g class="cb-block" data-info="chamber" style="cursor:pointer">
+<rect x="188" y="78" width="124" height="10" fill="#fff" stroke="#1e293b" stroke-width="1.3"/>
+<text x="360" y="88" font-size="13" font-weight="700" fill="#1e40af">камера</text>
+</g>
+<g class="cb-block" data-info="th" style="cursor:pointer">
+<path d="M210 128 Q250 118 290 128" fill="none" stroke="#b45309" stroke-width="2"/>
+<text x="110" y="132" text-anchor="end" font-size="13" font-weight="700" fill="#1e40af">биметалл</text>
+</g>
+<g class="cb-block" data-info="em" style="cursor:pointer">
+<ellipse cx="250" cy="158" rx="32" ry="10" fill="none" stroke="#b45309" stroke-width="1.6"/>
+<ellipse cx="250" cy="168" rx="32" ry="10" fill="none" stroke="#b45309" stroke-width="1.6"/>
+<text x="360" y="168" font-size="13" font-weight="700" fill="#1e40af">ЭМ катушка</text>
+</g>
+<text x="250" y="208" text-anchor="middle" font-size="12" fill="#64748b">зажимы</text>
+</svg>
+</div>
+<div class="asutp-tabs">
+<button type="button" class="asutp-tab active" data-info="intro">Обзор</button>
+<button type="button" class="asutp-tab" data-info="free">Свободное</button>
+<button type="button" class="asutp-tab" data-info="arc">Дуга</button>
+</div>
+</div>
+<aside class="asutp-panel" id="cbCorePanel">
+<h3>Обзор</h3>
+<p>В одном корпусе: силовые контакты, дугогасительная камера, механизм с защёлкой и расцепители.</p>
+<p>Расцепитель не размыкает ток сам — он срывает защёлку, пружина механизма рвёт контакты.</p>
+</aside>
+</div>
+</section>
+
+<section class="slide slide-cb-act-interactive">
+<h2>Принцип действия</h2>
+<div class="slide-body asutp-interactive">
+<div class="asutp-main">
+<p class="asutp-hint">Двигайте ток — сначала греется биметалл, при КЗ мгновенно бьёт электромагнит</p>
+<div class="asutp-diagram-wrap">
+<svg class="cb-svg" viewBox="0 0 520 210" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="Принцип действия автомата">
+<rect width="520" height="210" fill="#fafafa"/>
+<text x="36" y="36" font-size="13" font-weight="700" fill="#1e40af">L</text>
+<path d="M36 48 H120" stroke="#1e293b" stroke-width="1.5"/>
+<rect class="cb-act-left" x="120" y="36" width="54" height="22" fill="#fff" stroke="#1e293b" stroke-width="1.6"/>
+<rect class="cb-act-right" x="210" y="36" width="54" height="22" fill="#fff" stroke="#1e293b" stroke-width="1.6"/>
+<line class="cb-act-bridge" x1="174" y1="47" x2="210" y2="47" stroke="#1e293b" stroke-width="1.8"/>
+<path class="cb-act-arc" d="" fill="none" stroke="#d97706" stroke-width="2.2"/>
+<path d="M300 47 H330" stroke="#1e293b" stroke-width="1.5"/>
+<circle class="cb-act-load" cx="360" cy="47" r="14" fill="#fde68a" stroke="#d97706" stroke-width="1.4"/>
+<text x="360" y="78" text-anchor="middle" font-size="12" fill="#64748b">нагрузка</text>
+<path class="cb-act-bi" d="M140 110 Q180 110 220 110" fill="none" stroke="#b45309" stroke-width="2.2"/>
+<text x="100" y="114" text-anchor="end" font-size="13" font-weight="700" fill="#1e40af">биметалл</text>
+<g class="cb-act-em">
+<ellipse cx="180" cy="150" rx="28" ry="9" fill="none" stroke="#b45309" stroke-width="1.6"/>
+<rect class="cb-act-arm" x="168" y="162" width="24" height="10" fill="#e2e8f0" stroke="#1e293b" stroke-width="1.3"/>
+<text x="100" y="156" text-anchor="end" font-size="13" font-weight="700" fill="#1e40af">ЭМ</text>
+</g>
+<text class="cb-act-readout" x="260" y="198" text-anchor="middle" font-size="13" font-weight="700" fill="#1e40af">I = In · контакты замкнуты</text>
+</svg>
+</div>
+<div class="asutp-tabs">
+<button type="button" class="asutp-tab active" data-info="intro">Обзор</button>
+<button type="button" class="asutp-tab" data-info="ovl">Перегрузка</button>
+<button type="button" class="asutp-tab" data-info="sc">КЗ</button>
+</div>
+<div class="cb-controls">
+<label class="cb-ctrl">
+<span>ток I / In</span>
+<input type="range" class="cb-act-range" min="0" max="100" value="20" aria-label="Ток">
+<span class="cb-act-val">1,0 In</span>
+</label>
+</div>
+</div>
+<aside class="asutp-panel" id="cbActPanel">
+<h3>Обзор</h3>
+<p>Ток нагрузки течёт через контакты, биметалл и катушку электромагнита.</p>
+<p>При аварии расцепитель срывает защёлку — контакты рвутся <strong>независимо</strong> от положения рукоятки (свободное расцепление).</p>
+</aside>
+</div>
+</section>
+
+<section class="slide slide-cb-em-interactive">
+<h2>Электромагнитный расцепитель</h2>
+<div class="slide-body asutp-interactive">
+<div class="asutp-main">
+<p class="asutp-hint">Двигайте ток КЗ — катушка втягивает якорь и бьёт по защёлке</p>
+<div class="asutp-diagram-wrap">
+<svg class="cb-svg" viewBox="0 0 500 210" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="Электромагнитный расцепитель">
+<rect width="500" height="210" fill="#fafafa"/>
+<text x="40" y="48" font-size="13" font-weight="700" fill="#1e40af">I</text>
+<path d="M40 60 H88" stroke="#1e293b" stroke-width="1.5"/>
+<ellipse cx="130" cy="60" rx="42" ry="16" fill="none" stroke="#b45309" stroke-width="1.7"/>
+<ellipse cx="130" cy="76" rx="42" ry="16" fill="none" stroke="#b45309" stroke-width="1.7"/>
+<text x="130" y="36" text-anchor="middle" font-size="13" font-weight="700" fill="#1e40af">катушка</text>
+<rect class="cb-em-plunger" x="118" y="96" width="24" height="36" fill="#e2e8f0" stroke="#1e293b" stroke-width="1.5"/>
+<text x="178" y="148" font-size="13" font-weight="700" fill="#1e40af">якорь</text>
+<rect x="300" y="88" width="90" height="28" fill="#fff" stroke="#1e293b" stroke-width="1.5"/>
+<text x="345" y="106" text-anchor="middle" font-size="13" font-weight="700" fill="#1e40af">защёлка</text>
+<line class="cb-em-hit" x1="142" y1="132" x2="300" y2="102" stroke="#94a3b8" stroke-width="1.3" stroke-dasharray="5 4"/>
+<text class="cb-em-readout" x="250" y="188" text-anchor="middle" font-size="13" font-weight="700" fill="#1e40af">I = 2 In · якорь на месте</text>
+</svg>
+</div>
+<div class="asutp-tabs">
+<button type="button" class="asutp-tab active" data-info="intro">Обзор</button>
+<button type="button" class="asutp-tab" data-info="why">Зачем</button>
+<button type="button" class="asutp-tab" data-info="set">Уставка</button>
+</div>
+<div class="cb-controls">
+<label class="cb-ctrl">
+<span>ток КЗ</span>
+<input type="range" class="cb-em-range" min="0" max="100" value="15" aria-label="Ток КЗ">
+<span class="cb-em-val">2 In</span>
+</label>
+</div>
+</div>
+<aside class="asutp-panel" id="cbEmPanel">
+<h3>Обзор</h3>
+<p>Катушка включена <strong>последовательно</strong> в цепь. При токе короткого замыкания якорь мгновенно втягивается и срывает механизм.</p>
+<p>Это защита от КЗ: время — миллисекунды, без тепловой инерции.</p>
+</aside>
+</div>
+</section>
+
+<section class="slide slide-cb-th-interactive">
+<h2>Тепловой расцепитель</h2>
+<div class="slide-body asutp-interactive">
+<div class="asutp-main">
+<p class="asutp-hint">Двигайте ток и время — биметалл гнётся медленно, при КЗ не успевает</p>
+<div class="asutp-diagram-wrap">
+<svg class="cb-svg" viewBox="0 0 500 210" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="Тепловой расцепитель">
+<rect width="500" height="210" fill="#fafafa"/>
+<path class="cb-th-bi" d="M80 140 L240 140" fill="none" stroke="#b45309" stroke-width="3.2" stroke-linecap="round"/>
+<line x1="80" y1="140" x2="80" y2="168" stroke="#1e293b" stroke-width="1.5"/>
+<rect x="300" y="88" width="88" height="28" fill="#fff" stroke="#1e293b" stroke-width="1.5"/>
+<text x="344" y="106" text-anchor="middle" font-size="13" font-weight="700" fill="#1e40af">защёлка</text>
+<text x="160" y="172" text-anchor="middle" font-size="13" font-weight="700" fill="#1e40af">биметалл</text>
+<text class="cb-th-t" x="160" y="44" text-anchor="middle" font-size="13" font-weight="700" fill="#b45309">нагрев</text>
+<text class="cb-th-readout" x="250" y="198" text-anchor="middle" font-size="13" font-weight="700" fill="#1e40af">1,2 In · пластина ещё прямая</text>
+</svg>
+</div>
+<div class="asutp-tabs">
+<button type="button" class="asutp-tab active" data-info="intro">Обзор</button>
+<button type="button" class="asutp-tab" data-info="inv">Время</button>
+<button type="button" class="asutp-tab" data-info="amb">Окружающая T</button>
+</div>
+<div class="cb-controls">
+<label class="cb-ctrl">
+<span>ток / In</span>
+<input type="range" class="cb-th-i" min="10" max="100" value="30" aria-label="Ток">
+<span class="cb-th-i-val">1,2 In</span>
+</label>
+<label class="cb-ctrl">
+<span>время</span>
+<input type="range" class="cb-th-t-range" min="0" max="100" value="20" aria-label="Время">
+<span class="cb-th-t-val">мало</span>
+</label>
+</div>
+</div>
+<aside class="asutp-panel" id="cbThPanel">
+<h3>Обзор</h3>
+<p>Два металла с разным расширением. Ток греет пластину — она изгибается и нажимает на защёлку.</p>
+<p>Чем больше ток, тем быстрее нагрев: <strong>обратнозависимая</strong> характеристика. Пуск двигателя биметалл «переживает», длительная перегрузка — нет.</p>
+</aside>
+</div>
+</section>
+
+<section class="slide slide-cb-comb-interactive">
+<h2>Комбинированный расцепитель</h2>
+<div class="slide-body asutp-interactive">
+<div class="asutp-main">
+<p class="asutp-hint">Нажмите зону характеристики — тепловая ветвь и отсечка КЗ в одном полюсе</p>
+<div class="asutp-diagram-wrap">
+<svg class="cb-svg" viewBox="0 0 500 210" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="Комбинированная характеристика">
+<rect width="500" height="210" fill="#fafafa"/>
+<line x1="56" y1="180" x2="460" y2="180" stroke="#1e293b" stroke-width="1.4"/>
+<line x1="56" y1="180" x2="56" y2="28" stroke="#1e293b" stroke-width="1.4"/>
+<text x="468" y="200" font-size="12" fill="#475569">I / In</text>
+<text x="16" y="22" font-size="13" fill="#475569">t</text>
+<g class="cb-comb-zone" data-info="th" style="cursor:pointer">
+<path d="M90 48 Q160 70 240 130 T320 168" fill="none" stroke="#b45309" stroke-width="2.3"/>
+<text x="150" y="70" font-size="13" font-weight="700" fill="#b45309">тепловой</text>
+</g>
+<g class="cb-comb-zone" data-info="em" style="cursor:pointer">
+<line x1="320" y1="168" x2="320" y2="48" stroke="#1e40af" stroke-width="2.3"/>
+<text x="336" y="64" font-size="13" font-weight="700" fill="#1e40af">ЭМ отсечка</text>
+</g>
+<text x="90" y="198" font-size="11" fill="#64748b">1</text>
+<text x="320" y="198" font-size="11" fill="#64748b">5…10</text>
+<text class="cb-comb-readout" x="270" y="18" text-anchor="middle" font-size="13" font-weight="700" fill="#1e40af">два расцепителя · одна защёлка</text>
+</svg>
+</div>
+<div class="asutp-tabs">
+<button type="button" class="asutp-tab active" data-info="intro">Обзор</button>
+<button type="button" class="asutp-tab" data-info="th">Тепловой</button>
+<button type="button" class="asutp-tab" data-info="em">Электромагнит</button>
+</div>
+</div>
+<aside class="asutp-panel" id="cbCombPanel">
+<h3>Обзор</h3>
+<p>В бытовом и большинстве промышленных автоматов в каждом полюсе стоят <strong>оба</strong> расцепителя: тепловой от перегрузки, электромагнитный от КЗ.</p>
+<p>Одна защёлка, две причины срыва — это комбинированный расцепитель.</p>
+</aside>
+</div>
+</section>
+
+<section class="slide slide-cb-iec-interactive">
+<h2>Характеристики МЭК 60898</h2>
+<div class="slide-body asutp-interactive">
+<div class="asutp-main">
+<p class="asutp-hint">Выберите кривую B, C или D — тепловая ветвь общая, меняется только отсечка</p>
+<div class="asutp-diagram-wrap">
+<svg class="cb-svg cb-iec-svg" viewBox="0 0 540 242" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="Кривые B C D по МЭК 60898">
+<rect width="540" height="242" fill="#fafafa"/>
+<rect class="cb-iec-band" x="250" y="58" width="80" height="132" fill="#dbeafe" opacity="0.5"/>
+<path class="cb-iec-thermal" d="" fill="none" stroke="#b45309" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+<line class="cb-iec-cut" x1="290" y1="190" x2="290" y2="58" stroke="#1e40af" stroke-width="2.6"/>
+<line x1="70" y1="190" x2="478" y2="190" stroke="#1e293b" stroke-width="1.7"/>
+<line x1="70" y1="190" x2="70" y2="34" stroke="#1e293b" stroke-width="1.7"/>
+<polygon points="478,190 470,186 470,194" fill="#1e293b"/>
+<polygon points="70,34 66,42 74,42" fill="#1e293b"/>
+<text x="488" y="224" font-size="17" fill="#334155">I / In</text>
+<text x="24" y="30" font-size="18" fill="#334155">t</text>
+<text x="80" y="52" font-size="14" fill="#64748b">часы</text>
+<text x="80" y="182" font-size="14" fill="#64748b">мс</text>
+<g class="cb-iec-ticks" font-size="16" fill="#334155"></g>
+<text class="cb-iec-th-lab" x="126" y="88" font-size="16" font-weight="700" fill="#b45309">тепловой</text>
+<text class="cb-iec-readout" x="270" y="48" text-anchor="middle" font-size="17" font-weight="700" fill="#1e40af">тип C · отсечка 5…10 In</text>
+</svg>
+</div>
+<div class="asutp-tabs">
+<button type="button" class="asutp-tab" data-info="b">B · 3…5 In</button>
+<button type="button" class="asutp-tab active" data-info="c">C · 5…10 In</button>
+<button type="button" class="asutp-tab" data-info="d">D · 10…20 In</button>
+<button type="button" class="asutp-tab" data-info="th">Тепловой</button>
+</div>
+</div>
+<aside class="asutp-panel" id="cbIecPanel">
+<h3>Тип C</h3>
+<p>Отсечка <strong>5…10 In</strong>. Универсальная кривая для розеток и смешанной нагрузки в зданиях и щитах САУ.</p>
+</aside>
+</div>
+</section>
+
+<section class="slide slide-cb-ind-interactive">
+<h2>МЭК 60947-2</h2>
+<div class="slide-body asutp-interactive">
+<div class="asutp-main">
+<p class="asutp-hint">Нажмите параметр — это промышленные автоматы, не бытовые</p>
+<div class="app-purpose-grid em-fast-grid">
+<button type="button" class="app-purpose-card active" data-info="icu">Icu и Ics</button>
+<button type="button" class="app-purpose-card" data-info="cat">Категории A и B</button>
+<button type="button" class="app-purpose-card" data-info="adj">Регулировка</button>
+<button type="button" class="app-purpose-card" data-info="vs">Не 60898</button>
+</div>
+</div>
+<aside class="asutp-panel" id="cbIndPanel">
+<h3>Icu и Ics</h3>
+<p><strong>Icu</strong> — предельная коммутационная способность: автомат отключит КЗ и может после этого не работать.</p>
+<p><strong>Ics</strong> — рабочая: после отключения такого тока аппарат снова готов. Для щита САУ берут Icu ≥ ток КЗ в точке установки.</p>
+</aside>
+</div>
+</section>
+
+<section class="slide slide-cb-el-interactive">
+<h2>Электронные расцепители</h2>
+<div class="slide-body asutp-interactive">
+<div class="asutp-main">
+<p class="asutp-hint">Нажмите ступень — трансформаторы тока и блок вместо биметалла</p>
+<div class="app-purpose-grid em-fast-grid">
+<button type="button" class="app-purpose-card active" data-info="l">L · перегрузка</button>
+<button type="button" class="app-purpose-card" data-info="s">S · КЗ с выдержкой</button>
+<button type="button" class="app-purpose-card" data-info="i">I · мгновенно</button>
+<button type="button" class="app-purpose-card" data-info="g">G · земля</button>
+</div>
+</div>
+<aside class="asutp-panel" id="cbElPanel">
+<h3>L · перегрузка</h3>
+<p>Long-time: уставка тока Ir и времени tr. Заменяет тепловой расцепитель, но не боится окружающей температуры так же сильно.</p>
+<p>Ток измеряют трансформаторы в полюсах, решение принимает электронный блок.</p>
+</aside>
+</div>
+</section>
+
+<section class="slide slide-cb-uv-interactive">
+<h2>Расцепитель минимального напряжения и независимый</h2>
+<div class="slide-body asutp-interactive">
+<div class="asutp-main">
+<p class="asutp-hint">Нажмите катушку — одна держит автомат включённым, другая срывает по команде</p>
+<div class="asutp-diagram-wrap">
+<svg class="cb-svg" viewBox="0 0 520 200" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="Дополнительные расцепители">
+<rect width="520" height="200" fill="#fafafa"/>
+<g class="cb-uv-block" data-info="uv" style="cursor:pointer">
+<rect x="24" y="36" width="220" height="128" fill="#fff" stroke="#1e293b" stroke-width="1.6"/>
+<ellipse cx="134" cy="88" rx="36" ry="14" fill="none" stroke="#b45309" stroke-width="1.6"/>
+<text x="134" y="64" text-anchor="middle" font-size="14" font-weight="700" fill="#1e40af">минимум U</text>
+<text x="134" y="128" text-anchor="middle" font-size="12" fill="#64748b">катушка под напряжением</text>
+<text x="134" y="148" text-anchor="middle" font-size="12" fill="#1e40af">нет U → отключение</text>
+</g>
+<g class="cb-uv-block" data-info="shunt" style="cursor:pointer">
+<rect x="276" y="36" width="220" height="128" fill="#fff" stroke="#1e293b" stroke-width="1.6"/>
+<ellipse cx="386" cy="88" rx="36" ry="14" fill="none" stroke="#b45309" stroke-width="1.6"/>
+<text x="386" y="64" text-anchor="middle" font-size="14" font-weight="700" fill="#1e40af">независимый</text>
+<text x="386" y="128" text-anchor="middle" font-size="12" fill="#64748b">импульс с ПЛК / кнопки</text>
+<text x="386" y="148" text-anchor="middle" font-size="12" fill="#1e40af">есть U → отключение</text>
+</g>
+</svg>
+</div>
+<div class="asutp-tabs">
+<button type="button" class="asutp-tab active" data-info="uv">Минимум U</button>
+<button type="button" class="asutp-tab" data-info="shunt">Независимый</button>
+<button type="button" class="asutp-tab" data-info="plc">Выход ПЛК</button>
+</div>
+</div>
+<aside class="asutp-panel" id="cbUvPanel">
+<h3>Минимум U</h3>
+<p>Катушка питается от сети. Автомат <strong>держится</strong> включённым, пока есть напряжение. Провал ниже ~0,35…0,7 Un — расцепление.</p>
+<p>Нужен, чтобы механизм не самозапустился после пропадания питания.</p>
+</aside>
+</div>
+</section>
+
+<section class="slide slide-cb-diff-interactive">
+<h2>Дифференциальный расцепитель</h2>
+<div class="slide-body asutp-interactive">
+<div class="asutp-main">
+<p class="asutp-hint">Двигайте утечку — сумма токов в кольце не ноль, расцепитель срабатывает</p>
+<div class="asutp-diagram-wrap">
+<svg class="cb-svg" viewBox="0 0 520 210" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="Дифференциальный расцепитель">
+<rect width="520" height="210" fill="#fafafa"/>
+<ellipse cx="200" cy="100" rx="70" ry="70" fill="#fff" stroke="#1e293b" stroke-width="1.7"/>
+<text x="200" y="104" text-anchor="middle" font-size="13" font-weight="700" fill="#1e40af">ТТ</text>
+<path d="M40 70 H270" stroke="#1e40af" stroke-width="2"/>
+<path d="M40 100 H270" stroke="#1e40af" stroke-width="2"/>
+<path d="M40 130 H270" stroke="#64748b" stroke-width="2"/>
+<text x="28" y="74" text-anchor="end" font-size="12" fill="#1e40af">L1</text>
+<text x="28" y="104" text-anchor="end" font-size="12" fill="#1e40af">L2</text>
+<text x="28" y="134" text-anchor="end" font-size="12" fill="#64748b">N</text>
+<path class="cb-diff-leak" d="M270 70 Q340 40 400 88" fill="none" stroke="#dc2626" stroke-width="1.8" opacity="0"/>
+<text class="cb-diff-ileak" x="400" y="80" font-size="13" font-weight="700" fill="#dc2626" opacity="0">IΔ</text>
+<rect x="360" y="120" width="100" height="36" fill="#fff" stroke="#1e293b" stroke-width="1.5"/>
+<text x="410" y="142" text-anchor="middle" font-size="13" font-weight="700" fill="#1e40af">расцепитель</text>
+<text class="cb-diff-readout" x="260" y="198" text-anchor="middle" font-size="13" font-weight="700" fill="#1e40af">IΔ = 0 · сумма токов ноль</text>
+</svg>
+</div>
+<div class="asutp-tabs">
+<button type="button" class="asutp-tab active" data-info="intro">Обзор</button>
+<button type="button" class="asutp-tab" data-info="tor">Кольцо</button>
+<button type="button" class="asutp-tab" data-info="idn">IΔn</button>
+</div>
+<div class="cb-controls">
+<label class="cb-ctrl">
+<span>ток утечки IΔ</span>
+<input type="range" class="cb-diff-range" min="0" max="100" value="0" aria-label="Ток утечки">
+<span class="cb-diff-val">0 мА</span>
+</label>
+</div>
+</div>
+<aside class="asutp-panel" id="cbDiffPanel">
+<h3>Обзор</h3>
+<p>Все рабочие проводники проходят через одно магнитопроводное кольцо. Если утечки нет, сумма токов ноль — во вторичной обмотке ЭДС нет.</p>
+<p>Ток на землю (человек, повреждение изоляции) даёт IΔ — расцепитель срывает автомат.</p>
+</aside>
+</div>
+</section>
+
+<section class="slide slide-cb-rcd-interactive">
+<h2>Дифференциальные автоматы и УЗО</h2>
+<div class="slide-body asutp-interactive">
+<div class="asutp-main">
+<p class="asutp-hint">Нажмите аппарат — УЗО не защищает от КЗ, АВДТ совмещает оба</p>
+<div class="app-purpose-grid em-fast-grid">
+<button type="button" class="app-purpose-card active" data-info="rcd">УЗО</button>
+<button type="button" class="app-purpose-card" data-info="rcbo">АВДТ</button>
+<button type="button" class="app-purpose-card" data-info="type">Типы A и AC</button>
+<button type="button" class="app-purpose-card" data-info="test">Кнопка T</button>
+</div>
+</div>
+<aside class="asutp-panel" id="cbRcdPanel">
+<h3>УЗО</h3>
+<p>Устройство защитного отключения: только дифференциальный расцепитель. От перегрузки и КЗ <strong>не защищает</strong> — впереди ставят автомат.</p>
+<p>Типовые IΔn: 10, 30, 100, 300 мА. 30 мА — защита человека.</p>
+</aside>
+</div>
+</section>
+
+<section class="slide slide-cb-sel-interactive">
+<h2>Выбор автоматических выключателей</h2>
+<div class="slide-body asutp-interactive">
+<div class="asutp-main">
+<p class="asutp-hint">Нажмите условие — In, кривая, Icu и жила выбираются вместе</p>
+<div class="app-purpose-grid em-fast-grid">
+<button type="button" class="app-purpose-card active" data-info="in">Номинал In</button>
+<button type="button" class="app-purpose-card" data-info="curve">Кривая</button>
+<button type="button" class="app-purpose-card" data-info="icu">Icu</button>
+<button type="button" class="app-purpose-card" data-info="cable">Кабель</button>
+</div>
+</div>
+<aside class="asutp-panel" id="cbSelPanel">
+<h3>Номинал In</h3>
+<p>Ib ≤ In ≤ Iz: рабочий ток нагрузки не выше номинала автомата, номинал не выше длительно допустимого тока кабеля.</p>
+<p>Для двигателя In берут с запасом на пуск, а кривую — D или специальную моторную.</p>
+</aside>
+</div>
+</section>
+
+<section class="slide slide-cb-coord-interactive">
+<h2>Согласование характеристик</h2>
+<div class="slide-body asutp-interactive">
+<div class="asutp-main">
+<p class="asutp-hint">Двигайте ток КЗ — должен отключиться ближайший автомат, ввод остаться</p>
+<div class="asutp-diagram-wrap">
+<svg class="cb-svg" viewBox="0 0 500 210" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="Селективность">
+<rect width="500" height="210" fill="#fafafa"/>
+<rect class="cb-coord-up" x="40" y="40" width="100" height="44" fill="#fff" stroke="#1e293b" stroke-width="1.6"/>
+<text x="90" y="66" text-anchor="middle" font-size="13" font-weight="700" fill="#1e40af">Q1 ввод</text>
+<line x1="90" y1="84" x2="90" y2="118" stroke="#1e293b" stroke-width="1.5"/>
+<line x1="90" y1="118" x2="280" y2="118" stroke="#1e293b" stroke-width="1.5"/>
+<rect class="cb-coord-dn" x="230" y="96" width="100" height="44" fill="#fff" stroke="#1e293b" stroke-width="1.6"/>
+<text x="280" y="122" text-anchor="middle" font-size="13" font-weight="700" fill="#1e40af">Q2 линия</text>
+<text class="cb-coord-fault" x="418" y="108" font-size="13" font-weight="700" fill="#dc2626">КЗ</text>
+<circle class="cb-coord-dot" cx="400" cy="118" r="6" fill="#dc2626"/>
+<text class="cb-coord-readout" x="250" y="188" text-anchor="middle" font-size="13" font-weight="700" fill="#1e40af">малый ток · селективность есть</text>
+</svg>
+</div>
+<div class="asutp-tabs">
+<button type="button" class="asutp-tab active" data-info="intro">Обзор</button>
+<button type="button" class="asutp-tab" data-info="time">По времени</button>
+<button type="button" class="asutp-tab" data-info="curr">По току</button>
+</div>
+<div class="cb-controls">
+<label class="cb-ctrl">
+<span>ток КЗ</span>
+<input type="range" class="cb-coord-range" min="0" max="100" value="25" aria-label="Ток КЗ">
+<span class="cb-coord-val">линия</span>
+</label>
+</div>
+</div>
+<aside class="asutp-panel" id="cbCoordPanel">
+<h3>Обзор</h3>
+<p>Селективность: при КЗ на отходящей линии отключается <strong>Q2</strong>, ввод Q1 остаётся. Иначе падает весь щит.</p>
+<p>Добиваются ступенью номиналов, кривыми и выдержкой электронных расцепителей. Каскад (backup) — когда верхний помогает гасить, если нижнему не хватает Icu.</p>
+</aside>
+</div>
+</section>
+
+<section class="slide slide-cb-where-interactive">
+<h2>Где это в САУ</h2>
+<div class="slide-body asutp-interactive">
+<div class="asutp-main">
+<p class="asutp-hint">Нажмите узел — автомат в силовом щите, ПЛК видит статус и может отключить</p>
+<div class="app-purpose-grid em-fast-grid">
+<button type="button" class="app-purpose-card active" data-info="in">Ввод щита</button>
+<button type="button" class="app-purpose-card" data-info="mot">Фидер двигателя</button>
+<button type="button" class="app-purpose-card" data-info="plc">Статус (плк)</button>
+<button type="button" class="app-purpose-card" data-info="estop">Авар. стоп</button>
+</div>
+</div>
+<aside class="asutp-panel" id="cbWherePanel">
+<h3>Ввод щита</h3>
+<p>Автомат на вводе шкафа САУ: Icu по расчёту КЗ, селективность к вышестоящему на подстанции.</p>
+<p>Часто промышленный (МЭК 60947-2) с электронным расцепителем.</p>
+</aside>
+</div>
+</section>
+
+<section class="slide slide-title"><span class="tag">Конец лекции 6</span>
+<h1>Спасибо за внимание!</h1>
+<p><a href="../index.html" class="link-home">← На главную</a></p></section>
+</div>
+
+<div class="controls">
+<div class="controls-left">
+<a href="../index.html" class="course-title-bar course-title-link">Средства автоматизации и управления</a>
+</div>
+<div class="controls-left">
+<a href="../index.html" class="btn-nav btn-home" title="На главную">⌂</a>
+<button class="btn-nav" id="prevBtn">← Назад</button>
+<button class="btn-nav" id="nextBtn">Вперёд →</button>
+</div>
+<div class="progress-wrap"><div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div></div>
+<span class="slide-counter" id="slideCounter">1 / 18</span>
+<div class="controls-right">
+<button class="btn-nav" id="overviewBtn">Обзор</button>
+<button class="btn-nav" id="fullscreenBtn">⛶</button>
+</div>
+</div>
+<script src="../js/presentation.js"></script>
+</body></html>

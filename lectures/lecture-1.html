@@ -1,0 +1,1461 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Средства автоматизации и управления</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Merriweather:wght@700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/presentation.css">
+</head>
+<body>
+  <div class="deck">
+
+    <!-- 1. Title -->
+    <section class="slide slide-title active">
+      <span class="tag">Средства автоматизации и управления</span>
+      <h1>Автоматизированные системы управления, системы автоматики и автоматического управления и их технические средства</h1>
+      <p>Средства автоматизации и управления</p>
+    </section>
+
+    <section class="slide">
+      <h2>Цель освоения дисциплины</h2>
+      <div class="slide-body">
+        <div class="highlight-box" style="font-size:1.05em;line-height:1.55">
+          Формирование у студентов системных знаний о принципах построения, методах расчёта и практического применения технических средств автоматизации (датчиков, исполнительных устройств, контроллеров) для разработки и эксплуатации современных систем управления технологическими процессами и робототехническими комплексами.
+        </div>
+        <div class="grid-3" style="margin-top:0.85em">
+          <div class="variant-mini"><h4>Знания</h4><p>Принципы построения ТС автоматизации</p></div>
+          <div class="variant-mini"><h4>Умения</h4><p>Методы расчёта и применения</p></div>
+          <div class="variant-mini"><h4>Практика</h4><p>АСУТП и робототехнические комплексы</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <h2>Основные задачи</h2>
+      <div class="slide-body slide-body-dense">
+        <ol class="tasks-list" style="margin:0;padding-left:1.15em;font-size:1.12em;line-height:1.5">
+          <li style="margin-bottom:0.55em">Изучить физические принципы работы и характеристики датчиков (сенсоров) различных типов: <strong>резистивных, ёмкостных, индуктивных, оптических, пьезоэлектрических и ультразвуковых</strong>.</li>
+          <li style="margin-bottom:0.55em">Освоить методы анализа <strong>статических и динамических погрешностей</strong> измерительных систем.</li>
+          <li style="margin-bottom:0.55em">Изучить устройство и принципы управления <strong>электромеханическими, электрогидравлическими и пневматическими</strong> исполнительными механизмами.</li>
+          <li style="margin-bottom:0.55em">Сформировать навыки программирования промышленных контроллеров (<strong>ПЛК</strong>) и проектирования человеко-машинных интерфейсов (<strong>SCADA / HMI</strong>).</li>
+          <li>Научить обосновывать выбор технических средств исходя из требований к системе управления, условий эксплуатации и <strong>экономической эффективности</strong>.</li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="slide slide-literature">
+      <h2>Рекомендуемая литература</h2>
+      <div class="slide-body slide-body-dense">
+        <div class="literature-grid">
+          <ol class="literature-list">
+            <li><strong>Булгаков, А. Г.</strong> Промышленные роботы. Кинематика, динамика, контроль и управление / А. Г. Булгаков. — Москва : СОЛОН-ПРЕСС, 2007.</li>
+            <li><strong>Волков, И. Н.</strong> Электромашинные устройства автоматики / И. Н. Волков, В. Н. Миловзоров. — Москва : Высшая школа, 1978.</li>
+            <li><strong>Зенкевич, С. Л.</strong> Основы управления манипуляционными роботами / С. Л. Зенкевич, А. С. Ющенко. — 2-е изд. — Москва : МГТУ им. Н. Э. Баумана, 2005.</li>
+            <li><strong>Кацман, М. М.</strong> Электрические машины / М. М. Кацман. — Москва : Высшая школа, 2001.</li>
+            <li><strong>Кацман, М. М.</strong> Электрические машины автоматических систем / М. М. Кацман, Ф. М. Юферов. — Москва : Высшая школа, 1979.</li>
+          </ol>
+          <ol class="literature-list" start="6">
+            <li><strong>Келим, Ю. М.</strong> Типовые элементы систем автоматического управления / Ю. М. Келим. — Москва : Форум-Пресс, 2002.</li>
+            <li><strong>Ким, Д. П.</strong> Теория автоматического управления : учебник и практикум для вузов / Д. П. Ким. — Москва : Издательство Юрайт, 2024.</li>
+            <li><strong>Кремлев, А. С.</strong> Моделирование и программирование робототехнических комплексов / А. С. Кремлев, К. А. Зименко, А. С. Боргуль. — Санкт-Петербург : НИУ ИТМО, 2013.</li>
+            <li><strong>Лукинов, А. П.</strong> Проектирование мехатронных и робототехнических устройств / А. П. Лукинов. — Санкт-Петербург : Лань, 2012.</li>
+          </ol>
+          <ol class="literature-list" start="10">
+            <li><strong>Мирошник, И. В.</strong> Теория автоматического управления: Нелинейные и оптимальные системы / И. В. Мирошник. — Санкт-Петербург : Питер, 2006.</li>
+            <li><strong>Шандров, Б. В.</strong> Технические средства автоматизации / Б. В. Шандров, А. Д. Чудаков. — Москва : Академия, 2007. — 368 с.</li>
+            <li><strong>Гудинов, В. Н.</strong> Технические средства автоматизации : конспект лекций / В. Н. Гудинов, А. П. Корнейчук. — Омск : Изд-во ОмГТУ, 2006. — 66 с.</li>
+            <li><strong>Технические средства автоматизации и управления</strong> : учебник для вузов / под общей редакцией О. С. Колосова. — Москва : Издательство Юрайт, 2026. — 331 с. — (Высшее образование). — ISBN 978-5-534-19350-3.</li>
+          </ol>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. Agenda -->
+    <section class="slide slide-agenda">
+      <h2>Содержание</h2>
+      <div class="slide-body">
+        <ol>
+          <li>Цель освоения дисциплины</li>
+          <li>Основные задачи</li>
+          <li>Рекомендуемая литература</li>
+          <li>Классификации АСУ и САУ</li>
+          <li>Компоненты комплекса. СА и САУ</li>
+          <li>Пример: управление судном</li>
+          <li>Функциональная схема АСУТП</li>
+          <li>Отличие АСУП и АСУТП</li>
+          <li>Принципы построения АСУ. Уровни АСУТП</li>
+          <li>Принципы 3–6. Открытые системы</li>
+          <li>АСУТП на базе ПЛК</li>
+          <li>Иерархия АСУ</li>
+          <li>Функции АСУТП</li>
+          <li>SCADA и сегмент сети ПЛК</li>
+          <li>ERP-системы. АСНИ</li>
+          <li>Этапы и тенденции развития ТС АСУ</li>
+          <li>Этапы проектирования по ТЗ</li>
+          <li>Термины. История. Классификация аппаратов</li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- Классификации АСУ и САУ -->
+    <section class="slide">
+      <h2>Классификации АСУ и САУ</h2>
+      <div class="slide-body">
+        <p>Бурное развитие управляющей вычислительной техники привело к появлению множества аббревиатур:</p>
+        <div class="grid-3 grid-terms">
+          <div class="term-mini"><div class="abbr">СА</div><div class="name">Системы автоматики</div><div class="desc">Сигнализация, пуск/останов, блокировки и защиты</div></div>
+          <div class="term-mini"><div class="abbr">САУ</div><div class="name">Системы авт. управления</div><div class="desc">Управление «по отклонению» с обратной связью</div></div>
+          <div class="term-mini"><div class="abbr">АСУ</div><div class="name">Автоматизированные СУ</div><div class="desc">Человек включён в контур управления</div></div>
+          <div class="term-mini"><div class="abbr">АСУП</div><div class="name">АСУ предприятием</div><div class="desc">Планирование, учёт, управление ресурсами</div></div>
+          <div class="term-mini"><div class="abbr">АСУТП</div><div class="name">АСУ техн. процессом</div><div class="desc">Сбор данных и управление в реальном времени</div></div>
+          <div class="term-mini"><div class="abbr">АСНИ</div><div class="name">АСУ науч. исследованиями</div><div class="desc">Автоматизация НИР</div></div>
+        </div>
+        <div class="highlight-box">
+          <div class="label">Ключевое различие</div>
+          В <strong>АСУ</strong> человек включён в контур управления. В <strong>СА</strong> и <strong>САУ</strong> участие человека исключено.
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. Components + diagrams interactive -->
+    <section class="slide slide-sa-interactive">
+      <h2>Компоненты комплекса. СА и САУ</h2>
+      <div class="slide-body sa-interactive">
+        <div class="sa-main">
+          <p class="asutp-hint">Нажмите на блок схемы — справа откроется определение</p>
+          <div class="sa-diagrams">
+            <figure class="sa-fig">
+              <figcaption class="tb-caption">а) Системы автоматики (разомкнутый цикл)</figcaption>
+              <svg class="tb-svg sa-svg-a" viewBox="0 0 240 70" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                  <marker id="sa-arr" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#1e293b"/></marker>
+                </defs>
+                <g class="sa-block" data-info="d" style="cursor:pointer">
+                  <rect x="16" y="14" width="44" height="42" fill="#fff" stroke="#1e293b" stroke-width="1.5"/>
+                  <text x="38" y="41" text-anchor="middle" font-family="Merriweather, Georgia, serif" font-size="16" font-weight="700" pointer-events="none">Д</text>
+                </g>
+                <line x1="60" y1="35" x2="90" y2="35" stroke="#1e293b" stroke-width="1.5" marker-end="url(#sa-arr)" pointer-events="none"/>
+                <g class="sa-block" data-info="iu" style="cursor:pointer">
+                  <rect x="90" y="14" width="44" height="42" fill="#fff" stroke="#1e293b" stroke-width="1.5"/>
+                  <text x="112" y="41" text-anchor="middle" font-family="Merriweather, Georgia, serif" font-size="15" font-weight="700" pointer-events="none">ИУ</text>
+                </g>
+                <line x1="134" y1="35" x2="164" y2="35" stroke="#1e293b" stroke-width="1.5" marker-end="url(#sa-arr)" pointer-events="none"/>
+                <g class="sa-block" data-info="o" style="cursor:pointer">
+                  <rect x="164" y="14" width="44" height="42" fill="#fff" stroke="#1e293b" stroke-width="1.5"/>
+                  <text x="186" y="41" text-anchor="middle" font-family="Merriweather, Georgia, serif" font-size="16" font-weight="700" pointer-events="none">О</text>
+                </g>
+              </svg>
+            </figure>
+            <figure class="sa-fig sa-fig-b">
+              <figcaption class="tb-caption">б) Системы автоматического управления (замкнутый цикл)</figcaption>
+              <svg class="tb-svg sa-svg-b" viewBox="0 0 455 132" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                  <marker id="sa-arr2" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#1e293b"/></marker>
+                </defs>
+                <g class="sa-block" data-info="z" style="cursor:pointer">
+                  <rect x="8" y="22" width="40" height="40" fill="#fff" stroke="#1e293b" stroke-width="1.5"/>
+                  <text x="28" y="48" text-anchor="middle" font-family="Merriweather, Georgia, serif" font-size="15" font-weight="700" pointer-events="none">З</text>
+                </g>
+                <line x1="48" y1="42" x2="78" y2="42" stroke="#1e293b" stroke-width="1.5" marker-end="url(#sa-arr2)" pointer-events="none"/>
+                <text x="63" y="16" text-anchor="middle" font-family="Merriweather, Georgia, serif" font-size="14" font-style="italic" pointer-events="none">X</text>
+                <g class="sa-block" data-info="us" style="cursor:pointer">
+                  <rect x="78" y="22" width="40" height="40" fill="#fff" stroke="#1e293b" stroke-width="1.5"/>
+                  <text x="98" y="48" text-anchor="middle" font-family="Merriweather, Georgia, serif" font-size="14" font-weight="700" pointer-events="none">УС</text>
+                </g>
+                <line x1="118" y1="42" x2="148" y2="42" stroke="#1e293b" stroke-width="1.5" marker-end="url(#sa-arr2)" pointer-events="none"/>
+                <text x="133" y="16" text-anchor="middle" font-family="Merriweather, Georgia, serif" font-size="14" font-style="italic" pointer-events="none">Δ</text>
+                <g class="sa-block" data-info="upu" style="cursor:pointer">
+                  <rect x="148" y="22" width="40" height="40" fill="#fff" stroke="#1e293b" stroke-width="1.5"/>
+                  <text x="168" y="48" text-anchor="middle" font-family="Merriweather, Georgia, serif" font-size="12" font-weight="700" pointer-events="none">УПУ</text>
+                </g>
+                <line x1="188" y1="42" x2="218" y2="42" stroke="#1e293b" stroke-width="1.5" marker-end="url(#sa-arr2)" pointer-events="none"/>
+                <g class="sa-block" data-info="um" style="cursor:pointer">
+                  <rect x="218" y="22" width="40" height="40" fill="#fff" stroke="#1e293b" stroke-width="1.5"/>
+                  <text x="238" y="48" text-anchor="middle" font-family="Merriweather, Georgia, serif" font-size="14" font-weight="700" pointer-events="none">УМ</text>
+                </g>
+                <line x1="258" y1="42" x2="288" y2="42" stroke="#1e293b" stroke-width="1.5" marker-end="url(#sa-arr2)" pointer-events="none"/>
+                <g class="sa-block" data-info="dv" style="cursor:pointer">
+                  <rect x="288" y="22" width="40" height="40" fill="#fff" stroke="#1e293b" stroke-width="1.5"/>
+                  <text x="308" y="48" text-anchor="middle" font-family="Merriweather, Georgia, serif" font-size="14" font-weight="700" pointer-events="none">ДВ</text>
+                </g>
+                <line x1="328" y1="42" x2="358" y2="42" stroke="#1e293b" stroke-width="1.5" marker-end="url(#sa-arr2)" pointer-events="none"/>
+                <g class="sa-block" data-info="o" style="cursor:pointer">
+                  <rect x="358" y="22" width="40" height="40" fill="#fff" stroke="#1e293b" stroke-width="1.5"/>
+                  <text x="378" y="48" text-anchor="middle" font-family="Merriweather, Georgia, serif" font-size="15" font-weight="700" pointer-events="none">О</text>
+                </g>
+                <line x1="398" y1="42" x2="448" y2="42" stroke="#1e293b" stroke-width="1.5" marker-end="url(#sa-arr2)" pointer-events="none"/>
+                <text x="423" y="16" text-anchor="middle" font-family="Merriweather, Georgia, serif" font-size="14" font-style="italic" pointer-events="none">Z</text>
+                <line x1="378" y1="8" x2="378" y2="22" stroke="#1e293b" stroke-width="1.5" marker-end="url(#sa-arr2)" pointer-events="none"/>
+                <text x="388" y="14" font-family="Merriweather, Georgia, serif" font-size="14" font-style="italic" pointer-events="none">F</text>
+                <line x1="420" y1="42" x2="420" y2="108" stroke="#1e293b" stroke-width="1.5" pointer-events="none"/>
+                <line x1="420" y1="108" x2="388" y2="108" stroke="#1e293b" stroke-width="1.5" marker-end="url(#sa-arr2)" pointer-events="none"/>
+                <g class="sa-block" data-info="d" style="cursor:pointer">
+                  <rect x="348" y="88" width="40" height="40" fill="#fff" stroke="#1e293b" stroke-width="1.5"/>
+                  <text x="368" y="114" text-anchor="middle" font-family="Merriweather, Georgia, serif" font-size="15" font-weight="700" pointer-events="none">Д</text>
+                </g>
+                <line x1="348" y1="108" x2="98" y2="108" stroke="#1e293b" stroke-width="1.5" pointer-events="none"/>
+                <text x="223" y="100" text-anchor="middle" font-family="Merriweather, Georgia, serif" font-size="14" font-style="italic" pointer-events="none">Y</text>
+                <line x1="98" y1="108" x2="98" y2="62" stroke="#1e293b" stroke-width="1.5" marker-end="url(#sa-arr2)" pointer-events="none"/>
+                <text x="106" y="72" font-family="Merriweather, Georgia, serif" font-size="16" font-weight="700" pointer-events="none">−</text>
+              </svg>
+            </figure>
+          </div>
+          <div class="asutp-tabs">
+            <button type="button" class="asutp-tab active" data-info="intro">Обзор</button>
+            <button type="button" class="asutp-tab" data-info="sa">СА</button>
+            <button type="button" class="asutp-tab" data-info="sau">САУ</button>
+          </div>
+        </div>
+        <aside class="asutp-panel" id="saPanel" aria-live="polite">
+          <h3>Обзор</h3>
+          <p><strong>Управление</strong> — процесс достижения поставленной цели.</p>
+          <p>Нажмите на блок схемы или кнопку <strong>СА</strong> / <strong>САУ</strong> — здесь появится определение компонента.</p>
+          <p>В СА и САУ участие человека принципиально исключено (в САУ человек лишь задаёт уставку).</p>
+        </aside>
+      </div>
+    </section>
+
+    <!-- 8. Ship -->
+    <section class="slide">
+      <h2>Пример: управление судном</h2>
+      <div class="slide-body slide-body-textbook">
+        <figure class="tb-figure tb-figure-b">
+          <figcaption class="tb-caption">Сервосистема (управление «по отклонению»)</figcaption>
+          <svg class="tb-svg tb-svg-b" viewBox="0 0 455 132" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="Сервосистема управления судном">
+            <defs>
+              <marker id="tb-ship" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#1e293b"/></marker>
+            </defs>
+            <rect x="8" y="22" width="40" height="40" fill="#fff" stroke="#1e293b" stroke-width="1.5"/>
+            <text x="28" y="48" text-anchor="middle" font-family="Merriweather, Georgia, serif" font-size="14" font-weight="700">ЗУ</text>
+            <line x1="48" y1="42" x2="78" y2="42" stroke="#1e293b" stroke-width="1.5" marker-end="url(#tb-ship)"/>
+            <text x="63" y="16" text-anchor="middle" font-family="Merriweather, Georgia, serif" font-size="14" font-style="italic">X</text>
+
+            <rect x="78" y="22" width="40" height="40" fill="#fff" stroke="#1e293b" stroke-width="1.5"/>
+            <text x="98" y="48" text-anchor="middle" font-family="Merriweather, Georgia, serif" font-size="14" font-weight="700">УС</text>
+
+            <line x1="118" y1="42" x2="148" y2="42" stroke="#1e293b" stroke-width="1.5" marker-end="url(#tb-ship)"/>
+            <text x="133" y="16" text-anchor="middle" font-family="Merriweather, Georgia, serif" font-size="14" font-style="italic">Δ</text>
+
+            <rect x="148" y="22" width="40" height="40" fill="#fff" stroke="#1e293b" stroke-width="1.5"/>
+            <text x="168" y="48" text-anchor="middle" font-family="Merriweather, Georgia, serif" font-size="13" font-weight="700">УПУ</text>
+            <line x1="188" y1="42" x2="218" y2="42" stroke="#1e293b" stroke-width="1.5" marker-end="url(#tb-ship)"/>
+
+            <rect x="218" y="22" width="40" height="40" fill="#fff" stroke="#1e293b" stroke-width="1.5"/>
+            <text x="238" y="48" text-anchor="middle" font-family="Merriweather, Georgia, serif" font-size="14" font-weight="700">УМ</text>
+            <line x1="258" y1="42" x2="288" y2="42" stroke="#1e293b" stroke-width="1.5" marker-end="url(#tb-ship)"/>
+
+            <rect x="288" y="22" width="40" height="40" fill="#fff" stroke="#1e293b" stroke-width="1.5"/>
+            <text x="308" y="48" text-anchor="middle" font-family="Merriweather, Georgia, serif" font-size="14" font-weight="700">ДВ</text>
+            <line x1="328" y1="42" x2="358" y2="42" stroke="#1e293b" stroke-width="1.5" marker-end="url(#tb-ship)"/>
+
+            <rect x="358" y="22" width="52" height="40" fill="#fff" stroke="#1e293b" stroke-width="1.5"/>
+            <text x="384" y="48" text-anchor="middle" font-family="Merriweather, Georgia, serif" font-size="13" font-weight="700">руль</text>
+
+            <line x1="410" y1="42" x2="448" y2="42" stroke="#1e293b" stroke-width="1.5" marker-end="url(#tb-ship)"/>
+            <text x="429" y="16" text-anchor="middle" font-family="Merriweather, Georgia, serif" font-size="14" font-style="italic">Z</text>
+
+            <line x1="384" y1="8" x2="384" y2="22" stroke="#1e293b" stroke-width="1.5" marker-end="url(#tb-ship)"/>
+            <text x="394" y="14" font-family="Merriweather, Georgia, serif" font-size="14" font-style="italic">F</text>
+
+            <line x1="420" y1="42" x2="420" y2="108" stroke="#1e293b" stroke-width="1.5"/>
+            <line x1="420" y1="108" x2="388" y2="108" stroke="#1e293b" stroke-width="1.5" marker-end="url(#tb-ship)"/>
+
+            <rect x="348" y="88" width="40" height="40" fill="#fff" stroke="#1e293b" stroke-width="1.5"/>
+            <text x="368" y="114" text-anchor="middle" font-family="Merriweather, Georgia, serif" font-size="15" font-weight="700">Д</text>
+
+            <line x1="348" y1="108" x2="98" y2="108" stroke="#1e293b" stroke-width="1.5"/>
+            <text x="223" y="100" text-anchor="middle" font-family="Merriweather, Georgia, serif" font-size="14" font-style="italic">Y</text>
+
+            <line x1="98" y1="108" x2="98" y2="62" stroke="#1e293b" stroke-width="1.5" marker-end="url(#tb-ship)"/>
+            <text x="106" y="72" font-family="Merriweather, Georgia, serif" font-size="16" font-weight="700">−</text>
+          </svg>
+        </figure>
+        <p class="ship-note"><strong>УС</strong> сравнивает задание <strong>X</strong> и сигнал <strong>Y</strong> от датчика → <strong>Δ = X − Y</strong> → привод руля. Компенсация возмущений <strong>F</strong>.</p>
+      </div>
+    </section>
+
+    <!-- 7. ASUTP interactive -->
+    <section class="slide slide-asutp-interactive">
+      <h2>Функциональная схема АСУТП</h2>
+      <div class="slide-body asutp-interactive">
+        <div class="asutp-main">
+          <p class="asutp-hint">Нажмите на уровень или блок схемы — справа откроется определение</p>
+          <div class="asutp-diagram-wrap">
+            <svg class="tb-svg asutp-svg" viewBox="0 0 520 300" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="Функциональная схема АСУТП">
+              <defs>
+                <marker id="tb-asu" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#1e293b"/></marker>
+                <marker id="tb-asu-rev" markerWidth="8" markerHeight="6" refX="1" refY="3" orient="auto"><path d="M8,0 L0,3 L8,6 Z" fill="#1e293b"/></marker>
+              </defs>
+              <rect class="asutp-zone asutp-zone-upper" data-info="upper" x="40" y="4" width="440" height="120" rx="8" fill="#dbeafe" fill-opacity="0.45" stroke="#93c5fd" stroke-width="1.5"/>
+              <text x="50" y="22" font-family="Inter, sans-serif" font-size="12" font-weight="700" fill="#1d4ed8" pointer-events="none">Верхний уровень</text>
+              <rect class="asutp-zone asutp-zone-lower" data-info="lower" x="40" y="180" width="440" height="110" rx="8" fill="#ccfbf1" fill-opacity="0.45" stroke="#5eead4" stroke-width="1.5"/>
+              <text x="50" y="198" font-family="Inter, sans-serif" font-size="12" font-weight="700" fill="#0f766e" pointer-events="none">Нижний уровень</text>
+              <g class="asutp-block" data-info="operator" style="cursor:pointer">
+                <rect x="215" y="28" width="90" height="36" fill="#fff" stroke="#1e293b" stroke-width="1.5"/>
+                <text x="260" y="51" text-anchor="middle" font-family="Merriweather, Georgia, serif" font-size="13" font-weight="700" pointer-events="none">Оператор</text>
+              </g>
+              <line x1="260" y1="64" x2="260" y2="82" stroke="#1e293b" stroke-width="1.5" marker-start="url(#tb-asu-rev)" marker-end="url(#tb-asu)" pointer-events="none"/>
+              <g class="asutp-block" data-info="evm" style="cursor:pointer">
+                <rect x="205" y="82" width="110" height="36" fill="#fff" stroke="#1e293b" stroke-width="1.5"/>
+                <text x="260" y="105" text-anchor="middle" font-family="Merriweather, Georgia, serif" font-size="14" font-weight="700" pointer-events="none">ЭВМ <tspan font-size="10" font-weight="600">(плк)</tspan></text>
+              </g>
+              <g class="asutp-block" data-info="uso" style="cursor:pointer">
+                <rect x="65" y="82" width="70" height="36" fill="#fff" stroke="#1e293b" stroke-width="1.5"/>
+                <text x="100" y="105" text-anchor="middle" font-family="Merriweather, Georgia, serif" font-size="13" font-weight="700" pointer-events="none">УСО</text>
+              </g>
+              <g class="asutp-block" data-info="uso" style="cursor:pointer">
+                <rect x="385" y="82" width="70" height="36" fill="#fff" stroke="#1e293b" stroke-width="1.5"/>
+                <text x="420" y="105" text-anchor="middle" font-family="Merriweather, Georgia, serif" font-size="13" font-weight="700" pointer-events="none">УСО</text>
+              </g>
+              <line x1="135" y1="100" x2="205" y2="100" stroke="#1e293b" stroke-width="1.5" marker-end="url(#tb-asu)" pointer-events="none"/>
+              <line x1="315" y1="100" x2="385" y2="100" stroke="#1e293b" stroke-width="1.5" marker-end="url(#tb-asu)" pointer-events="none"/>
+              <g class="asutp-block" data-info="sensor" style="cursor:pointer">
+                <rect x="75" y="230" width="50" height="36" fill="#fff" stroke="#1e293b" stroke-width="1.5"/>
+                <text x="100" y="253" text-anchor="middle" font-family="Merriweather, Georgia, serif" font-size="15" font-weight="700" pointer-events="none">Д</text>
+              </g>
+              <g class="asutp-block" data-info="object" style="cursor:pointer">
+                <rect x="205" y="230" width="110" height="36" fill="#fff" stroke="#1e293b" stroke-width="1.5"/>
+                <text x="260" y="253" text-anchor="middle" font-family="Merriweather, Georgia, serif" font-size="13" font-weight="700" pointer-events="none">Объект</text>
+              </g>
+              <g class="asutp-block" data-info="actuator" style="cursor:pointer">
+                <rect x="395" y="230" width="50" height="36" fill="#fff" stroke="#1e293b" stroke-width="1.5"/>
+                <text x="420" y="253" text-anchor="middle" font-family="Merriweather, Georgia, serif" font-size="13" font-weight="700" pointer-events="none">ИУ</text>
+              </g>
+              <line x1="100" y1="230" x2="100" y2="118" stroke="#1e293b" stroke-width="1.5" marker-end="url(#tb-asu)" pointer-events="none"/>
+              <text x="112" y="175" font-family="Merriweather, Georgia, serif" font-size="14" font-style="italic" pointer-events="none">Y</text>
+              <line x1="420" y1="118" x2="420" y2="230" stroke="#1e293b" stroke-width="1.5" marker-end="url(#tb-asu)" pointer-events="none"/>
+              <text x="432" y="175" font-family="Merriweather, Georgia, serif" font-size="14" font-style="italic" pointer-events="none">X</text>
+              <line x1="395" y1="248" x2="315" y2="248" stroke="#1e293b" stroke-width="1.5" marker-end="url(#tb-asu)" pointer-events="none"/>
+              <line x1="205" y1="248" x2="125" y2="248" stroke="#1e293b" stroke-width="1.5" marker-end="url(#tb-asu)" pointer-events="none"/>
+              <line x1="100" y1="185" x2="420" y2="185" stroke="#1e293b" stroke-width="1.2" stroke-dasharray="6,4" pointer-events="none"/>
+            </svg>
+          </div>
+          <div class="asutp-tabs">
+            <button type="button" class="asutp-tab active" data-info="intro">Обзор</button>
+            <button type="button" class="asutp-tab" data-info="upper">Верхний уровень</button>
+            <button type="button" class="asutp-tab" data-info="lower">Нижний уровень</button>
+            <button type="button" class="asutp-tab" data-info="uso">УСО и ПО</button>
+          </div>
+        </div>
+        <aside class="asutp-panel" id="asutpPanel" aria-live="polite">
+          <h3>Обзор</h3>
+          <p>АСУТП строится по функциональной схеме с двумя уровнями управления.</p>
+          <p>Нажмите на <strong>синюю</strong> или <strong>зелёную</strong> зону схемы, на блок или на кнопку внизу — здесь появится определение.</p>
+        </aside>
+      </div>
+    </section>
+
+    <!-- 9. ASUP -->
+    <section class="slide">
+      <h2>Отличие АСУП и АСУТП</h2>
+      <div class="slide-body slide-body-dense">
+        <p><strong>АСУП</strong> — автоматизированные системы управления предприятием. Как правило, <strong>не имеют</strong> прямой двусторонней связи с объектом автоматизации.</p>
+        <p>Три варианта АСУП по способу связи с объектом:</p>
+        <div class="grid-3">
+          <div class="variant-mini">
+            <h4>Без прямой связи</h4>
+            <p>Нет аппаратного ввода и вывода. Данные обрабатываются offline: оператор вручную вводит параметры объекта, а по результатам системы сам выполняет управление.</p>
+          </div>
+          <div class="variant-mini">
+            <h4>Только ввод</h4>
+            <p>Есть аппаратура ввода данных с объекта в реальном времени (регистрация и обработка). Управление объектом остаётся ручным — выполняет оператор.</p>
+          </div>
+          <div class="variant-mini">
+            <h4>Только вывод</h4>
+            <p>Есть аппаратура прямого вывода управляющей информации на объект (программное управление), но нет автоматического ввода данных с объекта.</p>
+          </div>
+        </div>
+        <div class="highlight-box accent">
+          <div class="label">АСУТП</div>
+          Отличие от АСУП: есть <strong>и прямой ввод, и прямой вывод</strong> управляющих сигналов. Это <strong>замкнутая</strong> автоматизированная система: автоматический сбор информации, обработка и непосредственное управление объектом.
+        </div>
+        <p><strong>Пример (ТЭС):</strong> на нижнем уровне САУ регулируют подачу топлива, воды, воздуха, температуру и давление пара; на верхнем уровне (диспетчерский пункт / АСУП) координируют параллельную работу парогенераторов и турбин, контролируя качество вырабатываемой электроэнергии.</p>
+      </div>
+    </section>
+
+    <!-- 8. Principles 1–2 + levels + SCADA -->
+    <section class="slide">
+      <h2>Принципы построения АСУ. Уровни АСУТП</h2>
+      <div class="slide-body slide-body-dense">
+        <p><strong>SCADA</strong> — Supervisory Control and Data Acquisition («диспетчерский контроль и сбор данных»). Под «SCADA-системой» понимают либо всю АСУТП, либо HMI диспетчерского пункта (ПО сбора и хранения данных с ОУ). Обычно SCADA — верхний уровень, а систему в целом называют <strong>АСУТП</strong>. ПО для АСУТП — SCADA; для АСУП — <strong>ERP</strong>.</p>
+        <p><strong>1. Использование ЭВМ</strong> как центрального звена: реакция за микросекунды; приём данных до сотен МБ/с; гибкая перестройка алгоритмов программно; диалог с оператором.</p>
+        <p><strong>2. Иерархичность:</strong> системы верхнего уровня состоят из подсистем нижнего уровня.</p>
+        <div class="grid-2">
+          <div class="variant-mini">
+            <h4>Нижний (объектный) уровень</h4>
+            <p>Обычно у объекта: измерение в реальном времени, управление, сбор и оперативная обработка, временное хранение, передача наверх. Здесь работают СА и САУ. На базе ПЛК многоуровневые системы экономически выгодны.</p>
+          </div>
+          <div class="variant-mini">
+            <h4>Верхний (инструментальный, SCADA)</h4>
+            <p>Может быть удалён от объекта: подготовка и отладка программ, управление подсистемами, обработка в режиме разделения времени, длительное хранение данных, документирование.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 9. Principles 3–6 -->
+    <section class="slide">
+      <h2>Принципы 3–6. Открытые системы</h2>
+      <div class="slide-body slide-body-dense">
+        <div class="grid-2">
+          <div class="variant-mini">
+            <h4>3. Модульность</h4>
+            <p>Система «из кубиков»: АЦП, ЦАП, таймеры, ПЛК и др. Легко заменить неисправный модуль и модернизировать систему.</p>
+          </div>
+          <div class="variant-mini">
+            <h4>4. Программная управляемость</h4>
+            <p>Работа модулей задаётся программными командами; алгоритм можно оперативно менять по требованиям оператора.</p>
+          </div>
+          <div class="variant-mini">
+            <h4>5. Магистральная организация</h4>
+            <p>Общая шина, равный доступ, адресация как у ОЗУ; удобно наращивать АСУТП. С дешёвыми ПЛК чаще несколько контроллеров на разных уровнях вместо одной центральной ЭВМ.</p>
+          </div>
+          <div class="variant-mini">
+            <h4>6. Унификация</h4>
+            <p>Ограниченный набор стандартных модулей для разных АСУТП: меньше объём разработок, короче сроки отладки и модификации.</p>
+          </div>
+        </div>
+        <div class="highlight-box highlight-box-compact">
+          <div class="label">Открытые системы</div>
+          Модульная АСУТП: модули одного производителя можно заменить аналогами другого; интеграция — через стандартные протоколы и электрические параметры.
+        </div>
+      </div>
+    </section>
+
+    <!-- 10. ASUTP on PLC -->
+    <section class="slide">
+      <h2>АСУТП на базе ПЛК</h2>
+      <div class="slide-body slide-body-dense">
+        <p>Одна ПЛК или комплекс ПЛК реализуют автономную АСУТП с единым ПО верхнего уровня — <strong>SCADA</strong>. Обобщённая схема АСУ включает и уровень <strong>АСУП</strong>.</p>
+        <p>Совместное использование <strong>SCADA</strong> и <strong>ERP</strong> позволяет одновременно работать АСУП и АСУТП: взаимодействие уточняет критерии управления АСУТП.</p>
+        <div class="grid-2">
+          <div class="variant-mini">
+            <h4>Технико-экономические</h4>
+            <p>Себестоимость, производительность ТОУ и другие показатели эффективности производства.</p>
+          </div>
+          <div class="variant-mini">
+            <h4>Технические</h4>
+            <p>Параметры технологического процесса и характеристики выходного продукта.</p>
+          </div>
+        </div>
+        <div class="highlight-box highlight-box-compact">
+          <div class="label">Когда система — АСУТП</div>
+          Если она управляет ТОУ как единым целым <strong>в темпе ТП</strong> с участием средств ВТ, других технических средств и человека-оператора.
+        </div>
+      </div>
+    </section>
+
+    <!-- 16. Hierarchy pyramid -->
+    <section class="slide">
+      <h2>Иерархия АСУ: ERP (АСУП) и АСУТП</h2>
+      <div class="slide-body slide-body-pyramid">
+        <svg class="pyramid-svg" viewBox="0 0 640 380" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Пирамида автоматизации ERP и АСУТП">
+          <defs>
+            <linearGradient id="erpGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#fde68a"/>
+              <stop offset="100%" stop-color="#f59e0b"/>
+            </linearGradient>
+            <linearGradient id="scadaGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#60a5fa"/>
+              <stop offset="100%" stop-color="#2563eb"/>
+            </linearGradient>
+            <linearGradient id="plcGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#2dd4bf"/>
+              <stop offset="100%" stop-color="#0d9488"/>
+            </linearGradient>
+            <linearGradient id="fieldGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#94a3b8"/>
+              <stop offset="100%" stop-color="#475569"/>
+            </linearGradient>
+          </defs>
+
+          <!-- Level labels left -->
+          <text x="28" y="48" text-anchor="middle" font-size="12" fill="#64748b" font-weight="700">V</text>
+          <text x="28" y="152" text-anchor="middle" font-size="12" fill="#64748b" font-weight="700">IV</text>
+          <text x="28" y="235" text-anchor="middle" font-size="12" fill="#64748b" font-weight="700">III</text>
+          <text x="28" y="315" text-anchor="middle" font-size="12" fill="#64748b" font-weight="700">I–II</text>
+
+          <!-- ERP top triangle + band -->
+          <polygon points="260,12 290,48 230,48" fill="url(#erpGrad)" stroke="#d97706" stroke-width="1.5"/>
+          <polygon points="195,52 325,52 345,92 175,92" fill="url(#erpGrad)" stroke="#d97706" stroke-width="1.5"/>
+
+          <!-- ERP departments (right of pyramid) -->
+          <text x="365" y="40" font-size="12" fill="#92400e" font-weight="600">Дирекция</text>
+          <text x="365" y="56" font-size="12" fill="#78350f">Бухгалтерия</text>
+          <text x="365" y="72" font-size="12" fill="#78350f">Отдел кадров</text>
+          <text x="365" y="88" font-size="12" fill="#78350f">Отдел логистики</text>
+          <text x="365" y="104" font-size="11" fill="#64748b">и т.д.</text>
+
+          <!-- ERP brace + label further right -->
+          <path d="M 490 22 C 520 22 520 55 520 70 C 520 92 490 100" fill="none" stroke="#d97706" stroke-width="1.8"/>
+          <text x="535" y="60" font-size="14" font-weight="700" fill="#b45309">ERP</text>
+          <text x="535" y="76" font-size="11" fill="#92400e">(АСУП)</text>
+
+          <!-- Local network ↕ -->
+          <line x1="260" y1="100" x2="260" y2="120" stroke="#475569" stroke-width="2"/>
+          <polygon points="260,94 254,103 266,103" fill="#475569"/>
+          <polygon points="260,126 254,117 266,117" fill="#475569"/>
+          <text x="278" y="108" font-size="11" fill="#475569">Локальная сеть</text>
+          <text x="278" y="122" font-size="10" fill="#94a3b8">(возможно глобальные сети)</text>
+
+          <!-- SCADA -->
+          <polygon points="145,130 375,130 400,174 120,174" fill="url(#scadaGrad)" stroke="#1d4ed8" stroke-width="1.5"/>
+          <text x="260" y="158" text-anchor="middle" font-size="15" font-weight="700" fill="#ffffff">SCADA-система</text>
+
+          <!-- Industrial network ↕ -->
+          <line x1="260" y1="182" x2="260" y2="202" stroke="#475569" stroke-width="2"/>
+          <polygon points="260,176 254,185 266,185" fill="#475569"/>
+          <polygon points="260,208 254,199 266,199" fill="#475569"/>
+          <text x="278" y="190" font-size="11" fill="#475569">Промышленная сеть</text>
+          <text x="278" y="204" font-size="10" fill="#94a3b8">(связь с контроллерами)</text>
+
+          <!-- PLCs -->
+          <polygon points="100,212 420,212 445,258 75,258" fill="url(#plcGrad)" stroke="#0f766e" stroke-width="1.5"/>
+          <text x="260" y="242" text-anchor="middle" font-size="14" font-weight="600" fill="#ffffff">Программируемые контроллеры <tspan font-size="11" font-weight="500">(плк)</tspan></text>
+
+          <!-- Field links ↕ -->
+          <g fill="#475569" stroke="none">
+            <line x1="140" y1="264" x2="140" y2="276" stroke="#475569" stroke-width="1.8"/>
+            <polygon points="140,260 135,267 145,267"/>
+            <polygon points="140,280 135,273 145,273"/>
+
+            <line x1="200" y1="264" x2="200" y2="276" stroke="#475569" stroke-width="1.8"/>
+            <polygon points="200,260 195,267 205,267"/>
+            <polygon points="200,280 195,273 205,273"/>
+
+            <line x1="320" y1="264" x2="320" y2="276" stroke="#475569" stroke-width="1.8"/>
+            <polygon points="320,260 315,267 325,267"/>
+            <polygon points="320,280 315,273 325,273"/>
+
+            <line x1="380" y1="264" x2="380" y2="276" stroke="#475569" stroke-width="1.8"/>
+            <polygon points="380,260 375,267 385,267"/>
+            <polygon points="380,280 375,273 385,273"/>
+          </g>
+
+          <!-- Field level -->
+          <polygon points="55,282 465,282 490,340 30,340" fill="url(#fieldGrad)" stroke="#475569" stroke-width="1.5"/>
+          <text x="260" y="318" text-anchor="middle" font-size="13" font-weight="600" fill="#ffffff">Датчики и исполнительные устройства</text>
+
+          <!-- ASUTP brace -->
+          <path d="M 475 132 C 515 132 515 200 515 235 C 515 285 515 340 475 340" fill="none" stroke="#0d9488" stroke-width="1.8"/>
+          <text x="535" y="245" font-size="14" font-weight="700" fill="#0f766e" transform="rotate(90 535 245)">АСУТП</text>
+        </svg>
+        <p class="caption">Функциональная схема АСУ сложным техническим объектом на базе ПЛК</p>
+      </div>
+    </section>
+
+    <!-- Functions -->
+    <section class="slide">
+      <h2>Функции подсистем АСУТП</h2>
+      <div class="slide-body slide-body-dense">
+        <p>Функции АСУТП — совокупность действий подсистем на ПЛК, направленных на достижение частных целей управления.</p>
+        <div class="grid-3">
+          <div class="variant-mini">
+            <h4>Управляющие</h4>
+            <p>Выработка и реализация управляющих воздействий на ТОУ:</p>
+            <ul>
+              <li>регулирование и стабилизация;</li>
+              <li>логическое и программное управление;</li>
+              <li>оптимальное управление режимами;</li>
+              <li>адаптивное управление объектом.</li>
+            </ul>
+          </div>
+          <div class="variant-mini">
+            <h4>Информационные</h4>
+            <p>Сбор, обработка и выдача сведений о состоянии АТК персоналу и смежным системам:</p>
+            <ul>
+              <li>централизованный контроль и измерение;</li>
+              <li>выдача данных персоналу;</li>
+              <li>обмен со смежными СУ;</li>
+              <li>оценка и прогнозирование состояния.</li>
+            </ul>
+          </div>
+          <div class="variant-mini">
+            <h4>Вспомогательные</h4>
+            <p>Внутрисистемные задачи без внешнего потребителя:</p>
+            <ul>
+              <li>контроль функционирования ТС;</li>
+              <li>контроль хранения информации.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 15. SCADA hardware (interactive) -->
+    <section class="slide slide-scada-interactive">
+      <h2>Техническое обеспечение SCADA</h2>
+      <div class="slide-body asutp-interactive">
+        <div class="asutp-main">
+          <p class="asutp-hint">Нажмите на блок схемы — справа откроется определение</p>
+          <div class="asutp-diagram-wrap">
+                        <svg class="scada-hw-svg asutp-svg" viewBox="0 0 720 400" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Техническое обеспечение SCADA">
+              <defs>
+                <marker id="sc-arr" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto"><path d="M0,0 L9,3.5 L0,7 Z" fill="#1e293b"/></marker>
+                <marker id="sc-arr-rev" markerWidth="9" markerHeight="7" refX="1" refY="3.5" orient="auto"><path d="M9,0 L0,3.5 L9,7 Z" fill="#1e293b"/></marker>
+              </defs>
+
+              <g class="scada-block" data-info="erp" style="cursor:pointer">
+                <rect x="280" y="8" width="160" height="130" rx="6" fill="#eff6ff" fill-opacity="0.01" stroke="none"/>
+                <text x="360" y="36" text-anchor="middle" font-size="14" font-weight="700" fill="#0f172a" pointer-events="none">Связь с ERP</text>
+                <path d="M360,48 L351,62 L369,62 Z" fill="#1e293b" pointer-events="none"/>
+                <line x1="360" y1="62" x2="360" y2="128" stroke="#1e293b" stroke-width="4" pointer-events="none"/>
+                <path d="M360,142 L351,128 L369,128 Z" fill="#1e293b" pointer-events="none"/>
+              </g>
+
+              <g class="scada-block" data-info="server" style="cursor:pointer">
+                <rect x="300" y="142" width="120" height="120" rx="6" fill="#eff6ff" fill-opacity="0.01" stroke="none"/>
+                <g transform="translate(318,148)" pointer-events="none">
+                  <rect x="0" y="0" width="28" height="72" rx="2" fill="#f8fafc" stroke="#1e293b" stroke-width="1.6"/>
+                  <rect x="6" y="8" width="16" height="8" fill="#e2e8f0" stroke="#64748b" stroke-width="0.8"/>
+                  <rect x="6" y="22" width="16" height="8" fill="#e2e8f0" stroke="#64748b" stroke-width="0.8"/>
+                  <rect x="6" y="36" width="16" height="8" fill="#e2e8f0" stroke="#64748b" stroke-width="0.8"/>
+                  <circle cx="14" cy="58" r="3" fill="#94a3b8"/>
+                  <rect x="36" y="0" width="28" height="72" rx="2" fill="#f8fafc" stroke="#1e293b" stroke-width="1.6"/>
+                  <rect x="42" y="8" width="16" height="8" fill="#e2e8f0" stroke="#64748b" stroke-width="0.8"/>
+                  <rect x="42" y="22" width="16" height="8" fill="#e2e8f0" stroke="#64748b" stroke-width="0.8"/>
+                  <rect x="42" y="36" width="16" height="8" fill="#e2e8f0" stroke="#64748b" stroke-width="0.8"/>
+                  <circle cx="50" cy="58" r="3" fill="#94a3b8"/>
+                </g>
+                <text x="360" y="242" text-anchor="middle" font-size="12" font-weight="600" fill="#0f172a" pointer-events="none">Сервер сбора и хранения</text>
+                <text x="360" y="258" text-anchor="middle" font-size="12" font-weight="600" fill="#0f172a" pointer-events="none">данных (СУБД)</text>
+              </g>
+
+              <g class="scada-block" data-info="plc" style="cursor:pointer">
+                <rect x="280" y="262" width="160" height="120" rx="6" fill="#eff6ff" fill-opacity="0.01" stroke="none"/>
+                <path d="M360,268 L351,282 L369,282 Z" fill="#1e293b" pointer-events="none"/>
+                <line x1="360" y1="282" x2="360" y2="340" stroke="#1e293b" stroke-width="4" pointer-events="none"/>
+                <path d="M360,354 L351,340 L369,340 Z" fill="#1e293b" pointer-events="none"/>
+                <text x="360" y="378" text-anchor="middle" font-size="14" font-weight="700" fill="#0f172a" pointer-events="none">Связь с ПЛК</text>
+              </g>
+
+              <g class="scada-block" data-info="arm" style="cursor:pointer">
+                <rect x="4" y="40" width="150" height="250" rx="6" fill="#eff6ff" fill-opacity="0.01" stroke="none"/>
+                <g transform="translate(70,48)" pointer-events="none">
+                  <rect x="8" y="0" width="36" height="24" rx="1.5" fill="#f8fafc" stroke="#1e293b" stroke-width="1.4"/>
+                  <rect x="12" y="4" width="28" height="14" fill="#e2e8f0" stroke="#64748b" stroke-width="0.7"/>
+                  <rect x="18" y="24" width="16" height="4" fill="#cbd5e1" stroke="#1e293b" stroke-width="0.8"/>
+                  <rect x="0" y="32" width="22" height="30" rx="1.5" fill="#f8fafc" stroke="#1e293b" stroke-width="1.4"/>
+                  <rect x="28" y="36" width="28" height="18" rx="1" fill="#f8fafc" stroke="#1e293b" stroke-width="1.2"/>
+                </g>
+                <text x="98" y="128" text-anchor="middle" font-size="16" fill="#64748b" font-weight="700" pointer-events="none">···</text>
+                <g transform="translate(70,138)" pointer-events="none">
+                  <rect x="8" y="0" width="36" height="24" rx="1.5" fill="#f8fafc" stroke="#1e293b" stroke-width="1.4"/>
+                  <rect x="12" y="4" width="28" height="14" fill="#e2e8f0" stroke="#64748b" stroke-width="0.7"/>
+                  <rect x="18" y="24" width="16" height="4" fill="#cbd5e1" stroke="#1e293b" stroke-width="0.8"/>
+                  <rect x="0" y="32" width="22" height="30" rx="1.5" fill="#f8fafc" stroke="#1e293b" stroke-width="1.4"/>
+                  <rect x="28" y="36" width="28" height="18" rx="1" fill="#f8fafc" stroke="#1e293b" stroke-width="1.2"/>
+                </g>
+                <g transform="translate(70,228)" pointer-events="none">
+                  <rect x="8" y="0" width="36" height="24" rx="1.5" fill="#f8fafc" stroke="#1e293b" stroke-width="1.4"/>
+                  <rect x="12" y="4" width="28" height="14" fill="#e2e8f0" stroke="#64748b" stroke-width="0.7"/>
+                  <rect x="18" y="24" width="16" height="4" fill="#cbd5e1" stroke="#1e293b" stroke-width="0.8"/>
+                  <rect x="0" y="32" width="22" height="30" rx="1.5" fill="#f8fafc" stroke="#1e293b" stroke-width="1.4"/>
+                  <rect x="28" y="36" width="28" height="18" rx="1" fill="#f8fafc" stroke="#1e293b" stroke-width="1.2"/>
+                </g>
+                <path d="M 38 52 C 18 52 18 120 18 155 C 18 210 18 280 38 280" fill="none" stroke="#1e293b" stroke-width="1.6" pointer-events="none"/>
+                <text x="12" y="175" text-anchor="middle" font-size="13" font-weight="700" fill="#0f172a" transform="rotate(-90 12 175)" pointer-events="none">АРМ операторов</text>
+              </g>
+
+              <g pointer-events="none">
+                <line x1="130" y1="78" x2="305" y2="170" stroke="#1e293b" stroke-width="1.5" marker-start="url(#sc-arr-rev)" marker-end="url(#sc-arr)"/>
+                <line x1="130" y1="168" x2="305" y2="180" stroke="#1e293b" stroke-width="1.5" marker-start="url(#sc-arr-rev)" marker-end="url(#sc-arr)"/>
+                <line x1="130" y1="258" x2="305" y2="200" stroke="#1e293b" stroke-width="1.5" marker-start="url(#sc-arr-rev)" marker-end="url(#sc-arr)"/>
+              </g>
+
+              <g class="scada-block" data-info="printer" style="cursor:pointer">
+                <rect x="70" y="300" width="200" height="70" rx="6" fill="#eff6ff" fill-opacity="0.01" stroke="none"/>
+                <g transform="translate(78,308)" pointer-events="none">
+                  <rect x="4" y="0" width="40" height="18" rx="2" fill="#f8fafc" stroke="#1e293b" stroke-width="1.3"/>
+                  <rect x="0" y="18" width="48" height="22" rx="2" fill="#e2e8f0" stroke="#1e293b" stroke-width="1.3"/>
+                  <rect x="14" y="24" width="20" height="8" fill="#f8fafc" stroke="#64748b" stroke-width="0.8"/>
+                  <rect x="10" y="40" width="28" height="6" fill="#f8fafc" stroke="#1e293b" stroke-width="1"/>
+                </g>
+                <line x1="98" y1="290" x2="98" y2="308" stroke="#1e293b" stroke-width="1.5" marker-end="url(#sc-arr)" pointer-events="none"/>
+                <text x="155" y="338" font-size="11" fill="#334155" pointer-events="none">Вывод отчетов на печать</text>
+              </g>
+
+              <g class="scada-block" data-info="display" style="cursor:pointer">
+                <rect x="500" y="55" width="160" height="150" rx="6" fill="#eff6ff" fill-opacity="0.01" stroke="none"/>
+                <g transform="translate(520,70)" pointer-events="none">
+                  <rect x="0" y="0" width="110" height="70" rx="3" fill="#f8fafc" stroke="#1e293b" stroke-width="1.6"/>
+                  <rect x="8" y="8" width="94" height="48" fill="#e2e8f0" stroke="#64748b" stroke-width="0.8"/>
+                  <rect x="40" y="70" width="30" height="6" fill="#cbd5e1" stroke="#1e293b" stroke-width="0.8"/>
+                  <rect x="28" y="76" width="54" height="5" rx="1" fill="#f8fafc" stroke="#1e293b" stroke-width="0.8"/>
+                </g>
+                <line x1="390" y1="170" x2="515" y2="105" stroke="#1e293b" stroke-width="1.5" marker-end="url(#sc-arr)" pointer-events="none"/>
+                <text x="575" y="168" text-anchor="middle" font-size="11" fill="#334155" pointer-events="none">Отображение общего</text>
+                <text x="575" y="182" text-anchor="middle" font-size="11" fill="#334155" pointer-events="none">состояния объекта</text>
+                <text x="575" y="196" text-anchor="middle" font-size="11" fill="#334155" pointer-events="none">управления</text>
+              </g>
+
+              <g class="scada-block" data-info="archive" style="cursor:pointer">
+                <rect x="500" y="230" width="180" height="140" rx="6" fill="#eff6ff" fill-opacity="0.01" stroke="none"/>
+                <g transform="translate(545,250)" pointer-events="none">
+                  <ellipse cx="40" cy="12" rx="40" ry="12" fill="#f8fafc" stroke="#1e293b" stroke-width="1.5"/>
+                  <path d="M 0 12 V 48" fill="none" stroke="#1e293b" stroke-width="1.5"/>
+                  <path d="M 80 12 V 48" fill="none" stroke="#1e293b" stroke-width="1.5"/>
+                  <ellipse cx="40" cy="48" rx="40" ry="12" fill="#f1f5f9" stroke="#1e293b" stroke-width="1.5"/>
+                  <ellipse cx="40" cy="30" rx="40" ry="12" fill="none" stroke="#94a3b8" stroke-width="1"/>
+                </g>
+                <line x1="390" y1="210" x2="538" y2="272" stroke="#1e293b" stroke-width="1.5" marker-start="url(#sc-arr-rev)" marker-end="url(#sc-arr)" pointer-events="none"/>
+                <text x="585" y="328" text-anchor="middle" font-size="11" fill="#334155" pointer-events="none">Резервное копирование</text>
+                <text x="585" y="342" text-anchor="middle" font-size="11" fill="#334155" pointer-events="none">и восстановление</text>
+                <text x="585" y="356" text-anchor="middle" font-size="11" fill="#334155" pointer-events="none">архива данных (БД)</text>
+              </g>
+            </svg>
+          </div>
+          <div class="asutp-tabs">
+            <button type="button" class="asutp-tab active" data-info="intro">Обзор</button>
+            <button type="button" class="asutp-tab" data-info="server">Сервер</button>
+            <button type="button" class="asutp-tab" data-info="arm">АРМ</button>
+            <button type="button" class="asutp-tab" data-info="erp">ERP</button>
+            <button type="button" class="asutp-tab" data-info="plc">ПЛК</button>
+          </div>
+        </div>
+        <aside class="asutp-panel" id="scadaPanel" aria-live="polite">
+          <h3>Обзор</h3>
+          <p>Техническое обеспечение SCADA строится вокруг <strong>сервера сбора и хранения данных (СУБД)</strong>.</p>
+          <p>Нажмите на блок схемы или кнопку внизу — здесь появится определение.</p>
+        </aside>
+      </div>
+    </section>
+
+    <!-- PLC network segment (рис. 1.5) -->
+    <section class="slide slide-plc-interactive">
+      <h2>Сегмент сети на базе ПЛК</h2>
+      <div class="slide-body asutp-interactive">
+        <div class="asutp-main">
+          <p class="asutp-hint">Детализация уровня ПЛК зависит от сложности задач. Нажмите на блок — справа определение</p>
+          <div class="asutp-diagram-wrap">
+                        <svg class="plc-seg-svg asutp-svg" viewBox="0 0 720 400" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Сегмент сети АСУТП на базе ПЛК">
+              <defs>
+                <marker id="plc-arr" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto"><path d="M0,0 L9,3.5 L0,7 Z" fill="#1e293b"/></marker>
+                <marker id="plc-arr-rev" markerWidth="9" markerHeight="7" refX="1" refY="3.5" orient="auto"><path d="M9,0 L0,3.5 L9,7 Z" fill="#1e293b"/></marker>
+              </defs>
+
+              <g class="scada-block" data-info="scada" style="cursor:pointer">
+                <rect x="250" y="4" width="220" height="70" rx="6" fill="#eff6ff" fill-opacity="0.01" stroke="none"/>
+                <text x="360" y="28" text-anchor="middle" font-size="14" font-weight="700" fill="#0f172a" pointer-events="none">Связь со SCADA</text>
+                <path d="M360,38 L351,52 L369,52 Z" fill="#1e293b" pointer-events="none"/>
+                <line x1="360" y1="52" x2="360" y2="88" stroke="#1e293b" stroke-width="4" pointer-events="none"/>
+                <path d="M360,102 L351,88 L369,88 Z" fill="#1e293b" pointer-events="none"/>
+              </g>
+
+              <g class="scada-block" data-info="arm" style="cursor:pointer">
+                <rect x="40" y="70" width="120" height="100" rx="6" fill="#eff6ff" fill-opacity="0.01" stroke="none"/>
+                <g transform="translate(70,85)" pointer-events="none">
+                  <rect x="8" y="0" width="44" height="30" rx="2" fill="#f8fafc" stroke="#1e293b" stroke-width="1.5"/>
+                  <rect x="12" y="4" width="36" height="20" fill="#e2e8f0" stroke="#64748b" stroke-width="0.7"/>
+                  <rect x="20" y="30" width="20" height="5" fill="#cbd5e1" stroke="#1e293b" stroke-width="0.8"/>
+                  <rect x="10" y="35" width="40" height="8" rx="1" fill="#f8fafc" stroke="#1e293b" stroke-width="1"/>
+                </g>
+                <text x="100" y="150" text-anchor="middle" font-size="12" font-weight="600" fill="#0f172a" pointer-events="none">Локальное АРМ</text>
+              </g>
+
+              <g class="scada-block" data-info="high" style="cursor:pointer">
+                <rect x="250" y="95" width="220" height="95" rx="6" fill="#eff6ff" fill-opacity="0.01" stroke="none"/>
+                <g transform="translate(300,100)" pointer-events="none">
+                  <path d="M 8 8 L 112 8 L 120 16 L 120 72 L 8 72 Z" fill="#f8fafc" stroke="#1e293b" stroke-width="1.6"/>
+                  <path d="M 112 8 L 120 16 L 16 16 L 8 8" fill="#e2e8f0" stroke="#1e293b" stroke-width="1"/>
+                  <rect x="20" y="28" width="80" height="28" fill="#e2e8f0" stroke="#64748b" stroke-width="0.8"/>
+                  <circle cx="100" cy="60" r="3" fill="#94a3b8"/>
+                </g>
+                <text x="360" y="185" text-anchor="middle" font-size="11" font-weight="600" fill="#0f172a" pointer-events="none">Контроллер более высокого уровня</text>
+                <text x="360" y="200" text-anchor="middle" font-size="10" fill="#475569" pointer-events="none">(более производительный и сложный)</text>
+              </g>
+
+              <g class="scada-block" data-info="arm" style="cursor:pointer">
+                <rect x="560" y="70" width="120" height="100" rx="6" fill="#eff6ff" fill-opacity="0.01" stroke="none"/>
+                <g transform="translate(590,85)" pointer-events="none">
+                  <rect x="8" y="0" width="44" height="30" rx="2" fill="#f8fafc" stroke="#1e293b" stroke-width="1.5"/>
+                  <rect x="12" y="4" width="36" height="20" fill="#e2e8f0" stroke="#64748b" stroke-width="0.7"/>
+                  <rect x="20" y="30" width="20" height="5" fill="#cbd5e1" stroke="#1e293b" stroke-width="0.8"/>
+                  <rect x="10" y="35" width="40" height="8" rx="1" fill="#f8fafc" stroke="#1e293b" stroke-width="1"/>
+                </g>
+                <text x="620" y="150" text-anchor="middle" font-size="12" font-weight="600" fill="#0f172a" pointer-events="none">Локальное АРМ</text>
+              </g>
+
+              <g pointer-events="none">
+                <line x1="160" y1="120" x2="295" y2="135" stroke="#1e293b" stroke-width="1.5" marker-start="url(#plc-arr-rev)" marker-end="url(#plc-arr)"/>
+                <line x1="425" y1="135" x2="560" y2="120" stroke="#1e293b" stroke-width="1.5" marker-start="url(#plc-arr-rev)" marker-end="url(#plc-arr)"/>
+                <line x1="560" y1="140" x2="480" y2="225" stroke="#1e293b" stroke-width="1.5" marker-start="url(#plc-arr-rev)" marker-end="url(#plc-arr)"/>
+              </g>
+
+              <g class="scada-block" data-info="low" style="cursor:pointer">
+                <rect x="80" y="215" width="480" height="85" rx="6" fill="#eff6ff" fill-opacity="0.01" stroke="none"/>
+                <g transform="translate(120,225)" pointer-events="none">
+                  <rect x="0" y="8" width="70" height="42" rx="2" fill="#f8fafc" stroke="#1e293b" stroke-width="1.5"/>
+                  <rect x="8" y="16" width="54" height="18" fill="#e2e8f0" stroke="#64748b" stroke-width="0.7"/>
+                  <rect x="10" y="0" width="10" height="8" fill="#cbd5e1" stroke="#1e293b" stroke-width="0.7"/>
+                  <rect x="28" y="0" width="10" height="8" fill="#cbd5e1" stroke="#1e293b" stroke-width="0.7"/>
+                  <rect x="46" y="0" width="10" height="8" fill="#cbd5e1" stroke="#1e293b" stroke-width="0.7"/>
+                </g>
+                <text x="240" y="255" text-anchor="middle" font-size="18" fill="#64748b" font-weight="700" pointer-events="none">···</text>
+                <g transform="translate(280,225)" pointer-events="none">
+                  <rect x="0" y="8" width="70" height="42" rx="2" fill="#f8fafc" stroke="#1e293b" stroke-width="1.5"/>
+                  <rect x="8" y="16" width="54" height="18" fill="#e2e8f0" stroke="#64748b" stroke-width="0.7"/>
+                  <rect x="10" y="0" width="10" height="8" fill="#cbd5e1" stroke="#1e293b" stroke-width="0.7"/>
+                  <rect x="28" y="0" width="10" height="8" fill="#cbd5e1" stroke="#1e293b" stroke-width="0.7"/>
+                  <rect x="46" y="0" width="10" height="8" fill="#cbd5e1" stroke="#1e293b" stroke-width="0.7"/>
+                </g>
+                <g transform="translate(440,225)" pointer-events="none">
+                  <rect x="0" y="8" width="70" height="42" rx="2" fill="#f8fafc" stroke="#1e293b" stroke-width="1.5"/>
+                  <rect x="8" y="16" width="54" height="18" fill="#e2e8f0" stroke="#64748b" stroke-width="0.7"/>
+                  <rect x="10" y="0" width="10" height="8" fill="#cbd5e1" stroke="#1e293b" stroke-width="0.7"/>
+                  <rect x="28" y="0" width="10" height="8" fill="#cbd5e1" stroke="#1e293b" stroke-width="0.7"/>
+                  <rect x="46" y="0" width="10" height="8" fill="#cbd5e1" stroke="#1e293b" stroke-width="0.7"/>
+                </g>
+                <path d="M 575 230 C 600 230 600 255 600 260 C 600 275 600 290 575 290" fill="none" stroke="#0f766e" stroke-width="1.6" pointer-events="none"/>
+                <text x="615" y="250" font-size="12" font-weight="700" fill="#0f766e" pointer-events="none">ПЛК нижнего</text>
+                <text x="615" y="266" font-size="12" font-weight="700" fill="#0f766e" pointer-events="none">уровня</text>
+                <text x="615" y="282" font-size="10" fill="#475569" pointer-events="none">(связь с объектом)</text>
+              </g>
+
+              <g pointer-events="none">
+                <line x1="330" y1="205" x2="155" y2="233" stroke="#1e293b" stroke-width="1.5" marker-start="url(#plc-arr-rev)" marker-end="url(#plc-arr)"/>
+                <line x1="360" y1="205" x2="315" y2="233" stroke="#1e293b" stroke-width="1.5" marker-start="url(#plc-arr-rev)" marker-end="url(#plc-arr)"/>
+                <line x1="390" y1="205" x2="475" y2="233" stroke="#1e293b" stroke-width="1.5" marker-start="url(#plc-arr-rev)" marker-end="url(#plc-arr)"/>
+              </g>
+
+              <g class="scada-block" data-info="field" style="cursor:pointer">
+                <rect x="90" y="320" width="460" height="70" rx="6" fill="#eff6ff" fill-opacity="0.01" stroke="none"/>
+                <g pointer-events="none" fill="#1e293b">
+                  <line x1="140" y1="283" x2="140" y2="312" stroke="#1e293b" stroke-width="1.4"/>
+                  <path d="M140,275 L135,285 L145,285 Z"/><path d="M140,320 L135,310 L145,310 Z"/>
+                  <line x1="155" y1="283" x2="155" y2="312" stroke="#1e293b" stroke-width="1.4"/>
+                  <path d="M155,275 L150,285 L160,285 Z"/><path d="M155,320 L150,310 L160,310 Z"/>
+                  <line x1="170" y1="283" x2="170" y2="312" stroke="#1e293b" stroke-width="1.4"/>
+                  <path d="M170,275 L165,285 L175,285 Z"/><path d="M170,320 L165,310 L175,310 Z"/>
+                  <line x1="300" y1="283" x2="300" y2="312" stroke="#1e293b" stroke-width="1.4"/>
+                  <path d="M300,275 L295,285 L305,285 Z"/><path d="M300,320 L295,310 L305,310 Z"/>
+                  <line x1="315" y1="283" x2="315" y2="312" stroke="#1e293b" stroke-width="1.4"/>
+                  <path d="M315,275 L310,285 L320,285 Z"/><path d="M315,320 L310,310 L320,310 Z"/>
+                  <line x1="330" y1="283" x2="330" y2="312" stroke="#1e293b" stroke-width="1.4"/>
+                  <path d="M330,275 L325,285 L335,285 Z"/><path d="M330,320 L325,310 L335,310 Z"/>
+                  <line x1="460" y1="283" x2="460" y2="312" stroke="#1e293b" stroke-width="1.4"/>
+                  <path d="M460,275 L455,285 L465,285 Z"/><path d="M460,320 L455,310 L465,310 Z"/>
+                  <line x1="475" y1="283" x2="475" y2="312" stroke="#1e293b" stroke-width="1.4"/>
+                  <path d="M475,275 L470,285 L480,285 Z"/><path d="M475,320 L470,310 L480,310 Z"/>
+                  <line x1="490" y1="283" x2="490" y2="312" stroke="#1e293b" stroke-width="1.4"/>
+                  <path d="M490,275 L485,285 L495,285 Z"/><path d="M490,320 L485,310 L495,310 Z"/>
+                </g>
+                <rect x="110" y="325" width="420" height="40" rx="18" fill="#f1f5f9" stroke="#1e293b" stroke-width="1.6" pointer-events="none"/>
+                <text x="320" y="351" text-anchor="middle" font-size="13" font-weight="600" fill="#0f172a" pointer-events="none">К датчикам и исполнительным устройствам</text>
+              </g>
+            </svg>
+          </div>
+          <div class="asutp-tabs">
+            <button type="button" class="asutp-tab active" data-info="intro">Обзор</button>
+            <button type="button" class="asutp-tab" data-info="scada">SCADA</button>
+            <button type="button" class="asutp-tab" data-info="high">Верхний ПЛК</button>
+            <button type="button" class="asutp-tab" data-info="low">Нижний ПЛК</button>
+            <button type="button" class="asutp-tab" data-info="field">Объект</button>
+          </div>
+        </div>
+        <aside class="asutp-panel" id="plcPanel" aria-live="polite">
+          <h3>Обзор</h3>
+          <p>Общая схема одного сегмента сети на базе ПЛК, реализующего подсистему АСУТП.</p>
+          <p>Нажмите на блок схемы или кнопку внизу — здесь появится определение.</p>
+        </aside>
+      </div>
+    </section>
+
+    <!-- PLC levels detail -->
+    <section class="slide">
+      <h2>Уровни сегмента ПЛК</h2>
+      <div class="slide-body slide-body-dense">
+        <div class="grid-3">
+          <div class="variant-mini">
+            <div class="card-illust" aria-hidden="true">
+              <svg viewBox="0 0 160 72" xmlns="http://www.w3.org/2000/svg">
+                <rect x="20" y="18" width="50" height="36" rx="4" fill="#ecfdf5" stroke="#0d9488" stroke-width="1.5"/>
+                <circle cx="45" cy="36" r="10" fill="#ccfbf1" stroke="#0f766e" stroke-width="1.2"/>
+                <circle cx="45" cy="36" r="3" fill="#0f766e"/>
+                <path d="M70 36 H95" stroke="#64748b" stroke-width="1.5"/>
+                <polygon points="95,36 88,32 88,40" fill="#64748b"/>
+                <rect x="95" y="22" width="44" height="28" rx="3" fill="#f8fafc" stroke="#475569" stroke-width="1.4"/>
+                <text x="117" y="40" text-anchor="middle" font-size="9" fill="#334155" font-weight="700">ПЛК</text>
+              </svg>
+            </div>
+            <h4>Микропроцессорные датчики</h4>
+            <p>Датчики с микропроцессором (часто Modbus) всё чаще заменяют ПЛК нижнего уровня в современных АСУТП.</p>
+          </div>
+          <div class="variant-mini">
+            <div class="card-illust" aria-hidden="true">
+              <svg viewBox="0 0 160 72" xmlns="http://www.w3.org/2000/svg">
+                <rect x="48" y="10" width="64" height="42" rx="3" fill="#eff6ff" stroke="#2563eb" stroke-width="1.5"/>
+                <rect x="56" y="18" width="48" height="18" fill="#dbeafe" stroke="#3b82f6" stroke-width="0.8"/>
+                <text x="80" y="62" text-anchor="middle" font-size="9" fill="#1e40af" font-weight="700">P · PI · PID</text>
+                <path d="M80 52 v8" stroke="#2563eb" stroke-width="1.5"/>
+              </svg>
+            </div>
+            <h4>Контроллер высокого уровня</h4>
+            <p>Собирает и обрабатывает данные с нижних ПЛК; наверх передаёт только нужное. Законы <strong>P, I, PI, PD, PID</strong>, аварийные отключения.</p>
+          </div>
+          <div class="variant-mini">
+            <div class="card-illust" aria-hidden="true">
+              <svg viewBox="0 0 160 72" xmlns="http://www.w3.org/2000/svg">
+                <rect x="55" y="8" width="50" height="32" rx="2" fill="#f8fafc" stroke="#1e293b" stroke-width="1.4"/>
+                <rect x="60" y="12" width="40" height="22" fill="#e2e8f0" stroke="#64748b" stroke-width="0.7"/>
+                <rect x="68" y="40" width="24" height="5" fill="#cbd5e1" stroke="#1e293b" stroke-width="0.7"/>
+                <rect x="58" y="45" width="44" height="8" rx="1" fill="#f8fafc" stroke="#1e293b" stroke-width="1"/>
+                <circle cx="42" cy="28" r="4" fill="#22c55e"/><circle cx="118" cy="28" r="4" fill="#ef4444"/>
+              </svg>
+            </div>
+            <h4>Локальное АРМ</h4>
+            <p>Прямое управление объектом. Данные — <strong>напрямую с ПЛК</strong>; команды фиксируются в архиве верхнего уровня.</p>
+          </div>
+        </div>
+        <div class="highlight-box highlight-box-compact">
+          Иерархия может быть сложной, но чаще всего один ПЛК собирает данные с датчиков и передаёт их на сервер.
+        </div>
+      </div>
+    </section>
+
+    <!-- ERP -->
+    <section class="slide">
+      <h2>ERP в составе АСУП</h2>
+      <div class="slide-body slide-body-dense">
+        <p><strong>ERP</strong> (Enterprise Resource Planning) — пакеты ПО для планирования ресурсов предприятия: кадры, финансы, активы. Понятие сформулировано в <strong>1990</strong> г. Вместе со SCADA обеспечивают документооборот АСУП.</p>
+        <div class="grid-2">
+          <div class="variant-mini">
+            <div class="card-illust" aria-hidden="true">
+              <svg viewBox="0 0 200 72" xmlns="http://www.w3.org/2000/svg">
+                <rect x="20" y="16" width="48" height="40" rx="4" fill="#fef3c7" stroke="#d97706" stroke-width="1.4"/>
+                <text x="44" y="40" text-anchor="middle" font-size="10" font-weight="700" fill="#92400e">SAP</text>
+                <rect x="78" y="16" width="48" height="40" rx="4" fill="#fee2e2" stroke="#dc2626" stroke-width="1.4"/>
+                <text x="102" y="40" text-anchor="middle" font-size="9" font-weight="700" fill="#991b1b">Oracle</text>
+                <rect x="136" y="16" width="48" height="40" rx="4" fill="#dbeafe" stroke="#2563eb" stroke-width="1.4"/>
+                <text x="160" y="40" text-anchor="middle" font-size="9" font-weight="700" fill="#1e40af">MS</text>
+              </svg>
+            </div>
+            <h4>Мировые разработчики</h4>
+            <p><strong>Oracle</strong> (США), <strong>SAP</strong> (Германия); для малого и среднего бизнеса — Sage Group, Microsoft.</p>
+          </div>
+          <div class="variant-mini">
+            <div class="card-illust" aria-hidden="true">
+              <svg viewBox="0 0 200 72" xmlns="http://www.w3.org/2000/svg">
+                <rect x="18" y="20" width="40" height="32" rx="3" fill="#ecfdf5" stroke="#0d9488" stroke-width="1.3"/>
+                <rect x="66" y="20" width="40" height="32" rx="3" fill="#eff6ff" stroke="#2563eb" stroke-width="1.3"/>
+                <rect x="114" y="20" width="40" height="32" rx="3" fill="#fef3c7" stroke="#d97706" stroke-width="1.3"/>
+                <rect x="162" y="20" width="22" height="32" rx="3" fill="#f1f5f9" stroke="#94a3b8" stroke-dasharray="3,2" stroke-width="1.3"/>
+                <text x="38" y="40" text-anchor="middle" font-size="9" fill="#0f766e">HR</text>
+                <text x="86" y="40" text-anchor="middle" font-size="9" fill="#1d4ed8">Fin</text>
+                <text x="134" y="40" text-anchor="middle" font-size="9" fill="#b45309">Asset</text>
+              </svg>
+            </div>
+            <h4>Модульность</h4>
+            <p>Поэтапный ввод модулей, выбор нужных функций, сочетание модулей разных систем. Пример: Adastra — T-FACTORY.exe™, SCADA TRACE MODE®.</p>
+          </div>
+        </div>
+        <div class="highlight-box highlight-box-compact">
+          Аппаратно-программный уровень ERP дальше не разбираем — это ближе к экономическим и управленческим дисциплинам.
+        </div>
+      </div>
+    </section>
+
+    <!-- ASNI -->
+    <section class="slide">
+      <h2>Особенности построения АСНИ</h2>
+      <div class="slide-body slide-body-dense">
+        <p><strong>Цель</strong> — новая информация об объекте (модель, параметры). Систему строят при дефиците сведений; методика и сам объект могут меняться в ходе исследования.</p>
+        <p>Главное требование — <strong>гибкость</strong>:</p>
+        <div class="grid-3">
+          <div class="variant-mini">
+            <div class="card-illust" aria-hidden="true">
+              <svg viewBox="0 0 160 72" xmlns="http://www.w3.org/2000/svg">
+                <rect x="30" y="20" width="40" height="32" rx="3" fill="#e2e8f0" stroke="#64748b" stroke-width="1.3"/>
+                <path d="M78 36 H98" stroke="#2563eb" stroke-width="2"/>
+                <polygon points="98,36 90,31 90,41" fill="#2563eb"/>
+                <rect x="100" y="16" width="40" height="40" rx="3" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
+                <text x="50" y="40" text-anchor="middle" font-size="11" fill="#475569">A</text>
+                <text x="120" y="40" text-anchor="middle" font-size="11" fill="#1d4ed8" font-weight="700">B</text>
+              </svg>
+            </div>
+            <h4>Заменяемость</h4>
+            <p>Легко заменить элементы на другие с иными характеристиками или функциями.</p>
+          </div>
+          <div class="variant-mini">
+            <div class="card-illust" aria-hidden="true">
+              <svg viewBox="0 0 160 72" xmlns="http://www.w3.org/2000/svg">
+                <rect x="25" y="22" width="50" height="30" rx="3" fill="#ecfdf5" stroke="#0d9488" stroke-width="1.4"/>
+                <rect x="85" y="18" width="50" height="38" rx="3" fill="#ccfbf1" stroke="#0f766e" stroke-width="1.5" stroke-dasharray="4,2"/>
+                <text x="50" y="42" text-anchor="middle" font-size="12" fill="#0f766e">+</text>
+                <text x="110" y="42" text-anchor="middle" font-size="18" fill="#0d9488" font-weight="700">+</text>
+              </svg>
+            </div>
+            <h4>Наращиваемость</h4>
+            <p>Добавлять недостающие технические средства к уже имеющимся.</p>
+          </div>
+          <div class="variant-mini">
+            <div class="card-illust" aria-hidden="true">
+              <svg viewBox="0 0 160 72" xmlns="http://www.w3.org/2000/svg">
+                <path d="M25 50 Q50 10 80 36 T135 28" fill="none" stroke="#7c3aed" stroke-width="2"/>
+                <path d="M25 50 Q55 45 80 20 T135 48" fill="none" stroke="#a78bfa" stroke-width="1.5" stroke-dasharray="4,3"/>
+                <circle cx="25" cy="50" r="3" fill="#7c3aed"/><circle cx="135" cy="28" r="3" fill="#7c3aed"/>
+              </svg>
+            </div>
+            <h4>Алгоритмическая гибкость</h4>
+            <p>Гибко перестраивать алгоритмы и методики экспериментальных исследований.</p>
+          </div>
+        </div>
+        <div class="highlight-box highlight-box-compact">
+          Требования не должны завышать стоимость сверх разумного; они согласуются с требованиями к АСУТП.
+        </div>
+      </div>
+    </section>
+
+    <!-- Stages of TS development -->
+    <section class="slide">
+      <h2>Этапы развития технических средств АСУ и САУ</h2>
+      <div class="slide-body slide-body-dense">
+        <div class="grid-3">
+          <div class="variant-mini">
+            <div class="card-illust" aria-hidden="true">
+              <svg viewBox="0 0 160 72" xmlns="http://www.w3.org/2000/svg">
+                <!-- motor / dynamo -->
+                <circle cx="48" cy="36" r="22" fill="#fef3c7" stroke="#d97706" stroke-width="1.6"/>
+                <circle cx="48" cy="36" r="10" fill="#fde68a" stroke="#b45309" stroke-width="1.2"/>
+                <rect x="68" y="30" width="28" height="12" fill="#fef3c7" stroke="#d97706" stroke-width="1.2"/>
+                <!-- telegraph poles -->
+                <line x1="110" y1="55" x2="110" y2="18" stroke="#78350f" stroke-width="2"/>
+                <line x1="130" y1="55" x2="130" y2="18" stroke="#78350f" stroke-width="2"/>
+                <line x1="110" y1="22" x2="130" y2="22" stroke="#92400e" stroke-width="1.5"/>
+                <line x1="110" y1="30" x2="130" y2="30" stroke="#92400e" stroke-width="1.5"/>
+              </svg>
+            </div>
+            <h4>I. Со 2-й пол. XIX в.</h4>
+            <p>Электроэнергия: двигатели, трансформаторы, телефон, телеграф, линии связи. Коммутация, защита, датчики с электрическим выходом.</p>
+          </div>
+          <div class="variant-mini">
+            <div class="card-illust" aria-hidden="true">
+              <svg viewBox="0 0 160 72" xmlns="http://www.w3.org/2000/svg">
+                <!-- vacuum tube / amplifier -->
+                <ellipse cx="45" cy="18" rx="14" ry="6" fill="#e2e8f0" stroke="#475569" stroke-width="1.3"/>
+                <path d="M31 18 V48 Q31 58 45 58 Q59 58 59 48 V18" fill="#f8fafc" stroke="#475569" stroke-width="1.3"/>
+                <line x1="38" y1="58" x2="38" y2="66" stroke="#475569" stroke-width="1.2"/>
+                <line x1="45" y1="58" x2="45" y2="66" stroke="#475569" stroke-width="1.2"/>
+                <line x1="52" y1="58" x2="52" y2="66" stroke="#475569" stroke-width="1.2"/>
+                <!-- stepper motor -->
+                <circle cx="115" cy="36" r="20" fill="#eff6ff" stroke="#2563eb" stroke-width="1.5"/>
+                <path d="M115 20 L118 36 L115 52 L112 36 Z" fill="#93c5fd" stroke="#1d4ed8" stroke-width="1"/>
+                <circle cx="115" cy="36" r="4" fill="#1e40af"/>
+              </svg>
+            </div>
+            <h4>II. С нач. 1930-х</h4>
+            <p>САУ в промышленности и военном деле. Электромеханика → магнитные, ламповые, полупроводниковые усилители; асинхронные и шаговые двигатели.</p>
+          </div>
+          <div class="variant-mini">
+            <div class="card-illust" aria-hidden="true">
+              <svg viewBox="0 0 160 72" xmlns="http://www.w3.org/2000/svg">
+                <!-- chip -->
+                <rect x="35" y="18" width="40" height="36" rx="2" fill="#1e293b" stroke="#0f172a" stroke-width="1"/>
+                <rect x="42" y="25" width="26" height="22" fill="#334155"/>
+                <line x1="30" y1="28" x2="35" y2="28" stroke="#64748b" stroke-width="1.5"/>
+                <line x1="30" y1="36" x2="35" y2="36" stroke="#64748b" stroke-width="1.5"/>
+                <line x1="30" y1="44" x2="35" y2="44" stroke="#64748b" stroke-width="1.5"/>
+                <line x1="75" y1="28" x2="80" y2="28" stroke="#64748b" stroke-width="1.5"/>
+                <line x1="75" y1="36" x2="80" y2="36" stroke="#64748b" stroke-width="1.5"/>
+                <line x1="75" y1="44" x2="80" y2="44" stroke="#64748b" stroke-width="1.5"/>
+                <!-- inverter / motor -->
+                <rect x="95" y="22" width="28" height="28" rx="2" fill="#dbeafe" stroke="#2563eb" stroke-width="1.3"/>
+                <text x="109" y="40" text-anchor="middle" font-size="8" font-weight="700" fill="#1d4ed8">IGBT</text>
+                <circle cx="140" cy="36" r="12" fill="#ecfdf5" stroke="#0d9488" stroke-width="1.3"/>
+                <path d="M134 36 h12 M140 30 v12" stroke="#0f766e" stroke-width="1.5"/>
+              </svg>
+            </div>
+            <h4>III. С сер. 1970-х</h4>
+            <p>Микросхемы и БИС, контроллеры. В 1990-е — ПЛК + IGBT → частотные преобразователи для мощных двигателей.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Trends -->
+    <section class="slide">
+      <h2>Тенденции развития элементной базы АСУ</h2>
+      <div class="slide-body slide-body-dense">
+        <p>Датчики совершенствовались на всех этапах; промышленные реализации (эффект Холла, температура, фотоприёмники) стали возможны с появлением полупроводников.</p>
+        <div class="grid-2">
+          <div class="variant-mini">
+            <div class="card-illust" aria-hidden="true">
+              <svg viewBox="0 0 200 72" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="40" cy="36" r="16" fill="#fef3c7" stroke="#d97706" stroke-width="1.4"/>
+                <path d="M40 24 v24 M28 36 h24" stroke="#b45309" stroke-width="1.5"/>
+                <text x="40" y="62" text-anchor="middle" font-size="8" fill="#92400e">датчик</text>
+                <path d="M60 36 H90" stroke="#64748b" stroke-width="1.5"/>
+                <polygon points="90,36 82,32 82,40" fill="#64748b"/>
+                <circle cx="120" cy="36" r="20" fill="#eff6ff" stroke="#2563eb" stroke-width="1.5"/>
+                <path d="M110 36 h20 M120 26 v20" stroke="#1d4ed8" stroke-width="2"/>
+                <text x="120" y="62" text-anchor="middle" font-size="8" fill="#1e40af">ИУ</text>
+                <path d="M145 28 L165 20 L185 28 L185 48 L165 56 L145 48 Z" fill="#ecfdf5" stroke="#0d9488" stroke-width="1.3"/>
+                <text x="165" y="42" text-anchor="middle" font-size="9" font-weight="700" fill="#0f766e">↑</text>
+              </svg>
+            </div>
+            <h4>Датчики и ИУ</h4>
+            <p>Улучшение существующих и создание новых датчиков; рост быстродействия, мощности, КПД и надёжности исполнительных двигателей при уменьшении габаритов.</p>
+          </div>
+          <div class="variant-mini">
+            <div class="card-illust" aria-hidden="true">
+              <svg viewBox="0 0 200 72" xmlns="http://www.w3.org/2000/svg">
+                <rect x="25" y="16" width="50" height="40" rx="3" fill="#1e293b"/>
+                <rect x="32" y="22" width="36" height="20" fill="#22d3ee" opacity="0.35"/>
+                <text x="50" y="36" text-anchor="middle" font-size="8" fill="#e2e8f0">CPU</text>
+                <rect x="95" y="20" width="36" height="32" rx="2" fill="#fef3c7" stroke="#d97706" stroke-width="1.3"/>
+                <path d="M103 44 L111 28 L119 44" fill="none" stroke="#b45309" stroke-width="1.5"/>
+                <text x="113" y="58" text-anchor="middle" font-size="8" fill="#92400e">сила</text>
+                <rect x="150" y="18" width="30" height="16" rx="2" fill="#dbeafe" stroke="#2563eb"/>
+                <rect x="150" y="38" width="30" height="16" rx="2" fill="#dbeafe" stroke="#2563eb"/>
+                <text x="165" y="58" text-anchor="middle" font-size="8" fill="#1e40af">ЗУ</text>
+              </svg>
+            </div>
+            <h4>Электроника и ВТ</h4>
+            <p>Развитие силовой и преобразовательной электроники; рост скорости и объёма вычислений, ёмкости ЗУ и уменьшение размеров управляющей ВТ.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TZ design stages (рис. 1.7) -->
+    <section class="slide slide-tz-interactive">
+      <h2>Этапы проектирования по ТЗ</h2>
+      <div class="slide-body asutp-interactive">
+        <div class="asutp-main">
+          <p class="asutp-hint">Угловая следящая система: нажмите на этап (1–5) или блок схемы</p>
+          <div class="asutp-diagram-wrap">
+            <svg class="tz-svg asutp-svg" viewBox="0 0 640 280" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Функциональная схема угловой следящей системы">
+              <defs>
+                <marker id="tz-arr" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#1e293b"/></marker>
+              </defs>
+
+              <!-- Stage 3 zone: comparator -->
+              <g class="scada-block" data-info="s3" style="cursor:pointer">
+                <rect x="8" y="70" width="100" height="100" rx="6" fill="#fef3c7" fill-opacity="0.35" stroke="#d97706" stroke-width="1.5" stroke-dasharray="5,3"/>
+                <text x="18" y="88" font-size="14" font-weight="700" fill="#b45309" pointer-events="none">3</text>
+                <text x="28" y="125" font-size="12" font-style="italic" fill="#0f172a" pointer-events="none">φвх</text>
+                <circle cx="70" cy="120" r="18" fill="#fff" stroke="#1e293b" stroke-width="1.6" pointer-events="none"/>
+                <line x1="58" y1="120" x2="82" y2="120" stroke="#1e293b" stroke-width="1.3" pointer-events="none"/>
+                <line x1="70" y1="108" x2="70" y2="132" stroke="#1e293b" stroke-width="1.3" pointer-events="none"/>
+                <text x="70" y="156" text-anchor="middle" font-size="11" fill="#64748b" pointer-events="none">сравнение</text>
+              </g>
+
+              <line x1="88" y1="120" x2="128" y2="120" stroke="#1e293b" stroke-width="1.5" marker-end="url(#tz-arr)" pointer-events="none"/>
+
+              <!-- Stage 4: УПУ -->
+              <g class="scada-block" data-info="s4" style="cursor:pointer">
+                <rect x="128" y="98" width="70" height="44" fill="#fff" stroke="#1e293b" stroke-width="1.6"/>
+                <text x="163" y="125" text-anchor="middle" font-size="15" font-weight="700" fill="#0f172a" pointer-events="none">УПУ</text>
+                <circle cx="163" cy="78" r="12" fill="#ede9fe" stroke="#7c3aed" stroke-width="1.5"/>
+                <text x="163" y="83" text-anchor="middle" font-size="13" font-weight="700" fill="#6d28d9" pointer-events="none">4</text>
+              </g>
+
+              <line x1="198" y1="120" x2="238" y2="120" stroke="#1e293b" stroke-width="1.5" marker-end="url(#tz-arr)" pointer-events="none"/>
+
+              <!-- Stage 2: УМ -->
+              <g class="scada-block" data-info="s2" style="cursor:pointer">
+                <rect x="238" y="78" width="80" height="84" rx="4" fill="#dbeafe" fill-opacity="0.4" stroke="#2563eb" stroke-width="1.5" stroke-dasharray="5,3"/>
+                <text x="250" y="96" font-size="14" font-weight="700" fill="#1d4ed8" pointer-events="none">2</text>
+                <rect x="250" y="104" width="56" height="40" fill="#fff" stroke="#1e293b" stroke-width="1.5" pointer-events="none"/>
+                <text x="278" y="129" text-anchor="middle" font-size="15" font-weight="700" fill="#0f172a" pointer-events="none">УМ</text>
+              </g>
+
+              <line x1="318" y1="120" x2="358" y2="120" stroke="#1e293b" stroke-width="1.5" marker-end="url(#tz-arr)" pointer-events="none"/>
+
+              <!-- Stage 1: Дв Ред Нагр -->
+              <g class="scada-block" data-info="s1" style="cursor:pointer">
+                <rect x="358" y="70" width="250" height="100" rx="4" fill="#ccfbf1" fill-opacity="0.35" stroke="#0d9488" stroke-width="1.5" stroke-dasharray="5,3"/>
+                <text x="370" y="90" font-size="14" font-weight="700" fill="#0f766e" pointer-events="none">1</text>
+                <rect x="380" y="100" width="56" height="40" fill="#fff" stroke="#1e293b" stroke-width="1.5" pointer-events="none"/>
+                <text x="408" y="125" text-anchor="middle" font-size="14" font-weight="700" fill="#0f172a" pointer-events="none">Дв</text>
+                <line x1="436" y1="120" x2="456" y2="120" stroke="#1e293b" stroke-width="1.4" marker-end="url(#tz-arr)" pointer-events="none"/>
+                <rect x="456" y="100" width="56" height="40" fill="#fff" stroke="#1e293b" stroke-width="1.5" pointer-events="none"/>
+                <text x="484" y="125" text-anchor="middle" font-size="14" font-weight="700" fill="#0f172a" pointer-events="none">Ред</text>
+                <line x1="512" y1="120" x2="532" y2="120" stroke="#1e293b" stroke-width="1.4" marker-end="url(#tz-arr)" pointer-events="none"/>
+                <rect x="532" y="100" width="60" height="40" fill="#fff" stroke="#1e293b" stroke-width="1.5" pointer-events="none"/>
+                <text x="562" y="125" text-anchor="middle" font-size="13" font-weight="700" fill="#0f172a" pointer-events="none">Нагр</text>
+              </g>
+
+              <!-- Feedback -->
+              <path d="M484 140 V200 H70 V138" fill="none" stroke="#1e293b" stroke-width="1.5" marker-end="url(#tz-arr)" pointer-events="none"/>
+              <text x="280" y="192" text-anchor="middle" font-size="13" font-style="italic" fill="#475569" pointer-events="none">φвых</text>
+
+              <!-- Stage 5 badge -->
+              <g class="scada-block" data-info="s5" style="cursor:pointer">
+                <rect x="200" y="220" width="240" height="44" rx="8" fill="#f1f5f9" stroke="#475569" stroke-width="1.5"/>
+                <circle cx="228" cy="242" r="14" fill="#334155"/>
+                <text x="228" y="247" text-anchor="middle" font-size="13" font-weight="700" fill="#fff" pointer-events="none">5</text>
+                <text x="320" y="248" text-anchor="middle" font-size="13" font-weight="600" fill="#0f172a" pointer-events="none">Макет ↔ проверка по ТЗ</text>
+              </g>
+            </svg>
+          </div>
+          <div class="asutp-tabs">
+            <button type="button" class="asutp-tab active" data-info="intro">Обзор</button>
+            <button type="button" class="asutp-tab" data-info="s1">1 · Дв+Ред</button>
+            <button type="button" class="asutp-tab" data-info="s2">2 · УМ</button>
+            <button type="button" class="asutp-tab" data-info="s3">3 · Измерение</button>
+            <button type="button" class="asutp-tab" data-info="s4">4 · УПУ</button>
+            <button type="button" class="asutp-tab" data-info="s5">5 · Макет</button>
+          </div>
+        </div>
+        <aside class="asutp-panel" id="tzPanel" aria-live="polite">
+          <h3>Обзор</h3>
+          <p>Функциональная схема угловой следящей системы и последовательность этапов её проектирования.</p>
+          <p>Нажмите на номер этапа или блок — здесь появятся детали.</p>
+        </aside>
+      </div>
+    </section>
+
+    <!-- TZ stages list -->
+    <section class="slide">
+      <h2>Пять этапов проектирования</h2>
+      <div class="slide-body slide-body-dense">
+        <div class="comp-row"><div><strong>1. Двигатель и редуктор</strong> — предварительный выбор Дв и оценка передаточного числа; расчёт Ред; проверка пригодности связки Дв–Ред.</div></div>
+        <div class="comp-row"><div><strong>2. Усилитель мощности (УМ)</strong> — расчёт УМ.</div></div>
+        <div class="comp-row"><div><strong>3. Измерительное устройство</strong> — выбор класса точности; оценка передаточной функции разомкнутой системы.</div></div>
+        <div class="comp-row"><div><strong>4. Коррекция и УПУ</strong> — синтез корректирующих звеньев; расчёт усилительно-преобразовательного устройства.</div></div>
+        <div class="comp-row"><div><strong>5. Макет и ТЗ</strong> — изготовление макета и проверка качества работы на соответствие требованиям технического задания.</div></div>
+      </div>
+    </section>
+
+    <!-- Аппараты: термины, классификация, IP, климат -->
+    <section class="slide">
+      <h2>Термины электрических аппаратов</h2>
+      <div class="slide-body slide-body-dense">
+        <p style="margin:0 0 0.45em;font-size:0.9em;color:#64748b">От систем АСУ / САУ — к устройствам, из которых они собираются</p>
+        <div class="grid-3 grid-terms">
+          <div class="term-mini"><div class="abbr">ЭА</div><div class="name">Электрический аппарат</div><div class="desc">Устройство для коммутации, защиты, управления или измерения в электрических цепях</div></div>
+          <div class="term-mini"><div class="abbr">КА</div><div class="name">Коммутационный аппарат</div><div class="desc">Включение / отключение цепей: контактор, выключатель, рубильник</div></div>
+          <div class="term-mini"><div class="abbr">ЗА</div><div class="name">Защитный аппарат</div><div class="desc">Отключение при перегрузке, КЗ, утечке: автомат, УЗО, предохранитель</div></div>
+          <div class="term-mini"><div class="abbr">ИП</div><div class="name">Измерительный преобразователь</div><div class="desc">Физическая величина → сигнал для САУ (датчик в широком смысле)</div></div>
+          <div class="term-mini"><div class="abbr">ИМ</div><div class="name">Исполнительный механизм</div><div class="desc">Сигнал управления → механическое или энергетическое воздействие на объект</div></div>
+          <div class="term-mini"><div class="abbr">ПЛК</div><div class="name">Программируемый контроллер</div><div class="desc">Цифровое устройство логики и управления в составе АСУТП</div></div>
+        </div>
+        <div class="highlight-box highlight-box-compact" style="margin-top:0.45em">
+          <strong>Контактный</strong> аппарат — через механические контакты. <strong>Бесконтактный</strong> — полупроводники, оптоэлектроника (без искрения и износа контактов).
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <h2>Краткая история электрических аппаратов</h2>
+      <div class="slide-body slide-body-dense">
+        <div class="grid-3">
+          <div class="variant-mini">
+            <h4>XIX — нач. XX в.</h4>
+            <p>Рубильники, плавкие предохранители, электромагнитные реле и контакторы. Коммутация и защита силовых цепей.</p>
+          </div>
+          <div class="variant-mini">
+            <h4>1930–1960-е</h4>
+            <p>Ламповые и магнитные усилители, первые бесконтактные схемы. Рост САУ в промышленности и на транспорте.</p>
+          </div>
+          <div class="variant-mini">
+            <h4>С 1970-х</h4>
+            <p>Транзисторы, тиристоры, микросхемы → ПЛК, частотные преобразователи, «умные» датчики и цифровые интерфейсы.</p>
+          </div>
+        </div>
+        <div class="highlight-box highlight-box-compact" style="margin-top:0.55em">
+          Тренд: от <strong>электромеханики</strong> к <strong>электронике и цифре</strong> — выше ресурс, быстрее реакция, проще интеграция в АСУТП.
+        </div>
+      </div>
+    </section>
+
+    <section class="slide slide-app-purpose-interactive">
+      <h2>Классификация электрических аппаратов по назначению</h2>
+      <div class="slide-body asutp-interactive">
+        <div class="asutp-main">
+          <p class="asutp-hint">Нажмите класс аппарата — справа появятся примеры и роль в системе</p>
+          <div class="app-purpose-grid">
+            <button type="button" class="app-purpose-card active" data-info="switch">Коммутационные</button>
+            <button type="button" class="app-purpose-card" data-info="protect">Защитные</button>
+            <button type="button" class="app-purpose-card" data-info="control">Управляющие / регулирующие</button>
+            <button type="button" class="app-purpose-card" data-info="measure">Измерительные</button>
+            <button type="button" class="app-purpose-card" data-info="signal">Сигнальные</button>
+            <button type="button" class="app-purpose-card" data-info="drive">Пусковые / исполнительные</button>
+          </div>
+          <div class="asutp-tabs">
+            <button type="button" class="asutp-tab active" data-info="switch">Коммутация</button>
+            <button type="button" class="asutp-tab" data-info="protect">Защита</button>
+            <button type="button" class="asutp-tab" data-info="control">Управление</button>
+            <button type="button" class="asutp-tab" data-info="measure">Измерение</button>
+            <button type="button" class="asutp-tab" data-info="signal">Сигнализация</button>
+            <button type="button" class="asutp-tab" data-info="drive">Пуск / ИМ</button>
+          </div>
+        </div>
+        <aside class="asutp-panel" id="appPurposePanel">
+          <h3>Коммутационные</h3>
+          <p>Замыкают и размыкают электрические цепи в нормальных режимах.</p>
+          <p><strong>Примеры:</strong> контактор, магнитный пускатель, автоматический выключатель (в режиме коммутации), рубильник, разъединитель.</p>
+          <p>В АСУТП — силовые цепи двигателей, нагревателей, линий питания шкафов.</p>
+        </aside>
+      </div>
+    </section>
+
+    <section class="slide">
+      <h2>По областям применения</h2>
+      <div class="slide-body slide-body-dense">
+        <div class="grid-2" style="gap:0.55em 0.85em">
+          <div class="comp-row"><div><strong>Энергетика</strong> — генерация, распределение, КРУ (комплектные распределительные устройства); высокие токи и напряжения, жёсткие нормы защиты.</div></div>
+          <div class="comp-row"><div><strong>Промышленные ТП</strong> — АСУТП цехов, конвейеры, печи, насосы; датчики + ПЛК + приводы.</div></div>
+          <div class="comp-row"><div><strong>Транспорт</strong> — тяга, бортовые системы, светофоры; вибрация, широкий диапазон температур.</div></div>
+          <div class="comp-row"><div><strong>Здания и ЖКХ</strong> — освещение, HVAC, лифты; умеренные токи, акцент на пожарной безопасности.</div></div>
+          <div class="comp-row"><div><strong>Робототехника / мехатроника</strong> — сервоприводы, энкодеры, ПЛК/ЧПУ; точность и быстродействие.</div></div>
+          <div class="comp-row"><div><strong>Лаборатории и АСНИ</strong> — измерительные комплексы; метрология, гибкая перестройка.</div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide slide-ip-code-interactive">
+      <h2>Степень защиты оболочек электрооборудования (IP)</h2>
+      <div class="slide-body asutp-interactive">
+        <div class="asutp-main">
+          <p class="asutp-hint">Оболочка — корпус аппарата / шкафа. Код <strong>IPXY</strong>: X — твёрдые тела / пыль · Y — вода</p>
+          <div class="ip-code-display">
+            <span class="ip-code-label">IP</span>
+            <span class="ip-digit" id="ipDigitX">5</span>
+            <span class="ip-digit" id="ipDigitY">4</span>
+          </div>
+          <div class="ip-pickers">
+            <label class="ip-picker">
+              <span>1-я цифра (X)</span>
+              <select class="ip-x-select" aria-label="Первая цифра IP">
+                <option value="0">0 — нет защиты</option>
+                <option value="1">1 — &gt;50 мм</option>
+                <option value="2">2 — &gt;12,5 мм</option>
+                <option value="3">3 — &gt;2,5 мм</option>
+                <option value="4">4 — &gt;1 мм</option>
+                <option value="5" selected>5 — пылезащита</option>
+                <option value="6">6 — пыленепроницаемость</option>
+              </select>
+            </label>
+            <label class="ip-picker">
+              <span>2-я цифра (Y)</span>
+              <select class="ip-y-select" aria-label="Вторая цифра IP">
+                <option value="0">0 — нет защиты</option>
+                <option value="1">1 — вертикальные капли</option>
+                <option value="2">2 — капли под углом 15°</option>
+                <option value="3">3 — дождь / брызги</option>
+                <option value="4" selected>4 — сплошные брызги</option>
+                <option value="5">5 — струи воды</option>
+                <option value="6">6 — мощные струи</option>
+                <option value="7">7 — кратковременное погружение</option>
+                <option value="8">8 — длительное погружение</option>
+              </select>
+            </label>
+          </div>
+          <div class="ip-examples">
+            <button type="button" class="ip-ex-btn" data-x="2" data-y="0">IP20</button>
+            <button type="button" class="ip-ex-btn active" data-x="5" data-y="4">IP54</button>
+            <button type="button" class="ip-ex-btn" data-x="6" data-y="5">IP65</button>
+            <button type="button" class="ip-ex-btn" data-x="6" data-y="7">IP67</button>
+          </div>
+        </div>
+        <aside class="asutp-panel" id="ipCodePanel">
+          <h3>IP54</h3>
+          <p><strong>5</strong> — защита от пыли (неполная пыленепроницаемость).</p>
+          <p><strong>4</strong> — защита от брызг воды с любого направления.</p>
+          <p>Типично для шкафов и аппаратов в цехе без прямого орошения.</p>
+        </aside>
+      </div>
+    </section>
+
+    <section class="slide">
+      <h2>Климатическое исполнение</h2>
+      <div class="slide-body slide-body-dense">
+        <p style="margin:0 0 0.4em;font-size:0.88em;color:#64748b">По ГОСТ 15150: буквы — климат, цифра — категория размещения</p>
+        <div class="grid-2" style="gap:0.5em 0.85em">
+          <div class="comp-row"><div><strong>У</strong> — умеренный климат</div></div>
+          <div class="comp-row"><div><strong>УХЛ</strong> — умеренный и холодный</div></div>
+          <div class="comp-row"><div><strong>Т</strong> — тропический</div></div>
+          <div class="comp-row"><div><strong>М</strong> — морской</div></div>
+          <div class="comp-row"><div><strong>О</strong> — общеклиматическое</div></div>
+          <div class="comp-row"><div><strong>В</strong> — всеклиматическое</div></div>
+        </div>
+        <div class="highlight-box highlight-box-compact" style="margin-top:0.5em">
+          <strong>Категории размещения:</strong> 1 — на открытом воздухе; 2 — под навесом; 3 — в закрытых помещениях без климата; 4 — в отапливаемых / кондиционируемых помещениях.<br>
+          Пример маркировки: <strong>УХЛ4</strong> — для отапливаемого цеха в умеренно-холодном климате.
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <h2>Режимы нагрева и охлаждения</h2>
+      <div class="slide-body slide-body-dense">
+        <div class="grid-3">
+          <div class="variant-mini">
+            <h4>Длительный (S1)</h4>
+            <p>Работа с постоянной нагрузкой до установившейся температуры. Типичен для многих двигателей и аппаратов в номинале.</p>
+          </div>
+          <div class="variant-mini">
+            <h4>Кратковременный (S2)</h4>
+            <p>Короткий цикл нагрузки, затем пауза; нагрев не успевает до установившегося значения.</p>
+          </div>
+          <div class="variant-mini">
+            <h4>Повторно-кратковременный (S3…)</h4>
+            <p>Чередование работы и пауз (часто у кранов, приводов с частыми пусками). Важна ПВ — продолжительность включения.</p>
+          </div>
+        </div>
+        <div class="highlight-box highlight-box-compact" style="margin-top:0.5em">
+          <strong>Охлаждение:</strong> естественное (воздух, радиатор) или принудительное (вентилятор, жидкость). От режима нагрева и охлаждения зависят допустимый ток и ресурс контактов / полупроводников.
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <h2>По элементной базе</h2>
+      <div class="slide-body slide-body-dense">
+        <div class="grid-3">
+          <div class="variant-mini">
+            <h4>Электромеханика</h4>
+            <p>Реле, контакторы, электромагниты. Простота, гальваническая развязка контактов; износ, искрение, ограниченная частота коммутаций.</p>
+          </div>
+          <div class="variant-mini">
+            <h4>Электроника</h4>
+            <p>Тиристоры, транзисторы, оптопары, твердотельные реле. Быстро, бесшумно, большой ресурс; нужна защита от перенапряжений и тепла.</p>
+          </div>
+          <div class="variant-mini">
+            <h4>Микроэлектроника / цифра</h4>
+            <p>БИС, микроконтроллеры, ПЛК, smart-датчики. Гибкие алгоритмы, сети, диагностика; выше требования к ЭМС и ПО.</p>
+          </div>
+        </div>
+        <div class="highlight-box highlight-box-compact" style="margin-top:0.5em">
+          В реальных шкафах — <strong>смешанная база</strong>: силовая электромеханика + электронные приводы + цифровой контроллер. Выбор — по току, частоте, среде (IP, климат) и цене.
+        </div>
+      </div>
+    </section>
+
+    <!-- End -->
+    <section class="slide slide-title">
+      <span class="tag">Конец лекции</span>
+      <h1>Спасибо за внимание!</h1>
+      <p>Средства автоматизации и управления</p>
+      <p class="slide-footer-note" style="margin-top:24px"><a href="../index.html" class="link-home">← На главную</a> &nbsp;|&nbsp; ← → — навигация &nbsp;|&nbsp; F — полный экран &nbsp;|&nbsp; O — обзор</p>
+    </section>
+
+  </div>
+
+  <div class="controls">
+    <div class="controls-left">
+      <a href="../index.html" class="course-title-bar course-title-link">Средства автоматизации и управления</a>
+    </div>
+    <div class="controls-left">
+      <a href="../index.html" class="btn-nav btn-home" title="На главную">⌂</a>
+      <button class="btn-nav" id="prevBtn">← Назад</button>
+      <button class="btn-nav" id="nextBtn">Вперёд →</button>
+    </div>
+    <div class="progress-wrap">
+      <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+    </div>
+    <span class="slide-counter" id="slideCounter">1 / 33</span>
+    <div class="controls-right">
+      <button class="btn-nav" id="overviewBtn">Обзор</button>
+      <button class="btn-nav" id="fullscreenBtn">⛶</button>
+    </div>
+  </div>
+
+  <script src="../js/presentation.js"></script>
+</body>
+</html>

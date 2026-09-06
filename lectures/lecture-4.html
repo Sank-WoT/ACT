@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="UTF-8"><title>Лекция 4</title>
+<link rel="stylesheet" href="../css/presentation.css"></head><body>
+<div class="deck">
+<section class="slide slide-title active"><span class="tag">Лекция 4</span>
+<h1>Гашение электрической дуги</h1>
+<p>Средства автоматизации и управления</p></section>
+
+<section class="slide slide-agenda"><h2>Содержание</h2><div class="slide-body"><ol>
+<li>Зачем гасить</li><li>Дуга при размыкании</li><li>Как погасить</li>
+<li>Переменный и постоянный ток</li><li>Способы гашения</li>
+<li>Дугогасительные камеры</li><li>Магнитное дутьё</li>
+<li>Дугогасительная решётка</li><li>Полупроводники</li>
+<li>Другие способы</li><li>Где в САУ</li>
+</ol></div></section>
+
+<section class="slide slide-arc-why-interactive">
+<h2>Зачем гасить</h2>
+<div class="slide-body asutp-interactive">
+<div class="asutp-main">
+<p class="asutp-hint">Нажмите схему — дуга это проблема силового аппарата, не датчика</p>
+<div class="asutp-diagram-wrap">
+<svg class="arc-svg" viewBox="0 0 520 200" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="Датчик и контактор">
+<rect width="520" height="200" fill="#fafafa"/>
+<g class="arc-why-block" data-info="sensor" style="cursor:pointer">
+<rect x="16" y="36" width="220" height="128" rx="4" fill="#fff" stroke="#1e293b" stroke-width="1.6"/>
+<text x="126" y="64" text-anchor="middle" font-size="15" font-weight="700" fill="#0f172a">концевик · вход ПЛК</text>
+<rect x="48" y="84" width="56" height="22" fill="#fff" stroke="#1e293b" stroke-width="1.4"/>
+<rect x="148" y="84" width="56" height="22" fill="#fff" stroke="#1e293b" stroke-width="1.4"/>
+<line x1="104" y1="95" x2="148" y2="95" stroke="#1e293b" stroke-width="1.5"/>
+<text x="126" y="136" text-anchor="middle" font-size="13" fill="#64748b">ток миллиамперы</text>
+<text x="126" y="154" text-anchor="middle" font-size="13" fill="#1e40af">дуги почти нет</text>
+</g>
+<g class="arc-why-block" data-info="power" style="cursor:pointer">
+<rect x="284" y="36" width="220" height="128" rx="4" fill="#fff" stroke="#1e293b" stroke-width="1.6"/>
+<text x="394" y="64" text-anchor="middle" font-size="15" font-weight="700" fill="#0f172a">контактор · пускатель</text>
+<rect x="316" y="84" width="56" height="22" fill="#fff" stroke="#1e293b" stroke-width="1.4"/>
+<rect x="416" y="84" width="56" height="22" fill="#fff" stroke="#1e293b" stroke-width="1.4"/>
+<path d="M372 95 Q394 68 416 95" fill="none" stroke="#d97706" stroke-width="2.2"/>
+<text x="394" y="136" text-anchor="middle" font-size="13" fill="#64748b">амперы и килоамперы</text>
+<text x="394" y="154" text-anchor="middle" font-size="13" fill="#b45309">дуга горит в зазоре</text>
+</g>
+</svg>
+</div>
+<div class="asutp-tabs">
+<button type="button" class="asutp-tab active" data-info="intro">Обзор</button>
+<button type="button" class="asutp-tab" data-info="sensor">Датчик</button>
+<button type="button" class="asutp-tab" data-info="power">Силовой</button>
+</div>
+</div>
+<aside class="asutp-panel" id="arcWhyPanel">
+<h3>Обзор</h3>
+<p>Пока дуга горит, цепь <strong>ещё замкнута</strong>: нагрузка получает ток через плазму.</p>
+<p>У концевика на вход ПЛК тока мало — дуги нет. У контактора дугу надо <strong>погасить</strong>, иначе контакты выгорят, а двигатель не отключится.</p>
+</aside>
+</div>
+</section>
+
+<section class="slide slide-arc-gap-interactive">
+<h2>Дуга при размыкании</h2>
+<div class="slide-body asutp-interactive">
+<div class="asutp-main">
+<p class="asutp-hint">Двигайте размыкание — дуга тянется, нагрузка ещё питается</p>
+<div class="asutp-diagram-wrap">
+<svg class="arc-svg" viewBox="0 0 500 210" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="Размыкание контактов">
+<rect width="500" height="210" fill="#fafafa"/>
+<text x="40" y="36" font-size="13" font-weight="700" fill="#1e40af">~U</text>
+<path d="M40 48 H88" stroke="#1e293b" stroke-width="1.5"/>
+<rect class="arc-gap-left" x="88" y="78" width="70" height="28" fill="#fff" stroke="#1e293b" stroke-width="1.6"/>
+<rect class="arc-gap-right" x="210" y="78" width="70" height="28" fill="#fff" stroke="#1e293b" stroke-width="1.6"/>
+<path class="arc-gap-bolt" d="" fill="none" stroke="#d97706" stroke-width="2.4"/>
+<path d="M280 92 H360" stroke="#1e293b" stroke-width="1.5"/>
+<circle class="arc-gap-lamp" cx="390" cy="92" r="16" fill="#fde68a" stroke="#d97706" stroke-width="1.5"/>
+<text x="390" y="128" text-anchor="middle" font-size="12" fill="#64748b">нагрузка</text>
+<text class="arc-gap-readout" x="250" y="188" text-anchor="middle" font-size="13" font-weight="700" fill="#1e40af">зазор 0 · цепь замкнута · дуги нет</text>
+</svg>
+</div>
+<div class="asutp-tabs">
+<button type="button" class="asutp-tab active" data-info="intro">Обзор</button>
+<button type="button" class="asutp-tab" data-info="plasma">Плазма</button>
+<button type="button" class="asutp-tab" data-info="load">Нагрузка</button>
+</div>
+<div class="arc-controls">
+<label class="arc-ctrl">
+<span>размыкание</span>
+<input type="range" class="arc-gap-range" min="0" max="100" value="0" aria-label="Размыкание">
+<span class="arc-gap-val">0%</span>
+</label>
+</div>
+</div>
+<aside class="asutp-panel" id="arcGapPanel">
+<h3>Обзор</h3>
+<p>Контакты расходятся — между ними остаётся <strong>канал плазмы</strong>. Это и есть электрическая дуга.</p>
+<p>Металл испаряется, температура тысячи градусов: эрозия, рост <var>R</var><sub>k</sub>, риск сваривания.</p>
+</aside>
+</div>
+</section>
+
+<section class="slide slide-arc-how-interactive">
+<h2>Как погасить</h2>
+<div class="slide-body asutp-interactive">
+<div class="asutp-main">
+<p class="asutp-hint">Нажмите способ — дуга гаснет, когда её напряжение выше напряжения сети</p>
+<div class="highlight-box highlight-box-compact" style="margin:0">
+<p style="margin:0;font-size:0.92em"><var>U</var><sub>д</sub> &gt; <var>U</var><sub>сети</sub> → ток падает до нуля → дуга гаснет</p>
+</div>
+<div class="app-purpose-grid arc-how-grid">
+<button type="button" class="app-purpose-card active" data-info="stretch">Растянуть</button>
+<button type="button" class="app-purpose-card" data-info="cool">Охладить</button>
+<button type="button" class="app-purpose-card" data-info="cut">Разрезать</button>
+<button type="button" class="app-purpose-card" data-info="shunt">Зашунтировать</button>
+</div>
+</div>
+<aside class="asutp-panel" id="arcHowPanel">
+<h3>Растянуть</h3>
+<p>Длинная дуга требует большего напряжения. Контакты быстро расходятся, магнитное дутьё выдувает столб в камеру.</p>
+<p>На постоянном токе это основной приём: нуля тока нет, дугу надо <strong>сорвать</strong>.</p>
+</aside>
+</div>
+</section>
+
+<section class="slide slide-arc-acdc-interactive">
+<h2>Переменный и постоянный ток</h2>
+<div class="slide-body asutp-interactive">
+<div class="asutp-main">
+<p class="asutp-hint">Переключите род тока — на переменном дуга сама садится в нуле</p>
+<div class="asutp-diagram-wrap">
+<svg class="arc-svg" viewBox="0 0 500 200" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="Дуга на AC и DC">
+<rect width="500" height="200" fill="#fafafa"/>
+<rect x="70" y="70" width="64" height="26" fill="#fff" stroke="#1e293b" stroke-width="1.6"/>
+<rect x="210" y="70" width="64" height="26" fill="#fff" stroke="#1e293b" stroke-width="1.6"/>
+<path class="arc-acdc-bolt" d="M134 83 Q172 48 210 83" fill="none" stroke="#d97706" stroke-width="2.3"/>
+<text class="arc-acdc-kind" x="170" y="40" text-anchor="middle" font-size="14" font-weight="700" fill="#1e40af">переменный ток</text>
+<path class="arc-acdc-wave" d="M300 70 C318 70 318 50 336 50 C354 50 354 90 372 90 C390 90 390 70 408 70" fill="none" stroke="#1e40af" stroke-width="1.6"/>
+<circle class="arc-acdc-zero" cx="354" cy="70" r="4" fill="#2563eb"/>
+<text x="354" y="112" text-anchor="middle" font-size="12" fill="#64748b">i(t)</text>
+<text class="arc-acdc-readout" x="250" y="176" text-anchor="middle" font-size="13" font-weight="700" fill="#1e40af">нуль тока · дуга может погаснуть сама</text>
+</svg>
+</div>
+<div class="asutp-tabs">
+<button type="button" class="asutp-tab active" data-info="ac">Переменный</button>
+<button type="button" class="asutp-tab" data-info="dc">Постоянный</button>
+<button type="button" class="asutp-tab" data-info="why">Почему</button>
+</div>
+</div>
+<aside class="asutp-panel" id="arcAcdcPanel">
+<h3>Переменный</h3>
+<p>Ток 100 раз в секунду (50 Гц) проходит через <strong>ноль</strong>. В этот момент дуга гаснет, если промежуток уже не пробивается.</p>
+<p>Камера и решётка не дают дуге зажечься снова на следующем полупериоде.</p>
+</aside>
+</div>
+</section>
+
+<section class="slide slide-arc-map-interactive">
+<h2>Способы гашения</h2>
+<div class="slide-body asutp-interactive">
+<div class="asutp-main">
+<p class="asutp-hint">Нажмите способ — дальше каждый разберём на схеме</p>
+<div class="app-purpose-grid arc-map-grid">
+<button type="button" class="app-purpose-card active" data-info="chamber">Камера</button>
+<button type="button" class="app-purpose-card" data-info="blow">Магнитное дутьё</button>
+<button type="button" class="app-purpose-card" data-info="grid">Решётка</button>
+<button type="button" class="app-purpose-card" data-info="semi">Полупроводники</button>
+<button type="button" class="app-purpose-card" data-info="media">Другие среды</button>
+</div>
+</div>
+<aside class="asutp-panel" id="arcMapPanel">
+<h3>Камера</h3>
+<p>Дугу загоняют в узкую щель между стенками. Стенки забирают тепло, сечение столба падает, сопротивление растёт.</p>
+<p>Стоит почти на каждом контакторе и автомате до 1 кВ.</p>
+</aside>
+</div>
+</section>
+
+<section class="slide slide-arc-chamber-interactive">
+<h2>Дугогасительные камеры</h2>
+<div class="slide-body asutp-interactive">
+<div class="asutp-main">
+<p class="asutp-hint">Двигайте дугу вверх — стенки камеры охлаждают столб</p>
+<div class="asutp-diagram-wrap">
+<svg class="arc-svg" viewBox="0 0 480 220" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="Дугогасительная камера">
+<rect width="480" height="220" fill="#fafafa"/>
+<rect x="150" y="20" width="28" height="120" fill="#fff" stroke="#1e293b" stroke-width="1.5"/>
+<rect x="302" y="20" width="28" height="120" fill="#fff" stroke="#1e293b" stroke-width="1.5"/>
+<text x="164" y="16" text-anchor="middle" font-size="12" fill="#64748b">стенка</text>
+<text x="316" y="16" text-anchor="middle" font-size="12" fill="#64748b">стенка</text>
+<rect x="168" y="148" width="54" height="22" fill="#fff" stroke="#1e293b" stroke-width="1.6"/>
+<rect x="258" y="148" width="54" height="22" fill="#fff" stroke="#1e293b" stroke-width="1.6"/>
+<path class="arc-ch-bolt" d="M222 159 Q240 100 258 159" fill="none" stroke="#d97706" stroke-width="2.3"/>
+<text x="240" y="188" text-anchor="middle" font-size="12" fill="#64748b">контакты</text>
+<text class="arc-ch-readout" x="240" y="210" text-anchor="middle" font-size="13" font-weight="700" fill="#1e40af">дуга у контактов</text>
+</svg>
+</div>
+<div class="asutp-tabs">
+<button type="button" class="asutp-tab active" data-info="intro">Обзор</button>
+<button type="button" class="asutp-tab" data-info="slot">Щелевая</button>
+<button type="button" class="asutp-tab" data-info="lab">Лабиринт</button>
+</div>
+<div class="arc-controls">
+<label class="arc-ctrl">
+<span>вход в камеру</span>
+<input type="range" class="arc-ch-range" min="0" max="100" value="20" aria-label="Вход в камеру">
+<span class="arc-ch-val">20%</span>
+</label>
+</div>
+</div>
+<aside class="asutp-panel" id="arcChPanel">
+<h3>Обзор</h3>
+<p>Камера — кожух из дугостойкой керамики или пластика над контактами.</p>
+<p>Дуга выдувается или сама поднимается в щель: площадь контакта со стенками растёт, плазма <strong>остывает</strong>.</p>
+</aside>
+</div>
+</section>
+
+<section class="slide slide-arc-blow-interactive">
+<h2>Магнитное дутьё</h2>
+<div class="slide-body asutp-interactive">
+<div class="asutp-main">
+<p class="asutp-hint">Двигайте ток — сила Ампера выдувает дугу в камеру</p>
+<div class="asutp-diagram-wrap">
+<svg class="arc-svg" viewBox="0 0 500 220" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="Магнитное дутьё">
+<rect width="500" height="220" fill="#fafafa"/>
+<g class="arc-blow-coil">
+<ellipse cx="70" cy="96" rx="28" ry="12" fill="none" stroke="#b45309" stroke-width="1.6"/>
+<ellipse cx="70" cy="108" rx="28" ry="12" fill="none" stroke="#b45309" stroke-width="1.6"/>
+<text x="70" y="72" text-anchor="middle" font-size="13" font-weight="700" fill="#1e40af">катушка</text>
+</g>
+<text x="118" y="88" font-size="13" font-weight="700" fill="#1e40af">B</text>
+<text x="118" y="108" font-size="16" fill="#64748b">×</text>
+<text x="118" y="128" font-size="16" fill="#64748b">×</text>
+<rect x="150" y="92" width="56" height="24" fill="#fff" stroke="#1e293b" stroke-width="1.6"/>
+<rect x="250" y="92" width="56" height="24" fill="#fff" stroke="#1e293b" stroke-width="1.6"/>
+<path class="arc-blow-bolt" d="M206 104 Q228 70 250 104" fill="none" stroke="#d97706" stroke-width="2.3"/>
+<rect x="330" y="28" width="14" height="100" fill="#fff" stroke="#1e293b" stroke-width="1.3"/>
+<rect x="390" y="28" width="14" height="100" fill="#fff" stroke="#1e293b" stroke-width="1.3"/>
+<text x="367" y="20" text-anchor="middle" font-size="12" fill="#64748b">камера</text>
+<text x="228" y="148" text-anchor="middle" font-size="13" fill="#1e40af">F = I × B</text>
+<text class="arc-blow-readout" x="250" y="200" text-anchor="middle" font-size="13" font-weight="700" fill="#1e40af">ток мал · дуга у контактов</text>
+</svg>
+</div>
+<div class="asutp-tabs">
+<button type="button" class="asutp-tab active" data-info="intro">Обзор</button>
+<button type="button" class="asutp-tab" data-info="force">Сила</button>
+<button type="button" class="asutp-tab" data-info="dc">Постоянный ток</button>
+</div>
+<div class="arc-controls">
+<label class="arc-ctrl">
+<span>ток I</span>
+<input type="range" class="arc-blow-range" min="0" max="100" value="25" aria-label="Ток">
+<span class="arc-blow-val">25%</span>
+</label>
+</div>
+</div>
+<aside class="asutp-panel" id="arcBlowPanel">
+<h3>Обзор</h3>
+<p>Катушка (или магнит) создаёт поле <strong>поперёк</strong> дуги. На столб действует сила Ампера — дугу сносит в камеру.</p>
+<p>Чем больше ток, тем сильнее дутьё: тяжёлые режимы гасятся охотнее.</p>
+</aside>
+</div>
+</section>
+
+<section class="slide slide-arc-grid-interactive">
+<h2>Дугогасительная решётка</h2>
+<div class="slide-body asutp-interactive">
+<div class="asutp-main">
+<p class="asutp-hint">Двигайте вход в решётку — дуга режется на короткие дуги</p>
+<div class="asutp-diagram-wrap">
+<svg class="arc-svg" viewBox="0 0 500 220" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="Дугогасительная решётка">
+<rect width="500" height="220" fill="#fafafa"/>
+<g class="arc-grid-plates">
+<rect x="168" y="24" width="8" height="100" fill="#fff" stroke="#1e293b" stroke-width="1.3"/>
+<rect x="192" y="24" width="8" height="100" fill="#fff" stroke="#1e293b" stroke-width="1.3"/>
+<rect x="216" y="24" width="8" height="100" fill="#fff" stroke="#1e293b" stroke-width="1.3"/>
+<rect x="240" y="24" width="8" height="100" fill="#fff" stroke="#1e293b" stroke-width="1.3"/>
+<rect x="264" y="24" width="8" height="100" fill="#fff" stroke="#1e293b" stroke-width="1.3"/>
+<rect x="288" y="24" width="8" height="100" fill="#fff" stroke="#1e293b" stroke-width="1.3"/>
+<rect x="312" y="24" width="8" height="100" fill="#fff" stroke="#1e293b" stroke-width="1.3"/>
+<rect x="336" y="24" width="8" height="100" fill="#fff" stroke="#1e293b" stroke-width="1.3"/>
+</g>
+<text x="256" y="18" text-anchor="middle" font-size="12" fill="#64748b">пластины</text>
+<rect x="148" y="140" width="56" height="22" fill="#fff" stroke="#1e293b" stroke-width="1.6"/>
+<rect x="296" y="140" width="56" height="22" fill="#fff" stroke="#1e293b" stroke-width="1.6"/>
+<path class="arc-grid-bolt" d="" fill="none" stroke="#d97706" stroke-width="2.2"/>
+<text class="arc-grid-u" x="400" y="80" font-size="13" font-weight="700" fill="#1e40af">Uд ≈ n·ΔUк</text>
+<text class="arc-grid-readout" x="250" y="200" text-anchor="middle" font-size="13" font-weight="700" fill="#1e40af">n = 0 · дуга целая</text>
+</svg>
+</div>
+<div class="asutp-tabs">
+<button type="button" class="asutp-tab active" data-info="intro">Обзор</button>
+<button type="button" class="asutp-tab" data-info="drop">Катодное падение</button>
+<button type="button" class="asutp-tab" data-info="ac">Переменный ток</button>
+</div>
+<div class="arc-controls">
+<label class="arc-ctrl">
+<span>вход в решётку</span>
+<input type="range" class="arc-grid-range" min="0" max="100" value="0" aria-label="Вход в решётку">
+<span class="arc-grid-val">0%</span>
+</label>
+</div>
+</div>
+<aside class="asutp-panel" id="arcGridPanel">
+<h3>Обзор</h3>
+<p>Пакет стальных пластин (деионная решётка) стоит над контактами. Дуга втягивается и <strong>разрезается</strong> на n коротких дуг.</p>
+<p>У каждой дуги своё катодное падение ~15…25 В. Сумма растёт — ток не может течь.</p>
+</aside>
+</div>
+</section>
+
+<section class="slide slide-arc-semi-interactive">
+<h2>Гашение с полупроводниками</h2>
+<div class="slide-body asutp-interactive">
+<div class="asutp-main">
+<p class="asutp-hint">Двигайте цикл — полупроводник берёт ток, контакт расходится без дуги</p>
+<div class="asutp-diagram-wrap">
+<svg class="arc-svg" viewBox="0 0 520 210" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="Гибридное гашение">
+<rect width="520" height="210" fill="#fafafa"/>
+<text x="40" y="40" font-size="13" font-weight="700" fill="#1e40af">~U</text>
+<path class="arc-semi-line-main" d="M40 52 H150" stroke="#1e293b" stroke-width="1.6"/>
+<g class="arc-semi-contact">
+<rect x="150" y="40" width="50" height="22" fill="#fff" stroke="#1e293b" stroke-width="1.6"/>
+<rect class="arc-semi-move" x="200" y="40" width="50" height="22" fill="#fff" stroke="#1e293b" stroke-width="1.6"/>
+</g>
+<path class="arc-semi-line-load" d="M250 52 H400" stroke="#1e293b" stroke-width="1.6"/>
+<circle class="arc-semi-lamp" cx="430" cy="52" r="15" fill="#fde68a" stroke="#d97706" stroke-width="1.4"/>
+<text x="430" y="84" text-anchor="middle" font-size="12" fill="#64748b">нагрузка</text>
+<path class="arc-semi-branch" d="M120 52 V120 H250 V52" fill="none" stroke="#94a3b8" stroke-width="1.4"/>
+<rect class="arc-semi-thy" x="178" y="102" width="44" height="36" rx="3" fill="#fff" stroke="#1e293b" stroke-width="1.5"/>
+<text x="200" y="124" text-anchor="middle" font-size="13" font-weight="700" fill="#1e40af">VS</text>
+<text x="200" y="154" text-anchor="middle" font-size="12" fill="#64748b">тиристор</text>
+<text class="arc-semi-readout" x="260" y="192" text-anchor="middle" font-size="13" font-weight="700" fill="#1e40af">контакт замкнут · VS выключен</text>
+</svg>
+</div>
+<div class="asutp-tabs">
+<button type="button" class="asutp-tab active" data-info="intro">Обзор</button>
+<button type="button" class="asutp-tab" data-info="hybrid">Гибрид</button>
+<button type="button" class="asutp-tab" data-info="ssr">Твердотельный</button>
+</div>
+<div class="arc-controls">
+<label class="arc-ctrl">
+<span>цикл отключения</span>
+<input type="range" class="arc-semi-range" min="0" max="100" value="0" aria-label="Цикл отключения">
+<span class="arc-semi-val">покой</span>
+</label>
+</div>
+</div>
+<aside class="asutp-panel" id="arcSemiPanel">
+<h3>Обзор</h3>
+<p>Полупроводник параллельно контакту: в момент размыкания ток уходит в тиристор (симистор, IGBT), контакт расходится <strong>без дуги</strong>.</p>
+<p>Потом полупроводник запирается в нуле тока. Ресурс контакта почти как у слаботочного.</p>
+</aside>
+</div>
+</section>
+
+<section class="slide slide-arc-other-interactive">
+<h2>Другие способы гашения</h2>
+<div class="slide-body asutp-interactive">
+<div class="asutp-main">
+<p class="asutp-hint">Нажмите среду — это уже высоковольтные выключатели</p>
+<div class="app-purpose-grid" style="grid-template-columns:repeat(2,1fr)">
+<button type="button" class="app-purpose-card active" data-info="vac">Вакуум</button>
+<button type="button" class="app-purpose-card" data-info="sf6">Элегаз SF₆</button>
+<button type="button" class="app-purpose-card" data-info="oil">Масло</button>
+<button type="button" class="app-purpose-card" data-info="air">Сжатый воздух</button>
+</div>
+</div>
+<aside class="asutp-panel" id="arcOtherPanel">
+<h3>Вакуум</h3>
+<p>В вакуумной камере нечему ионизироваться: дуга из паров металла гаснет в первом нуле тока.</p>
+<p>Компактные вакуумные выключатели 6…35 кВ на подстанциях и в ячейках КРУ.</p>
+</aside>
+</div>
+</section>
+
+<section class="slide slide-arc-where-interactive">
+<h2>Где это в САУ</h2>
+<div class="slide-body asutp-interactive">
+<div class="asutp-main">
+<p class="asutp-hint">Нажмите аппарат — какой способ гашения ему нужен</p>
+<div class="app-purpose-grid" style="grid-template-columns:repeat(2,1fr)">
+<button type="button" class="app-purpose-card active" data-info="plc">Концевик (плк)</button>
+<button type="button" class="app-purpose-card" data-info="relay">Реле</button>
+<button type="button" class="app-purpose-card" data-info="cont">Контактор</button>
+<button type="button" class="app-purpose-card" data-info="brk">Автомат</button>
+</div>
+</div>
+<aside class="asutp-panel" id="arcWherePanel">
+<h3>Концевик (плк)</h3>
+<p>Ток входа ПЛК — миллиамперы. Камеры и дутья нет: важны <var>R</var><sub>k</sub> и плёнка, как в лекции 2.</p>
+<p>Если ПЛК коммутирует нагрузку сам — ставят твердотельный выход или внешний пускатель.</p>
+</aside>
+</div>
+</section>
+
+<section class="slide slide-title"><span class="tag">Конец лекции 4</span>
+<h1>Спасибо за внимание!</h1>
+<p><a href="../index.html" class="link-home">← На главную</a></p></section>
+</div>
+
+<div class="controls">
+<div class="controls-left">
+<a href="../index.html" class="course-title-bar course-title-link">Средства автоматизации и управления</a>
+</div>
+<div class="controls-left">
+<a href="../index.html" class="btn-nav btn-home" title="На главную">⌂</a>
+<button class="btn-nav" id="prevBtn">← Назад</button>
+<button class="btn-nav" id="nextBtn">Вперёд →</button>
+</div>
+<div class="progress-wrap"><div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div></div>
+<span class="slide-counter" id="slideCounter">1 / 14</span>
+<div class="controls-right">
+<button class="btn-nav" id="overviewBtn">Обзор</button>
+<button class="btn-nav" id="fullscreenBtn">⛶</button>
+</div>
+</div>
+<script src="../js/presentation.js"></script>
+</body></html>
