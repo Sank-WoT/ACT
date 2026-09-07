@@ -2947,10 +2947,23 @@ body.overview-mode .slide-diagram { display: none; }
   display: block;
 }
 .em-math-svg {
-  max-height: 22vh;
+  max-height: 16vh;
 }
 .em-math-box {
   text-align: center;
+  flex-shrink: 0;
+  padding: 0.35em 0.7em 0.45em;
+}
+.slide.slide-em-math-interactive .em-math-box .cap-eq {
+  margin: 0.08em 0 0.28em;
+  padding: 0.22em 0.4em;
+}
+.slide.slide-em-math-interactive .em-math-legend {
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  margin: 0.2em 0 0;
+  padding: 0.3em 0.45em;
+  font-size: 0.82em;
+  gap: 0.16em 0.7em;
 }
 .em-math-eq {
   margin: 0;
@@ -2960,9 +2973,11 @@ body.overview-mode .slide-diagram { display: none; }
   font-family: var(--font-serif);
 }
 .em-math-eq-note {
-  margin: 0.2em 0 0;
-  font-size: 0.82em;
-  color: #475569;
+  margin: 0.35em 0 0;
+  font-size: 0.86em;
+  font-weight: 600;
+  color: #1e3a8a;
+  font-family: var(--font-serif);
 }
 .em-controls {
   display: flex;
@@ -2998,15 +3013,189 @@ body.overview-mode .slide-diagram { display: none; }
   min-width: 5.5em;
   text-align: right;
 }
+.slide-em-core-interactive .em-core-live-bar,
+.slide-em-solo-interactive .em-solo-live-bar,
+.slide-em-relay-interactive .em-rel-live-bar {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 0.7em;
+}
+.slide-em-core-interactive .em-core-phase,
+.slide-em-solo-interactive .em-solo-phase,
+.slide-em-relay-interactive .em-rel-phase {
+  flex: 1;
+  min-width: 0;
+}
+.em-core-play,
+.em-solo-play,
+.em-rel-play {
+  border: 1px solid var(--slide-border);
+  background: #fff;
+  color: var(--slide-primary);
+  border-radius: 8px;
+  padding: 0.35em 0.8em;
+  font-size: 0.82em;
+  font-weight: 700;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.em-core-play:hover:not(:disabled),
+.em-solo-play:hover:not(:disabled),
+.em-rel-play:hover:not(:disabled) {
+  border-color: #93c5fd;
+  background: #eff6ff;
+}
+.em-core-play:disabled,
+.em-solo-play:disabled {
+  cursor: default;
+  color: #64748b;
+}
+.em-core-phase,
+.em-solo-phase,
+.em-rel-phase {
+  font-size: 0.88em;
+  font-weight: 700;
+  color: #1e40af;
+}
+.em-core-coil-body.is-hot,
+.em-solo-coil-body.is-hot,
+.em-rel-coil.is-hot {
+  fill: #fde68a;
+  stroke: #d97706;
+}
+.em-kind-hit.is-active > rect:first-child,
+.em-kind-hit:hover > rect:first-child,
+.em-xfmr-hit.is-active > rect:first-child,
+.em-xfmr-hit:hover > rect:first-child {
+  stroke: #2563eb;
+  fill: #eff6ff;
+}
+.em-mach-grid {
+  grid-template-columns: repeat(2, 1fr);
+}
+.slide-em-mach-interactive .app-purpose-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15em;
+}
+.slide-em-mach-interactive .app-purpose-card span {
+  font-weight: 500;
+  color: #64748b;
+  font-size: 0.86em;
+}
+.slide-em-mach-class-interactive .em-mach-view {
+  display: none;
+}
+.slide-em-mach-class-interactive .em-mach-view.is-on {
+  display: inline;
+}
+.slide-em-mach-class-interactive .em-mach-hit.is-active rect,
+.slide-em-mach-class-interactive .em-mach-hit:hover rect {
+  stroke: #2563eb;
+  fill: #eff6ff;
+}
+.slide-em-mach-class-interactive .em-mach-svg {
+  max-height: 46vh;
+}
+.slide-em-dc-work-interactive .em-dc-mode {
+  display: none;
+}
+.slide-em-dc-work-interactive .em-dc-mode.is-on {
+  display: inline;
+}
+.slide-em-dc-work-interactive .em-dc-legend {
+  grid-template-columns: repeat(4, 1fr);
+  margin: 0.22em 0 0;
+  padding: 0.28em 0.45em;
+  font-size: 0.8em;
+  gap: 0.16em 0.65em;
+  cursor: pointer;
+}
+.slide-em-dc-work-interactive.is-tight .em-dc-svg {
+  max-height: 34vh;
+}
+.slide-em-dc-work-interactive .em-dc-hit.is-active rect,
+.slide-em-dc-work-interactive .em-dc-hit:hover rect,
+.slide-em-dc-work-interactive .em-dc-hit.is-active path,
+.slide-em-dc-work-interactive .em-dc-hit:hover path,
+.slide-em-dc-work-interactive .em-dc-hit.is-active ellipse,
+.slide-em-dc-work-interactive .em-dc-hit:hover ellipse {
+  stroke: #2563eb;
+}
+.slide-em-dc-work-interactive .em-dc-legend .em-dc-hit.is-active dt,
+.slide-em-dc-work-interactive .em-dc-legend .em-dc-hit:hover dt {
+  color: #1d4ed8;
+}
+.slide-em-dc-interactive .app-purpose-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15em;
+}
+.slide-em-dc-interactive .app-purpose-card span {
+  font-weight: 500;
+  color: #64748b;
+  font-size: 0.86em;
+}
+.slide-em-load-interactive .em-load-view {
+  display: none;
+}
+.slide-em-load-interactive .em-load-view.is-on {
+  display: inline;
+}
+.slide-em-load-interactive .em-load-react {
+  display: none;
+}
+.slide-em-load-interactive .em-load-react.is-on {
+  display: inline;
+}
+.slide-em-load-interactive .em-load-legend {
+  display: none;
+  grid-template-columns: repeat(4, 1fr);
+  margin: 0.22em 0 0;
+  padding: 0.28em 0.45em;
+  font-size: 0.8em;
+  gap: 0.16em 0.7em;
+  cursor: pointer;
+}
+.slide-em-load-interactive.is-ref .em-load-legend {
+  display: grid;
+}
+.slide-em-load-interactive.is-ref .em-svg {
+  max-height: 34vh;
+}
+.slide-em-load-interactive .em-load-hit.is-active rect,
+.slide-em-load-interactive .em-load-hit:hover rect,
+.slide-em-load-interactive .em-load-hit.is-active circle,
+.slide-em-load-interactive .em-load-hit:hover circle {
+  stroke: #2563eb;
+}
+.slide-em-load-interactive .em-load-hit.is-active path,
+.slide-em-load-interactive .em-load-hit:hover path {
+  stroke: #2563eb;
+}
+.slide-em-load-interactive .em-load-legend .em-load-hit.is-active dt,
+.slide-em-load-interactive .em-load-legend .em-load-hit:hover dt {
+  color: #1d4ed8;
+}
 .em-block.is-active path,
 .em-block.is-active rect,
 .em-block.is-active ellipse,
 .em-block.is-active circle,
+.em-block.is-active line,
+.em-block.is-active polyline,
 .em-block:hover path,
 .em-block:hover rect,
 .em-block:hover ellipse,
-.em-block:hover circle {
+.em-block:hover circle,
+.em-block:hover line,
+.em-block:hover polyline {
   stroke: #2563eb;
+}
+.em-block.is-active text,
+.em-block:hover text {
+  fill: #1d4ed8;
 }
 .em-purpose-grid,
 .em-fast-grid {
@@ -3519,6 +3708,26 @@ body.overview-mode .slide-diagram { display: none; }
 .slide.slide-enc-kind-interactive .asutp-hint,
 .slide.slide-enc-mag-interactive .asutp-hint,
 .slide.slide-enc-choose-interactive .asutp-hint,
+.slide.slide-hall-interactive .hall-eq-box {
+  flex-shrink: 0;
+  padding: 0.35em 0.7em 0.45em;
+}
+.slide.slide-hall-interactive .hall-eq-legend {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.12em 1.1em;
+  list-style: none;
+  margin: 0.35em 0 0;
+  padding: 0;
+  text-align: left;
+  font-size: 0.86em;
+  line-height: 1.35;
+  color: #475569;
+}
+.slide.slide-hall-interactive .hall-eq-legend var {
+  font-weight: 700;
+  color: #1e40af;
+}
 .slide.slide-hall-interactive .asutp-hint,
 .slide.slide-hall-types-interactive .asutp-hint,
 .slide.slide-sensor-test-interactive .asutp-hint {
@@ -3545,6 +3754,40 @@ body.overview-mode .slide-diagram { display: none; }
   width: 100%;
   max-height: 48vh;
   display: block;
+}
+.hall-view {
+  display: none;
+}
+.hall-view.is-on {
+  display: inline;
+}
+.hall-scheme.is-off {
+  display: none;
+}
+.slide-hall-interactive .hall-live-controls {
+  display: none;
+}
+.slide-hall-interactive.hall-is-live .hall-live-controls {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 0.8em 1.2em;
+}
+.slide-hall-interactive.hall-is-live .hall-live-controls .cap-ctrl {
+  flex: 1 1 12em;
+}
+.hall-i-val,
+.hall-h-val {
+  font-weight: 700;
+  color: var(--slide-primary);
+  min-width: 3.2em;
+  text-align: right;
+}
+.hall-live-bit {
+  display: none;
+}
+.hall-live-bit.is-on {
+  display: inline;
 }
 .enc-kind-svg {
   width: 100%;

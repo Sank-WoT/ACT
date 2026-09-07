@@ -1669,7 +1669,7 @@
 <h2>Магнитный и магниторезистивный</h2>
 <div class="slide-body asutp-interactive">
 <div class="asutp-main">
-<p class="asutp-hint">Нажмите тип — магнит на валу + датчик Холла или катушка в поле</p>
+<p class="asutp-hint">Нажмите тип — магнит на валу: датчик Холла или магниторезистор</p>
 <div class="asutp-diagram-wrap" id="encMagFig"></div>
 <div class="asutp-tabs">
 <button type="button" class="asutp-tab active" data-info="mag">Магнитный</button>
@@ -1726,13 +1726,32 @@
 <h2>Датчики Холла</h2>
 <div class="slide-body asutp-interactive">
 <div class="asutp-main">
-<p class="asutp-hint">Нажмите узел — ток I, поле H и ЭДС Холла E на поперечных контактах</p>
-<div class="highlight-box highlight-box-compact xfmr-props-formula">
+<p class="asutp-hint">Двигайте ток I и поле H — носители уходят вбок, напряжение появляется на 3–4</p>
+<div class="highlight-box highlight-box-compact xfmr-props-formula hall-eq-box">
 <p class="cap-eq" aria-label="E равно K I H"><span class="char-eq"><var>E</var> = <var>K</var> · <var>I</var> · <var>H</var></span></p>
+<ul class="hall-eq-legend">
+<li><var>E</var> — ЭДС Холла на контактах 3–4</li>
+<li><var>K</var> — материал и толщина <var>d</var></li>
+<li><var>I</var> — ток через контакты 1–2</li>
+<li><var>H</var> — поле перпендикулярно пластине</li>
+</ul>
 </div>
 <div class="asutp-diagram-wrap" id="hallFig"></div>
+<div class="cap-controls hall-live-controls">
+<label class="cap-ctrl">
+<span>I ток</span>
+<input type="range" class="hall-i-range" min="0" max="100" value="70" aria-label="Ток через пластину">
+<span class="hall-i-val">70</span>
+</label>
+<label class="cap-ctrl">
+<span>H поле</span>
+<input type="range" class="hall-h-range" min="-100" max="100" value="55" aria-label="Магнитное поле">
+<span class="hall-h-val">+55</span>
+</label>
+</div>
 <div class="asutp-tabs">
-<button type="button" class="asutp-tab active" data-info="plate">Пластина</button>
+<button type="button" class="asutp-tab active" data-info="effect">Эффект</button>
+<button type="button" class="asutp-tab" data-info="plate">Пластина</button>
 <button type="button" class="asutp-tab" data-info="i">Ток I</button>
 <button type="button" class="asutp-tab" data-info="h">Поле H</button>
 <button type="button" class="asutp-tab" data-info="e">ЭДС E</button>
@@ -1740,8 +1759,8 @@
 </div>
 </div>
 <aside class="asutp-panel" id="hallPanel">
-<h3>Пластина</h3>
-<p>Полупроводниковая пластина: через торцы 1–2 течёт ток, на боковых 3–4 снимают напряжение Холла.</p>
+<h3>Эффект Холла</h3>
+<p>Напряжение поперёк пластины: ток гонит носители, поле отклоняет их к краю, на контактах 3–4 появляется ЭДС.</p>
 </aside>
 </div>
 </section>
