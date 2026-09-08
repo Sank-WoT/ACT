@@ -3577,7 +3577,7 @@
     const info = {
       intro: {
         title: 'Обзор',
-        html: '<p>Якорь контактора (лекция 4) уже развёл контакты. Пока дуга горит, цепь <strong>ещё замкнута</strong>: нагрузка получает ток через плазму.</p><p>У концевика на вход ПЛК тока мало — дуги нет. У контактора дугу надо <strong>погасить</strong>, иначе контакты выгорят, а двигатель не отключится.</p>'
+        html: '<p>Якорь контактора уже развёл контакты. Пока дуга горит, цепь <strong>ещё замкнута</strong>: нагрузка получает ток через плазму.</p><p>У концевика на вход ПЛК тока мало — дуги нет. У контактора дугу надо <strong>погасить</strong>, иначе контакты выгорят, а двигатель не отключится.</p>'
       },
       sensor: {
         title: 'Датчик · вход ПЛК',
@@ -3682,7 +3682,7 @@
     updatePanel();
   }
 
-  /* ===== Lecture 3: how to quench ===== */
+  /* ===== Lecture 4: how to quench ===== */
   const arcHowSlide = document.querySelector('.slide-arc-how-interactive');
   if (arcHowSlide) {
     const panel = document.getElementById('arcHowPanel');
@@ -3704,21 +3704,148 @@
         html: '<p>Полупроводник берёт ток на себя. Контакт расходится в бестоковую паузу — дуги нет.</p><p>Гибридные пускатели и твердотельные реле.</p>'
       }
     };
-    const showPanel = (key) => {
+    const Unet = 0.62;
+    const barX = 348;
+    const barW = 150;
+    let arcHowMode = 'stretch';
+    const paintArcHow = () => {
+      const raw = Number(arcHowSlide.querySelector('.arc-how-range')?.value);
+      const t = Number.isFinite(raw) ? raw / 100 : 0.2;
+      const left = arcHowSlide.querySelector('.arc-how-left');
+      const right = arcHowSlide.querySelector('.arc-how-right');
+      const bolt = arcHowSlide.querySelector('.arc-how-bolt');
+      const lamp = arcHowSlide.querySelector('.arc-how-lamp');
+      const loadw = arcHowSlide.querySelector('.arc-how-loadw');
+      const udEl = arcHowSlide.querySelector('.arc-how-ud');
+      const cmp = arcHowSlide.querySelector('.arc-how-cmp');
+      const readout = arcHowSlide.querySelector('.arc-how-readout');
+      const val = arcHowSlide.querySelector('.arc-how-val');
+      const slabel = arcHowSlide.querySelector('.arc-how-slabel');
+      const thy = arcHowSlide.querySelector('.arc-how-thy');
+      if (left) left.setAttribute('x', '48');
+      let xR = 156;
+      let u = 0.32;
+      let out = false;
+      let note = '';
+      if (arcHowMode === 'stretch') {
+        xR = 132 + t * 86;
+        const mid = (100 + xR) / 2;
+        const bow = 18 + t * 44;
+        if (bolt) bolt.setAttribute('d', `M100 88 Q${mid.toFixed(1)} ${(88 - bow).toFixed(1)} ${xR.toFixed(1)} 88`);
+        u = 0.28 + t * 0.74;
+        out = u > Unet;
+        note = out ? 'зазор велик · Uд > Uсети · гаснет' : 'растянуть · дуга ещё короткая';
+        if (slabel) slabel.textContent = 'зазор';
+        if (val) val.textContent = `${Math.round(t * 12)} мм`;
+      } else if (arcHowMode === 'cool') {
+        xR = 168;
+        const rise = 88 - t * 52;
+        const thin = 2.4 - t * 1.2;
+        if (bolt) {
+          bolt.setAttribute('d', `M100 88 Q154 ${rise.toFixed(1)} 168 88`);
+          bolt.setAttribute('stroke-width', String(Math.max(1.1, thin)));
+        }
+        u = 0.30 + t * 0.70;
+        out = u > Unet;
+        note = out ? 'остыла · Uд > Uсети · гаснет' : 'охлаждение · столб ещё горячий';
+        if (slabel) slabel.textContent = 'охлаждение';
+        if (val) val.textContent = `${Math.round(t * 100)}%`;
+      } else if (arcHowMode === 'cut') {
+        xR = 168;
+        const n = Math.max(1, Math.round(1 + t * 5));
+        const x0 = 112;
+        const step = 12;
+        let d = '';
+        for (let i = 0; i < n; i += 1) {
+          const xa = x0 + i * step;
+          const xb = xa + 6;
+          d += `M${xa} 62 Q${(xa + xb) / 2} 28 ${xb} 62 `;
+        }
+        d += 'M100 88 L112 62 M178 62 L168 88';
+        if (bolt) {
+          bolt.setAttribute('d', d.trim());
+          bolt.setAttribute('stroke-width', '2.1');
+        }
+        u = 0.22 + n * 0.12;
+        out = u > Unet;
+        note = out ? `n = ${n} · сумма падений > Uсети` : `n = ${n} · ещё мало пластин`;
+        if (slabel) slabel.textContent = 'пластины';
+        if (val) val.textContent = `n = ${n}`;
+      } else {
+        xR = 132 + t * 70;
+        const vsOn = t >= 0.22 && t < 0.78;
+        out = t >= 0.22;
+        u = out ? 0.08 : 0.34;
+        if (bolt) {
+          bolt.setAttribute('d', `M100 88 Q${((100 + xR) / 2).toFixed(1)} 70 ${xR.toFixed(1)} 88`);
+          bolt.setAttribute('stroke-width', '2.2');
+          bolt.setAttribute('opacity', vsOn || t >= 0.78 ? '0' : '1');
+        }
+        if (thy) {
+          thy.setAttribute('fill', vsOn ? '#dbeafe' : '#fff');
+          thy.setAttribute('stroke', vsOn ? '#1d4ed8' : '#1e40af');
+        }
+        note = t < 0.22
+          ? 'контакт замкнут · VS выключен'
+          : t < 0.78
+            ? 'ток в VS · контакт без дуги'
+            : 'VS заперся · нагрузка отключена';
+        if (slabel) slabel.textContent = 'цикл';
+        if (val) val.textContent = t < 0.22 ? 'покой' : t < 0.78 ? 'шунт' : 'выкл';
+      }
+      if (arcHowMode !== 'shunt' && bolt) {
+        bolt.setAttribute('opacity', out ? '0.18' : '1');
+        if (arcHowMode !== 'cut' && arcHowMode !== 'cool') bolt.setAttribute('stroke-width', '2.4');
+      }
+      if (right) {
+        right.setAttribute('x', String(xR));
+        if (loadw) {
+          loadw.setAttribute('x1', String(xR + 52));
+          loadw.setAttribute('x2', '268');
+        }
+      }
+      if (lamp) {
+        lamp.setAttribute('fill', out && arcHowMode !== 'shunt' ? '#e2e8f0' : (arcHowMode === 'shunt' && t >= 0.78 ? '#e2e8f0' : '#fde68a'));
+        lamp.setAttribute('stroke', out && !(arcHowMode === 'shunt' && t < 0.78) ? '#94a3b8' : '#d97706');
+        if (arcHowMode === 'shunt') {
+          lamp.setAttribute('fill', t >= 0.78 ? '#e2e8f0' : '#fde68a');
+          lamp.setAttribute('stroke', t >= 0.78 ? '#94a3b8' : '#d97706');
+        }
+      }
+      const udW = Math.max(8, Math.min(barW, u * barW));
+      if (udEl) {
+        udEl.setAttribute('width', String(udW));
+        udEl.setAttribute('fill', u > Unet ? '#15803d' : '#d97706');
+      }
+      if (cmp) {
+        cmp.textContent = u > Unet ? 'Uд > Uсети' : 'Uд < Uсети';
+        cmp.setAttribute('fill', u > Unet ? '#15803d' : '#b45309');
+      }
+      if (readout) readout.textContent = note;
+    };
+    const showArcHowInfo = (key) => {
       const data = info[key] || info.stretch;
       if (panel) panel.innerHTML = `<h3>${data.title}</h3>${data.html}`;
+      arcHowMode = key;
       arcHowSlide.querySelectorAll('.app-purpose-card').forEach((btn) => {
         btn.classList.toggle('active', btn.dataset.info === key);
       });
-    }
+      arcHowSlide.querySelectorAll('.arc-how-view').forEach((g) => {
+        const on = g.classList.contains(`arc-how-view-${key}`);
+        g.classList.toggle('is-on', on);
+        if (on) g.removeAttribute('display');
+        else g.setAttribute('display', 'none');
+      });
+      paintArcHow();
+    };
     arcHowSlide.addEventListener('click', (e) => {
       const card = e.target.closest('.app-purpose-card');
-      if (card?.dataset.info) {
-        e.stopPropagation();
-        showPanel(card.dataset.info);
-      }
+      if (!card?.dataset.info) return;
+      e.stopPropagation();
+      showArcHowInfo(card.dataset.info);
     });
-    showPanel('stretch');
+    arcHowSlide.querySelector('.arc-how-range')?.addEventListener('input', paintArcHow);
+    showArcHowInfo('stretch');
   }
 
   /* ===== Lecture 3: AC / DC ===== */
@@ -3780,7 +3907,7 @@
     showPanel('ac');
   }
 
-  /* ===== Lecture 3: methods map ===== */
+  /* ===== Lecture 4: methods map ===== */
   const arcMapSlide = document.querySelector('.slide-arc-map-interactive');
   if (arcMapSlide) {
     const panel = document.getElementById('arcMapPanel');
@@ -3806,21 +3933,140 @@
         html: '<p>Вакуум, элегаз, масло, сжатый воздух — высоковольтные выключатели.</p><p>В шкафу САУ 0,4 кВ почти не встречаются.</p>'
       }
     };
-    const showPanel = (key) => {
+    let arcMapMode = 'chamber';
+    const paintArcMap = () => {
+      const raw = Number(arcMapSlide.querySelector('.arc-map-range')?.value);
+      const t = Number.isFinite(raw) ? raw / 100 : 0.25;
+      const bolt = arcMapSlide.querySelector('.arc-map-bolt');
+      const left = arcMapSlide.querySelector('.arc-map-left');
+      const right = arcMapSlide.querySelector('.arc-map-right');
+      const readout = arcMapSlide.querySelector('.arc-map-readout');
+      const val = arcMapSlide.querySelector('.arc-map-val');
+      const slabel = arcMapSlide.querySelector('.arc-map-slabel');
+      const thy = arcMapSlide.querySelector('.arc-map-thy');
+      const bLab = arcMapSlide.querySelector('.arc-map-b');
+      if (left) {
+        left.setAttribute('x', '168');
+        left.setAttribute('y', '148');
+        left.setAttribute('opacity', '1');
+      }
+      if (right) {
+        right.setAttribute('x', '258');
+        right.setAttribute('y', '148');
+        right.setAttribute('opacity', '1');
+      }
+      if (readout) readout.setAttribute('y', '222');
+      if (bolt) {
+        bolt.setAttribute('opacity', '1');
+        bolt.setAttribute('stroke-width', '2.3');
+      }
+      if (arcMapMode === 'chamber') {
+        const y = 148 - t * 110;
+        if (bolt) bolt.setAttribute('d', `M222 159 Q240 ${y.toFixed(1)} 258 159`);
+        if (slabel) slabel.textContent = 'вход';
+        if (val) val.textContent = `${Math.round(t * 100)}%`;
+        if (readout) {
+          readout.textContent = t < 0.35
+            ? 'камера · дуга у контактов'
+            : t < 0.75
+              ? 'дуга в щели · стенки охлаждают'
+              : 'столб сжат · Uд растёт';
+        }
+      } else if (arcMapMode === 'blow') {
+        const mx = 240 + t * 120;
+        const my = 100 - t * 20;
+        if (bolt) bolt.setAttribute('d', `M222 159 Q${mx.toFixed(1)} ${my.toFixed(1)} 258 159`);
+        if (bLab) bLab.setAttribute('opacity', String(0.35 + t * 0.65));
+        if (slabel) slabel.textContent = 'ток I';
+        if (val) val.textContent = `${Math.round(t * 100)}%`;
+        if (readout) {
+          readout.textContent = t < 0.3
+            ? 'ток мал · дуга у контактов'
+            : t < 0.7
+              ? 'дутьё сносит дугу вправо'
+              : 'дуга в камере · растянута';
+        }
+      } else if (arcMapMode === 'grid') {
+        const n = Math.max(1, Math.round(1 + t * 7));
+        let d = 'M222 159 L176 112 ';
+        for (let i = 0; i < n; i += 1) {
+          const xa = 176 + i * 20;
+          d += `M${xa} 112 Q${xa + 3.5} 40 ${xa + 7} 112 `;
+        }
+        d += `M${176 + Math.min(n, 7) * 20} 112 L312 159`;
+        if (bolt) bolt.setAttribute('d', d.trim());
+        if (slabel) slabel.textContent = 'пластины';
+        if (val) val.textContent = `n = ${n}`;
+        if (readout) {
+          readout.textContent = n < 4
+            ? `n = ${n} · дуга ещё целая`
+            : `n = ${n} · сумма падений гасит`;
+        }
+      } else if (arcMapMode === 'semi') {
+        const yC = 92;
+        const xR = 258 + t * 36;
+        if (left) left.setAttribute('y', String(yC));
+        if (right) {
+          right.setAttribute('x', String(xR));
+          right.setAttribute('y', String(yC));
+        }
+        const vsOn = t >= 0.2 && t < 0.78;
+        if (bolt) bolt.setAttribute('opacity', vsOn || t >= 0.78 ? '0' : '1');
+        if (bolt) bolt.setAttribute('d', `M222 ${yC + 11} Q240 ${yC - 28} ${xR.toFixed(1)} ${yC + 11}`);
+        if (thy) {
+          thy.setAttribute('fill', vsOn ? '#dbeafe' : '#fff');
+          thy.setAttribute('stroke', vsOn ? '#1d4ed8' : '#1e40af');
+        }
+        if (slabel) slabel.textContent = 'цикл';
+        if (val) val.textContent = t < 0.2 ? 'покой' : t < 0.78 ? 'шунт' : 'выкл';
+        if (readout) {
+          readout.textContent = t < 0.2
+            ? 'контакт замкнут · VS выключен'
+            : t < 0.78
+              ? 'ток в VS · контакт без дуги'
+              : 'VS заперся · нагрузка отключена';
+        }
+      } else {
+        if (bolt) bolt.setAttribute('opacity', '0');
+        if (left) left.setAttribute('opacity', '0');
+        if (right) right.setAttribute('opacity', '0');
+        const idx = Math.min(3, Math.floor(t * 3.99));
+        const names = ['вакуум', 'элегаз SF₆', 'масло', 'сжатый воздух'];
+        for (let i = 0; i < 4; i += 1) {
+          const box = arcMapSlide.querySelector(`.arc-map-m${i}`);
+          if (!box) continue;
+          box.setAttribute('stroke', i === idx ? '#2563eb' : '#e2e8f0');
+          box.setAttribute('stroke-width', i === idx ? '2.2' : '1.4');
+          box.setAttribute('fill', i === idx ? '#eff6ff' : '#fff');
+        }
+        if (slabel) slabel.textContent = 'среда';
+        if (val) val.textContent = names[idx];
+        if (readout) readout.textContent = `${names[idx]} · высоковольтные выключатели`;
+      }
+    };
+    const showArcMapInfo = (key) => {
       const data = info[key] || info.chamber;
       if (panel) panel.innerHTML = `<h3>${data.title}</h3>${data.html}`;
+      arcMapMode = key;
       arcMapSlide.querySelectorAll('.app-purpose-card').forEach((btn) => {
         btn.classList.toggle('active', btn.dataset.info === key);
       });
-    }
+      arcMapSlide.querySelectorAll('.arc-map-view').forEach((g) => {
+        const on = g.classList.contains(`arc-map-view-${key}`);
+        g.classList.toggle('is-on', on);
+        if (on) g.removeAttribute('display');
+        else g.setAttribute('display', 'none');
+      });
+      paintArcMap();
+    };
     arcMapSlide.addEventListener('click', (e) => {
       const card = e.target.closest('.app-purpose-card');
-      if (card?.dataset.info) {
-        e.stopPropagation();
-        showPanel(card.dataset.info);
-      }
+      if (!card?.dataset.info) return;
+      e.stopPropagation();
+      showArcMapInfo(card.dataset.info);
     });
-    showPanel('chamber');
+    arcMapSlide.querySelector('.arc-map-range')?.addEventListener('input', paintArcMap);
+    showArcMapInfo('chamber');
   }
 
   /* ===== Lecture 3: chamber ===== */
@@ -5276,81 +5522,172 @@
     const info = {
       intro: {
         title: 'Обзор',
-        html: '<p>Катушка — индуктивность. После подачи <var>U</var> ток не скачет: <var>i</var> = <var>I</var>(1 − e<sup>−t/τ</sup>), τ = <var>L</var>/<var>R</var>.</p><p>Когда <var>F</var><sub>т</sub> превысит <var>F</var><sub>п</sub>, якорь идёт. Пока он движется, <var>L</var> растёт — ток <strong>проседает</strong>, затем доходит до <var>U</var>/<var>R</var>.</p>'
+        html: '<p>Сплошная — реальный ток. Пунктир — если якорь <strong>не двинулся</strong>: i шло бы к <var>I</var><sub>уст</sub> без провала.</p><p>На ходе якоря с уровня <var>I</var><sub>ср</sub> ток <strong>падает</strong>: зазор закрывается, <var>L</var> растёт, <var>i</var> = ψ / <var>L</var>.</p>'
+      },
+      start: {
+        title: 'Рост тока',
+        html: '<p>Якорь стоит, <var>L</var> постоянна. Формула тока: <var>i</var> = <var>I</var><sub>уст</sub>(1 − e<sup>−t/τ</sup>), где <var>I</var><sub>уст</sub> = <var>U</var>/<var>R</var>, τ = <var>L</var>/<var>R</var>.</p><p>Сплошная и пунктир здесь совпадают. Когда <var>i</var> = <var>I</var><sub>ср</sub>, сила больше пружины — якорь срывается.</p>'
+      },
+      move: {
+        title: 'Почему падает с Iср',
+        html: '<p><var>I</var><sub>ср</sub> не «сломался». Пунктир продолжал бы вверх к <var>U</var>/<var>R</var>.</p><p>Якорь пошёл → δ↓ → <var>L</var>↑. Потокосцепление ψ ≈ <var>L</var><var>i</var> не успевает вырасти: ψ почти то же, <var>L</var> больше → <var>i</var> меньше. График идёт <strong>обратно</strong> с уровня <var>I</var><sub>ср</sub>.</p>'
+      },
+      lgap: {
+        title: 'Почему растёт L',
+        html: '<p>Почти всё магнитное сопротивление — воздух в зазоре: <var>R</var><sub>м</sub> ≈ δ / (μ<sub>0</sub> <var>S</var>). Сталь почти не мешает потоку (μ ≫ μ<sub>0</sub>).</p><p><var>L</var> = <var>w</var> Φ / <var>I</var> = <var>w</var><sup>2</sup> / <var>R</var><sub>м</sub> ≈ <var>w</var><sup>2</sup> μ<sub>0</sub> <var>S</var> / δ. Якорь ближе → δ↓ → <var>R</var><sub>м</sub>↓ → тот же ток даёт больший Φ → <var>L</var>↑. Сел — δ ≈ 0, <var>L</var> наибольшая: катушка лучше замыкается железом якоря.</p>'
+      },
+      act: {
+        title: 'tср',
+        html: '<p><var>t</var><sub>ср</sub> = <var>t</var><sub>тр</sub> + <var>t</var><sub>дв</sub>. Срабатывание кончается, когда якорь сел. Провал тока как раз на <var>t</var><sub>дв</sub>.</p>'
+      },
+      hold: {
+        title: 'Удержание',
+        html: '<p>Якорь сел, движение кончилось. <var>L</var> уже большая и снова почти постоянна. Ток растёт к <var>I</var><sub>уст</sub> = <var>U</var>/<var>R</var> — медленнее, чем на трогании.</p>'
       },
       tau: {
-        title: 'Постоянная τ',
-        html: '<p>τ = <var>L</var>/<var>R</var>. Большой зазор → меньше <var>L</var> → ток нарастает быстрее, но сила ещё мала.</p><p>Форсировка увеличивает эффективное <var>U</var>/<var>R</var> на интервале трогания — I<sub>ср</sub> достигается раньше.</p>'
-      },
-      dip: {
-        title: 'Провал тока',
-        html: '<p>При ходе якоря потокосцепление ψ ≈ <var>L</var><var>i</var> не успевает измениться мгновенно. <var>L</var> растёт (δ падает) — <var>i</var> падает.</p><p>По осциллограмме тока как раз видно три участка: трогание, движение, удержание.</p>'
+        title: 'τ = L/R',
+        html: '<p>На трогании зазор велик → <var>L</var> мала → τ мала → быстрый рост к <var>I</var><sub>ср</sub>.</p><p>После хода <var>L</var> велика → хвост пологий. Форсировка ускоряет участок <var>t</var><sub>тр</sub>.</p>'
       }
     };
-    const tabs = ['intro', 'tau', 'dip'];
-    const OX0 = 56;
-    const OX1 = 444;
-    const OY0 = 188;
-    const OY1 = 56;
+    const tabs = ['intro', 'start', 'move', 'lgap'];
+    const OX0 = 168;
+    const OX1 = 492;
+    const OY0 = 170;
+    const OY1 = 22;
+    const T1 = 0.321;
+    const T2 = 0.58;
+    const IPick = 0.62;
+    const IDip = 0.36;
+    const TAU1 = -T1 / Math.log(1 - IPick);
+    const emOnIdle = (t) => 1 - Math.exp(-t / TAU1);
     const emOnI = (t) => {
-      if (t < 0.38) return 0.88 * (1 - Math.exp(-t / 0.14));
-      if (t < 0.54) {
-        const u = (t - 0.38) / 0.16;
-        return 0.72 - 0.28 * Math.sin(u * Math.PI);
+      if (t <= T1) return emOnIdle(t);
+      if (t < T2) {
+        const u = (t - T1) / (T2 - T1);
+        return IPick - (IPick - IDip) * (1 - Math.cos(u * Math.PI)) / 2;
       }
-      const u = (t - 0.54) / 0.46;
-      return 0.55 + 0.45 * (1 - Math.exp(-u * 3.2));
+      const u = (t - T2) / (1 - T2);
+      return IDip + (1 - IDip) * (1 - Math.exp(-u * 2.8));
     };
+    const emOnX = (t) => OX0 + t * (OX1 - OX0);
+    const emOnY = (i) => OY0 - i * (OY0 - OY1);
     const onCurve = emOnSlide.querySelector('.em-on-curve');
     if (onCurve) {
       let d = '';
-      for (let i = 0; i <= 70; i += 1) {
-        const t = i / 70;
-        const x = OX0 + t * (OX1 - OX0);
-        const y = OY0 - emOnI(t) * (OY0 - OY1);
-        d += `${i === 0 ? 'M' : 'L'}${x.toFixed(1)} ${y.toFixed(1)} `;
+      for (let n = 0; n <= 80; n += 1) {
+        const t = n / 80;
+        d += `${n === 0 ? 'M' : 'L'}${emOnX(t).toFixed(1)} ${emOnY(emOnI(t)).toFixed(1)} `;
       }
       onCurve.setAttribute('d', d.trim());
+    }
+    const idleCurve = emOnSlide.querySelector('.em-on-idle');
+    if (idleCurve) {
+      let d = '';
+      const n0 = Math.round(T1 * 80);
+      for (let n = n0; n <= 80; n += 1) {
+        const t = n / 80;
+        const i = Math.min(0.98, emOnIdle(t));
+        d += `${n === n0 ? 'M' : 'L'}${emOnX(t).toFixed(1)} ${emOnY(i).toFixed(1)} `;
+      }
+      idleCurve.setAttribute('d', d.trim());
+    }
+    const isr = emOnSlide.querySelector('.em-on-isr');
+    const isrLab = emOnSlide.querySelector('.em-on-isr-lab');
+    if (isr) {
+      const y = emOnY(IPick).toFixed(1);
+      isr.setAttribute('y1', y);
+      isr.setAttribute('y2', y);
+      if (isrLab) isrLab.setAttribute('y', String(Number(y) - 4));
+    }
+    const dipLine = emOnSlide.querySelector('.em-on-dip line');
+    const dipLab = emOnSlide.querySelector('.em-on-dip text');
+    if (dipLine) {
+      const xm = emOnX((T1 + T2) / 2);
+      dipLine.setAttribute('x1', String(xm));
+      dipLine.setAttribute('x2', String(xm));
+      dipLine.setAttribute('y1', String(emOnY(IPick)));
+      dipLine.setAttribute('y2', String(emOnY(IDip)));
+      if (dipLab) {
+        dipLab.setAttribute('x', String(xm + 6));
+        dipLab.setAttribute('y', String(emOnY(IDip) + 14));
+      }
+    }
+    const idleLab = emOnSlide.querySelector('.em-on-idle-lab');
+    if (idleLab) {
+      const tLab = 0.72;
+      idleLab.setAttribute('x', String(emOnX(tLab) - 4));
+      idleLab.setAttribute('y', String(emOnY(Math.min(0.92, emOnIdle(tLab))) - 6));
     }
     const showEmOnInfo = (key) => {
       const data = info[key] || info.intro;
       if (panel) panel.innerHTML = `<h3>${data.title}</h3>${data.html}`;
       emOnSlide.querySelectorAll('.asutp-tab').forEach((btn) => {
-        btn.classList.toggle('active', tabs.includes(key) && btn.dataset.info === key);
+        btn.classList.toggle('active', tabs.indexOf(key) !== -1 && btn.dataset.info === key);
+      });
+      emOnSlide.querySelectorAll('.em-on-hit').forEach((el) => {
+        const id = el.dataset.info;
+        const on = id === key
+          || (key === 'lgap' && id === 'move')
+          || (key === 'act' && (id === 'start' || id === 'move' || id === 'act'));
+        el.classList.toggle('is-active', on);
       });
     };
-    const updateEmOn = () => {
+    const paintEmOn = () => {
       const raw = Number(emOnSlide.querySelector('.em-on-range')?.value);
-      const t = Number.isFinite(raw) ? raw / 100 : 0.2;
+      const t = Number.isFinite(raw) ? raw / 100 : 0.18;
       const i = emOnI(t);
       const pt = emOnSlide.querySelector('.em-on-point');
-      const readout = emOnSlide.querySelector('.em-on-readout');
+      const phaseEl = emOnSlide.querySelector('.em-on-phase');
       const val = emOnSlide.querySelector('.em-on-val');
+      const arm = emOnSlide.querySelector('.em-on-arm');
+      const coil = emOnSlide.querySelector('.em-on-coil');
+      const ilab = emOnSlide.querySelector('.em-on-ilabel');
+      const gap = emOnSlide.querySelector('.em-on-gap');
+      const eqI = emOnSlide.querySelector('.em-on-eq-i');
+      const eqL = emOnSlide.querySelector('.em-on-eq-l');
       if (pt) {
-        pt.setAttribute('cx', String(OX0 + t * (OX1 - OX0)));
-        pt.setAttribute('cy', String(OY0 - i * (OY0 - OY1)));
+        pt.setAttribute('cx', String(emOnX(t)));
+        pt.setAttribute('cy', String(emOnY(i)));
       }
-      let phase = 'якорь стоит · i растёт';
-      let label = 'трогание';
-      if (t >= 0.38 && t < 0.54) {
-        phase = 'ход якоря · ток проседает';
-        label = 'ход';
-      } else if (t >= 0.54) {
-        phase = 'якорь притянут · i → U/R';
+      let close = 0;
+      let phase = 'якорь стоит · i растёт к Iср';
+      let label = 'tтр';
+      let onMove = false;
+      if (t >= T1 && t < T2) {
+        close = (t - T1) / (T2 - T1);
+        phase = 'ход · ток падает с Iср · δ↓ L↑';
+        label = 'tдв';
+        onMove = true;
+      } else if (t >= T2) {
+        close = 1;
+        phase = 'якорь сел · i → U/R · L макс';
         label = 'удержание';
       }
-      if (readout) readout.textContent = phase;
+      if (arm) arm.setAttribute('transform', `rotate(${(14 * (1 - close)).toFixed(2)} 120 70)`);
+      if (coil) coil.classList.toggle('is-hot', i > 0.22);
+      if (ilab) ilab.setAttribute('opacity', String(Math.min(1, i * 1.2)));
+      if (gap) gap.setAttribute('opacity', String(Math.max(0.12, 1 - close)));
+      if (eqI) eqI.classList.toggle('is-live', !onMove);
+      if (eqL) eqL.classList.toggle('is-live', onMove);
+      if (phaseEl) phaseEl.textContent = phase;
       if (val) val.textContent = label;
     };
     emOnSlide.addEventListener('click', (e) => {
       const tab = e.target.closest('.asutp-tab');
-      if (!tab?.dataset.info) return;
-      e.stopPropagation();
-      showEmOnInfo(tab.dataset.info);
+      const hit = e.target.closest('.em-on-hit');
+      if (tab && tab.dataset.info) {
+        e.stopPropagation();
+        showEmOnInfo(tab.dataset.info);
+        return;
+      }
+      if (hit && hit.dataset.info) {
+        e.stopPropagation();
+        showEmOnInfo(hit.dataset.info);
+      }
     });
-    emOnSlide.querySelector('.em-on-range')?.addEventListener('input', updateEmOn);
-    showEmOnInfo('intro');
-    updateEmOn();
+    emOnSlide.querySelector('.em-on-range')?.addEventListener('input', paintEmOn);
+    showEmOnInfo('start');
+    paintEmOn();
   }
 
   /* ===== Lecture 4: turn-off dynamics ===== */
@@ -5367,8 +5704,8 @@
         html: '<p>Цепь рвут насухо. Ток падает очень быстро, якорь отпадает сразу. Но на катушке всплеск <var>u</var> = <var>L</var> di/dt — сотни вольт: пробой изоляции или выход ПЛК.</p>'
       },
       spike: {
-        title: 'Перенапряжение',
-        html: '<p>Компромисс: TVS, варистор, RC-снаббер. Выброс ограничен безопасным уровнем, ток спадает быстрее, чем через диод.</p><p>Для быстрого клапана на выходе ПЛК диода мало — смотрят время отпускания в паспорте.</p>'
+        title: 'TVS — ограничитель выброса',
+        html: '<p><strong>TVS</strong> (Transient Voltage Suppressor) — супрессор, полупроводниковый ограничитель импульсных перенапряжений.</p><p>Компромисс: выброс обрезается на безопасном уровне, ток спадает быстрее, чем через обычный диод — отпускание короче. Тот же смысл у варистора и RC-снаббера.</p>'
       }
     };
     const FX0 = 210;
@@ -5421,7 +5758,9 @@
       });
       emOffMode = key === 'open' ? 'open' : (key === 'spike' ? 'spike' : 'diode');
       const diode = emOffSlide.querySelector('.em-off-diode');
-      if (diode) diode.setAttribute('opacity', emOffMode === 'diode' ? '1' : '0.22');
+      const diodeLab = emOffSlide.querySelector('.em-off-diode text');
+      if (diode) diode.setAttribute('opacity', emOffMode === 'open' ? '0.22' : '1');
+      if (diodeLab) diodeLab.textContent = emOffMode === 'spike' ? 'TVS' : 'диод';
       drawEmOff();
       updateEmOff();
     };
@@ -5442,27 +5781,204 @@
     const info = {
       force: {
         title: 'Форсировка',
-        html: '<p>На время втягивания на катушку дают полное напряжение. После притяжения вводят <strong>экономический резистор</strong>: ток падает до тока удержания.</p><p>τ = L/R: больше R и U — ток I<sub>ср</sub> набирается быстрее, в установившемся режиме катушка не перегревается.</p>'
+        html: '<p><strong>Кадр 1.</strong> Ключ замкнут — <var>R</var><sub>эк</sub> обойден. На катушке полное <var>U</var>, ток быстро доходит до <var>I</var><sub>ср</sub>, якорь срывается.</p><p><strong>Кадр 2.</strong> Якорь уже сел, ключ разомкнулся: <var>R</var><sub>эк</sub> в цепи, ток падает до удержания. Спад на графике — не поломка, а экономия.</p>'
       },
       two: {
         title: 'Две обмотки',
-        html: '<p>Втягивающая — малое сопротивление, большой ток. Удерживающая — после притяжения, ток мал.</p><p>Втягивающую отключают блок-контактом самого аппарата. Классика катушек контакторов.</p>'
+        html: '<p>Втягивающая — малый <var>R</var>, большой ток, короткое <var>t</var><sub>тр</sub>. Удерживающая — после притяжения, ток мал.</p><p>Втягивающую отключают блок-контактом самого аппарата. Классика катушек контакторов.</p>'
       },
       u: {
         title: 'Повысить U',
-        html: '<p>Кратковременно завышенное напряжение (форсирующий конденсатор в питании, отдельный источник). Нельзя держать долго: изоляция и нагрев.</p>'
+        html: '<p><var>I</var><sub>уст</sub> = <var>U</var>/<var>R</var> растёт — доля <var>I</var><sub>ср</sub>/<var>I</var><sub>уст</sub> меньше, логарифм в формуле <var>t</var><sub>тр</sub> меньше.</p><p>Кратковременно можно. Держать нельзя: изоляция и нагрев.</p>'
       },
       cap: {
         title: 'Ёмкость',
-        html: '<p>Конденсатор, заряженный до повышенного напряжения, разряжается на катушку — импульс тока выше установившегося.</p><p>После импульса катушка остаётся на номинале или на токе удержания.</p>'
+        html: '<p>Конденсатор, заряженный выше номинала, разряжается на катушку — импульс тока выше установившегося, <var>I</var><sub>ср</sub> набирается скачком.</p><p>После импульса катушка остаётся на номинале или на токе удержания.</p>'
+      }
+    };
+    const OX0 = 200;
+    const OX1 = 528;
+    const OY0 = 176;
+    const OY1 = 32;
+    const IPick = 0.56;
+    const IIdleInf = 0.80;
+    const TAUIdle = 0.40;
+    const emFastIdleI = (t) => IIdleInf * (1 - Math.exp(-t / TAUIdle));
+    const TIdle = -TAUIdle * Math.log(1 - IPick / IIdleInf);
+    const emFastLiveI = (t, mode) => {
+      if (mode === 'force' || mode === 'two') {
+        const tau = 0.15;
+        const iInf = 0.94;
+        const tPick = -tau * Math.log(1 - IPick / iInf);
+        const iT = iInf * (1 - Math.exp(-Math.min(t, tPick) / tau));
+        if (t <= tPick) return iInf * (1 - Math.exp(-t / tau));
+        return 0.34 + (iT - 0.34) * Math.exp(-(t - tPick) / 0.14);
+      }
+      if (mode === 'u') {
+        return Math.min(0.99, 0.98 * (1 - Math.exp(-t / 0.20)));
+      }
+      const tauC = 0.08;
+      const tC = 0.24;
+      if (t <= tC) return 0.92 * (1 - Math.exp(-t / tauC));
+      const iC = 0.92 * (1 - Math.exp(-tC / tauC));
+      return 0.38 + (iC - 0.38) * Math.exp(-(t - tC) / 0.16);
+    };
+    const emFastPickT = (mode) => {
+      if (mode === 'force' || mode === 'two') {
+        return -0.15 * Math.log(1 - IPick / 0.94);
+      }
+      if (mode === 'u') {
+        return -0.20 * Math.log(1 - IPick / 0.98);
+      }
+      return -0.08 * Math.log(1 - IPick / 0.92);
+    };
+    const emFastX = (t) => OX0 + t * (OX1 - OX0);
+    const emFastY = (i) => OY0 - i * (OY0 - OY1);
+    let emFastMode = 'force';
+    const drawEmFastCurve = () => {
+      const idle = emFastSlide.querySelector('.em-fast-idle');
+      const live = emFastSlide.querySelector('.em-fast-curve');
+      if (idle) {
+        let d = '';
+        for (let n = 0; n <= 80; n += 1) {
+          const t = n / 80;
+          d += `${n === 0 ? 'M' : 'L'}${emFastX(t).toFixed(1)} ${emFastY(emFastIdleI(t)).toFixed(1)} `;
+        }
+        idle.setAttribute('d', d.trim());
+      }
+      if (live) {
+        let d = '';
+        for (let n = 0; n <= 80; n += 1) {
+          const t = n / 80;
+          d += `${n === 0 ? 'M' : 'L'}${emFastX(t).toFixed(1)} ${emFastY(emFastLiveI(t, emFastMode)).toFixed(1)} `;
+        }
+        live.setAttribute('d', d.trim());
+      }
+      const isr = emFastSlide.querySelector('.em-fast-isr');
+      const isrLab = emFastSlide.querySelector('.em-fast-isr-lab');
+      const yPick = emFastY(IPick);
+      if (isr) {
+        isr.setAttribute('y1', String(yPick));
+        isr.setAttribute('y2', String(yPick));
+        if (isrLab) isrLab.setAttribute('y', String(yPick + 4));
+      }
+      const idleLab = emFastSlide.querySelector('.em-fast-idle-lab');
+      if (idleLab) {
+        const tLab = 0.70;
+        idleLab.setAttribute('x', String(emFastX(tLab)));
+        idleLab.setAttribute('y', String(emFastY(Math.min(0.90, emFastIdleI(tLab))) - 8));
+      }
+      const t0 = emFastSlide.querySelector('.em-fast-t0');
+      const t1 = emFastSlide.querySelector('.em-fast-t1');
+      const t0Lab = emFastSlide.querySelector('.em-fast-t0-lab');
+      const t1Lab = emFastSlide.querySelector('.em-fast-t1-lab');
+      const xIdle = emFastX(TIdle);
+      const xLive = emFastX(emFastPickT(emFastMode));
+      if (t0) {
+        t0.setAttribute('x1', String(xIdle));
+        t0.setAttribute('x2', String(xIdle));
+        if (t0Lab) t0Lab.setAttribute('x', String(xIdle));
+      }
+      if (t1) {
+        t1.setAttribute('x1', String(xLive));
+        t1.setAttribute('x2', String(xLive));
+        if (t1Lab) t1Lab.setAttribute('x', String(xLive));
+      }
+    };
+    const paintEmFast = () => {
+      const raw = Number(emFastSlide.querySelector('.em-fast-range')?.value);
+      const t = Number.isFinite(raw) ? raw / 100 : 0.1;
+      const i = emFastLiveI(t, emFastMode);
+      const tPick = emFastPickT(emFastMode);
+      const seated = t >= tPick;
+      const pt = emFastSlide.querySelector('.em-fast-point');
+      const readout = emFastSlide.querySelector('.em-fast-readout');
+      const val = emFastSlide.querySelector('.em-fast-val');
+      const sch = emFastSlide.querySelector('.em-fast-sch.is-on');
+      const arm = sch?.querySelector('.em-fast-arm');
+      const coil = emFastSlide.querySelector('.em-fast-coil');
+      const rbox = emFastSlide.querySelector('.em-fast-rbox');
+      const swOn = emFastSlide.querySelector('.em-fast-sw-on');
+      const swOff = emFastSlide.querySelector('.em-fast-sw-off');
+      if (pt) {
+        pt.setAttribute('cx', String(emFastX(t)));
+        pt.setAttribute('cy', String(emFastY(i)));
+      }
+      if (arm) {
+        const pivot = arm.getAttribute('data-pivot') || '142 80';
+        arm.setAttribute('transform', `rotate(${seated ? 0 : -8} ${pivot})`);
+      }
+      if (coil) coil.classList.toggle('is-hot', i > 0.28);
+      if (rbox) rbox.classList.toggle('is-dim', emFastMode === 'force' && !seated);
+      if (emFastMode === 'force') {
+        if (swOn) {
+          swOn.classList.toggle('is-on', !seated);
+          if (!seated) swOn.removeAttribute('display');
+          else swOn.setAttribute('display', 'none');
+        }
+        if (swOff) {
+          swOff.classList.toggle('is-on', seated);
+          if (seated) swOff.removeAttribute('display');
+          else swOff.setAttribute('display', 'none');
+        }
+      }
+      if (emFastMode === 'two') {
+        const pull = sch.querySelector('.em-fast-coil-pull');
+        const hold = sch.querySelector('.em-fast-coil-hold');
+        const bkOn = sch.querySelector('.em-fast-bk-on');
+        const bkOff = sch.querySelector('.em-fast-bk-off');
+        pull?.classList.toggle('is-hot', !seated);
+        pull?.classList.toggle('is-off', seated);
+        hold?.classList.toggle('is-hot', seated);
+        hold?.classList.toggle('is-dim', !seated);
+        if (bkOn) {
+          if (!seated) bkOn.removeAttribute('display');
+          else bkOn.setAttribute('display', 'none');
+        }
+        if (bkOff) {
+          if (seated) bkOff.removeAttribute('display');
+          else bkOff.setAttribute('display', 'none');
+        }
+      }
+      const kadTitle = emFastSlide.querySelector('.em-fast-kad-title');
+      const kadA = emFastSlide.querySelector('.em-fast-kad-a');
+      const kadB = emFastSlide.querySelector('.em-fast-kad-b');
+      if (emFastMode === 'force') {
+        if (kadTitle) {
+          kadTitle.textContent = seated ? 'кадр 2' : 'кадр 1';
+          kadTitle.setAttribute('fill', seated ? '#1e40af' : '#c2410c');
+        }
+        if (kadA) kadA.textContent = seated ? 'ключ разомкнут' : 'ключ замкнут';
+        if (kadB) kadB.textContent = seated ? 'Rэк в цепи' : 'Rэк обойден';
+      }
+      const notes = {
+        force: seated ? 'кадр 2 · ключ открыт, Rэк, якорь сел' : 'кадр 1 · ключ замкнут, полный U',
+        two: seated ? 'удерживающая · втяг отключена' : 'втягивающая · большой ток',
+        u: seated ? 'U↑ · дальше перегрев, если держать' : 'U↑ · Iср раньше',
+        cap: seated ? 'импульс кончился · ток удержания' : 'разряд C · импульс тока'
+      };
+      if (readout) readout.textContent = notes[emFastMode] || notes.force;
+      if (val) {
+        val.textContent = emFastMode === 'force'
+          ? (seated ? 'кадр 2' : 'кадр 1')
+          : (seated ? 'после Iср' : 'к Iср');
       }
     };
     const showEmFastInfo = (key) => {
       const data = info[key] || info.force;
       if (panel) panel.innerHTML = `<h3>${data.title}</h3>${data.html}`;
+      emFastMode = key;
       emFastSlide.querySelectorAll('.app-purpose-card').forEach((btn) => {
         btn.classList.toggle('active', btn.dataset.info === key);
       });
+      emFastSlide.querySelectorAll('.em-fast-sch').forEach((g) => {
+        const on = g.classList.contains(`em-fast-sch-${key}`);
+        g.classList.toggle('is-on', on);
+        if (on) g.removeAttribute('display');
+        else g.setAttribute('display', 'none');
+      });
+      drawEmFastCurve();
+      paintEmFast();
     };
     emFastSlide.addEventListener('click', (e) => {
       const card = e.target.closest('.app-purpose-card');
@@ -5470,6 +5986,7 @@
       e.stopPropagation();
       showEmFastInfo(card.dataset.info);
     });
+    emFastSlide.querySelector('.em-fast-range')?.addEventListener('input', paintEmFast);
     showEmFastInfo('force');
   }
 
@@ -5480,27 +5997,130 @@
     const info = {
       sleeve: {
         title: 'Гильза',
-        html: '<p>Медная (или алюминиевая) гильза на сердечнике: вихревые токи мешают нарастать потоку. Якорь трогается позже.</p><p>Тот же эффект тормозит и отпускание — гильза замедляет <strong>оба</strong> фронта.</p>'
+        html: '<p>Медная (или алюминиевая) гильза на сердечнике — короткозамкнутый виток. Вихревые токи противодействуют изменению Φ: поток (и сила) нарастают позже, хотя напряжение уже подано.</p><p>Тот же эффект тормозит и отпускание — гильза замедляет <strong>оба</strong> фронта.</p>'
       },
       short: {
         title: 'Замкнутый виток',
-        html: '<p>Массивный короткозамкнутый виток или демпферная обмотка. На постоянном токе это аналог гильзы: задерживает изменение потока.</p><p>Не путать с экранным витком переменного тока: тот борется с пульсацией силы, а не с выдержкой времени.</p>'
+        html: '<p>Массивный короткозамкнутый виток или демпферная обмотка. На постоянном токе это аналог гильзы: задерживает изменение потока.</p><p>Не путать с <strong>экранным витком</strong> переменного тока: тот борется с пульсацией силы, а не даёт выдержку времени.</p>'
       },
       rc: {
         title: 'RC-цепь',
-        html: '<p>Конденсатор параллельно катушке или в цепи управления: напряжение на обмотке нарастает с постоянной RC.</p><p>Ставят, когда нужна выдержка единицы–десятки миллисекунд без механического реле времени.</p>'
+        html: '<p>Конденсатор параллельно катушке или в цепи управления: напряжение на обмотке нарастает с постоянной RC, поэтому <var>i</var> и <var>I</var><sub>ср</sub> запаздывают.</p><p>Ставят, когда нужна выдержка единицы–десятки миллисекунд без механического реле времени.</p>'
       },
       r: {
         title: 'Последовательный R',
-        html: '<p>Лишний резистор при том же U снижает установившийся ток и увеличивает τ относительно силы: I<sub>ср</sub> набирается дольше или вообще не достигается.</p><p>Грубый способ, катушка может не втянуться — чаще комбинируют с форсировкой, а не наоборот.</p>'
+        html: '<p>Лишний резистор при том же <var>U</var> снижает <var>I</var><sub>уст</sub> = <var>U</var>/(<var>R</var>+<var>r</var>). Доля <var>I</var><sub>ср</sub>/<var>I</var><sub>уст</sub> растёт — <var>t</var><sub>тр</sub> длиннее.</p><p>Если <var>I</var><sub>уст</sub> &lt; <var>I</var><sub>ср</sub>, сплошная так и не пересечёт линию — якорь <strong>не втянется</strong>.</p>'
       }
+    };
+    const OX0 = 168;
+    const OX1 = 492;
+    const OY0 = 168;
+    const OY1 = 28;
+    const IPick = 0.56;
+    const IIdleInf = 0.90;
+    const TAUIdle = 0.16;
+    const emSlowIdleI = (t) => IIdleInf * (1 - Math.exp(-t / TAUIdle));
+    const TIdle = -TAUIdle * Math.log(1 - IPick / IIdleInf);
+    const emSlowLiveI = (t, mode) => {
+      if (mode === 'sleeve' || mode === 'short') return 0.90 * (1 - Math.exp(-t / 0.50));
+      if (mode === 'rc') return 0.88 * (1 - Math.exp(-t / 0.62));
+      return 0.50 * (1 - Math.exp(-t / 0.22));
+    };
+    const emSlowPickT = (mode) => {
+      if (mode === 'sleeve' || mode === 'short') return -0.50 * Math.log(1 - IPick / 0.90);
+      if (mode === 'rc') return -0.62 * Math.log(1 - IPick / 0.88);
+      return null;
+    };
+    const emSlowX = (t) => OX0 + t * (OX1 - OX0);
+    const emSlowY = (i) => OY0 - i * (OY0 - OY1);
+    let emSlowMode = 'sleeve';
+    const drawEmSlowCurve = () => {
+      const idle = emSlowSlide.querySelector('.em-slow-idle');
+      const live = emSlowSlide.querySelector('.em-slow-curve');
+      if (idle) {
+        let d = '';
+        for (let n = 0; n <= 80; n += 1) {
+          const t = n / 80;
+          d += `${n === 0 ? 'M' : 'L'}${emSlowX(t).toFixed(1)} ${emSlowY(emSlowIdleI(t)).toFixed(1)} `;
+        }
+        idle.setAttribute('d', d.trim());
+      }
+      if (live) {
+        let d = '';
+        for (let n = 0; n <= 80; n += 1) {
+          const t = n / 80;
+          d += `${n === 0 ? 'M' : 'L'}${emSlowX(t).toFixed(1)} ${emSlowY(emSlowLiveI(t, emSlowMode)).toFixed(1)} `;
+        }
+        live.setAttribute('d', d.trim());
+      }
+      const isr = emSlowSlide.querySelector('.em-slow-isr');
+      const isrLab = emSlowSlide.querySelector('.em-slow-isr-lab');
+      const yPick = emSlowY(IPick);
+      if (isr) {
+        isr.setAttribute('y1', String(yPick));
+        isr.setAttribute('y2', String(yPick));
+        if (isrLab) isrLab.setAttribute('y', String(yPick - 4));
+      }
+      const t0 = emSlowSlide.querySelector('.em-slow-t0');
+      const t1 = emSlowSlide.querySelector('.em-slow-t1');
+      const t0Lab = emSlowSlide.querySelector('.em-slow-t0-lab');
+      const t1Lab = emSlowSlide.querySelector('.em-slow-t1-lab');
+      const xIdle = emSlowX(TIdle);
+      const tLive = emSlowPickT(emSlowMode);
+      if (t0) {
+        t0.setAttribute('x1', String(xIdle));
+        t0.setAttribute('x2', String(xIdle));
+        if (t0Lab) t0Lab.setAttribute('x', String(xIdle));
+      }
+      if (t1 && t1Lab) {
+        if (tLive) {
+          const xLive = emSlowX(tLive);
+          t1.setAttribute('x1', String(xLive));
+          t1.setAttribute('x2', String(xLive));
+          t1.setAttribute('opacity', '1');
+          t1Lab.setAttribute('x', String(xLive));
+          t1Lab.setAttribute('opacity', '1');
+          t1Lab.textContent = 'tтр';
+        } else {
+          t1.setAttribute('opacity', '0');
+          t1Lab.setAttribute('x', String(emSlowX(0.82)));
+          t1Lab.setAttribute('opacity', '1');
+          t1Lab.textContent = 'нет Iср';
+        }
+      }
+    };
+    const paintEmSlow = () => {
+      const raw = Number(emSlowSlide.querySelector('.em-slow-range')?.value);
+      const t = Number.isFinite(raw) ? raw / 100 : 0.28;
+      const i = emSlowLiveI(t, emSlowMode);
+      const tPick = emSlowPickT(emSlowMode);
+      const pt = emSlowSlide.querySelector('.em-slow-point');
+      const readout = emSlowSlide.querySelector('.em-slow-readout');
+      const val = emSlowSlide.querySelector('.em-slow-val');
+      if (pt) {
+        pt.setAttribute('cx', String(emSlowX(t)));
+        pt.setAttribute('cy', String(emSlowY(i)));
+      }
+      let phase = 'гильза · Φ запаздывает';
+      if (emSlowMode === 'short') phase = tPick && t < tPick ? 'к.з. виток · поток тормозит' : 'Iср позже, чем без витка';
+      else if (emSlowMode === 'rc') phase = tPick && t < tPick ? 'RC · U на катушке растёт медленно' : 'Iср с выдержкой RC';
+      else if (emSlowMode === 'r') phase = i < IPick ? 'Iуст < Iср · якорь не втянется' : 'ток у Iср';
+      else phase = tPick && t < tPick ? 'гильза · Φ запаздывает' : 'Iср позже, чем без гильзы';
+      if (readout) readout.textContent = phase;
+      if (val) val.textContent = tPick && t >= tPick ? 'после Iср' : 'к Iср';
     };
     const showEmSlowInfo = (key) => {
       const data = info[key] || info.sleeve;
       if (panel) panel.innerHTML = `<h3>${data.title}</h3>${data.html}`;
+      emSlowMode = key;
       emSlowSlide.querySelectorAll('.app-purpose-card').forEach((btn) => {
         btn.classList.toggle('active', btn.dataset.info === key);
       });
+      emSlowSlide.querySelectorAll('.em-slow-sch').forEach((g) => {
+        g.classList.toggle('is-on', g.classList.contains(`em-slow-sch-${key}`));
+      });
+      drawEmSlowCurve();
+      paintEmSlow();
     };
     emSlowSlide.addEventListener('click', (e) => {
       const card = e.target.closest('.app-purpose-card');
@@ -5508,6 +6128,7 @@
       e.stopPropagation();
       showEmSlowInfo(card.dataset.info);
     });
+    emSlowSlide.querySelector('.em-slow-range')?.addEventListener('input', paintEmSlow);
     showEmSlowInfo('sleeve');
   }
 
@@ -5518,27 +6139,125 @@
     const info = {
       tvs: {
         title: 'TVS вместо диода',
-        html: '<p>Обычный диод на выходе ПЛК защищает транзистор, но держит ток. Варистор или TVS обрезает выброс и даёт току стечь <strong>быстрее</strong> — отпускание короче.</p>'
+        html: '<p><strong>TVS</strong> (Transient Voltage Suppressor) — супрессор, ограничитель импульсных перенапряжений.</p><p>Диод даёт путь с малым напряжением: τ велика, ток «висит». TVS держит выброс на десятках вольт — <var>di</var>/<var>dt</var> больше, <var>t</var><sub>отп</sub> короче.</p>'
       },
       res: {
         title: 'Разрядный R',
-        html: '<p>Резистор параллельно катушке или последовательно с диодом. Ток спадает с меньшей постоянной, чем через одну обмотку, выброс напряжения ограничен <var>I</var>·<var>R</var>.</p>'
+        html: '<p>Резистор параллельно катушке или последовательно с диодом. τ = <var>L</var> / (<var>R</var> + <var>r</var>), выброс ограничен <var>I</var>·<var>R</var>.</p><p>Компромисс между диодом (медленно, безопасно) и сухим разрывом (быстро, опасно).</p>'
       },
       pin: {
         title: 'Прокладка',
-        html: '<p>Немагнитный штифт или прокладка в полюсе: в «притянутом» положении остаётся зазор десятые доли миллиметра.</p><p>Остаточный поток не удерживает якорь — отпускание чёткое, без залипания.</p>'
+        html: '<p>Немагнитный штифт в полюсе: в «притянутом» положении остаётся зазор. Ток спадает как с диодом, но <var>I</var><sub>отп</sub> выше — остаточный поток не держит якорь.</p><p>На графике пунктир и сплошная совпадают, линия <var>I</var><sub>отп</sub> поднимается.</p>'
       },
       hold: {
         title: 'Ток удержания',
-        html: '<p>После втягивания ток снижают (экономический резистор, вторая обмотка). Запас до I<sub>отп</sub> мал — при снятии питания якорь отпадает почти сразу.</p><p>И меньше нагрев катушки в длительном режиме.</p>'
+        html: '<p>После втягивания ток снижают (<var>R</var><sub>эк</sub>, вторая обмотка). <var>I</var><sub>0</sub> уже близко к <var>I</var><sub>отп</sub> — в формуле логарифм мал, якорь отпадает почти сразу.</p><p>И меньше нагрев катушки в длительном режиме.</p>'
       }
+    };
+    const OX0 = 168;
+    const OX1 = 492;
+    const OY0 = 168;
+    const OY1 = 28;
+    const TAUDiode = 0.45;
+    const IOff0 = 0.24;
+    const IOffPin = 0.48;
+    const IHold = 0.42;
+    const emDropIdleI = (t) => Math.exp(-t / TAUDiode);
+    const emDropLiveI = (t, mode) => {
+      if (mode === 'tvs') return Math.exp(-t / 0.15);
+      if (mode === 'res') return Math.exp(-t / 0.22);
+      if (mode === 'pin') return emDropIdleI(t);
+      return IHold * Math.exp(-t / TAUDiode);
+    };
+    const emDropIOff = (mode) => (mode === 'pin' ? IOffPin : IOff0);
+    const emDropTOff = (mode) => {
+      if (mode === 'tvs') return -0.15 * Math.log(IOff0);
+      if (mode === 'res') return -0.22 * Math.log(IOff0);
+      if (mode === 'pin') return -TAUDiode * Math.log(IOffPin);
+      return -TAUDiode * Math.log(IOff0 / IHold);
+    };
+    const TOffDiode = -TAUDiode * Math.log(IOff0);
+    const emDropX = (t) => OX0 + t * (OX1 - OX0);
+    const emDropY = (i) => OY0 - i * (OY0 - OY1);
+    let emDropMode = 'tvs';
+    const drawEmDropCurve = () => {
+      const idle = emDropSlide.querySelector('.em-drop-idle');
+      const live = emDropSlide.querySelector('.em-drop-curve');
+      if (idle) {
+        let d = '';
+        for (let n = 0; n <= 80; n += 1) {
+          const t = n / 80;
+          d += `${n === 0 ? 'M' : 'L'}${emDropX(t).toFixed(1)} ${emDropY(emDropIdleI(t)).toFixed(1)} `;
+        }
+        idle.setAttribute('d', d.trim());
+      }
+      if (live) {
+        let d = '';
+        for (let n = 0; n <= 80; n += 1) {
+          const t = n / 80;
+          d += `${n === 0 ? 'M' : 'L'}${emDropX(t).toFixed(1)} ${emDropY(emDropLiveI(t, emDropMode)).toFixed(1)} `;
+        }
+        live.setAttribute('d', d.trim());
+      }
+      const iOff = emDropIOff(emDropMode);
+      const yOff = emDropY(iOff);
+      const ioff = emDropSlide.querySelector('.em-drop-ioff');
+      const ioffLab = emDropSlide.querySelector('.em-drop-ioff-lab');
+      if (ioff) {
+        ioff.setAttribute('y1', String(yOff));
+        ioff.setAttribute('y2', String(yOff));
+        if (ioffLab) ioffLab.setAttribute('y', String(yOff - 4));
+      }
+      const t0 = emDropSlide.querySelector('.em-drop-t0');
+      const t1 = emDropSlide.querySelector('.em-drop-t1');
+      const t0Lab = emDropSlide.querySelector('.em-drop-t0-lab');
+      const t1Lab = emDropSlide.querySelector('.em-drop-t1-lab');
+      const xIdle = emDropX(TOffDiode);
+      const xLive = emDropX(emDropTOff(emDropMode));
+      if (t0) {
+        t0.setAttribute('x1', String(xIdle));
+        t0.setAttribute('x2', String(xIdle));
+        if (t0Lab) t0Lab.setAttribute('x', String(xIdle));
+      }
+      if (t1) {
+        t1.setAttribute('x1', String(xLive));
+        t1.setAttribute('x2', String(xLive));
+        if (t1Lab) t1Lab.setAttribute('x', String(xLive));
+      }
+    };
+    const paintEmDrop = () => {
+      const raw = Number(emDropSlide.querySelector('.em-drop-range')?.value);
+      const t = Number.isFinite(raw) ? raw / 100 : 0.2;
+      const i = emDropLiveI(t, emDropMode);
+      const tOff = emDropTOff(emDropMode);
+      const pt = emDropSlide.querySelector('.em-drop-point');
+      const readout = emDropSlide.querySelector('.em-drop-readout');
+      const val = emDropSlide.querySelector('.em-drop-val');
+      if (pt) {
+        pt.setAttribute('cx', String(emDropX(t)));
+        pt.setAttribute('cy', String(emDropY(i)));
+      }
+      const notes = {
+        tvs: t < tOff ? 'TVS · спад быстрее диода' : 'ток у Iотп · якорь уже отпал',
+        res: t < tOff ? 'разрядный R · τ меньше' : 'ток у Iотп · отпускание раньше',
+        pin: t < tOff ? 'ток как с диодом · Iотп выше' : 'Iотп раньше · зазор не даёт залипнуть',
+        hold: t < tOff ? 'Iуд близко к Iотп' : 'якорь отпал почти сразу'
+      };
+      if (readout) readout.textContent = notes[emDropMode] || notes.tvs;
+      if (val) val.textContent = t < tOff ? 'к Iотп' : 'после Iотп';
     };
     const showEmDropInfo = (key) => {
       const data = info[key] || info.tvs;
       if (panel) panel.innerHTML = `<h3>${data.title}</h3>${data.html}`;
+      emDropMode = key;
       emDropSlide.querySelectorAll('.app-purpose-card').forEach((btn) => {
         btn.classList.toggle('active', btn.dataset.info === key);
       });
+      emDropSlide.querySelectorAll('.em-drop-sch').forEach((g) => {
+        g.classList.toggle('is-on', g.classList.contains(`em-drop-sch-${key}`));
+      });
+      drawEmDropCurve();
+      paintEmDrop();
     };
     emDropSlide.addEventListener('click', (e) => {
       const card = e.target.closest('.app-purpose-card');
@@ -5546,6 +6265,7 @@
       e.stopPropagation();
       showEmDropInfo(card.dataset.info);
     });
+    emDropSlide.querySelector('.em-drop-range')?.addEventListener('input', paintEmDrop);
     showEmDropInfo('tvs');
   }
 
@@ -5556,7 +6276,7 @@
     const info = {
       plc: {
         title: 'Выход ПЛК',
-        html: '<p>Дискретный выход (релейный или транзисторный) питает катушку реле, пускателя, гидро- или пневмоклапана.</p><p>На DC обязательна защита от выброса: диод, TVS или снаббер — иначе выход ПЛК выбьет.</p>'
+        html: '<p>Дискретный выход (релейный или транзисторный) питает катушку реле, пускателя, гидро- или пневмоклапана.</p><p>На DC обязательна защита от выброса: диод, TVS (супрессор) или снаббер — иначе выход ПЛК выбьет.</p>'
       },
       start: {
         title: 'Пускатель',
@@ -5568,7 +6288,7 @@
       },
       time: {
         title: 'Тайминг',
-        html: '<p>В программе ПЛК закладывают не только логику, но и реальное t<sub>ср</sub> и t<sub>отп</sub> аппарата.</p><p>Форсировка и TVS — если цикл быстрый; гильза и диод — если нужна пауза без таймера в коде.</p>'
+        html: '<p>В программе ПЛК закладывают не только логику, но и реальное t<sub>ср</sub> и t<sub>отп</sub> аппарата.</p><p>Форсировка и TVS (супрессор) — если цикл быстрый; гильза и диод — если нужна пауза без таймера в коде.</p>'
       }
     };
     const showEmWhereInfo = (key) => {
@@ -5968,6 +6688,235 @@
     showEmDcWorkInfo('intro');
   }
 
+  /* ===== Lecture 4: DC construction ===== */
+  const emDcCoreSlide = document.querySelector('.slide-em-dc-core-interactive');
+  if (emDcCoreSlide) {
+    const panel = document.getElementById('emDcCorePanel');
+    const info = {
+      intro: {
+        title: 'Обзор',
+        html: '<p>Микромашина постоянного тока в разборе. Статор даёт поле, ротор с коллектором крутится в нём, щётки снимают или подают ток.</p>'
+      },
+      stator: {
+        title: '1 · статор',
+        html: '<p>Цилиндр из листов электротехнической стали — меньше вихревые токи. Полюса с обмоткой или, у микромашин, постоянные магниты.</p><p>Число пар полюсов <var>p</var>. На фото учебника обычно <var>p</var> = 1. Больше <var>p</var> — у генератора чаще пульсации ЭДС, у двигателя ниже скорость при той же частоте коммутации.</p>'
+      },
+      rotor: {
+        title: '2 · ротор',
+        html: '<p>В машинах постоянного тока ротор называют <strong>якорем</strong>: пакет стали, пазы, обмотка, коллектор и подшипники на одном валу.</p>'
+      },
+      cover: {
+        title: '3 · торцевые щиты',
+        html: '<p>Две крышки. На одной — щёточный механизм: колодцы из изолятора, пружины, токоподводы.</p>'
+      },
+      brush: {
+        title: '4 · щётка',
+        html: '<p>Угольно-графитовый брусок. Пружина прижимает его к коллектору. Гибкий вывод идёт на зажим машины.</p>'
+      },
+      plug: {
+        title: '5 · пробка',
+        html: '<p>Резьбовая пробка и контргайка: фиксируют и поджимают щётку снаружи, не разбирая машину.</p>'
+      }
+    };
+    const tabs = ['intro', 'stator', 'rotor', 'cover', 'brush', 'plug'];
+    const showEmDcCoreInfo = (key) => {
+      const data = info[key] || info.intro;
+      if (panel) panel.innerHTML = `<h3>${data.title}</h3>${data.html}`;
+      emDcCoreSlide.querySelectorAll('.asutp-tab').forEach((btn) => {
+        btn.classList.toggle('active', tabs.indexOf(key) !== -1 && btn.dataset.info === key);
+      });
+      emDcCoreSlide.querySelectorAll('.em-dcc-hit').forEach((el) => {
+        el.classList.toggle('is-active', el.dataset.info === key);
+      });
+    };
+    emDcCoreSlide.addEventListener('click', (e) => {
+      const tab = e.target.closest('.asutp-tab');
+      const hit = e.target.closest('.em-dcc-hit');
+      if (tab && tab.dataset.info) {
+        e.stopPropagation();
+        showEmDcCoreInfo(tab.dataset.info);
+        return;
+      }
+      if (hit && hit.dataset.info) {
+        e.stopPropagation();
+        showEmDcCoreInfo(hit.dataset.info);
+      }
+    });
+    showEmDcCoreInfo('intro');
+  }
+
+  /* ===== Lecture 4: armature windings ===== */
+  const emDcWindSlide = document.querySelector('.slide-em-dc-wind-interactive');
+  if (emDcWindSlide) {
+    const panel = document.getElementById('emDcWindPanel');
+    const info = {
+      intro: {
+        title: 'Обзор',
+        html: '<p>Ротор называют якорем. Пакет из листов стали, пазы часто скошены — ход ровнее. Секция обмотки: один или несколько витков, концы на соседние или удалённые пластины коллектора.</p>'
+      },
+      lap: {
+        title: 'Петлевая',
+        html: '<p>Секция замыкается «петлёй» на соседние пластины. Число щёток = числу полюсов <var>2p</var>.</p><p>Простая петлевая: <var>2a</var> = <var>2p</var>. Большой ток, относительно малое напряжение.</p>'
+      },
+      wave: {
+        title: 'Волновая',
+        html: '<p>Секция идёт вперёд через полюсное деление — «волна». Ветвей всегда две: <var>2a</var> = 2, сколько бы ни было полюсов.</p><p>Меньший ток, большее напряжение.</p>'
+      },
+      poles: {
+        title: '2p',
+        html: '<p>Число полюсов машины. Пар полюсов — <var>p</var>. У микромашины на разборе часто <var>p</var> = 1.</p>'
+      },
+      paths: {
+        title: '2a',
+        html: '<p>Число параллельных ветвей обмотки. Петлевая: <var>2a</var> = <var>2p</var>. Волновая: <var>2a</var> = 2.</p>'
+      },
+      tau: {
+        title: 'τ',
+        html: '<p>Полюсное деление — дуга между одинаковыми точками соседних полюсов (центры). Связано с диаметром <var>D</var> расточки статора: τ = π<var>D</var> / <var>2p</var>.</p><p>Шаг секции в пазах берут близким к τ — активные стороны секции под разными полюсами.</p>'
+      },
+      ncond: {
+        title: 'N',
+        html: '<p>Общее число проводников во всех пазах якоря. Входит в конструктивный коэффициент <var>k</var> формул ЭДС и момента.</p>'
+      }
+    };
+    const showEmDcWindInfo = (key) => {
+      const data = info[key] || info.intro;
+      if (panel) panel.innerHTML = `<h3>${data.title}</h3>${data.html}`;
+      const waveOn = key === 'wave';
+      emDcWindSlide.querySelectorAll('.em-dcw-view').forEach((view) => {
+        view.classList.toggle('is-on', waveOn ? view.dataset.view === 'wave' : view.dataset.view === 'lap');
+      });
+      emDcWindSlide.querySelectorAll('.asutp-tab').forEach((btn) => {
+        const k = btn.dataset.info;
+        btn.classList.toggle('active', k === key || (key === 'paths' && k === 'lap') || (key === 'poles' && k === 'intro') || (key === 'ncond' && k === 'intro'));
+      });
+      emDcWindSlide.querySelectorAll('.em-dcw-hit').forEach((el) => {
+        el.classList.toggle('is-active', el.dataset.info === key);
+      });
+    };
+    emDcWindSlide.addEventListener('click', (e) => {
+      const tab = e.target.closest('.asutp-tab');
+      const hit = e.target.closest('.em-dcw-hit');
+      if (tab && tab.dataset.info) {
+        e.stopPropagation();
+        showEmDcWindInfo(tab.dataset.info);
+        return;
+      }
+      if (hit && hit.dataset.info) {
+        e.stopPropagation();
+        showEmDcWindInfo(hit.dataset.info);
+      }
+    });
+    showEmDcWindInfo('intro');
+  }
+
+  /* ===== Lecture 4: excitation ===== */
+  const emDcExSlide = document.querySelector('.slide-em-dc-ex-interactive');
+  if (emDcExSlide) {
+    const panel = document.getElementById('emDcExPanel');
+    const info = {
+      ind: {
+        title: 'Независимое',
+        html: '<p>Обмотка возбуждения от своего источника постоянного тока — или магниты в статоре.</p><p>Для САУ основной вариант: ток якоря и Φ задают раздельно. Дальше в учебнике — якорное управление при Φ = const.</p>'
+      },
+      ser: {
+        title: 'Последовательное',
+        html: '<p>Обмотка возбуждения в серии с якорем на общий источник. Φ растёт вместе с током нагрузки. Типично для тяги, не для точного регулирования.</p>'
+      },
+      par: {
+        title: 'Параллельное',
+        html: '<p>Обмотка возбуждения параллельно якорю. На том же напряжении.</p><p>Такой двигатель может работать и от переменного тока — так устроена часть бытовой техники (универсальный коллекторный).</p>'
+      },
+      mix: {
+        title: 'Смешанное',
+        html: '<p>Две части обмотки возбуждения: одна параллельно якорю, другая последовательно. Вся связка — на управляющее напряжение.</p>'
+      }
+    };
+    const showEmDcExInfo = (key) => {
+      const data = info[key] || info.ind;
+      if (panel) panel.innerHTML = `<h3>${data.title}</h3>${data.html}`;
+      emDcExSlide.querySelectorAll('.app-purpose-card').forEach((btn) => {
+        btn.classList.toggle('active', btn.dataset.info === key);
+      });
+    };
+    emDcExSlide.addEventListener('click', (e) => {
+      const card = e.target.closest('.app-purpose-card');
+      if (!card || !card.dataset.info) return;
+      e.stopPropagation();
+      showEmDcExInfo(card.dataset.info);
+    });
+    showEmDcExInfo('ind');
+  }
+
+  /* ===== Lecture 4: EMF and torque ===== */
+  const emDcEqSlide = document.querySelector('.slide-em-dc-eq-interactive');
+  if (emDcEqSlide) {
+    const panel = document.getElementById('emDcEqPanel');
+    const info = {
+      intro: {
+        title: 'Обзор',
+        html: '<p>Обратимость: тот же <var>k</var>. Проводник <var>l</var> в поле <var>B</var>: ЭДС <var>e</var> = <var>B</var><var>l</var><var>v</var>, сила <var>f</var> = <var>B</var><var>l</var><var>i</var>.</p>'
+      },
+      gen: {
+        title: 'ЭДС',
+        html: '<p><var>e</var> = <var>B</var><var>l</var><var>v</var>, <var>v</var> = ω<var>r</var>, <var>B</var> = Φ/<var>S</var>. По всем <var>N</var> проводникам: <var>E</var> = <var>k</var> Φ ω.</p><p>Если Φ = const, <var>c</var> = <var>k</var>Φ, тогда <var>E</var> = <var>c</var> ω — ЭДС пропорциональна скорости. Тахогенератор работает именно так.</p>'
+      },
+      mot: {
+        title: 'Момент',
+        html: '<p><var>f</var> = <var>B</var><var>l</var><var>i</var>, момент <var>m</var> = <var>f</var><var>r</var>. Ток в проводнике <var>i</var> = <var>I</var><sub>дв</sub> / <var>2a</var>.</p><p>От <var>N</var> проводников: <var>M</var><sub>дв</sub> = <var>k</var> Φ <var>I</var><sub>дв</sub>. При Φ = const → <var>M</var><sub>дв</sub> = <var>c</var> <var>I</var><sub>дв</sub>.</p>'
+      },
+      phi: {
+        title: 'Φ',
+        html: '<p>Поток возбуждения. Его держат постоянным при якорном управлении — тогда характеристики линейные.</p>'
+      },
+      om: {
+        title: 'ω',
+        html: '<p>Угловая скорость якоря. У генератора <var>E</var> ∝ ω при Φ = const.</p>'
+      },
+      i: {
+        title: 'Iдв',
+        html: '<p>Ток якоря (ротора). У двигателя <var>M</var> ∝ <var>I</var><sub>дв</sub> при Φ = const.</p>'
+      },
+      k: {
+        title: 'k',
+        html: '<p>Конструктивный коэффициент: <var>k</var> = <var>p</var><var>N</var> / (2π<var>a</var>). Пары полюсов, число проводников, число пар параллельных ветвей.</p>'
+      },
+      c: {
+        title: 'c',
+        html: '<p><var>c</var> = <var>k</var>Φ, когда поток не меняют. Тогда <var>E</var> = <var>c</var>ω и <var>M</var><sub>дв</sub> = <var>c</var><var>I</var><sub>дв</sub>.</p>'
+      },
+      ctrl: {
+        title: 'Управление',
+        html: '<p>Для САУ берут независимое возбуждение. <strong>Якорное</strong>: Φ фиксирован, управляют током ротора — линейные характеристики. Его учебник разбирает дальше.</p><p><strong>Полюсное</strong>: якорь от неуправляемого источника, крутят ток возбуждения — реже.</p>'
+      }
+    };
+    const tabs = ['intro', 'gen', 'mot', 'ctrl'];
+    const showEmDcEqInfo = (key) => {
+      const data = info[key] || info.intro;
+      if (panel) panel.innerHTML = `<h3>${data.title}</h3>${data.html}`;
+      emDcEqSlide.querySelectorAll('.asutp-tab').forEach((btn) => {
+        btn.classList.toggle('active', tabs.indexOf(key) !== -1 && btn.dataset.info === key);
+      });
+      emDcEqSlide.querySelectorAll('.em-dceq-hit').forEach((el) => {
+        el.classList.toggle('is-active', el.dataset.info === key);
+      });
+    };
+    emDcEqSlide.addEventListener('click', (e) => {
+      const tab = e.target.closest('.asutp-tab');
+      const hit = e.target.closest('.em-dceq-hit');
+      if (tab && tab.dataset.info) {
+        e.stopPropagation();
+        showEmDcEqInfo(tab.dataset.info);
+        return;
+      }
+      if (hit && hit.dataset.info) {
+        e.stopPropagation();
+        showEmDcEqInfo(hit.dataset.info);
+      }
+    });
+    showEmDcEqInfo('intro');
+  }
+
   /* ===== Lecture 5: breaker purpose ===== */
   const cbPurposeSlide = document.querySelector('.slide-cb-purpose-interactive');
   if (cbPurposeSlide) {
@@ -6021,7 +6970,7 @@
       },
       arc: {
         title: 'Дуга',
-        html: '<p>Камера над контактами — как в лекции 5: щель, решётка, дутьё. Без гашения дуги автомат не имеет коммутационной способности Icu.</p>'
+        html: '<p>Камера над контактами — как в лекции 4: щель, решётка, дутьё. Без гашения дуги автомат не имеет коммутационной способности Icu.</p>'
       },
       handle: { title: 'Рукоятка', html: '<p>Взводит механизм и показывает состояние: вверх — включён, вниз — отключён, среднее — сработал расцепитель (нужно сбросить).</p>' },
       latch: { title: 'Механизм', html: '<p>Защёлка держит контакты замкнутыми. Удар расцепителя срывает её — энергия пружины размыкает цепь.</p>' },

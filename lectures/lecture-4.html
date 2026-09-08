@@ -3,7 +3,7 @@
 <link rel="stylesheet" href="../css/presentation.css"></head><body>
 <div class="deck">
 <section class="slide slide-title active"><span class="tag">Лекция 4</span>
-<h1>Электромагниты постоянного и переменного тока</h1>
+<h1>Электромагниты и гашение электрической дуги</h1>
 <p>Средства автоматизации и управления</p></section>
 
 <section class="slide slide-agenda"><h2>Содержание</h2><div class="slide-body"><ol>
@@ -12,11 +12,13 @@
 <li>Тяговые характеристики</li><li>Срабатывание и отпускание</li>
 <li>Динамика включения</li><li>Динамика выключения</li>
 <li>Ускорение срабатывания</li><li>Замедление срабатывания</li>
-<li>Время отпускания</li><li>Где в САУ</li><li>Трансформаторы</li><li>Нагруженный трансформатор</li>
-<li>Электромашинные устройства</li><li>Классификация машин</li>
-<li>Машины постоянного тока</li><li>Принцип генератора и двигателя</li>
+<li>Время отпускания</li><li>Где в САУ</li>
+<li>Зачем гасить дугу</li><li>Дуга при размыкании</li><li>Как погасить</li>
+<li>Дуга на AC и DC</li><li>Способы гашения</li>
+<li>Дугогасительные камеры</li><li>Магнитное дутьё</li>
+<li>Дугогасительная решётка</li><li>Полупроводники</li>
+<li>Другие способы</li><li>Дуга в САУ</li>
 </ol></div></section>
-
 <section class="slide slide-em-purpose-interactive">
 <h2>Назначение</h2>
 <div class="slide-body asutp-interactive">
@@ -582,42 +584,101 @@
 <h2>Динамика включения</h2>
 <div class="slide-body asutp-interactive">
 <div class="asutp-main">
-<p class="asutp-hint">Двигайте время — ток растёт с τ = L/R, затем якорь идёт и ток проседает</p>
+<p class="asutp-hint">Пока якорь стоит — экспонента тока. На ходе L растёт, ток падает с Iср</p>
+<div class="highlight-box highlight-box-compact em-on-box">
+<div class="em-on-eq em-on-eq-i em-on-hit is-live" data-info="start">
+<p class="cap-eq" aria-label="i равно I уст на 1 минус e в минус t на тау"><span class="char-eq"><var>i</var> = <var>I</var><sub>уст</sub> (1 − e<sup>−t/τ</sup>)</span></p>
+<p class="em-on-eq-cap">трогание, якорь стоит · <var>I</var><sub>уст</sub> = <var>U</var>/<var>R</var> · τ = <var>L</var>/<var>R</var></p>
+</div>
+<div class="em-on-eq em-on-eq-l em-on-hit" data-info="lgap">
+<p class="cap-eq" aria-label="L примерно w квадрат мю нулевое S на дельта, i равно пси на L"><span class="char-eq"><var>L</var> ≈ </span><span class="char-frac"><span class="char-frac-part"><var>w</var><sup>2</sup> μ<sub>0</sub> <var>S</var></span><span class="char-frac-bar"></span><span class="char-frac-part">δ</span></span><span class="char-eq"> · <var>i</var> = ψ / <var>L</var></span></p>
+<p class="em-on-eq-cap">ход: δ↓ → <var>R</var><sub>м</sub>↓ → <var>L</var>↑ → ток падает с <var>I</var><sub>ср</sub></p>
+</div>
+</div>
 <div class="asutp-diagram-wrap">
-<svg class="em-svg" viewBox="0 0 500 216" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="Динамика включения">
-<rect width="500" height="216" fill="#fafafa"/>
-<rect class="em-on-z1" x="56" y="36" width="120" height="152" fill="#dbeafe" opacity="0.35"/>
-<rect class="em-on-z2" x="176" y="36" width="80" height="152" fill="#fef3c7" opacity="0.45"/>
-<rect class="em-on-z3" x="256" y="36" width="188" height="152" fill="#dcfce7" opacity="0.35"/>
-<text x="116" y="52" text-anchor="middle" font-size="11" fill="#2563eb">трогание</text>
-<text x="216" y="52" text-anchor="middle" font-size="11" fill="#b45309">ход</text>
-<text x="350" y="52" text-anchor="middle" font-size="11" fill="#15803d">удержание</text>
-<line x1="56" y1="188" x2="460" y2="188" stroke="#1e293b" stroke-width="1.4"/>
-<line x1="56" y1="188" x2="56" y2="28" stroke="#1e293b" stroke-width="1.4"/>
-<text x="468" y="208" font-size="12" fill="#475569">t</text>
-<text x="18" y="22" font-size="13" fill="#475569">i</text>
-<path class="em-on-curve" d="" fill="none" stroke="#1e40af" stroke-width="2.2"/>
-<circle class="em-on-point" cx="100" cy="140" r="5" fill="#2563eb" stroke="#fff" stroke-width="1.5"/>
-<text class="em-on-readout" x="250" y="18" text-anchor="middle" font-size="12" font-weight="700" fill="#1e40af">якорь стоит · i растёт</text>
+<svg class="em-svg em-on-svg" viewBox="0 0 520 220" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="Осциллограмма тока включения">
+<defs>
+<marker id="emOnArr" markerWidth="8" markerHeight="7" refX="7" refY="3.5" orient="auto"><path d="M0 0 L8 3.5 L0 7 Z" fill="#1e293b"/></marker>
+<marker id="emOnArrDip" markerWidth="8" markerHeight="7" refX="7" refY="3.5" orient="auto"><path d="M0 0 L8 3.5 L0 7 Z" fill="#c2410c"/></marker>
+</defs>
+<rect width="520" height="220" fill="#fafafa"/>
+<g class="em-on-mech" pointer-events="none">
+<rect x="18" y="128" width="112" height="18" fill="#cbd5e1" stroke="#1e293b" stroke-width="1.4"/>
+<rect x="18" y="78" width="22" height="50" fill="#cbd5e1" stroke="#1e293b" stroke-width="1.4"/>
+<rect x="108" y="78" width="22" height="50" fill="#cbd5e1" stroke="#1e293b" stroke-width="1.4"/>
+<rect class="em-on-coil" x="6" y="92" width="46" height="32" rx="6" fill="#fef3c7" stroke="#b45309" stroke-width="1.3"/>
+<line x1="12" y1="102" x2="44" y2="102" stroke="#d97706" stroke-width="1"/>
+<line x1="12" y1="112" x2="44" y2="112" stroke="#d97706" stroke-width="1"/>
+<rect x="20" y="92" width="18" height="32" fill="#cbd5e1" stroke="#1e293b" stroke-width="1.2"/>
+<g class="em-on-arm" transform="rotate(14 120 70)">
+<rect x="14" y="62" width="110" height="12" rx="2" fill="#e2e8f0" stroke="#1e293b" stroke-width="1.4"/>
+</g>
+<circle cx="120" cy="70" r="5" fill="#fff" stroke="#1e293b" stroke-width="1.3"/>
+<text class="em-on-ilabel" x="28" y="86" text-anchor="middle" font-size="12" font-weight="700" fill="#b45309" opacity="0.2">I</text>
+<text class="em-on-gap" x="64" y="76" text-anchor="middle" font-size="13" font-weight="700" fill="#b45309">δ</text>
+</g>
+<g class="em-on-hit" data-info="start" style="cursor:pointer">
+<rect class="em-on-z1" x="168" y="22" width="104" height="148" fill="#dbeafe" opacity="0.4"/>
+<text x="220" y="40" text-anchor="middle" font-size="13" font-weight="700" fill="#1d4ed8">трогание</text>
+<text x="220" y="54" text-anchor="middle" font-size="11" fill="#2563eb">tтр</text>
+</g>
+<g class="em-on-hit" data-info="move" style="cursor:pointer">
+<rect class="em-on-z2" x="272" y="22" width="84" height="148" fill="#fef3c7" opacity="0.5"/>
+<text x="314" y="40" text-anchor="middle" font-size="13" font-weight="700" fill="#b45309">ход</text>
+<text x="314" y="54" text-anchor="middle" font-size="11" fill="#b45309">tдв</text>
+</g>
+<g class="em-on-hit" data-info="hold" style="cursor:pointer">
+<rect class="em-on-z3" x="356" y="22" width="136" height="148" fill="#dcfce7" opacity="0.4"/>
+<text x="424" y="40" text-anchor="middle" font-size="13" font-weight="700" fill="#15803d">удержание</text>
+</g>
+<line x1="168" y1="170" x2="500" y2="170" stroke="#1e293b" stroke-width="1.4" marker-end="url(#emOnArr)"/>
+<line x1="168" y1="170" x2="168" y2="16" stroke="#1e293b" stroke-width="1.4" marker-end="url(#emOnArr)"/>
+<text x="506" y="186" font-size="13" fill="#475569">t</text>
+<text x="148" y="20" font-size="14" font-weight="700" fill="#1e40af">i</text>
+<text x="148" y="36" font-size="11" font-weight="700" fill="#1e40af">Iуст</text>
+<line class="em-on-isr" x1="168" y1="94" x2="492" y2="94" stroke="#94a3b8" stroke-width="1" stroke-dasharray="4 3"/>
+<text class="em-on-isr-lab" x="176" y="90" font-size="12" font-weight="700" fill="#1e40af">Iср</text>
+<path class="em-on-idle" d="" fill="none" stroke="#94a3b8" stroke-width="1.7" stroke-dasharray="6 4"/>
+<path class="em-on-curve" d="" fill="none" stroke="#1e40af" stroke-width="2.3"/>
+<g class="em-on-dip" pointer-events="none">
+<line x1="314" y1="72" x2="314" y2="112" stroke="#c2410c" stroke-width="1.8" marker-end="url(#emOnArrDip)"/>
+<text x="318" y="126" font-size="12" font-weight="700" fill="#c2410c">L↑ → i↓</text>
+</g>
+<circle class="em-on-point" cx="200" cy="140" r="5.5" fill="#2563eb" stroke="#fff" stroke-width="1.5"/>
+<text class="em-on-idle-lab" x="400" y="52" font-size="11" fill="#64748b">если якорь стоит</text>
+<line x1="272" y1="170" x2="272" y2="178" stroke="#1e293b" stroke-width="1.3"/>
+<line x1="356" y1="170" x2="356" y2="178" stroke="#1e293b" stroke-width="1.3"/>
+<line x1="168" y1="196" x2="356" y2="196" stroke="#1e40af" stroke-width="1.5"/>
+<line x1="168" y1="190" x2="168" y2="202" stroke="#1e40af" stroke-width="1.5"/>
+<line x1="356" y1="190" x2="356" y2="202" stroke="#1e40af" stroke-width="1.5"/>
+<text x="262" y="214" text-anchor="middle" font-size="13" font-weight="700" fill="#1e40af">tср = tтр + tдв</text>
 </svg>
 </div>
+<dl class="char-formula-legend em-on-legend">
+<div class="em-on-hit" data-info="start"><dt>i(t)</dt><dd>экспонента, якорь стоит</dd></div>
+<div class="em-on-hit" data-info="move"><dt>провал</dt><dd>ход, L↑ i↓</dd></div>
+<div class="em-on-hit" data-info="lgap"><dt>L(δ)</dt><dd>δ↓ → Rм↓ → L↑</dd></div>
+<div class="em-on-hit" data-info="tau"><dt>τ</dt><dd>L / R</dd></div>
+</dl>
 <div class="asutp-tabs">
-<button type="button" class="asutp-tab active" data-info="intro">Обзор</button>
-<button type="button" class="asutp-tab" data-info="tau">Постоянная τ</button>
-<button type="button" class="asutp-tab" data-info="dip">Провал тока</button>
+<button type="button" class="asutp-tab" data-info="intro">Обзор</button>
+<button type="button" class="asutp-tab active" data-info="start">Трогание</button>
+<button type="button" class="asutp-tab" data-info="move">Ход</button>
+<button type="button" class="asutp-tab" data-info="lgap">Почему L↑</button>
 </div>
-<div class="em-controls">
+<div class="em-controls em-on-live-bar">
 <label class="em-ctrl">
 <span>время t</span>
-<input type="range" class="em-on-range" min="0" max="100" value="20" aria-label="Время">
-<span class="em-on-val">трогание</span>
+<input type="range" class="em-on-range" min="0" max="100" value="18" aria-label="Время включения">
+<span class="em-on-val">tтр</span>
 </label>
+<span class="em-on-phase">якорь стоит · i растёт к Iср</span>
 </div>
 </div>
 <aside class="asutp-panel" id="emOnPanel">
-<h3>Обзор</h3>
-<p>Катушка — индуктивность. После подачи <var>U</var> ток не скачет: <var>i</var> = <var>I</var>(1 − e<sup>−t/τ</sup>), τ = <var>L</var>/<var>R</var>.</p>
-<p>Когда <var>F</var><sub>т</sub> превысит <var>F</var><sub>п</sub>, якорь идёт. Пока он движется, <var>L</var> растёт — ток <strong>проседает</strong>, затем доходит до <var>U</var>/<var>R</var>.</p>
+<h3>Рост тока</h3>
+<p>Якорь стоит, <var>L</var> постоянна. <var>i</var> = <var>I</var><sub>уст</sub>(1 − e<sup>−t/τ</sup>), где <var>I</var><sub>уст</sub> = <var>U</var>/<var>R</var>, τ = <var>L</var>/<var>R</var>.</p>
+<p>Когда <var>i</var> = <var>I</var><sub>ср</sub>, сила больше пружины — якорь срывается.</p>
 </aside>
 </div>
 </section>
@@ -653,7 +714,7 @@
 <div class="asutp-tabs">
 <button type="button" class="asutp-tab active" data-info="diode">С диодом</button>
 <button type="button" class="asutp-tab" data-info="open">Разрыв</button>
-<button type="button" class="asutp-tab" data-info="spike">Перенапряжение</button>
+<button type="button" class="asutp-tab" data-info="spike">TVS</button>
 </div>
 <div class="em-controls">
 <label class="em-ctrl">
@@ -674,18 +735,162 @@
 <h2>Ускорение срабатывания</h2>
 <div class="slide-body asutp-interactive">
 <div class="asutp-main">
-<p class="asutp-hint">Нажмите способ — цель: быстрее набрать Iср</p>
+<p class="asutp-hint">Форсировка — два кадра: ключ обходит Rэк, после Iср открывается. Двигайте t</p>
+<div class="highlight-box highlight-box-compact em-fast-box">
+<p class="cap-eq" aria-label="t тр примерно минус тау ln от 1 минус I ср на I уст"><span class="char-eq"><var>t</var><sub>тр</sub> ≈ −τ ln(1 − <var>I</var><sub>ср</sub> / <var>I</var><sub>уст</sub>)</span></p>
+<p class="em-math-eq-note">τ = <var>L</var>/<var>R</var> · <var>I</var><sub>уст</sub> = <var>U</var>/<var>R</var> · больше <var>U</var> или меньше τ → <var>I</var><sub>ср</sub> раньше</p>
+</div>
+<div class="asutp-diagram-wrap">
+<svg class="em-svg em-fast-svg" viewBox="0 0 560 228" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="Схема и ток при форсировке">
+<defs>
+<marker id="emFastArr" markerWidth="8" markerHeight="7" refX="7" refY="3.5" orient="auto"><path d="M0 0 L8 3.5 L0 7 Z" fill="#1e293b"/></marker>
+</defs>
+<rect width="560" height="228" fill="#fafafa"/>
+<g class="em-fast-sch em-fast-sch-force is-on">
+<text class="em-fast-kad-title" x="12" y="18" font-size="13" font-weight="700" fill="#c2410c">кадр 1</text>
+<text class="em-fast-kad-a" x="12" y="34" font-size="11" fill="#64748b">ключ замкнут</text>
+<text class="em-fast-kad-b" x="12" y="48" font-size="11" fill="#64748b">Rэк обойден</text>
+<g class="em-fast-arm" data-pivot="142 80" transform="rotate(-8 142 80)">
+<rect x="36" y="74" width="110" height="11" rx="2" fill="#e2e8f0" stroke="#1e293b" stroke-width="1.3"/>
+</g>
+<circle cx="142" cy="80" r="4.5" fill="#fff" stroke="#1e293b" stroke-width="1.2"/>
+<rect x="40" y="90" width="20" height="42" fill="#cbd5e1" stroke="#1e293b" stroke-width="1.3"/>
+<rect x="132" y="90" width="20" height="42" fill="#cbd5e1" stroke="#1e293b" stroke-width="1.3"/>
+<rect x="40" y="132" width="112" height="14" fill="#cbd5e1" stroke="#1e293b" stroke-width="1.3"/>
+<rect class="em-fast-coil" x="26" y="100" width="48" height="28" rx="5" fill="#fef3c7" stroke="#b45309" stroke-width="1.3"/>
+<line x1="32" y1="110" x2="68" y2="110" stroke="#d97706" stroke-width="1"/>
+<line x1="32" y1="118" x2="68" y2="118" stroke="#d97706" stroke-width="1"/>
+<rect x="42" y="100" width="16" height="28" fill="#cbd5e1" stroke="#1e293b" stroke-width="1.2"/>
+<rect x="6" y="104" width="22" height="16" rx="3" fill="#dbeafe" stroke="#1e40af" stroke-width="1.3"/>
+<text x="17" y="116" text-anchor="middle" font-size="11" font-weight="700" fill="#1e40af">U</text>
+<line x1="28" y1="112" x2="26" y2="112" stroke="#1e40af" stroke-width="1.5"/>
+<line x1="50" y1="128" x2="50" y2="156" stroke="#1e293b" stroke-width="1.4"/>
+<rect class="em-fast-rbox" x="32" y="156" width="36" height="20" rx="4" fill="#fff" stroke="#64748b" stroke-width="1.3"/>
+<text x="50" y="170" text-anchor="middle" font-size="11" font-weight="700" fill="#475569">Rэк</text>
+<line x1="50" y1="176" x2="50" y2="190" stroke="#1e293b" stroke-width="1.3"/>
+<line x1="40" y1="190" x2="60" y2="190" stroke="#1e293b" stroke-width="1.3"/>
+<line x1="43" y1="194" x2="57" y2="194" stroke="#1e293b" stroke-width="1.3"/>
+<g class="em-fast-sw em-fast-sw-on is-on">
+<line x1="68" y1="158" x2="98" y2="158" stroke="#ea580c" stroke-width="1.6"/>
+<line x1="68" y1="174" x2="98" y2="174" stroke="#ea580c" stroke-width="1.6"/>
+<line x1="98" y1="158" x2="98" y2="174" stroke="#ea580c" stroke-width="2.4"/>
+<circle cx="98" cy="158" r="3" fill="#ea580c"/>
+<circle cx="98" cy="174" r="3" fill="#ea580c"/>
+<text x="108" y="169" font-size="10" font-weight="700" fill="#ea580c">ключ</text>
+<text class="em-fast-kad-c" x="12" y="216" font-size="11" fill="#ea580c">полный U на L</text>
+</g>
+<g class="em-fast-sw em-fast-sw-off" display="none">
+<line x1="68" y1="158" x2="98" y2="158" stroke="#94a3b8" stroke-width="1.4"/>
+<line x1="68" y1="174" x2="98" y2="174" stroke="#94a3b8" stroke-width="1.4"/>
+<line x1="98" y1="158" x2="116" y2="170" stroke="#1e293b" stroke-width="2.2"/>
+<circle cx="98" cy="158" r="3" fill="#1e293b"/>
+<circle cx="98" cy="174" r="2.8" fill="#94a3b8"/>
+<text x="108" y="190" font-size="10" fill="#64748b">ключ</text>
+<text class="em-fast-kad-c" x="12" y="216" font-size="11" fill="#1e40af">ток удержания</text>
+</g>
+</g>
+<g class="em-fast-sch em-fast-sch-two" display="none">
+<g class="em-fast-arm" data-pivot="124 66" transform="rotate(-8 124 66)">
+<rect x="28" y="60" width="100" height="11" rx="2" fill="#e2e8f0" stroke="#1e293b" stroke-width="1.3"/>
+</g>
+<circle cx="124" cy="66" r="4.5" fill="#fff" stroke="#1e293b" stroke-width="1.2"/>
+<rect x="32" y="76" width="16" height="50" fill="#cbd5e1" stroke="#1e293b" stroke-width="1.3"/>
+<rect x="108" y="76" width="16" height="50" fill="#cbd5e1" stroke="#1e293b" stroke-width="1.3"/>
+<rect x="32" y="126" width="92" height="13" fill="#cbd5e1" stroke="#1e293b" stroke-width="1.3"/>
+<rect x="8" y="16" width="24" height="16" rx="3" fill="#dbeafe" stroke="#1e40af" stroke-width="1.3"/>
+<text x="20" y="28" text-anchor="middle" font-size="12" font-weight="700" fill="#1e40af">U</text>
+<line x1="20" y1="32" x2="20" y2="118" stroke="#1e40af" stroke-width="1.4"/>
+<rect class="em-fast-coil-pull" x="16" y="80" width="50" height="26" rx="4" fill="#fef3c7" stroke="#b45309" stroke-width="1.5"/>
+<line x1="22" y1="88" x2="60" y2="88" stroke="#d97706" stroke-width="1.5"/>
+<line x1="22" y1="93" x2="60" y2="93" stroke="#d97706" stroke-width="1.5"/>
+<line x1="22" y1="98" x2="60" y2="98" stroke="#d97706" stroke-width="1.5"/>
+<rect x="34" y="80" width="12" height="26" fill="#cbd5e1" stroke="#1e293b" stroke-width="1.1"/>
+<text x="41" y="74" text-anchor="middle" font-size="11" font-weight="700" fill="#b45309">втяг</text>
+<rect class="em-fast-coil-hold" x="20" y="108" width="42" height="18" rx="3" fill="#dcfce7" stroke="#15803d" stroke-width="1.3"/>
+<line x1="26" y1="114" x2="56" y2="114" stroke="#16a34a" stroke-width="1.1"/>
+<line x1="26" y1="120" x2="56" y2="120" stroke="#16a34a" stroke-width="1.1"/>
+<rect x="34" y="108" width="12" height="18" fill="#cbd5e1" stroke="#1e293b" stroke-width="1.1"/>
+<text x="8" y="154" font-size="11" font-weight="700" fill="#15803d">удерж</text>
+<line x1="20" y1="93" x2="16" y2="93" stroke="#1e40af" stroke-width="1.4"/>
+<line x1="20" y1="117" x2="20" y2="117" stroke="#15803d" stroke-width="1.3"/>
+<line x1="66" y1="93" x2="96" y2="93" stroke="#b45309" stroke-width="1.4"/>
+<line x1="96" y1="93" x2="96" y2="152" stroke="#b45309" stroke-width="1.4"/>
+<line x1="96" y1="152" x2="150" y2="152" stroke="#b45309" stroke-width="1.4"/>
+<line x1="62" y1="117" x2="62" y2="168" stroke="#15803d" stroke-width="1.3"/>
+<line x1="62" y1="168" x2="44" y2="168" stroke="#1e293b" stroke-width="1.3"/>
+<g class="em-fast-bk-on">
+<line x1="150" y1="152" x2="150" y2="168" stroke="#ea580c" stroke-width="2.3"/>
+<circle cx="150" cy="152" r="3" fill="#ea580c"/>
+<circle cx="150" cy="168" r="3" fill="#ea580c"/>
+<text x="158" y="164" font-size="10" font-weight="700" fill="#ea580c">бк</text>
+<text class="em-fast-two-note" x="12" y="216" font-size="11" fill="#b45309">бк замкнут · втяг в цепи</text>
+</g>
+<g class="em-fast-bk-off" display="none">
+<line x1="150" y1="152" x2="168" y2="162" stroke="#1e293b" stroke-width="2.2"/>
+<circle cx="150" cy="152" r="3" fill="#1e293b"/>
+<circle cx="150" cy="168" r="2.8" fill="#94a3b8"/>
+<line x1="150" y1="168" x2="62" y2="168" stroke="#94a3b8" stroke-width="1.3"/>
+<text x="158" y="164" font-size="10" font-weight="700" fill="#64748b">бк</text>
+<text class="em-fast-two-note" x="12" y="216" font-size="11" fill="#15803d">бк разомкнут · только удерж</text>
+</g>
+<line x1="44" y1="139" x2="44" y2="168" stroke="#1e293b" stroke-width="1.3"/>
+<line x1="44" y1="168" x2="44" y2="186" stroke="#1e293b" stroke-width="1.3"/>
+<line x1="34" y1="186" x2="54" y2="186" stroke="#1e293b" stroke-width="1.3"/>
+<line x1="37" y1="190" x2="51" y2="190" stroke="#1e293b" stroke-width="1.3"/>
+</g>
+<g class="em-fast-sch em-fast-sch-u" display="none">
+<rect x="22" y="72" width="56" height="36" rx="4" fill="#fee2e2" stroke="#b91c1c" stroke-width="1.3"/>
+<text x="50" y="95" text-anchor="middle" font-size="16" font-weight="700" fill="#b91c1c">U↑</text>
+<rect x="22" y="128" width="56" height="28" rx="4" fill="#fef3c7" stroke="#b45309" stroke-width="1.3"/>
+<text x="50" y="147" text-anchor="middle" font-size="13" font-weight="700" fill="#b45309">L</text>
+<line x1="50" y1="108" x2="50" y2="128" stroke="#1e293b" stroke-width="1.3"/>
+<text x="22" y="180" font-size="11" fill="#64748b">Iуст выше</text>
+<text x="22" y="196" font-size="11" fill="#b91c1c">держать нельзя</text>
+</g>
+<g class="em-fast-sch em-fast-sch-cap" display="none">
+<rect x="22" y="72" width="56" height="36" rx="4" fill="#ede9fe" stroke="#6d28d9" stroke-width="1.3"/>
+<text x="50" y="95" text-anchor="middle" font-size="16" font-weight="700" fill="#6d28d9">C</text>
+<rect x="22" y="128" width="56" height="28" rx="4" fill="#fef3c7" stroke="#b45309" stroke-width="1.3"/>
+<text x="50" y="147" text-anchor="middle" font-size="13" font-weight="700" fill="#b45309">L</text>
+<line x1="50" y1="108" x2="50" y2="128" stroke="#1e293b" stroke-width="1.3"/>
+<text x="22" y="180" font-size="11" fill="#64748b">разряд на катушку</text>
+<text x="22" y="196" font-size="11" fill="#64748b">импульс I &gt; Iуст</text>
+</g>
+<line x1="200" y1="176" x2="544" y2="176" stroke="#1e293b" stroke-width="1.4" marker-end="url(#emFastArr)"/>
+<line x1="200" y1="176" x2="200" y2="28" stroke="#1e293b" stroke-width="1.4" marker-end="url(#emFastArr)"/>
+<text x="548" y="192" font-size="13" fill="#475569">t</text>
+<text x="184" y="32" font-size="14" font-weight="700" fill="#1e40af">i</text>
+<line class="em-fast-isr" x1="200" y1="100" x2="528" y2="100" stroke="#94a3b8" stroke-width="1" stroke-dasharray="4 3"/>
+<text class="em-fast-isr-lab" x="208" y="96" font-size="12" font-weight="700" fill="#1e40af">Iср</text>
+<path class="em-fast-idle" d="" fill="none" stroke="#94a3b8" stroke-width="1.7" stroke-dasharray="6 4"/>
+<path class="em-fast-curve" d="" fill="none" stroke="#1e40af" stroke-width="2.3"/>
+<line class="em-fast-t0" x1="360" y1="176" x2="360" y2="184" stroke="#94a3b8" stroke-width="1.3"/>
+<line class="em-fast-t1" x1="280" y1="176" x2="280" y2="184" stroke="#1e40af" stroke-width="1.3"/>
+<text class="em-fast-t0-lab" x="360" y="204" text-anchor="middle" font-size="11" fill="#64748b">tтр без</text>
+<text class="em-fast-t1-lab" x="280" y="204" text-anchor="middle" font-size="11" fill="#1e40af">tтр</text>
+<circle class="em-fast-point" cx="240" cy="140" r="5.5" fill="#2563eb" stroke="#fff" stroke-width="1.5"/>
+<text class="em-fast-idle-lab" x="430" y="48" font-size="11" fill="#64748b">без форсировки</text>
+<text class="em-fast-readout" x="372" y="20" text-anchor="middle" font-size="12" font-weight="700" fill="#1e40af">кадр 1 · ключ замкнут, полный U</text>
+</svg>
+</div>
 <div class="app-purpose-grid em-fast-grid">
 <button type="button" class="app-purpose-card active" data-info="force">Форсировка</button>
 <button type="button" class="app-purpose-card" data-info="two">Две обмотки</button>
 <button type="button" class="app-purpose-card" data-info="u">Повысить U</button>
 <button type="button" class="app-purpose-card" data-info="cap">Ёмкость</button>
 </div>
+<div class="em-controls em-fast-live-bar">
+<label class="em-ctrl">
+<span>время t</span>
+<input type="range" class="em-fast-range" min="0" max="100" value="10" aria-label="Время набора тока">
+<span class="em-fast-val">tтр</span>
+</label>
+</div>
 </div>
 <aside class="asutp-panel" id="emFastPanel">
 <h3>Форсировка</h3>
-<p>На время втягивания на катушку дают полное напряжение. После притяжения вводят <strong>экономический резистор</strong>: ток падает до тока удержания.</p>
-<p>τ = L/R: больше R и U — ток Iср набирается быстрее, в установившемся режиме катушка не перегревается.</p>
+<p><strong>Кадр 1.</strong> Ключ замкнут — <var>R</var><sub>эк</sub> обойден, на катушке полное <var>U</var>, ток быстро доходит до <var>I</var><sub>ср</sub>.</p>
+<p><strong>Кадр 2.</strong> Якорь сел, ключ разомкнулся: <var>R</var><sub>эк</sub> в цепи, ток падает до удержания. Катушка не перегревается.</p>
 </aside>
 </div>
 </section>
@@ -694,12 +899,87 @@
 <h2>Замедление срабатывания</h2>
 <div class="slide-body asutp-interactive">
 <div class="asutp-main">
-<p class="asutp-hint">Нажмите способ — якорь не должен срываться сразу</p>
-<div class="app-purpose-grid em-fast-grid">
+<p class="asutp-hint">Пунктир — обычный набор. Сплошная — выбранный способ: Iср позже или не достигается</p>
+<div class="highlight-box highlight-box-compact em-slow-box">
+<p class="cap-eq" aria-label="t тр примерно минус тау ln от 1 минус I ср на I уст"><span class="char-eq"><var>t</var><sub>тр</sub> ≈ −τ ln(1 − <var>I</var><sub>ср</sub> / <var>I</var><sub>уст</sub>)</span></p>
+<p class="em-math-eq-note">больше τ или <var>I</var><sub>уст</sub> ближе к <var>I</var><sub>ср</sub> → якорь позже. Если <var>I</var><sub>уст</sub> &lt; <var>I</var><sub>ср</sub> — не втянется</p>
+</div>
+<div class="asutp-diagram-wrap">
+<svg class="em-svg em-slow-svg" viewBox="0 0 520 210" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="Замедление набора Iср">
+<defs>
+<marker id="emSlowArr" markerWidth="8" markerHeight="7" refX="7" refY="3.5" orient="auto"><path d="M0 0 L8 3.5 L0 7 Z" fill="#1e293b"/></marker>
+</defs>
+<rect width="520" height="210" fill="#fafafa"/>
+<g class="em-slow-sch em-slow-sch-sleeve is-on">
+<rect x="18" y="128" width="100" height="16" fill="#cbd5e1" stroke="#1e293b" stroke-width="1.3"/>
+<rect x="18" y="86" width="18" height="42" fill="#cbd5e1" stroke="#1e293b" stroke-width="1.3"/>
+<rect x="100" y="86" width="18" height="42" fill="#cbd5e1" stroke="#1e293b" stroke-width="1.3"/>
+<rect x="14" y="98" width="26" height="24" rx="3" fill="#fbbf24" stroke="#b45309" stroke-width="1.3"/>
+<text x="70" y="78" text-anchor="middle" font-size="12" font-weight="700" fill="#b45309">гильза</text>
+<text x="70" y="164" text-anchor="middle" font-size="11" fill="#64748b">вихревые токи</text>
+<text x="70" y="178" font-size="11" text-anchor="middle" fill="#64748b">Φ нарастает позже</text>
+</g>
+<g class="em-slow-sch em-slow-sch-short">
+<rect x="18" y="128" width="100" height="16" fill="#cbd5e1" stroke="#1e293b" stroke-width="1.3"/>
+<rect x="18" y="86" width="18" height="42" fill="#cbd5e1" stroke="#1e293b" stroke-width="1.3"/>
+<rect x="100" y="86" width="18" height="42" fill="#cbd5e1" stroke="#1e293b" stroke-width="1.3"/>
+<rect x="14" y="108" width="26" height="10" fill="none" stroke="#b45309" stroke-width="2.2"/>
+<text x="70" y="78" text-anchor="middle" font-size="12" font-weight="700" fill="#b45309">к.з. виток</text>
+<text x="70" y="164" text-anchor="middle" font-size="11" fill="#64748b">демпфер, не экран AC</text>
+</g>
+<g class="em-slow-sch em-slow-sch-rc">
+<rect x="22" y="56" width="56" height="28" rx="4" fill="#ede9fe" stroke="#6d28d9" stroke-width="1.3"/>
+<text x="50" y="75" text-anchor="middle" font-size="13" font-weight="700" fill="#6d28d9">C</text>
+<rect x="22" y="100" width="56" height="28" rx="4" fill="#fff" stroke="#1e40af" stroke-width="1.3"/>
+<text x="50" y="119" text-anchor="middle" font-size="13" font-weight="700" fill="#1e40af">R</text>
+<rect x="22" y="144" width="56" height="28" rx="4" fill="#fef3c7" stroke="#b45309" stroke-width="1.3"/>
+<text x="50" y="163" text-anchor="middle" font-size="13" font-weight="700" fill="#b45309">L</text>
+<line x1="50" y1="84" x2="50" y2="100" stroke="#1e293b" stroke-width="1.3"/>
+<line x1="50" y1="128" x2="50" y2="144" stroke="#1e293b" stroke-width="1.3"/>
+<text x="86" y="74" font-size="11" fill="#64748b">U нарастает</text>
+<text x="86" y="118" font-size="11" fill="#64748b">постоянная RC</text>
+</g>
+<g class="em-slow-sch em-slow-sch-r">
+<rect x="22" y="72" width="56" height="32" rx="4" fill="#dbeafe" stroke="#1e40af" stroke-width="1.3"/>
+<text x="50" y="93" text-anchor="middle" font-size="13" font-weight="700" fill="#1e40af">U</text>
+<rect x="22" y="118" width="56" height="28" rx="4" fill="#fff" stroke="#64748b" stroke-width="1.3"/>
+<text x="50" y="137" text-anchor="middle" font-size="13" font-weight="700" fill="#475569">R</text>
+<rect x="22" y="158" width="56" height="24" rx="4" fill="#fef3c7" stroke="#b45309" stroke-width="1.3"/>
+<text x="50" y="175" text-anchor="middle" font-size="12" font-weight="700" fill="#b45309">L</text>
+<line x1="50" y1="104" x2="50" y2="118" stroke="#1e293b" stroke-width="1.3"/>
+<line x1="50" y1="146" x2="50" y2="158" stroke="#1e293b" stroke-width="1.3"/>
+<text x="86" y="92" font-size="11" fill="#64748b">Iуст = U/(R+r)</text>
+<text x="86" y="136" font-size="11" fill="#b91c1c">может быть &lt; Iср</text>
+</g>
+<line x1="168" y1="168" x2="500" y2="168" stroke="#1e293b" stroke-width="1.4" marker-end="url(#emSlowArr)"/>
+<line x1="168" y1="168" x2="168" y2="20" stroke="#1e293b" stroke-width="1.4" marker-end="url(#emSlowArr)"/>
+<text x="506" y="184" font-size="13" fill="#475569">t</text>
+<text x="152" y="22" font-size="14" font-weight="700" fill="#1e40af">i</text>
+<line class="em-slow-isr" x1="168" y1="96" x2="492" y2="96" stroke="#94a3b8" stroke-width="1" stroke-dasharray="4 3"/>
+<text class="em-slow-isr-lab" x="176" y="92" font-size="12" font-weight="700" fill="#1e40af">Iср</text>
+<path class="em-slow-idle" d="" fill="none" stroke="#94a3b8" stroke-width="1.7" stroke-dasharray="6 4"/>
+<path class="em-slow-curve" d="" fill="none" stroke="#1e40af" stroke-width="2.3"/>
+<line class="em-slow-t0" x1="220" y1="168" x2="220" y2="176" stroke="#94a3b8" stroke-width="1.3"/>
+<line class="em-slow-t1" x1="320" y1="168" x2="320" y2="176" stroke="#1e40af" stroke-width="1.3"/>
+<text class="em-slow-t0-lab" x="220" y="192" text-anchor="middle" font-size="11" fill="#64748b">tтр без</text>
+<text class="em-slow-t1-lab" x="320" y="192" text-anchor="middle" font-size="11" fill="#1e40af">tтр</text>
+<circle class="em-slow-point" cx="200" cy="140" r="5.5" fill="#2563eb" stroke="#fff" stroke-width="1.5"/>
+<text class="em-slow-idle-lab" x="400" y="48" font-size="11" fill="#64748b">без замедления</text>
+<text class="em-slow-readout" x="336" y="16" text-anchor="middle" font-size="12" font-weight="700" fill="#1e40af">гильза · Φ запаздывает</text>
+</svg>
+</div>
+<div class="app-purpose-grid em-slow-grid">
 <button type="button" class="app-purpose-card active" data-info="sleeve">Гильза</button>
 <button type="button" class="app-purpose-card" data-info="short">Замкнутый виток</button>
 <button type="button" class="app-purpose-card" data-info="rc">RC-цепь</button>
 <button type="button" class="app-purpose-card" data-info="r">Последовательный R</button>
+</div>
+<div class="em-controls em-slow-live-bar">
+<label class="em-ctrl">
+<span>время t</span>
+<input type="range" class="em-slow-range" min="0" max="100" value="28" aria-label="Время набора тока">
+<span class="em-slow-val">к Iср</span>
+</label>
 </div>
 </div>
 <aside class="asutp-panel" id="emSlowPanel">
@@ -714,17 +994,89 @@
 <h2>Уменьшение времени отпускания</h2>
 <div class="slide-body asutp-interactive">
 <div class="asutp-main">
-<p class="asutp-hint">Нажмите способ — якорь должен отпасть сразу после снятия U</p>
-<div class="app-purpose-grid em-fast-grid">
+<p class="asutp-hint">Пунктир — обычный диод, ток «висит». Сплошная — выбранный способ: Iотп раньше</p>
+<div class="highlight-box highlight-box-compact em-drop-box">
+<p class="cap-eq" aria-label="t отп примерно минус тау ln от I отп на I нулевое"><span class="char-eq"><var>t</var><sub>отп</sub> ≈ −τ ln(<var>I</var><sub>отп</sub> / <var>I</var><sub>0</sub>)</span></p>
+<p class="em-math-eq-note"><var>i</var> = <var>I</var><sub>0</sub> e<sup>−t/τ</sup> · меньше τ или <var>I</var><sub>0</sub> ближе к <var>I</var><sub>отп</sub> → якорь отпадает раньше</p>
+</div>
+<div class="asutp-diagram-wrap">
+<svg class="em-svg em-drop-svg" viewBox="0 0 520 210" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="Спад тока и время отпускания">
+<defs>
+<marker id="emDropArr" markerWidth="8" markerHeight="7" refX="7" refY="3.5" orient="auto"><path d="M0 0 L8 3.5 L0 7 Z" fill="#1e293b"/></marker>
+</defs>
+<rect width="520" height="210" fill="#fafafa"/>
+<g class="em-drop-sch em-drop-sch-tvs is-on">
+<rect x="22" y="72" width="56" height="32" rx="4" fill="#fef3c7" stroke="#b45309" stroke-width="1.3"/>
+<text x="50" y="93" text-anchor="middle" font-size="13" font-weight="700" fill="#b45309">L</text>
+<rect x="22" y="124" width="56" height="32" rx="4" fill="#ede9fe" stroke="#6d28d9" stroke-width="1.3"/>
+<text x="50" y="145" text-anchor="middle" font-size="13" font-weight="700" fill="#6d28d9">TVS</text>
+<line x1="50" y1="104" x2="50" y2="124" stroke="#1e293b" stroke-width="1.3"/>
+<text x="86" y="92" font-size="11" fill="#64748b">катушка</text>
+<text x="86" y="138" font-size="11" fill="#6d28d9">супрессор</text>
+<text x="86" y="154" font-size="11" fill="#64748b">обрезает выброс</text>
+</g>
+<g class="em-drop-sch em-drop-sch-res">
+<rect x="22" y="72" width="56" height="32" rx="4" fill="#fef3c7" stroke="#b45309" stroke-width="1.3"/>
+<text x="50" y="93" text-anchor="middle" font-size="13" font-weight="700" fill="#b45309">L</text>
+<rect x="22" y="124" width="56" height="32" rx="4" fill="#fff" stroke="#1e40af" stroke-width="1.3"/>
+<text x="50" y="145" text-anchor="middle" font-size="13" font-weight="700" fill="#1e40af">R</text>
+<line x1="50" y1="104" x2="50" y2="124" stroke="#1e293b" stroke-width="1.3"/>
+<text x="86" y="92" font-size="11" fill="#64748b">параллельно</text>
+<text x="86" y="144" font-size="11" fill="#64748b">τ = L / (R+r)</text>
+</g>
+<g class="em-drop-sch em-drop-sch-pin">
+<rect x="18" y="128" width="96" height="16" fill="#cbd5e1" stroke="#1e293b" stroke-width="1.3"/>
+<rect x="18" y="86" width="18" height="42" fill="#cbd5e1" stroke="#1e293b" stroke-width="1.3"/>
+<rect x="96" y="86" width="18" height="42" fill="#cbd5e1" stroke="#1e293b" stroke-width="1.3"/>
+<rect x="22" y="70" width="88" height="12" rx="2" fill="#e2e8f0" stroke="#1e293b" stroke-width="1.3"/>
+<line x1="40" y1="82" x2="40" y2="86" stroke="#b45309" stroke-width="2"/>
+<text x="70" y="64" text-anchor="middle" font-size="12" font-weight="700" fill="#b45309">δ ост.</text>
+<text x="70" y="168" text-anchor="middle" font-size="11" fill="#64748b">прокладка в полюсе</text>
+</g>
+<g class="em-drop-sch em-drop-sch-hold">
+<rect x="22" y="72" width="56" height="32" rx="4" fill="#dbeafe" stroke="#1e40af" stroke-width="1.3"/>
+<text x="50" y="93" text-anchor="middle" font-size="12" font-weight="700" fill="#1e40af">Iуд</text>
+<rect x="22" y="124" width="56" height="32" rx="4" fill="#fff" stroke="#64748b" stroke-width="1.3"/>
+<text x="50" y="145" text-anchor="middle" font-size="12" font-weight="700" fill="#475569">Iотп</text>
+<line x1="50" y1="104" x2="50" y2="124" stroke="#1e293b" stroke-width="1.3"/>
+<text x="86" y="92" font-size="11" fill="#64748b">уже близко</text>
+<text x="86" y="144" font-size="11" fill="#64748b">запас мал</text>
+</g>
+<line x1="168" y1="168" x2="500" y2="168" stroke="#1e293b" stroke-width="1.4" marker-end="url(#emDropArr)"/>
+<line x1="168" y1="168" x2="168" y2="20" stroke="#1e293b" stroke-width="1.4" marker-end="url(#emDropArr)"/>
+<text x="506" y="184" font-size="13" fill="#475569">t</text>
+<text x="152" y="22" font-size="14" font-weight="700" fill="#1e40af">i</text>
+<line class="em-drop-ioff" x1="168" y1="140" x2="492" y2="140" stroke="#94a3b8" stroke-width="1" stroke-dasharray="4 3"/>
+<text class="em-drop-ioff-lab" x="176" y="136" font-size="12" font-weight="700" fill="#1e40af">Iотп</text>
+<path class="em-drop-idle" d="" fill="none" stroke="#94a3b8" stroke-width="1.7" stroke-dasharray="6 4"/>
+<path class="em-drop-curve" d="" fill="none" stroke="#1e40af" stroke-width="2.3"/>
+<line class="em-drop-t0" x1="360" y1="168" x2="360" y2="176" stroke="#94a3b8" stroke-width="1.3"/>
+<line class="em-drop-t1" x1="240" y1="168" x2="240" y2="176" stroke="#1e40af" stroke-width="1.3"/>
+<text class="em-drop-t0-lab" x="360" y="192" text-anchor="middle" font-size="11" fill="#64748b">tотп с диодом</text>
+<text class="em-drop-t1-lab" x="240" y="192" text-anchor="middle" font-size="11" fill="#1e40af">tотп</text>
+<circle class="em-drop-point" cx="200" cy="80" r="5.5" fill="#2563eb" stroke="#fff" stroke-width="1.5"/>
+<text class="em-drop-idle-lab" x="390" y="48" font-size="11" fill="#64748b">с диодом</text>
+<text class="em-drop-readout" x="336" y="16" text-anchor="middle" font-size="12" font-weight="700" fill="#1e40af">TVS · спад быстрее диода</text>
+</svg>
+</div>
+<div class="app-purpose-grid em-drop-grid">
 <button type="button" class="app-purpose-card active" data-info="tvs">TVS вместо диода</button>
 <button type="button" class="app-purpose-card" data-info="res">Разрядный R</button>
 <button type="button" class="app-purpose-card" data-info="pin">Прокладка</button>
 <button type="button" class="app-purpose-card" data-info="hold">Ток удержания</button>
 </div>
+<div class="em-controls em-drop-live-bar">
+<label class="em-ctrl">
+<span>время после отключения</span>
+<input type="range" class="em-drop-range" min="0" max="100" value="20" aria-label="Время после отключения">
+<span class="em-drop-val">к Iотп</span>
+</label>
+</div>
 </div>
 <aside class="asutp-panel" id="emDropPanel">
 <h3>TVS вместо диода</h3>
-<p>Обычный диод на выходе ПЛК защищает транзистор, но держит ток. Варистор или TVS обрезает выброс и даёт току стечь <strong>быстрее</strong> — отпускание короче.</p>
+<p><strong>TVS</strong> (Transient Voltage Suppressor) — супрессор, ограничитель импульсных перенапряжений.</p>
+<p>Обычный диод держит ток: τ велика. TVS обрезает выброс, ток стекает быстрее — <var>t</var><sub>отп</sub> короче.</p>
 </aside>
 </div>
 </section>
@@ -744,472 +1096,495 @@
 <aside class="asutp-panel" id="emWherePanel">
 <h3>Выход ПЛК</h3>
 <p>Дискретный выход (релейный или транзисторный) питает катушку реле, пускателя, гидро- или пневмоклапана.</p>
-<p>На DC обязательна защита от выброса: диод, TVS или снаббер — иначе выход ПЛК выбьет.</p>
+<p>На DC обязательна защита от выброса: диод, TVS (супрессор) или снаббер — иначе выход ПЛК выбьет.</p>
 </aside>
 </div>
 </section>
 
-<section class="slide slide-em-xfmr-interactive">
-<h2>Трансформаторы</h2>
+<section class="slide slide-arc-why-interactive">
+<h2>Зачем гасить</h2>
 <div class="slide-body asutp-interactive">
 <div class="asutp-main">
-<p class="asutp-hint">Нажмите вид — тоже сердечник и обмотки, но якоря нет: энергия уходит во вторую обмотку</p>
+<p class="asutp-hint">Якорь уже разобрали — теперь размыкание: дуга у силового, не у датчика</p>
 <div class="asutp-diagram-wrap">
-<svg class="em-svg" viewBox="0 0 520 236" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="Стержневой и броневой трансформаторы">
-<rect width="520" height="236" fill="#fafafa"/>
-<g class="em-xfmr-hit" data-info="rod" style="cursor:pointer">
-<rect x="16" y="16" width="236" height="188" rx="8" fill="#fff" stroke="#e2e8f0" stroke-width="1.2"/>
-<rect x="58" y="40" width="22" height="132" fill="#cbd5e1" stroke="#1e293b" stroke-width="1.5"/>
-<rect x="188" y="40" width="22" height="132" fill="#cbd5e1" stroke="#1e293b" stroke-width="1.5"/>
-<rect x="58" y="40" width="152" height="18" fill="#cbd5e1" stroke="#1e293b" stroke-width="1.5"/>
-<rect x="58" y="154" width="152" height="18" fill="#cbd5e1" stroke="#1e293b" stroke-width="1.5"/>
-<rect x="40" y="72" width="58" height="64" rx="8" fill="#fef3c7" stroke="#b45309" stroke-width="1.5"/>
-<line x1="48" y1="86" x2="90" y2="86" stroke="#d97706" stroke-width="1.2"/>
-<line x1="48" y1="100" x2="90" y2="100" stroke="#d97706" stroke-width="1.2"/>
-<line x1="48" y1="114" x2="90" y2="114" stroke="#d97706" stroke-width="1.2"/>
-<rect x="62" y="72" width="14" height="64" fill="#cbd5e1" stroke="#1e293b" stroke-width="1.2"/>
-<rect x="170" y="72" width="58" height="64" rx="8" fill="#ffedd5" stroke="#c2410c" stroke-width="1.5"/>
-<line x1="178" y1="86" x2="220" y2="86" stroke="#ea580c" stroke-width="1.2"/>
-<line x1="178" y1="100" x2="220" y2="100" stroke="#ea580c" stroke-width="1.2"/>
-<line x1="178" y1="114" x2="220" y2="114" stroke="#ea580c" stroke-width="1.2"/>
-<rect x="192" y="72" width="14" height="64" fill="#cbd5e1" stroke="#1e293b" stroke-width="1.2"/>
-<text x="69" y="68" text-anchor="middle" font-size="13" font-weight="700" fill="#b45309">w₁</text>
-<text x="199" y="68" text-anchor="middle" font-size="13" font-weight="700" fill="#c2410c">w₂</text>
-<text x="134" y="196" text-anchor="middle" font-size="15" font-weight="700" fill="#1e40af">а стержневой</text>
+<svg class="arc-svg" viewBox="0 0 520 200" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="Датчик и контактор">
+<rect width="520" height="200" fill="#fafafa"/>
+<g class="arc-why-block" data-info="sensor" style="cursor:pointer">
+<rect x="16" y="36" width="220" height="128" rx="4" fill="#fff" stroke="#1e293b" stroke-width="1.6"/>
+<text x="126" y="64" text-anchor="middle" font-size="15" font-weight="700" fill="#0f172a">концевик · вход ПЛК</text>
+<rect x="48" y="84" width="56" height="22" fill="#fff" stroke="#1e293b" stroke-width="1.4"/>
+<rect x="148" y="84" width="56" height="22" fill="#fff" stroke="#1e293b" stroke-width="1.4"/>
+<line x1="104" y1="95" x2="148" y2="95" stroke="#1e293b" stroke-width="1.5"/>
+<text x="126" y="136" text-anchor="middle" font-size="13" fill="#64748b">ток миллиамперы</text>
+<text x="126" y="154" text-anchor="middle" font-size="13" fill="#1e40af">дуги почти нет</text>
 </g>
-<g class="em-xfmr-hit" data-info="shell" style="cursor:pointer">
-<rect x="268" y="16" width="236" height="188" rx="8" fill="#fff" stroke="#e2e8f0" stroke-width="1.2"/>
-<rect x="292" y="40" width="188" height="18" fill="#cbd5e1" stroke="#1e293b" stroke-width="1.5"/>
-<rect x="292" y="154" width="188" height="18" fill="#cbd5e1" stroke="#1e293b" stroke-width="1.5"/>
-<rect x="292" y="40" width="20" height="132" fill="#cbd5e1" stroke="#1e293b" stroke-width="1.5"/>
-<rect x="460" y="40" width="20" height="132" fill="#cbd5e1" stroke="#1e293b" stroke-width="1.5"/>
-<rect x="376" y="40" width="22" height="132" fill="#cbd5e1" stroke="#1e293b" stroke-width="1.5"/>
-<rect x="352" y="70" width="70" height="68" rx="8" fill="#fef3c7" stroke="#b45309" stroke-width="1.5"/>
-<line x1="360" y1="84" x2="414" y2="84" stroke="#d97706" stroke-width="1.2"/>
-<line x1="360" y1="98" x2="414" y2="98" stroke="#d97706" stroke-width="1.2"/>
-<line x1="360" y1="112" x2="414" y2="112" stroke="#ea580c" stroke-width="1.2"/>
-<line x1="360" y1="126" x2="414" y2="126" stroke="#ea580c" stroke-width="1.2"/>
-<rect x="380" y="70" width="14" height="68" fill="#cbd5e1" stroke="#1e293b" stroke-width="1.2"/>
-<text x="350" y="66" font-size="13" font-weight="700" fill="#b45309">w₁</text>
-<text x="424" y="66" font-size="13" font-weight="700" fill="#c2410c">w₂</text>
-<text x="386" y="196" text-anchor="middle" font-size="15" font-weight="700" fill="#1e40af">б броневой</text>
+<g class="arc-why-block" data-info="power" style="cursor:pointer">
+<rect x="284" y="36" width="220" height="128" rx="4" fill="#fff" stroke="#1e293b" stroke-width="1.6"/>
+<text x="394" y="64" text-anchor="middle" font-size="15" font-weight="700" fill="#0f172a">контактор · пускатель</text>
+<rect x="316" y="84" width="56" height="22" fill="#fff" stroke="#1e293b" stroke-width="1.4"/>
+<rect x="416" y="84" width="56" height="22" fill="#fff" stroke="#1e293b" stroke-width="1.4"/>
+<path d="M372 95 Q394 68 416 95" fill="none" stroke="#d97706" stroke-width="2.2"/>
+<text x="394" y="136" text-anchor="middle" font-size="13" fill="#64748b">амперы и килоамперы</text>
+<text x="394" y="154" text-anchor="middle" font-size="13" fill="#b45309">дуга горит в зазоре</text>
 </g>
-<text x="260" y="226" text-anchor="middle" font-size="12" fill="#475569">сердечник замкнут · две обмотки · якоря нет</text>
 </svg>
 </div>
 <div class="asutp-tabs">
 <button type="button" class="asutp-tab active" data-info="intro">Обзор</button>
-<button type="button" class="asutp-tab" data-info="rod">Стержневой</button>
-<button type="button" class="asutp-tab" data-info="shell">Броневой</button>
-<button type="button" class="asutp-tab" data-info="mmf">МДС</button>
+<button type="button" class="asutp-tab" data-info="sensor">Датчик</button>
+<button type="button" class="asutp-tab" data-info="power">Силовой</button>
 </div>
 </div>
-<aside class="asutp-panel" id="emXfmrPanel">
+<aside class="asutp-panel" id="arcWhyPanel">
 <h3>Обзор</h3>
-<p>Это <strong>не электромагнит привода</strong>. Сердечник и обмотки есть, но якорь не ходит. Задача — передать энергию из <var>w</var><sub>1</sub> в <var>w</var><sub>2</sub> через поток Φ.</p>
-<p>Два вида однофазных: <strong>а</strong> стержневой (катушки на разных стержнях) и <strong>б</strong> броневой (обе на среднем).</p>
+<p>Якорь контактора уже развёл контакты. Пока дуга горит, цепь <strong>ещё замкнута</strong>: нагрузка получает ток через плазму.</p>
+<p>У концевика на вход ПЛК тока мало — дуги нет. У контактора дугу надо <strong>погасить</strong>, иначе контакты выгорят, а двигатель не отключится.</p>
 </aside>
 </div>
 </section>
 
-<section class="slide slide-em-load-interactive">
-<h2>Нагруженный трансформатор</h2>
+<section class="slide slide-arc-gap-interactive">
+<h2>Дуга при размыкании</h2>
 <div class="slide-body asutp-interactive">
 <div class="asutp-main">
-<p class="asutp-hint">Нагрузка на w₂ даёт ток i₂ — его МДС почти гасит добавка в первичной</p>
+<p class="asutp-hint">Двигайте размыкание — дуга тянется, нагрузка ещё питается</p>
 <div class="asutp-diagram-wrap">
-<svg class="em-svg" viewBox="0 0 520 228" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="Нагруженный трансформатор и схема замещения">
-<defs>
-<marker id="emLoadArrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8 Z" fill="#1e40af"/></marker>
-<marker id="emLoadArrowOrange" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8 Z" fill="#c2410c"/></marker>
-</defs>
-<rect width="520" height="228" fill="#fafafa"/>
-<g class="em-load-view is-on" data-view="core">
-<rect x="120" y="36" width="24" height="140" fill="#cbd5e1" stroke="#1e293b" stroke-width="1.5"/>
-<rect x="300" y="36" width="24" height="140" fill="#cbd5e1" stroke="#1e293b" stroke-width="1.5"/>
-<rect x="120" y="36" width="204" height="20" fill="#cbd5e1" stroke="#1e293b" stroke-width="1.5"/>
-<rect x="120" y="156" width="204" height="20" fill="#cbd5e1" stroke="#1e293b" stroke-width="1.5"/>
-<rect x="100" y="68" width="64" height="70" rx="8" fill="#fef3c7" stroke="#b45309" stroke-width="1.5"/>
-<line x1="108" y1="82" x2="156" y2="82" stroke="#d97706" stroke-width="1.2"/>
-<line x1="108" y1="96" x2="156" y2="96" stroke="#d97706" stroke-width="1.2"/>
-<line x1="108" y1="110" x2="156" y2="110" stroke="#d97706" stroke-width="1.2"/>
-<rect x="126" y="68" width="12" height="70" fill="#cbd5e1" stroke="#1e293b" stroke-width="1.2"/>
-<rect x="280" y="68" width="64" height="70" rx="8" fill="#ffedd5" stroke="#c2410c" stroke-width="1.5"/>
-<line x1="288" y1="82" x2="336" y2="82" stroke="#ea580c" stroke-width="1.2"/>
-<line x1="288" y1="96" x2="336" y2="96" stroke="#ea580c" stroke-width="1.2"/>
-<line x1="288" y1="110" x2="336" y2="110" stroke="#ea580c" stroke-width="1.2"/>
-<rect x="306" y="68" width="12" height="70" fill="#cbd5e1" stroke="#1e293b" stroke-width="1.2"/>
-<rect x="384" y="86" width="56" height="40" rx="4" fill="#fff" stroke="#1e293b" stroke-width="1.5"/>
-<text x="412" y="111" text-anchor="middle" font-size="14" font-weight="700" fill="#1e40af">Zн</text>
-<line x1="344" y1="96" x2="384" y2="96" stroke="#1e293b" stroke-width="1.4"/>
-<line x1="344" y1="116" x2="384" y2="116" stroke="#1e293b" stroke-width="1.4"/>
-<path d="M132 46 H312 V166 H132 Z" fill="none" stroke="#3b82f6" stroke-width="1.5" stroke-dasharray="7 5"/>
-<text x="222" y="118" text-anchor="middle" font-size="15" font-weight="700" fill="#2563eb">Φ</text>
-<text x="132" y="64" text-anchor="middle" font-size="13" font-weight="700" fill="#b45309">w₁</text>
-<text x="312" y="64" text-anchor="middle" font-size="13" font-weight="700" fill="#c2410c">w₂</text>
-<line x1="52" y1="118" x2="92" y2="118" stroke="#1e40af" stroke-width="1.5" marker-end="url(#emLoadArrow)"/>
-<text x="72" y="110" text-anchor="middle" font-size="13" font-weight="700" fill="#1e40af">i₁</text>
-<line x1="352" y1="88" x2="378" y2="88" stroke="#c2410c" stroke-width="1.5" marker-end="url(#emLoadArrowOrange)"/>
-<text x="366" y="80" text-anchor="middle" font-size="13" font-weight="700" fill="#c2410c">i₂</text>
-<g class="em-load-react">
-<text x="178" y="58" text-anchor="middle" font-size="13" font-weight="700" fill="#1d4ed8">Φ₁</text>
-<text x="266" y="58" text-anchor="middle" font-size="13" font-weight="700" fill="#c2410c">Φ₂</text>
-<text x="222" y="148" text-anchor="middle" font-size="12" fill="#475569">Φ₁ ≈ −Φ₂</text>
-</g>
-<text x="260" y="210" text-anchor="middle" font-size="13" fill="#475569">нагрузка на вторичной · поток в замкнутом сердечнике</text>
-</g>
-<g class="em-load-view" data-view="circ">
-<text x="36" y="48" font-size="15" font-weight="700" fill="#1e40af">U₁</text>
-<circle cx="56" cy="72" r="10" fill="#fff" stroke="#1e293b" stroke-width="1.4"/>
-<line x1="66" y1="72" x2="92" y2="72" stroke="#1e293b" stroke-width="1.4"/>
-<rect x="92" y="62" width="36" height="20" fill="#fff" stroke="#1e293b" stroke-width="1.4"/>
-<text x="110" y="56" text-anchor="middle" font-size="13" fill="#475569">r₁</text>
-<line x1="128" y1="72" x2="148" y2="72" stroke="#1e293b" stroke-width="1.4"/>
-<path d="M148 72 l8 -10 l8 10 l8 -10 l8 10 l8 -10 l8 10" fill="none" stroke="#1e293b" stroke-width="1.4"/>
-<text x="172" y="50" text-anchor="middle" font-size="13" fill="#475569">x₁</text>
-<line x1="196" y1="72" x2="220" y2="72" stroke="#1e293b" stroke-width="1.4"/>
-<circle cx="236" cy="72" r="14" fill="#fff" stroke="#1e40af" stroke-width="1.5"/>
-<text x="236" y="76" text-anchor="middle" font-size="13" font-weight="700" fill="#1e40af">E₁</text>
-<line x1="250" y1="72" x2="268" y2="72" stroke="#1e293b" stroke-width="1.4"/>
-<line x1="56" y1="82" x2="56" y2="168" stroke="#1e293b" stroke-width="1.3"/>
-<line x1="268" y1="72" x2="268" y2="168" stroke="#1e293b" stroke-width="1.3"/>
-<line x1="56" y1="168" x2="268" y2="168" stroke="#1e293b" stroke-width="1.3"/>
-<circle cx="300" cy="72" r="14" fill="#fff" stroke="#c2410c" stroke-width="1.5"/>
-<text x="300" y="76" text-anchor="middle" font-size="13" font-weight="700" fill="#c2410c">E₂</text>
-<line x1="314" y1="72" x2="334" y2="72" stroke="#1e293b" stroke-width="1.4"/>
-<path d="M334 72 l8 -10 l8 10 l8 -10 l8 10 l8 -10 l8 10" fill="none" stroke="#1e293b" stroke-width="1.4"/>
-<text x="358" y="50" text-anchor="middle" font-size="13" fill="#475569">x₂</text>
-<line x1="382" y1="72" x2="398" y2="72" stroke="#1e293b" stroke-width="1.4"/>
-<rect x="398" y="62" width="36" height="20" fill="#fff" stroke="#1e293b" stroke-width="1.4"/>
-<text x="416" y="56" text-anchor="middle" font-size="13" fill="#475569">r₂</text>
-<line x1="434" y1="72" x2="454" y2="72" stroke="#1e293b" stroke-width="1.4"/>
-<rect x="454" y="56" width="44" height="32" rx="3" fill="#fff" stroke="#1e293b" stroke-width="1.5"/>
-<text x="476" y="76" text-anchor="middle" font-size="13" font-weight="700" fill="#1e40af">Zн</text>
-<line x1="300" y1="86" x2="300" y2="168" stroke="#1e293b" stroke-width="1.3"/>
-<line x1="476" y1="88" x2="476" y2="168" stroke="#1e293b" stroke-width="1.3"/>
-<line x1="300" y1="168" x2="476" y2="168" stroke="#1e293b" stroke-width="1.3"/>
-<text x="162" y="200" text-anchor="middle" font-size="13" fill="#1e40af">первичная</text>
-<text x="388" y="200" text-anchor="middle" font-size="13" fill="#c2410c">вторичная</text>
-<text x="260" y="220" text-anchor="middle" font-size="12" fill="#475569">E₁ и E₂ связаны потоком · Zн = rн + jXн</text>
-</g>
-<g class="em-load-view" data-view="ref">
-<g class="em-load-hit" data-info="u1" style="cursor:pointer">
-<circle cx="42" cy="86" r="18" fill="#fff" stroke="#1e293b" stroke-width="1.6"/>
-<text x="42" y="91" text-anchor="middle" font-size="14" font-weight="700" fill="#1e40af">U₁</text>
-</g>
-<line x1="60" y1="86" x2="78" y2="86" stroke="#1e293b" stroke-width="1.6"/>
-<g class="em-load-hit" data-info="i1" style="cursor:pointer">
-<line x1="86" y1="54" x2="168" y2="54" stroke="#1e40af" stroke-width="1.6" marker-end="url(#emLoadArrow)"/>
-<text x="124" y="46" text-anchor="middle" font-size="15" font-weight="700" fill="#1e40af">I₁</text>
-</g>
-<g class="em-load-hit" data-info="r1" style="cursor:pointer">
-<rect x="78" y="74" width="52" height="24" fill="#fff" stroke="#1e293b" stroke-width="1.6"/>
-<text x="104" y="68" text-anchor="middle" font-size="15" font-weight="700" fill="#1e40af">r₁</text>
-</g>
-<line x1="130" y1="86" x2="146" y2="86" stroke="#1e293b" stroke-width="1.6"/>
-<g class="em-load-hit" data-info="x1" style="cursor:pointer">
-<path d="M146 86 l10 -12 l10 12 l10 -12 l10 12 l10 -12 l10 12" fill="none" stroke="#1e293b" stroke-width="1.6"/>
-<text x="176" y="62" text-anchor="middle" font-size="15" font-weight="700" fill="#1e40af">x₁</text>
-</g>
-<line x1="206" y1="86" x2="222" y2="86" stroke="#1e293b" stroke-width="1.6"/>
-<g class="em-load-hit" data-info="r2p" style="cursor:pointer">
-<rect x="222" y="74" width="52" height="24" fill="#fff" stroke="#1e293b" stroke-width="1.6"/>
-<text x="248" y="68" text-anchor="middle" font-size="15" font-weight="700" fill="#c2410c">r′₂</text>
-</g>
-<line x1="274" y1="86" x2="290" y2="86" stroke="#1e293b" stroke-width="1.6"/>
-<g class="em-load-hit" data-info="x2p" style="cursor:pointer">
-<path d="M290 86 l10 -12 l10 12 l10 -12 l10 12 l10 -12 l10 12" fill="none" stroke="#1e293b" stroke-width="1.6"/>
-<text x="320" y="62" text-anchor="middle" font-size="15" font-weight="700" fill="#c2410c">x′₂</text>
-</g>
-<line x1="350" y1="86" x2="394" y2="86" stroke="#1e293b" stroke-width="1.6"/>
-<g class="em-load-hit" data-info="zhp" style="cursor:pointer">
-<rect x="380" y="86" width="28" height="86" fill="#fff" stroke="#1e293b" stroke-width="1.6"/>
-<text x="430" y="132" text-anchor="middle" font-size="15" font-weight="700" fill="#1e40af">Z′н</text>
-</g>
-<line x1="42" y1="104" x2="42" y2="172" stroke="#1e293b" stroke-width="1.5"/>
-<line x1="42" y1="172" x2="394" y2="172" stroke="#1e293b" stroke-width="1.5"/>
-<line x1="394" y1="86" x2="394" y2="172" stroke="#1e293b" stroke-width="1.5"/>
-<text x="260" y="204" text-anchor="middle" font-size="13" fill="#475569">приведённая схема замещения · всё к первичной обмотке</text>
-<text x="260" y="222" text-anchor="middle" font-size="12" fill="#64748b">n = w₁/w₂ · r′₂ = n² r₂ · x′₂ = n² x₂ · Z′н = n² Zн</text>
-</g>
+<svg class="arc-svg" viewBox="0 0 500 210" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="Размыкание контактов">
+<rect width="500" height="210" fill="#fafafa"/>
+<text x="40" y="36" font-size="13" font-weight="700" fill="#1e40af">~U</text>
+<path d="M40 48 H88" stroke="#1e293b" stroke-width="1.5"/>
+<rect class="arc-gap-left" x="88" y="78" width="70" height="28" fill="#fff" stroke="#1e293b" stroke-width="1.6"/>
+<rect class="arc-gap-right" x="210" y="78" width="70" height="28" fill="#fff" stroke="#1e293b" stroke-width="1.6"/>
+<path class="arc-gap-bolt" d="" fill="none" stroke="#d97706" stroke-width="2.4"/>
+<path d="M280 92 H360" stroke="#1e293b" stroke-width="1.5"/>
+<circle class="arc-gap-lamp" cx="390" cy="92" r="16" fill="#fde68a" stroke="#d97706" stroke-width="1.5"/>
+<text x="390" y="128" text-anchor="middle" font-size="12" fill="#64748b">нагрузка</text>
+<text class="arc-gap-readout" x="250" y="188" text-anchor="middle" font-size="13" font-weight="700" fill="#1e40af">зазор 0 · цепь замкнута · дуги нет</text>
 </svg>
-<dl class="char-formula-legend em-load-legend">
-<div class="em-load-hit" data-info="u1"><dt>U₁</dt><dd>напряжение первичной</dd></div>
-<div class="em-load-hit" data-info="i1"><dt>I₁</dt><dd>ток первичной</dd></div>
-<div class="em-load-hit" data-info="r1"><dt>r₁</dt><dd>активное первичной</dd></div>
-<div class="em-load-hit" data-info="x1"><dt>x₁</dt><dd>рассеяние первичной</dd></div>
-<div class="em-load-hit" data-info="r2p"><dt>r′₂</dt><dd>приведённое r₂</dd></div>
-<div class="em-load-hit" data-info="x2p"><dt>x′₂</dt><dd>приведённое x₂</dd></div>
-<div class="em-load-hit" data-info="zhp"><dt>Z′н</dt><dd>приведённая нагрузка</dd></div>
-</dl>
 </div>
 <div class="asutp-tabs">
 <button type="button" class="asutp-tab active" data-info="intro">Обзор</button>
+<button type="button" class="asutp-tab" data-info="plasma">Плазма</button>
 <button type="button" class="asutp-tab" data-info="load">Нагрузка</button>
-<button type="button" class="asutp-tab" data-info="react">Реакция</button>
-<button type="button" class="asutp-tab" data-info="circ">Схема</button>
-<button type="button" class="asutp-tab" data-info="ref">Приведение</button>
+</div>
+<div class="arc-controls">
+<label class="arc-ctrl">
+<span>размыкание</span>
+<input type="range" class="arc-gap-range" min="0" max="100" value="0" aria-label="Размыкание">
+<span class="arc-gap-val">0%</span>
+</label>
 </div>
 </div>
-<aside class="asutp-panel" id="emLoadPanel">
+<aside class="asutp-panel" id="arcGapPanel">
 <h3>Обзор</h3>
-<p>На <var>w</var><sub>2</sub> повесили нагрузку <var>Z</var><sub>н</sub>. Появился ток <var>i</var><sub>2</sub>. Якоря по-прежнему нет — меняются только токи и поток.</p>
-<p>МДС нагрузки <var>w</var><sub>2</sub><var>i</var><sub>2</sub> почти компенсируется добавкой в первичной: <var>w</var><sub>1</sub>Δ<var>i</var><sub>1</sub> ≈ −<var>w</var><sub>2</sub><var>i</var><sub>2</sub>.</p>
+<p>Контакты расходятся — между ними остаётся <strong>канал плазмы</strong>. Это и есть электрическая дуга.</p>
+<p>Металл испаряется, температура тысячи градусов: эрозия, рост <var>R</var><sub>k</sub>, риск сваривания.</p>
 </aside>
 </div>
 </section>
 
-<section class="slide slide-em-mach-interactive">
-<h2>Электромашинные устройства</h2>
+<section class="slide slide-arc-how-interactive">
+<h2>Как погасить</h2>
 <div class="slide-body asutp-interactive">
 <div class="asutp-main">
-<p class="asutp-hint">В САУ это микромашины до 1 кВт — важны статика и динамика, не масса</p>
-<div class="app-purpose-grid em-mach-grid">
-<button type="button" class="app-purpose-card active" data-info="mot">
-<strong>Двигатели</strong>
-<span>исполнительные</span>
-</button>
-<button type="button" class="app-purpose-card" data-info="speed">
-<strong>Датчики скорости</strong>
-<span>тахогенераторы</span>
-</button>
-<button type="button" class="app-purpose-card" data-info="ang">
-<strong>Датчики угла</strong>
-<span>поворот вала</span>
-</button>
-<button type="button" class="app-purpose-card" data-info="err">
-<strong>Рассогласование</strong>
-<span>измерители ошибки</span>
-</button>
+<p class="asutp-hint">Нажмите способ и двигайте ползунок — дуга гаснет, когда Uд выше Uсети</p>
+<div class="highlight-box highlight-box-compact arc-how-box">
+<p class="cap-eq" aria-label="U д больше U сети, ток падает до нуля"><span class="char-eq"><var>U</var><sub>д</sub> &gt; <var>U</var><sub>сети</sub> → ток → 0 → дуга гаснет</span></p>
 </div>
-</div>
-<aside class="asutp-panel" id="emMachPanel">
-<h3>Двигатели</h3>
-<p>Исполнительный двигатель крутит объект: клапан, стол, ленту. В САУ берут микромашины — мощность обычно до 1 кВт.</p>
-</aside>
-</div>
-</section>
-
-<section class="slide slide-em-mach-class-interactive">
-<h2>Классификация машин</h2>
-<div class="slide-body asutp-interactive">
-<div class="asutp-main">
-<p class="asutp-hint">Нажмите блок — справа роль в САУ. Два дерева: двигатели и генераторы</p>
 <div class="asutp-diagram-wrap">
-<svg class="em-svg em-mach-svg" viewBox="0 0 520 228" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="Классификация электрических машин">
-<defs>
-<marker id="emMachArr" markerWidth="8" markerHeight="7" refX="7" refY="3.5" orient="auto"><path d="M0 0 L8 3.5 L0 7 Z" fill="#1e293b"/></marker>
-</defs>
-<rect width="520" height="228" fill="#fafafa"/>
-<g class="em-mach-view is-on" data-view="mot">
-<g class="em-mach-hit" data-info="mot" style="cursor:pointer">
-<rect x="190" y="8" width="140" height="34" fill="#fff" stroke="#1e293b" stroke-width="1.5"/>
-<text x="260" y="30" text-anchor="middle" font-size="14" font-weight="700" fill="#1e3a8a">Двигатели</text>
+<svg class="arc-svg arc-how-svg" viewBox="0 0 520 200" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="Как погасить дугу">
+<rect width="520" height="200" fill="#fafafa"/>
+<text x="20" y="28" font-size="13" font-weight="700" fill="#1e40af">U</text>
+<line x1="20" y1="40" x2="48" y2="40" stroke="#1e293b" stroke-width="1.5"/>
+<line x1="20" y1="40" x2="20" y2="88" stroke="#1e293b" stroke-width="1.5"/>
+<line x1="20" y1="88" x2="48" y2="88" stroke="#1e293b" stroke-width="1.5"/>
+<rect class="arc-how-left" x="48" y="76" width="52" height="24" fill="#fff" stroke="#1e293b" stroke-width="1.6"/>
+<rect class="arc-how-right" x="156" y="76" width="52" height="24" fill="#fff" stroke="#1e293b" stroke-width="1.6"/>
+<path class="arc-how-bolt" d="M100 88 Q128 52 156 88" fill="none" stroke="#d97706" stroke-width="2.4"/>
+<g class="arc-how-view arc-how-view-cool" display="none">
+<rect x="108" y="12" width="14" height="58" fill="#fff" stroke="#64748b" stroke-width="1.3"/>
+<rect x="186" y="12" width="14" height="58" fill="#fff" stroke="#64748b" stroke-width="1.3"/>
+<text x="154" y="28" text-anchor="middle" font-size="11" fill="#64748b">стенки</text>
 </g>
-<line x1="260" y1="42" x2="260" y2="58" stroke="#1e293b" stroke-width="1.4"/>
-<line x1="112" y1="58" x2="408" y2="58" stroke="#1e293b" stroke-width="1.4"/>
-<line x1="112" y1="58" x2="112" y2="70" stroke="#1e293b" stroke-width="1.4" marker-end="url(#emMachArr)"/>
-<line x1="408" y1="58" x2="408" y2="70" stroke="#1e293b" stroke-width="1.4" marker-end="url(#emMachArr)"/>
-<g class="em-mach-hit" data-info="mdc" style="cursor:pointer">
-<rect x="24" y="72" width="176" height="40" fill="#fff" stroke="#1e293b" stroke-width="1.5"/>
-<text x="112" y="89" text-anchor="middle" font-size="13" font-weight="700" fill="#1e3a8a">Постоянного тока</text>
-<text x="112" y="105" text-anchor="middle" font-size="11" fill="#475569">коллекторные</text>
+<g class="arc-how-view arc-how-view-cut" display="none">
+<rect x="112" y="10" width="6" height="52" fill="#fff" stroke="#1e293b" stroke-width="1.1"/>
+<rect x="124" y="10" width="6" height="52" fill="#fff" stroke="#1e293b" stroke-width="1.1"/>
+<rect x="136" y="10" width="6" height="52" fill="#fff" stroke="#1e293b" stroke-width="1.1"/>
+<rect x="148" y="10" width="6" height="52" fill="#fff" stroke="#1e293b" stroke-width="1.1"/>
+<rect x="160" y="10" width="6" height="52" fill="#fff" stroke="#1e293b" stroke-width="1.1"/>
+<rect x="172" y="10" width="6" height="52" fill="#fff" stroke="#1e293b" stroke-width="1.1"/>
+<text x="145" y="72" text-anchor="middle" font-size="11" fill="#64748b">решётка</text>
 </g>
-<g class="em-mach-hit" data-info="mac" style="cursor:pointer">
-<rect x="320" y="72" width="176" height="40" fill="#fff" stroke="#1e293b" stroke-width="1.5"/>
-<text x="408" y="89" text-anchor="middle" font-size="13" font-weight="700" fill="#1e3a8a">Переменного тока</text>
-<text x="408" y="105" text-anchor="middle" font-size="11" fill="#475569">и электронная коммутация</text>
+<g class="arc-how-view arc-how-view-shunt" display="none">
+<line class="arc-how-shunt-br" x1="74" y1="100" x2="74" y2="148" stroke="#94a3b8" stroke-width="1.4"/>
+<line x1="74" y1="148" x2="182" y2="148" stroke="#94a3b8" stroke-width="1.4"/>
+<line x1="182" y1="148" x2="182" y2="100" stroke="#94a3b8" stroke-width="1.4"/>
+<rect class="arc-how-thy" x="106" y="132" width="44" height="28" rx="3" fill="#fff" stroke="#1e40af" stroke-width="1.5"/>
+<text x="128" y="150" text-anchor="middle" font-size="12" font-weight="700" fill="#1e40af">VS</text>
 </g>
-<line x1="408" y1="112" x2="408" y2="216" stroke="#1e293b" stroke-width="1.4"/>
-<line x1="408" y1="138" x2="378" y2="138" stroke="#1e293b" stroke-width="1.4" marker-end="url(#emMachArr)"/>
-<line x1="408" y1="174" x2="378" y2="174" stroke="#1e293b" stroke-width="1.4" marker-end="url(#emMachArr)"/>
-<line x1="408" y1="210" x2="378" y2="210" stroke="#1e293b" stroke-width="1.4" marker-end="url(#emMachArr)"/>
-<line x1="408" y1="174" x2="424" y2="174" stroke="#1e293b" stroke-width="1.4" marker-end="url(#emMachArr)"/>
-<g class="em-mach-hit" data-info="msync" style="cursor:pointer">
-<rect x="200" y="124" width="176" height="28" fill="#fff" stroke="#1e293b" stroke-width="1.5"/>
-<text x="288" y="143" text-anchor="middle" font-size="13" font-weight="700" fill="#1e3a8a">Синхронные</text>
-</g>
-<g class="em-mach-hit" data-info="mstep" style="cursor:pointer">
-<rect x="200" y="160" width="176" height="28" fill="#fff" stroke="#1e293b" stroke-width="1.5"/>
-<text x="288" y="179" text-anchor="middle" font-size="13" font-weight="700" fill="#1e3a8a">Шаговые</text>
-</g>
-<g class="em-mach-hit" data-info="mbldc" style="cursor:pointer">
-<rect x="200" y="196" width="176" height="28" fill="#fff" stroke="#1e293b" stroke-width="1.5"/>
-<text x="288" y="215" text-anchor="middle" font-size="13" font-weight="700" fill="#1e3a8a">БДПТ</text>
-</g>
-<g class="em-mach-hit" data-info="masync" style="cursor:pointer">
-<rect x="426" y="156" width="86" height="36" fill="#fff" stroke="#1e293b" stroke-width="1.5"/>
-<text x="469" y="178" text-anchor="middle" font-size="12" font-weight="700" fill="#1e3a8a">Асинхронные</text>
-</g>
-</g>
-<g class="em-mach-view" data-view="gen">
-<g class="em-mach-hit" data-info="gen" style="cursor:pointer">
-<rect x="190" y="8" width="140" height="34" fill="#fff" stroke="#1e293b" stroke-width="1.5"/>
-<text x="260" y="30" text-anchor="middle" font-size="14" font-weight="700" fill="#1e3a8a">Генераторы</text>
-</g>
-<line x1="260" y1="42" x2="260" y2="58" stroke="#1e293b" stroke-width="1.4"/>
-<line x1="112" y1="58" x2="408" y2="58" stroke="#1e293b" stroke-width="1.4"/>
-<line x1="112" y1="58" x2="112" y2="70" stroke="#1e293b" stroke-width="1.4" marker-end="url(#emMachArr)"/>
-<line x1="408" y1="58" x2="408" y2="70" stroke="#1e293b" stroke-width="1.4" marker-end="url(#emMachArr)"/>
-<g class="em-mach-hit" data-info="gdc" style="cursor:pointer">
-<rect x="16" y="72" width="192" height="44" fill="#fff" stroke="#1e293b" stroke-width="1.5"/>
-<text x="112" y="90" text-anchor="middle" font-size="13" font-weight="700" fill="#1e3a8a">Постоянного тока</text>
-<text x="112" y="106" text-anchor="middle" font-size="11" fill="#475569">включая тахогенераторы</text>
-</g>
-<g class="em-mach-hit" data-info="gac" style="cursor:pointer">
-<rect x="320" y="72" width="176" height="44" fill="#fff" stroke="#1e293b" stroke-width="1.5"/>
-<text x="408" y="99" text-anchor="middle" font-size="13" font-weight="700" fill="#1e3a8a">Переменного тока</text>
-</g>
-<line x1="408" y1="116" x2="408" y2="210" stroke="#1e293b" stroke-width="1.4"/>
-<line x1="408" y1="150" x2="378" y2="150" stroke="#1e293b" stroke-width="1.4" marker-end="url(#emMachArr)"/>
-<line x1="408" y1="194" x2="378" y2="194" stroke="#1e293b" stroke-width="1.4" marker-end="url(#emMachArr)"/>
-<line x1="408" y1="172" x2="424" y2="172" stroke="#1e293b" stroke-width="1.4" marker-end="url(#emMachArr)"/>
-<g class="em-mach-hit" data-info="gsync" style="cursor:pointer">
-<rect x="168" y="136" width="208" height="28" fill="#fff" stroke="#1e293b" stroke-width="1.5"/>
-<text x="272" y="155" text-anchor="middle" font-size="13" font-weight="700" fill="#1e3a8a">Синхронные</text>
-</g>
-<g class="em-mach-hit" data-info="gst" style="cursor:pointer">
-<rect x="168" y="180" width="208" height="28" fill="#fff" stroke="#1e293b" stroke-width="1.5"/>
-<text x="272" y="199" text-anchor="middle" font-size="13" font-weight="700" fill="#1e3a8a">Синхронные тахогенераторы</text>
-</g>
-<g class="em-mach-hit" data-info="gat" style="cursor:pointer">
-<rect x="426" y="152" width="86" height="40" fill="#fff" stroke="#1e293b" stroke-width="1.5"/>
-<text x="469" y="168" text-anchor="middle" font-size="11" font-weight="700" fill="#1e3a8a">Асинхронные</text>
-<text x="469" y="182" text-anchor="middle" font-size="11" font-weight="700" fill="#1e3a8a">тахогенер.</text>
-</g>
-</g>
+<line class="arc-how-loadw" x1="208" y1="88" x2="268" y2="88" stroke="#1e293b" stroke-width="1.5"/>
+<circle class="arc-how-lamp" cx="286" cy="88" r="14" fill="#fde68a" stroke="#d97706" stroke-width="1.5"/>
+<text x="286" y="118" text-anchor="middle" font-size="11" fill="#64748b">нагрузка</text>
+<text x="348" y="28" font-size="12" font-weight="700" fill="#64748b">Uсети</text>
+<rect x="348" y="36" width="150" height="14" rx="3" fill="#e2e8f0"/>
+<rect class="arc-how-unet" x="348" y="36" width="93" height="14" rx="3" fill="#94a3b8"/>
+<text x="348" y="72" font-size="12" font-weight="700" fill="#1e40af">Uд</text>
+<rect x="348" y="80" width="150" height="14" rx="3" fill="#e2e8f0"/>
+<rect class="arc-how-ud" x="348" y="80" width="48" height="14" rx="3" fill="#d97706"/>
+<text class="arc-how-cmp" x="423" y="118" text-anchor="middle" font-size="12" font-weight="700" fill="#b45309">Uд &lt; Uсети</text>
+<text class="arc-how-readout" x="260" y="186" text-anchor="middle" font-size="13" font-weight="700" fill="#1e40af">растянуть · дуга ещё короткая</text>
+</svg>
+</div>
+<div class="app-purpose-grid arc-how-grid">
+<button type="button" class="app-purpose-card active" data-info="stretch">Растянуть</button>
+<button type="button" class="app-purpose-card" data-info="cool">Охладить</button>
+<button type="button" class="app-purpose-card" data-info="cut">Разрезать</button>
+<button type="button" class="app-purpose-card" data-info="shunt">Зашунтировать</button>
+</div>
+<div class="arc-controls">
+<label class="arc-ctrl">
+<span class="arc-how-slabel">зазор</span>
+<input type="range" class="arc-how-range" min="0" max="100" value="20" aria-label="Сила приёма">
+<span class="arc-how-val">20%</span>
+</label>
+</div>
+</div>
+<aside class="asutp-panel" id="arcHowPanel">
+<h3>Растянуть</h3>
+<p>Длинная дуга требует большего напряжения. Контакты быстро расходятся, магнитное дутьё выдувает столб в камеру.</p>
+<p>На постоянном токе это основной приём: нуля тока нет, дугу надо <strong>сорвать</strong>.</p>
+</aside>
+</div>
+</section>
+
+<section class="slide slide-arc-acdc-interactive">
+<h2>Переменный и постоянный ток</h2>
+<div class="slide-body asutp-interactive">
+<div class="asutp-main">
+<p class="asutp-hint">Переключите род тока — на переменном дуга сама садится в нуле</p>
+<div class="asutp-diagram-wrap">
+<svg class="arc-svg" viewBox="0 0 500 200" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="Дуга на AC и DC">
+<rect width="500" height="200" fill="#fafafa"/>
+<rect x="70" y="70" width="64" height="26" fill="#fff" stroke="#1e293b" stroke-width="1.6"/>
+<rect x="210" y="70" width="64" height="26" fill="#fff" stroke="#1e293b" stroke-width="1.6"/>
+<path class="arc-acdc-bolt" d="M134 83 Q172 48 210 83" fill="none" stroke="#d97706" stroke-width="2.3"/>
+<text class="arc-acdc-kind" x="170" y="40" text-anchor="middle" font-size="14" font-weight="700" fill="#1e40af">переменный ток</text>
+<path class="arc-acdc-wave" d="M300 70 C318 70 318 50 336 50 C354 50 354 90 372 90 C390 90 390 70 408 70" fill="none" stroke="#1e40af" stroke-width="1.6"/>
+<circle class="arc-acdc-zero" cx="354" cy="70" r="4" fill="#2563eb"/>
+<text x="354" y="112" text-anchor="middle" font-size="12" fill="#64748b">i(t)</text>
+<text class="arc-acdc-readout" x="250" y="176" text-anchor="middle" font-size="13" font-weight="700" fill="#1e40af">нуль тока · дуга может погаснуть сама</text>
 </svg>
 </div>
 <div class="asutp-tabs">
-<button type="button" class="asutp-tab active" data-info="mot">Двигатели</button>
-<button type="button" class="asutp-tab" data-info="gen">Генераторы</button>
+<button type="button" class="asutp-tab active" data-info="ac">Переменный</button>
+<button type="button" class="asutp-tab" data-info="dc">Постоянный</button>
+<button type="button" class="asutp-tab" data-info="why">Почему</button>
 </div>
 </div>
-<aside class="asutp-panel" id="emMachClassPanel">
-<h3>Двигатели</h3>
-<p>Сначала род тока, затем принцип. Нажмите блок дерева.</p>
+<aside class="asutp-panel" id="arcAcdcPanel">
+<h3>Переменный</h3>
+<p>Ток 100 раз в секунду (50 Гц) проходит через <strong>ноль</strong>. В этот момент дуга гаснет, если промежуток уже не пробивается.</p>
+<p>Камера и решётка не дают дуге зажечься снова на следующем полупериоде.</p>
 </aside>
 </div>
 </section>
 
-<section class="slide slide-em-dc-interactive">
-<h2>Машины постоянного тока</h2>
+<section class="slide slide-arc-map-interactive">
+<h2>Способы гашения</h2>
 <div class="slide-body asutp-interactive">
 <div class="asutp-main">
-<p class="asutp-hint">Одна и та же рамка в поле Φ: крутим — генератор, подаём U — двигатель</p>
-<div class="app-purpose-grid em-mach-grid">
-<button type="button" class="app-purpose-card active" data-info="gen">
-<strong>Генератор</strong>
-<span>рамка → ЭДС</span>
-</button>
-<button type="button" class="app-purpose-card" data-info="mot">
-<strong>Двигатель</strong>
-<span>U → момент</span>
-</button>
-<button type="button" class="app-purpose-card" data-info="comm">
-<strong>Коллектор</strong>
-<span>полукольца</span>
-</button>
-<button type="button" class="app-purpose-card" data-info="hand">
-<strong>Правила руки</strong>
-<span>правая / левая</span>
-</button>
-</div>
-</div>
-<aside class="asutp-panel" id="emDcPanel">
-<h3>Генератор</h3>
-<p>Рамку крутят в постоянном поле Φ. В проводниках наводится ЭДС. Коллектор и щётки снимают её уже выпрямленной.</p>
-</aside>
-</div>
-</section>
-
-<section class="slide slide-em-dc-work-interactive">
-<h2>Принцип работы</h2>
-<div class="slide-body asutp-interactive">
-<div class="asutp-main">
-<p class="asutp-hint">Нажмите часть — слева машина, справа пульсации ЭДС после коллектора</p>
+<p class="asutp-hint">Нажмите способ и двигайте — превью. Дальше каждый разберём отдельно</p>
 <div class="asutp-diagram-wrap">
-<svg class="em-svg em-dc-svg" viewBox="0 0 520 228" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="Принцип машины постоянного тока">
-<defs>
-<marker id="emDcArr" markerWidth="8" markerHeight="7" refX="7" refY="3.5" orient="auto"><path d="M0 0 L8 3.5 L0 7 Z" fill="#1e40af"/></marker>
-<marker id="emDcArrN" markerWidth="8" markerHeight="7" refX="7" refY="3.5" orient="auto"><path d="M0 0 L8 3.5 L0 7 Z" fill="#1e293b"/></marker>
-</defs>
-<rect width="520" height="228" fill="#fafafa"/>
-<g class="em-dc-hit" data-info="poles" style="cursor:pointer">
-<path d="M70 8 H250 L238 40 H82 Z" fill="#cbd5e1" stroke="#1e293b" stroke-width="1.5"/>
-<text x="160" y="30" text-anchor="middle" font-size="14" font-weight="700" fill="#1e3a8a">N</text>
-<path d="M82 176 H238 L250 208 H70 Z" fill="#cbd5e1" stroke="#1e293b" stroke-width="1.5"/>
-<text x="160" y="200" text-anchor="middle" font-size="14" font-weight="700" fill="#1e3a8a">S</text>
-<line x1="120" y1="46" x2="120" y2="168" stroke="#2563eb" stroke-width="1.5" marker-end="url(#emDcArr)"/>
-<line x1="160" y1="46" x2="160" y2="168" stroke="#2563eb" stroke-width="1.5" marker-end="url(#emDcArr)"/>
-<line x1="200" y1="46" x2="200" y2="168" stroke="#2563eb" stroke-width="1.5" marker-end="url(#emDcArr)"/>
-<text x="214" y="110" font-size="16" font-weight="700" fill="#1d4ed8">Φ</text>
+<svg class="arc-svg arc-map-svg" viewBox="0 0 520 236" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="Способы гашения дуги">
+<rect width="520" height="236" fill="#fafafa"/>
+<rect class="arc-map-left" x="168" y="148" width="54" height="22" fill="#fff" stroke="#1e293b" stroke-width="1.6"/>
+<rect class="arc-map-right" x="258" y="148" width="54" height="22" fill="#fff" stroke="#1e293b" stroke-width="1.6"/>
+<path class="arc-map-bolt" d="M222 159 Q240 100 258 159" fill="none" stroke="#d97706" stroke-width="2.3"/>
+<g class="arc-map-view arc-map-view-chamber is-on">
+<rect x="150" y="16" width="24" height="118" fill="#fff" stroke="#64748b" stroke-width="1.4"/>
+<rect x="346" y="16" width="24" height="118" fill="#fff" stroke="#64748b" stroke-width="1.4"/>
+<text x="260" y="28" text-anchor="middle" font-size="12" fill="#64748b">щель камеры</text>
 </g>
-<g class="em-dc-hit" data-info="frame" style="cursor:pointer">
-<rect x="88" y="68" width="144" height="80" fill="none" stroke="#1e293b" stroke-width="2.2"/>
-<rect x="84" y="72" width="10" height="72" fill="#fef3c7" stroke="#b45309" stroke-width="1.3"/>
-<rect x="226" y="72" width="10" height="72" fill="#fef3c7" stroke="#b45309" stroke-width="1.3"/>
-<text x="160" y="62" text-anchor="middle" font-size="13" font-weight="700" fill="#1e40af">рамка</text>
+<g class="arc-map-view arc-map-view-blow" display="none">
+<ellipse cx="64" cy="88" rx="26" ry="11" fill="none" stroke="#b45309" stroke-width="1.5"/>
+<ellipse cx="64" cy="100" rx="26" ry="11" fill="none" stroke="#b45309" stroke-width="1.5"/>
+<text x="64" y="68" text-anchor="middle" font-size="12" font-weight="700" fill="#1e40af">катушка</text>
+<text class="arc-map-b" x="108" y="96" font-size="14" font-weight="700" fill="#1e40af">B</text>
+<text x="108" y="114" font-size="14" fill="#94a3b8">×</text>
+<rect x="392" y="24" width="14" height="100" fill="#fff" stroke="#1e293b" stroke-width="1.3"/>
+<rect x="448" y="24" width="14" height="100" fill="#fff" stroke="#1e293b" stroke-width="1.3"/>
+<text x="427" y="18" text-anchor="middle" font-size="11" fill="#64748b">камера</text>
+<text x="240" y="132" text-anchor="middle" font-size="12" fill="#1e40af">F = I × B</text>
 </g>
-<g class="em-dc-mode is-on" data-mode="gen">
-<path d="M248 28 A22 22 0 0 1 278 52" fill="none" stroke="#1e293b" stroke-width="1.6" marker-end="url(#emDcArrN)"/>
-<text x="286" y="30" font-size="15" font-weight="700" fill="#1e40af">n</text>
-<text x="70" y="86" font-size="13" font-weight="700" fill="#b45309">v</text>
-<line x1="78" y1="90" x2="78" y2="118" stroke="#b45309" stroke-width="1.4" marker-end="url(#emDcArr)"/>
+<g class="arc-map-view arc-map-view-grid" display="none">
+<rect x="176" y="16" width="7" height="96" fill="#fff" stroke="#1e293b" stroke-width="1.1"/>
+<rect x="196" y="16" width="7" height="96" fill="#fff" stroke="#1e293b" stroke-width="1.1"/>
+<rect x="216" y="16" width="7" height="96" fill="#fff" stroke="#1e293b" stroke-width="1.1"/>
+<rect x="236" y="16" width="7" height="96" fill="#fff" stroke="#1e293b" stroke-width="1.1"/>
+<rect x="256" y="16" width="7" height="96" fill="#fff" stroke="#1e293b" stroke-width="1.1"/>
+<rect x="276" y="16" width="7" height="96" fill="#fff" stroke="#1e293b" stroke-width="1.1"/>
+<rect x="296" y="16" width="7" height="96" fill="#fff" stroke="#1e293b" stroke-width="1.1"/>
+<rect x="316" y="16" width="7" height="96" fill="#fff" stroke="#1e293b" stroke-width="1.1"/>
+<text x="250" y="128" text-anchor="middle" font-size="12" fill="#64748b">пластины</text>
 </g>
-<g class="em-dc-mode" data-mode="mot">
-<text x="48" y="118" font-size="15" font-weight="700" fill="#1e40af">U</text>
-<line x1="58" y1="122" x2="82" y2="122" stroke="#1e40af" stroke-width="1.5" marker-end="url(#emDcArr)"/>
-<text x="48" y="148" font-size="15" font-weight="700" fill="#c2410c">I</text>
-<text x="248" y="86" font-size="14" font-weight="700" fill="#1e40af">F</text>
-<line x1="240" y1="100" x2="268" y2="100" stroke="#1e40af" stroke-width="1.5" marker-end="url(#emDcArr)"/>
-<text x="66" y="86" font-size="14" font-weight="700" fill="#1e40af">F</text>
-<line x1="78" y1="100" x2="50" y2="100" stroke="#1e40af" stroke-width="1.5" marker-end="url(#emDcArr)"/>
+<g class="arc-map-view arc-map-view-semi" display="none">
+<line x1="140" y1="114" x2="140" y2="160" stroke="#94a3b8" stroke-width="1.3"/>
+<line x1="140" y1="160" x2="372" y2="160" stroke="#94a3b8" stroke-width="1.3"/>
+<line x1="372" y1="160" x2="372" y2="114" stroke="#94a3b8" stroke-width="1.3"/>
+<rect class="arc-map-thy" x="218" y="148" width="44" height="24" rx="3" fill="#fff" stroke="#1e40af" stroke-width="1.4"/>
+<text class="arc-map-thy-lab" x="240" y="165" text-anchor="middle" font-size="12" font-weight="700" fill="#1e40af">VS</text>
 </g>
-<g class="em-dc-hit" data-info="comm" style="cursor:pointer">
-<ellipse cx="300" cy="108" rx="22" ry="16" fill="#fff" stroke="#1e293b" stroke-width="1.5"/>
-<line x1="300" y1="92" x2="300" y2="124" stroke="#1e293b" stroke-width="1.4"/>
-<line x1="232" y1="108" x2="278" y2="108" stroke="#1e293b" stroke-width="1.5"/>
-<text x="300" y="144" text-anchor="middle" font-size="12" font-weight="700" fill="#1e40af">коллектор</text>
+<g class="arc-map-view arc-map-view-media" display="none">
+<rect class="arc-map-m0" x="36" y="28" width="100" height="88" rx="8" fill="#fff" stroke="#e2e8f0" stroke-width="1.4"/>
+<text x="86" y="78" text-anchor="middle" font-size="13" font-weight="700" fill="#1e40af">вакуум</text>
+<rect class="arc-map-m1" x="152" y="28" width="100" height="88" rx="8" fill="#fff" stroke="#e2e8f0" stroke-width="1.4"/>
+<text x="202" y="78" text-anchor="middle" font-size="13" font-weight="700" fill="#0f766e">SF₆</text>
+<rect class="arc-map-m2" x="268" y="28" width="100" height="88" rx="8" fill="#fff" stroke="#e2e8f0" stroke-width="1.4"/>
+<text x="318" y="78" text-anchor="middle" font-size="13" font-weight="700" fill="#b45309">масло</text>
+<rect class="arc-map-m3" x="384" y="28" width="100" height="88" rx="8" fill="#fff" stroke="#e2e8f0" stroke-width="1.4"/>
+<text x="434" y="78" text-anchor="middle" font-size="13" font-weight="700" fill="#1d4ed8">воздух</text>
 </g>
-<g class="em-dc-hit" data-info="brush" style="cursor:pointer">
-<rect x="292" y="70" width="16" height="14" fill="#fed7aa" stroke="#9a3412" stroke-width="1.3"/>
-<rect x="292" y="132" width="16" height="14" fill="#fed7aa" stroke="#9a3412" stroke-width="1.3"/>
-<line x1="300" y1="70" x2="300" y2="56" stroke="#1e293b" stroke-width="1.3"/>
-<line x1="300" y1="146" x2="300" y2="160" stroke="#1e293b" stroke-width="1.3"/>
-<text x="332" y="80" font-size="12" font-weight="700" fill="#9a3412">щётки</text>
-</g>
-<g class="em-dc-hit em-dc-wave" data-info="emf" style="cursor:pointer">
-<line x1="360" y1="200" x2="508" y2="200" stroke="#94a3b8" stroke-width="1.2"/>
-<line x1="360" y1="200" x2="360" y2="56" stroke="#94a3b8" stroke-width="1.2"/>
-<text x="510" y="204" font-size="12" fill="#64748b">t</text>
-<text x="350" y="64" font-size="13" font-weight="700" fill="#1e40af">e</text>
-<path d="M360 200 C372 200 376 72 392 72 S412 200 424 200 S436 72 452 72 S472 200 484 200" fill="none" stroke="#1d4ed8" stroke-width="2"/>
-<text x="434" y="220" text-anchor="middle" font-size="12" fill="#475569">а машина · б ЭДС после коллектора</text>
-</g>
+<text class="arc-map-readout" x="260" y="222" text-anchor="middle" font-size="13" font-weight="700" fill="#1e40af">камера · дуга уходит в щель</text>
 </svg>
 </div>
-<dl class="char-formula-legend em-dc-legend">
-<div class="em-dc-hit" data-info="poles"><dt>Φ</dt><dd>постоянный поток полюсов</dd></div>
-<div class="em-dc-hit" data-info="frame"><dt>рамка</dt><dd>проводник в поле</dd></div>
-<div class="em-dc-hit" data-info="comm"><dt>коллектор</dt><dd>два полукольца</dd></div>
-<div class="em-dc-hit" data-info="brush"><dt>щётки</dt><dd>съём тока / ЭДС</dd></div>
-<div class="em-dc-hit" data-info="gen"><dt>n</dt><dd>вращение рамки</dd></div>
-<div class="em-dc-hit" data-info="emf"><dt>e</dt><dd>пульсирующая ЭДС</dd></div>
-<div class="em-dc-hit" data-info="mot"><dt>F</dt><dd>сила Ампера</dd></div>
-<div class="em-dc-hit" data-info="hand"><dt>рука</dt><dd>правая / левая</dd></div>
-</dl>
+<div class="app-purpose-grid arc-map-grid">
+<button type="button" class="app-purpose-card active" data-info="chamber">Камера</button>
+<button type="button" class="app-purpose-card" data-info="blow">Магнитное дутьё</button>
+<button type="button" class="app-purpose-card" data-info="grid">Решётка</button>
+<button type="button" class="app-purpose-card" data-info="semi">Полупроводники</button>
+<button type="button" class="app-purpose-card" data-info="media">Другие среды</button>
+</div>
+<div class="arc-controls">
+<label class="arc-ctrl">
+<span class="arc-map-slabel">вход</span>
+<input type="range" class="arc-map-range" min="0" max="100" value="25" aria-label="Превью способа">
+<span class="arc-map-val">25%</span>
+</label>
+</div>
+</div>
+<aside class="asutp-panel" id="arcMapPanel">
+<h3>Камера</h3>
+<p>Дугу загоняют в узкую щель между стенками. Стенки забирают тепло, сечение столба падает, сопротивление растёт.</p>
+<p>Стоит почти на каждом контакторе и автомате до 1 кВ.</p>
+</aside>
+</div>
+</section>
+
+<section class="slide slide-arc-chamber-interactive">
+<h2>Дугогасительные камеры</h2>
+<div class="slide-body asutp-interactive">
+<div class="asutp-main">
+<p class="asutp-hint">Двигайте дугу вверх — стенки камеры охлаждают столб</p>
+<div class="asutp-diagram-wrap">
+<svg class="arc-svg" viewBox="0 0 480 220" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="Дугогасительная камера">
+<rect width="480" height="220" fill="#fafafa"/>
+<rect x="150" y="20" width="28" height="120" fill="#fff" stroke="#1e293b" stroke-width="1.5"/>
+<rect x="302" y="20" width="28" height="120" fill="#fff" stroke="#1e293b" stroke-width="1.5"/>
+<text x="164" y="16" text-anchor="middle" font-size="12" fill="#64748b">стенка</text>
+<text x="316" y="16" text-anchor="middle" font-size="12" fill="#64748b">стенка</text>
+<rect x="168" y="148" width="54" height="22" fill="#fff" stroke="#1e293b" stroke-width="1.6"/>
+<rect x="258" y="148" width="54" height="22" fill="#fff" stroke="#1e293b" stroke-width="1.6"/>
+<path class="arc-ch-bolt" d="M222 159 Q240 100 258 159" fill="none" stroke="#d97706" stroke-width="2.3"/>
+<text x="240" y="188" text-anchor="middle" font-size="12" fill="#64748b">контакты</text>
+<text class="arc-ch-readout" x="240" y="210" text-anchor="middle" font-size="13" font-weight="700" fill="#1e40af">дуга у контактов</text>
+</svg>
+</div>
 <div class="asutp-tabs">
 <button type="button" class="asutp-tab active" data-info="intro">Обзор</button>
-<button type="button" class="asutp-tab" data-info="gen">Генератор</button>
-<button type="button" class="asutp-tab" data-info="mot">Двигатель</button>
-<button type="button" class="asutp-tab" data-info="comm">Коллектор</button>
-<button type="button" class="asutp-tab" data-info="hand">Правила руки</button>
+<button type="button" class="asutp-tab" data-info="slot">Щелевая</button>
+<button type="button" class="asutp-tab" data-info="lab">Лабиринт</button>
+</div>
+<div class="arc-controls">
+<label class="arc-ctrl">
+<span>вход в камеру</span>
+<input type="range" class="arc-ch-range" min="0" max="100" value="20" aria-label="Вход в камеру">
+<span class="arc-ch-val">20%</span>
+</label>
 </div>
 </div>
-<aside class="asutp-panel" id="emDcWorkPanel">
+<aside class="asutp-panel" id="arcChPanel">
 <h3>Обзор</h3>
-<p>Полюсы дают постоянный поток Φ. Рамка в зазоре. Концы — на коллекторные полукольца, с них ток снимают щётки.</p>
+<p>Камера — кожух из дугостойкой керамики или пластика над контактами.</p>
+<p>Дуга выдувается или сама поднимается в щель: площадь контакта со стенками растёт, плазма <strong>остывает</strong>.</p>
+</aside>
+</div>
+</section>
+
+<section class="slide slide-arc-blow-interactive">
+<h2>Магнитное дутьё</h2>
+<div class="slide-body asutp-interactive">
+<div class="asutp-main">
+<p class="asutp-hint">Двигайте ток — сила Ампера выдувает дугу в камеру</p>
+<div class="asutp-diagram-wrap">
+<svg class="arc-svg" viewBox="0 0 500 220" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="Магнитное дутьё">
+<rect width="500" height="220" fill="#fafafa"/>
+<g class="arc-blow-coil">
+<ellipse cx="70" cy="96" rx="28" ry="12" fill="none" stroke="#b45309" stroke-width="1.6"/>
+<ellipse cx="70" cy="108" rx="28" ry="12" fill="none" stroke="#b45309" stroke-width="1.6"/>
+<text x="70" y="72" text-anchor="middle" font-size="13" font-weight="700" fill="#1e40af">катушка</text>
+</g>
+<text x="118" y="88" font-size="13" font-weight="700" fill="#1e40af">B</text>
+<text x="118" y="108" font-size="16" fill="#64748b">×</text>
+<text x="118" y="128" font-size="16" fill="#64748b">×</text>
+<rect x="150" y="92" width="56" height="24" fill="#fff" stroke="#1e293b" stroke-width="1.6"/>
+<rect x="250" y="92" width="56" height="24" fill="#fff" stroke="#1e293b" stroke-width="1.6"/>
+<path class="arc-blow-bolt" d="M206 104 Q228 70 250 104" fill="none" stroke="#d97706" stroke-width="2.3"/>
+<rect x="330" y="28" width="14" height="100" fill="#fff" stroke="#1e293b" stroke-width="1.3"/>
+<rect x="390" y="28" width="14" height="100" fill="#fff" stroke="#1e293b" stroke-width="1.3"/>
+<text x="367" y="20" text-anchor="middle" font-size="12" fill="#64748b">камера</text>
+<text x="228" y="148" text-anchor="middle" font-size="13" fill="#1e40af">F = I × B</text>
+<text class="arc-blow-readout" x="250" y="200" text-anchor="middle" font-size="13" font-weight="700" fill="#1e40af">ток мал · дуга у контактов</text>
+</svg>
+</div>
+<div class="asutp-tabs">
+<button type="button" class="asutp-tab active" data-info="intro">Обзор</button>
+<button type="button" class="asutp-tab" data-info="force">Сила</button>
+<button type="button" class="asutp-tab" data-info="dc">Постоянный ток</button>
+</div>
+<div class="arc-controls">
+<label class="arc-ctrl">
+<span>ток I</span>
+<input type="range" class="arc-blow-range" min="0" max="100" value="25" aria-label="Ток">
+<span class="arc-blow-val">25%</span>
+</label>
+</div>
+</div>
+<aside class="asutp-panel" id="arcBlowPanel">
+<h3>Обзор</h3>
+<p>Катушка (или магнит) создаёт поле <strong>поперёк</strong> дуги. На столб действует сила Ампера — дугу сносит в камеру.</p>
+<p>Чем больше ток, тем сильнее дутьё: тяжёлые режимы гасятся охотнее.</p>
+</aside>
+</div>
+</section>
+
+<section class="slide slide-arc-grid-interactive">
+<h2>Дугогасительная решётка</h2>
+<div class="slide-body asutp-interactive">
+<div class="asutp-main">
+<p class="asutp-hint">Двигайте вход в решётку — дуга режется на короткие дуги</p>
+<div class="asutp-diagram-wrap">
+<svg class="arc-svg" viewBox="0 0 500 220" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="Дугогасительная решётка">
+<rect width="500" height="220" fill="#fafafa"/>
+<g class="arc-grid-plates">
+<rect x="168" y="24" width="8" height="100" fill="#fff" stroke="#1e293b" stroke-width="1.3"/>
+<rect x="192" y="24" width="8" height="100" fill="#fff" stroke="#1e293b" stroke-width="1.3"/>
+<rect x="216" y="24" width="8" height="100" fill="#fff" stroke="#1e293b" stroke-width="1.3"/>
+<rect x="240" y="24" width="8" height="100" fill="#fff" stroke="#1e293b" stroke-width="1.3"/>
+<rect x="264" y="24" width="8" height="100" fill="#fff" stroke="#1e293b" stroke-width="1.3"/>
+<rect x="288" y="24" width="8" height="100" fill="#fff" stroke="#1e293b" stroke-width="1.3"/>
+<rect x="312" y="24" width="8" height="100" fill="#fff" stroke="#1e293b" stroke-width="1.3"/>
+<rect x="336" y="24" width="8" height="100" fill="#fff" stroke="#1e293b" stroke-width="1.3"/>
+</g>
+<text x="256" y="18" text-anchor="middle" font-size="12" fill="#64748b">пластины</text>
+<rect x="148" y="140" width="56" height="22" fill="#fff" stroke="#1e293b" stroke-width="1.6"/>
+<rect x="296" y="140" width="56" height="22" fill="#fff" stroke="#1e293b" stroke-width="1.6"/>
+<path class="arc-grid-bolt" d="" fill="none" stroke="#d97706" stroke-width="2.2"/>
+<text class="arc-grid-u" x="400" y="80" font-size="13" font-weight="700" fill="#1e40af">Uд ≈ n·ΔUк</text>
+<text class="arc-grid-readout" x="250" y="200" text-anchor="middle" font-size="13" font-weight="700" fill="#1e40af">n = 0 · дуга целая</text>
+</svg>
+</div>
+<div class="asutp-tabs">
+<button type="button" class="asutp-tab active" data-info="intro">Обзор</button>
+<button type="button" class="asutp-tab" data-info="drop">Катодное падение</button>
+<button type="button" class="asutp-tab" data-info="ac">Переменный ток</button>
+</div>
+<div class="arc-controls">
+<label class="arc-ctrl">
+<span>вход в решётку</span>
+<input type="range" class="arc-grid-range" min="0" max="100" value="0" aria-label="Вход в решётку">
+<span class="arc-grid-val">0%</span>
+</label>
+</div>
+</div>
+<aside class="asutp-panel" id="arcGridPanel">
+<h3>Обзор</h3>
+<p>Пакет стальных пластин (деионная решётка) стоит над контактами. Дуга втягивается и <strong>разрезается</strong> на n коротких дуг.</p>
+<p>У каждой дуги своё катодное падение ~15…25 В. Сумма растёт — ток не может течь.</p>
+</aside>
+</div>
+</section>
+
+<section class="slide slide-arc-semi-interactive">
+<h2>Гашение с полупроводниками</h2>
+<div class="slide-body asutp-interactive">
+<div class="asutp-main">
+<p class="asutp-hint">Двигайте цикл — полупроводник берёт ток, контакт расходится без дуги</p>
+<div class="asutp-diagram-wrap">
+<svg class="arc-svg" viewBox="0 0 520 210" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="Гибридное гашение">
+<rect width="520" height="210" fill="#fafafa"/>
+<text x="40" y="40" font-size="13" font-weight="700" fill="#1e40af">~U</text>
+<path class="arc-semi-line-main" d="M40 52 H150" stroke="#1e293b" stroke-width="1.6"/>
+<g class="arc-semi-contact">
+<rect x="150" y="40" width="50" height="22" fill="#fff" stroke="#1e293b" stroke-width="1.6"/>
+<rect class="arc-semi-move" x="200" y="40" width="50" height="22" fill="#fff" stroke="#1e293b" stroke-width="1.6"/>
+</g>
+<path class="arc-semi-line-load" d="M250 52 H400" stroke="#1e293b" stroke-width="1.6"/>
+<circle class="arc-semi-lamp" cx="430" cy="52" r="15" fill="#fde68a" stroke="#d97706" stroke-width="1.4"/>
+<text x="430" y="84" text-anchor="middle" font-size="12" fill="#64748b">нагрузка</text>
+<path class="arc-semi-branch" d="M120 52 V120 H250 V52" fill="none" stroke="#94a3b8" stroke-width="1.4"/>
+<rect class="arc-semi-thy" x="178" y="102" width="44" height="36" rx="3" fill="#fff" stroke="#1e293b" stroke-width="1.5"/>
+<text x="200" y="124" text-anchor="middle" font-size="13" font-weight="700" fill="#1e40af">VS</text>
+<text x="200" y="154" text-anchor="middle" font-size="12" fill="#64748b">тиристор</text>
+<text class="arc-semi-readout" x="260" y="192" text-anchor="middle" font-size="13" font-weight="700" fill="#1e40af">контакт замкнут · VS выключен</text>
+</svg>
+</div>
+<div class="asutp-tabs">
+<button type="button" class="asutp-tab active" data-info="intro">Обзор</button>
+<button type="button" class="asutp-tab" data-info="hybrid">Гибрид</button>
+<button type="button" class="asutp-tab" data-info="ssr">Твердотельный</button>
+</div>
+<div class="arc-controls">
+<label class="arc-ctrl">
+<span>цикл отключения</span>
+<input type="range" class="arc-semi-range" min="0" max="100" value="0" aria-label="Цикл отключения">
+<span class="arc-semi-val">покой</span>
+</label>
+</div>
+</div>
+<aside class="asutp-panel" id="arcSemiPanel">
+<h3>Обзор</h3>
+<p>Полупроводник параллельно контакту: в момент размыкания ток уходит в тиристор (симистор, IGBT), контакт расходится <strong>без дуги</strong>.</p>
+<p>Потом полупроводник запирается в нуле тока. Ресурс контакта почти как у слаботочного.</p>
+</aside>
+</div>
+</section>
+
+<section class="slide slide-arc-other-interactive">
+<h2>Другие способы гашения</h2>
+<div class="slide-body asutp-interactive">
+<div class="asutp-main">
+<p class="asutp-hint">Нажмите среду — это уже высоковольтные выключатели</p>
+<div class="app-purpose-grid" style="grid-template-columns:repeat(2,1fr)">
+<button type="button" class="app-purpose-card active" data-info="vac">Вакуум</button>
+<button type="button" class="app-purpose-card" data-info="sf6">Элегаз SF₆</button>
+<button type="button" class="app-purpose-card" data-info="oil">Масло</button>
+<button type="button" class="app-purpose-card" data-info="air">Сжатый воздух</button>
+</div>
+</div>
+<aside class="asutp-panel" id="arcOtherPanel">
+<h3>Вакуум</h3>
+<p>В вакуумной камере нечему ионизироваться: дуга из паров металла гаснет в первом нуле тока.</p>
+<p>Компактные вакуумные выключатели 6…35 кВ на подстанциях и в ячейках КРУ.</p>
+</aside>
+</div>
+</section>
+
+<section class="slide slide-arc-where-interactive">
+<h2>Где это в САУ</h2>
+<div class="slide-body asutp-interactive">
+<div class="asutp-main">
+<p class="asutp-hint">Нажмите аппарат — какой способ гашения ему нужен</p>
+<div class="app-purpose-grid" style="grid-template-columns:repeat(2,1fr)">
+<button type="button" class="app-purpose-card active" data-info="plc">Концевик (плк)</button>
+<button type="button" class="app-purpose-card" data-info="relay">Реле</button>
+<button type="button" class="app-purpose-card" data-info="cont">Контактор</button>
+<button type="button" class="app-purpose-card" data-info="brk">Автомат</button>
+</div>
+</div>
+<aside class="asutp-panel" id="arcWherePanel">
+<h3>Концевик (плк)</h3>
+<p>Ток входа ПЛК — миллиамперы. Камеры и дутья нет: важны <var>R</var><sub>k</sub> и плёнка, как в лекции 2.</p>
+<p>Если ПЛК коммутирует нагрузку сам — ставят твердотельный выход или внешний пускатель.</p>
 </aside>
 </div>
 </section>
@@ -1229,7 +1604,7 @@
 <button class="btn-nav" id="nextBtn">Вперёд →</button>
 </div>
 <div class="progress-wrap"><div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div></div>
-<span class="slide-counter" id="slideCounter">1 / 25</span>
+<span class="slide-counter" id="slideCounter">1 / 30</span>
 <div class="controls-right">
 <button class="btn-nav" id="overviewBtn">Обзор</button>
 <button class="btn-nav" id="fullscreenBtn">⛶</button>
