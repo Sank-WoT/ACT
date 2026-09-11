@@ -690,12 +690,12 @@
   if (classSlide) {
     const classPanel = document.getElementById('classPanel');
     const classFig = document.getElementById('classFig');
-    const box = (x, y, w, h, t1, t2) => `<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="#fff" stroke="#1e293b" stroke-width="1.5"/><text x="${x + w / 2}" y="${t2 ? y + 24 : y + 32}" text-anchor="middle" font-size="13" font-weight="700" fill="#0f172a">${t1}</text>${t2 ? `<text x="${x + w / 2}" y="${y + 42}" text-anchor="middle" font-size="11" fill="#64748b">${t2}</text>` : ''}`;
+    const box = (x, y, w, h, t1, t2) => `<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="#fff" stroke="#1e293b" stroke-width="1.5"/><text x="${x + w / 2}" y="${t2 ? y + 28 : y + 36}" text-anchor="middle" font-size="16" font-weight="700" fill="#0f172a">${t1}</text>${t2 ? `<text x="${x + w / 2}" y="${y + 50}" text-anchor="middle" font-size="14" fill="#64748b">${t2}</text>` : ''}`;
     const classInfo = {
       out: {
         title: 'По выходу',
         html: '<p>Для АСУ удобны датчики с <strong>электрическим</strong> выходом: сигнал легко усиливать, передавать и обрабатывать в ПЛК.</p><p><strong>Неэлектрические</strong> (пневматические, гидравлические) в этой лекции не рассматриваются.</p>',
-        fig: `<svg viewBox="0 0 480 200" xmlns="http://www.w3.org/2000/svg"><rect width="480" height="200" fill="#fafafa"/><text x="240" y="28" text-anchor="middle" font-size="13" fill="#64748b">выходной сигнал датчика</text>${box(40, 56, 180, 88, 'электрический', 'U, I, код')}${box(260, 56, 180, 88, 'неэлектрический', 'давление, ход')}<path d="M220 100 H258" stroke="#1e293b" stroke-width="1.3"/><text x="240" y="178" text-anchor="middle" font-size="12" fill="#1e40af">в курсе — электрические</text></svg>`
+        fig: `<svg viewBox="0 0 480 200" xmlns="http://www.w3.org/2000/svg"><rect width="480" height="200" fill="#fafafa"/><text x="240" y="30" text-anchor="middle" font-size="16" fill="#64748b">выходной сигнал датчика</text>${box(40, 50, 180, 92, 'электрический', 'U, I, код')}${box(260, 50, 180, 92, 'неэлектрический', 'давление, ход')}<path d="M220 96 H258" stroke="#1e293b" stroke-width="1.3"/><text x="240" y="180" text-anchor="middle" font-size="15" fill="#1e40af">в курсе — электрические</text></svg>`
       },
       energy: {
         title: 'По энергии',
@@ -808,15 +808,15 @@
       },
       ring: {
         title: 'Кольцевой',
-        html: '<p>Щётка едет по окружности. Угол → сигнал.</p>',
+        html: '<p><strong>Принцип.</strong> Та же щётка, что при скольжении, но дорожка свёрнута в кольцо. Контакт не размыкается: щётка едет по окружности и всё время касается кольца.</p><p>Ползунок задаёт <strong>угол</strong>. Точка съёма тока едет по дуге → сигнал угла (кольцевой потенциометр, кольцо / коллектор машины).</p>',
         label: 'угол',
-        fig: `<svg viewBox="0 0 440 190" xmlns="http://www.w3.org/2000/svg"><rect width="440" height="190" fill="#fafafa"/><circle cx="220" cy="92" r="54" fill="#fff" stroke="#1e293b" stroke-width="1.8"/><circle cx="220" cy="92" r="34" fill="#fafafa" stroke="#94a3b8" stroke-width="1.2"/><circle cx="220" cy="92" r="7" fill="#fff" stroke="#1e293b"/><g class="ct-brush" transform="rotate(0 220 92)"><rect x="262" y="82" width="24" height="20" rx="2" fill="#e2e8f0" stroke="#1e293b" stroke-width="1.4"/></g><text x="220" y="170" text-anchor="middle" font-size="13" font-weight="700" fill="#1e40af" class="ct-state">угол 0°</text></svg>`
+        fig: `<svg viewBox="0 0 440 190" xmlns="http://www.w3.org/2000/svg"><rect width="440" height="190" fill="#fafafa"/><circle cx="220" cy="88" r="54" fill="#fff" stroke="#1e293b" stroke-width="1.8"/><circle cx="220" cy="88" r="34" fill="#fafafa" stroke="#94a3b8" stroke-width="1.2"/><circle cx="220" cy="88" r="7" fill="#fff" stroke="#1e293b"/><g class="ct-brush" transform="rotate(0 220 88)"><rect x="262" y="78" width="24" height="20" rx="2" fill="#e2e8f0" stroke="#1e293b" stroke-width="1.4"/></g><text x="300" y="88" font-size="12" fill="#334155">щётка</text><text x="220" y="28" text-anchor="middle" font-size="12" fill="#64748b">кольцо = круговая дорожка</text><text x="220" y="168" text-anchor="middle" font-size="13" font-weight="700" fill="#1e40af" class="ct-state">угол 0° · контакт не рвётся</text></svg>`
       },
       slide: {
         title: 'Скользящий (щётка)',
-        html: '<p>Движок по дорожке. Положение → <var>R</var> или <var>U</var><sub>вых</sub>.</p>',
+        html: '<p><strong>Принцип.</strong> Две поверхности не смыкаются ударом, как НО/НЗ. Щётка (движок) <strong>едет</strong> по резистивной дорожке и всё время её касается.</p><p>Синий участок — длина <var>l</var> от начала до движка. Сопротивление этого участка <var>R</var> ~ <var>l</var>. Если дорожка — делитель, с движка снимают <var>U</var><sub>вых</sub> ~ перемещению (реостат, потенциометр).</p><p>Сигнал <strong>аналоговый</strong>: ход, а не «вкл/выкл». Щётка мягче дорожки (графит, металлографит) — изнашивается она, а не резистор.</p>',
         label: 'положение',
-        fig: `<svg viewBox="0 0 440 190" xmlns="http://www.w3.org/2000/svg"><rect width="440" height="190" fill="#fafafa"/><rect x="70" y="84" width="300" height="16" fill="#fff" stroke="#1e293b" stroke-width="1.5"/><rect class="ct-active" x="70" y="84" width="0" height="16" fill="#dbeafe"/><g class="ct-wiper"><rect x="-12" y="72" width="24" height="40" fill="#e2e8f0" stroke="#1e293b" stroke-width="1.5"/><line x1="0" y1="112" x2="0" y2="140" stroke="#1e293b" stroke-width="1.5"/></g><text x="220" y="50" text-anchor="middle" font-size="12" fill="#64748b">резистивная дорожка</text><text x="220" y="168" text-anchor="middle" font-size="13" font-weight="700" fill="#1e40af" class="ct-state">положение 0%</text></svg>`
+        fig: `<svg viewBox="0 0 440 200" xmlns="http://www.w3.org/2000/svg"><rect width="440" height="200" fill="#fafafa"/><text x="70" y="48" font-size="13" font-weight="700" fill="#1e40af">A</text><text x="358" y="48" font-size="13" font-weight="700" fill="#1e40af">B</text><text x="220" y="36" text-anchor="middle" font-size="13" fill="#64748b">резистивная дорожка</text><rect x="70" y="88" width="300" height="18" fill="#fff" stroke="#1e293b" stroke-width="1.5"/><rect class="ct-active" x="70" y="88" width="0" height="18" fill="#dbeafe"/><g class="ct-wiper"><rect x="-12" y="74" width="24" height="46" fill="#e2e8f0" stroke="#1e293b" stroke-width="1.5"/><line x1="0" y1="120" x2="0" y2="148" stroke="#1e293b" stroke-width="1.5"/><text x="0" y="168" text-anchor="middle" font-size="12" fill="#1e40af">Uвых</text></g><text x="220" y="72" text-anchor="middle" font-size="12" fill="#475569">движок едет · касается дорожки</text><text x="220" y="190" text-anchor="middle" font-size="13" font-weight="700" fill="#1e40af" class="ct-state">l = 0% · R ~ l</text></svg>`
       }
     };
     const contactTypeKeys = ['no', 'nc', 'co', 'point', 'ring', 'slide'];
@@ -877,15 +877,15 @@
       } else if (contactTypeKey === 'ring') {
         const ang = t * 270 - 20;
         const brush = contactTypeFig?.querySelector('.ct-brush');
-        if (brush) brush.setAttribute('transform', `rotate(${ang.toFixed(1)} 220 92)`);
-        if (state) state.textContent = `угол ${Math.round(t * 270)}°`;
+        if (brush) brush.setAttribute('transform', `rotate(${ang.toFixed(1)} 220 88)`);
+        if (state) state.textContent = `угол ${Math.round(t * 270)}° · контакт не рвётся`;
       } else if (contactTypeKey === 'slide') {
         const x = 82 + t * 276;
         const wiper = contactTypeFig?.querySelector('.ct-wiper');
         const active = contactTypeFig?.querySelector('.ct-active');
         if (wiper) wiper.setAttribute('transform', `translate(${x.toFixed(1)} 0)`);
         if (active) active.setAttribute('width', String(Math.max(0, x - 70)));
-        if (state) state.textContent = `положение ${pct}%`;
+        if (state) state.textContent = `l = ${pct}% · R ~ l · Uвых ~ l`;
       }
     }
 
@@ -946,7 +946,7 @@
       },
       wiper: {
         title: 'Движок (щётка)',
-        html: '<p>Скользящий контакт по резистору или ламели. Зона износа — дорожка, по которой ходит щётка.</p><p>Материал движка <strong>мягче</strong> обмотки, чтобы истиралась щётка, а не резистор.</p>'
+        html: '<p><strong>Принцип.</strong> Движок едет по резистору или ламели и не размыкает цепь: ток снимают с точки касания. Длина участка до движка задаёт <var>R</var> или долю <var>U</var>.</p><p>Зона износа — дорожка. Материал щётки <strong>мягче</strong> обмотки, чтобы истиралась она, а не резистор.</p>'
       }
     };
     const contactConstTabs = ['intro', 'fixed', 'move', 'spring', 'wiper'];
@@ -3945,6 +3945,8 @@
       const slabel = arcMapSlide.querySelector('.arc-map-slabel');
       const thy = arcMapSlide.querySelector('.arc-map-thy');
       const bLab = arcMapSlide.querySelector('.arc-map-b');
+      const farr = arcMapSlide.querySelector('.arc-map-farr');
+      const flab = arcMapSlide.querySelector('.arc-map-flab');
       if (left) {
         left.setAttribute('x', '168');
         left.setAttribute('y', '148');
@@ -3973,18 +3975,43 @@
               : 'столб сжат · Uд растёт';
         }
       } else if (arcMapMode === 'blow') {
-        const mx = 240 + t * 120;
-        const my = 100 - t * 20;
-        if (bolt) bolt.setAttribute('d', `M222 159 Q${mx.toFixed(1)} ${my.toFixed(1)} 258 159`);
-        if (bLab) bLab.setAttribute('opacity', String(0.35 + t * 0.65));
+        const yC = 118;
+        const xL = 120;
+        const xR = 210;
+        const x0 = xL + 54;
+        const yM = yC + 11;
+        if (left) {
+          left.setAttribute('x', String(xL));
+          left.setAttribute('y', String(yC));
+        }
+        if (right) {
+          right.setAttribute('x', String(xR));
+          right.setAttribute('y', String(yC));
+        }
+        const peakX = 192 + t * 138;
+        const peakY = 112 - t * 82;
+        const c1y = 118 - t * 48;
+        const c2x = 192 + t * 118;
+        const c3x = 192 + t * 158;
+        if (bolt) {
+          bolt.setAttribute('d', `M${x0} ${yM} C${x0} ${c1y.toFixed(1)} ${c2x.toFixed(1)} ${peakY.toFixed(1)} ${peakX.toFixed(1)} ${peakY.toFixed(1)} C${c3x.toFixed(1)} ${peakY.toFixed(1)} ${xR} ${c1y.toFixed(1)} ${xR} ${yM}`);
+          bolt.setAttribute('stroke-width', String(2.1 + t * 0.7));
+        }
+        if (bLab) bLab.setAttribute('opacity', String(0.4 + t * 0.6));
+        if (farr) {
+          const fx = 210 + t * 70;
+          farr.setAttribute('d', `M200 58 L${fx.toFixed(1)} 58`);
+          farr.setAttribute('opacity', String(0.25 + t * 0.75));
+        }
+        if (flab) flab.setAttribute('opacity', String(0.35 + t * 0.65));
         if (slabel) slabel.textContent = 'ток I';
         if (val) val.textContent = `${Math.round(t * 100)}%`;
         if (readout) {
-          readout.textContent = t < 0.3
+          readout.textContent = t < 0.32
             ? 'ток мал · дуга у контактов'
-            : t < 0.7
-              ? 'дутьё сносит дугу вправо'
-              : 'дуга в камере · растянута';
+            : t < 0.72
+              ? 'F сносит дугу в камеру'
+              : 'дуга в щели камеры · растянута';
         }
       } else if (arcMapMode === 'grid') {
         const n = Math.max(1, Math.round(1 + t * 7));
@@ -4152,15 +4179,28 @@
       const bolt = arcBlowSlide.querySelector('.arc-blow-bolt');
       const readout = arcBlowSlide.querySelector('.arc-blow-readout');
       const val = arcBlowSlide.querySelector('.arc-blow-val');
-      const cx = 228 + t * 110;
-      const cy = 70 - t * 36;
-      if (bolt) bolt.setAttribute('d', `M206 104 Q${cx.toFixed(1)} ${cy.toFixed(1)} 250 104`);
+      const farr = arcBlowSlide.querySelector('.arc-blow-farr');
+      const flab = arcBlowSlide.querySelector('.arc-blow-flab');
+      const peakX = 208 + t * 130;
+      const peakY = 94 - t * 72;
+      const c1y = 100 - t * 50;
+      const c2x = 208 + t * 100;
+      const c3x = 208 + t * 160;
+      if (bolt) {
+        bolt.setAttribute('d', `M196 112 C196 ${c1y.toFixed(1)} ${c2x.toFixed(1)} ${peakY.toFixed(1)} ${peakX.toFixed(1)} ${peakY.toFixed(1)} C${c3x.toFixed(1)} ${peakY.toFixed(1)} 220 ${c1y.toFixed(1)} 220 112`);
+        bolt.setAttribute('stroke-width', String(2.1 + t * 0.7));
+      }
+      if (farr) {
+        farr.setAttribute('d', `M214 52 L${(214 + 40 + t * 50).toFixed(1)} 52`);
+        farr.setAttribute('opacity', String(0.25 + t * 0.75));
+      }
+      if (flab) flab.setAttribute('opacity', String(0.35 + t * 0.65));
       if (readout) {
-        readout.textContent = t < 0.3
+        readout.textContent = t < 0.32
           ? 'ток мал · дуга у контактов'
-          : t < 0.7
-            ? 'дутьё сносит дугу вправо'
-            : 'дуга в камере · растянута';
+          : t < 0.72
+            ? 'F сносит дугу в камеру'
+            : 'дуга в щели камеры · растянута';
       }
       if (val) val.textContent = `${raw}%`;
     }
@@ -6314,7 +6354,7 @@
     const info = {
       intro: {
         title: 'Обзор',
-        html: '<p>Это <strong>не электромагнит привода</strong>. Сердечник и обмотки есть, но якорь не ходит. Задача — передать энергию из <var>w</var><sub>1</sub> в <var>w</var><sub>2</sub> через поток Φ.</p><p>Два вида однофазных: <strong>а</strong> стержневой (катушки на разных стержнях) и <strong>б</strong> броневой (обе на среднем).</p>'
+        html: '<p>Железо и обмотки есть, но это <strong>не электромагнит привода</strong>: якорь не ходит. Поток нужен, чтобы передать энергию из <var>w</var><sub>1</sub> в <var>w</var><sub>2</sub>.</p><p>Два вида однофазных: <strong>а</strong> стержневой (катушки на разных стержнях) и <strong>б</strong> броневой (обе на среднем).</p>'
       },
       rod: {
         title: 'Стержневой',
@@ -6356,99 +6396,155 @@
     showEmXfmrInfo('intro');
   }
 
-  /* ===== Lecture 4: loaded transformer ===== */
+  /* ===== Lecture 5: loaded transformer ===== */
   const emLoadSlide = document.querySelector('.slide-em-load-interactive');
   if (emLoadSlide) {
     const panel = document.getElementById('emLoadPanel');
     const info = {
       intro: {
         title: 'Обзор',
-        html: '<p>На <var>w</var><sub>2</sub> повесили нагрузку <var>Z</var><sub>н</sub>. Появился ток <var>i</var><sub>2</sub>. Якоря по-прежнему нет — меняются только токи и поток.</p><p>МДС нагрузки <var>w</var><sub>2</sub><var>i</var><sub>2</sub> почти компенсируется добавкой в первичной: <var>w</var><sub>1</sub>Δ<var>i</var><sub>1</sub> ≈ −<var>w</var><sub>2</sub><var>i</var><sub>2</sub>.</p>'
+        html: '<p>На <var>w</var><sub>2</sub> повесили нагрузку <var>Z</var><sub>н</sub>. Появился ток <var>i</var><sub>2</sub>. Якоря нет — меняются только токи и поток.</p><p>МДС нагрузки почти гасится добавкой в первичной: <var>w</var><sub>1</sub>Δ<var>i</var><sub>1</sub> ≈ −<var>w</var><sub>2</sub><var>i</var><sub>2</sub>.</p>',
+        eq: '<var>Φ</var><sub>1</sub> ≈ −<var>Φ</var><sub>2</sub>',
+        cap: 'нагрузка на вторичной · поток в замкнутом сердечнике'
       },
       load: {
         title: 'Нагрузка',
-        html: '<p>ЭДС <var>E</var><sub>2</sub> гонит ток через <var>Z</var><sub>н</sub> = <var>r</var><sub>н</sub> + j<var>X</var><sub>н</sub>. Чем меньше <var>Z</var><sub>н</sub>, тем больше <var>i</var><sub>2</sub> и тем сильнее реакция вторичной обмотки.</p>'
+        html: '<p>Во вторичной навелась ЭДС — она гонит ток через <var>Z</var><sub>н</sub> = <var>r</var><sub>н</sub> + j<var>X</var><sub>н</sub>.</p><p>Чем меньше <var>Z</var><sub>н</sub>, тем больше <var>i</var><sub>2</sub> и тем сильнее поле вторичной обмотки. Контуры и Кирхгоф — следующий слайд.</p>',
+        eq: '<var>w</var><sub>2</sub><var>i</var><sub>2</sub>',
+        cap: 'ток i₂ через Zн · чем меньше Zн, тем сильнее реакция'
       },
       react: {
         title: 'Реакция',
-        html: '<p>Ток <var>i</var><sub>2</sub> даёт МДС <var>w</var><sub>2</sub><var>i</var><sub>2</sub> — поток реакции, встречный основному.</p><p>Первичная отвечает добавкой тока: её МДС почти равна и противоположна. Основной поток Φ<sub>0</sub> почти не меняется — поэтому <var>U</var> на зажимах держится.</p>'
-      },
-      circ: {
-        title: 'Схема',
-        html: '<p>Закон Кирхгофа: слева контур <var>U</var><sub>1</sub> — активное <var>r</var><sub>1</sub>, рассеяние <var>x</var><sub>1</sub>, ЭДС <var>E</var><sub>1</sub>.</p><p>Справа вторичная: <var>E</var><sub>2</sub>, <var>x</var><sub>2</sub>, <var>r</var><sub>2</sub> и <var>Z</var><sub>н</sub> = <var>r</var><sub>н</sub> + j<var>X</var><sub>н</sub>. <var>E</var><sub>1</sub> и <var>E</var><sub>2</sub> связаны одним потоком.</p>'
-      },
-      ref: {
-        title: 'Приведение',
-        html: '<p>Вторичную приводят к виткам первичной: <var>n</var> = <var>w</var><sub>1</sub>/<var>w</var><sub>2</sub>.</p><p>Тогда <var>r</var>′<sub>2</sub> = <var>n</var>²<var>r</var><sub>2</sub>, <var>x</var>′<sub>2</sub> = <var>n</var>²<var>x</var><sub>2</sub>, <var>Z</var>′<sub>н</sub> = <var>n</var>²<var>Z</var><sub>н</sub> — одна цепь без двух ЭДС.</p><p>Нажмите элемент схемы — расшифровка справа.</p>'
-      },
-      u1: {
-        title: 'U₁',
-        html: '<p>Напряжение на зажимах первичной обмотки. Источник слева на приведённой схеме.</p>'
-      },
-      i1: {
-        title: 'I₁',
-        html: '<p>Ток первичной. После приведения это ток одной цепи: его считают через сумму <var>r</var><sub>1</sub>, <var>x</var><sub>1</sub> и приведённых вторичных сопротивлений.</p>'
-      },
-      r1: {
-        title: 'r₁',
-        html: '<p>Активное сопротивление первичной обмотки. Не приводят — оно уже в цепи <var>w</var><sub>1</sub>.</p>'
-      },
-      x1: {
-        title: 'x₁',
-        html: '<p>Индуктивное сопротивление рассеяния первичной обмотки.</p>'
-      },
-      r2p: {
-        title: 'r′₂',
-        html: '<p>Приведённое к первичной активное сопротивление вторичной: <var>r</var>′<sub>2</sub> = <var>n</var>² <var>r</var><sub>2</sub>, где <var>n</var> = <var>w</var><sub>1</sub>/<var>w</var><sub>2</sub>.</p>'
-      },
-      x2p: {
-        title: 'x′₂',
-        html: '<p>Приведённое сопротивление рассеяния вторичной: <var>x</var>′<sub>2</sub> = <var>n</var>² <var>x</var><sub>2</sub>.</p>'
-      },
-      zhp: {
-        title: 'Z′н',
-        html: '<p>Приведённое комплексное сопротивление нагрузки: <var>Z</var>′<sub>н</sub> = <var>n</var>² <var>Z</var><sub>н</sub>.</p><p>Стоит вертикально и замыкает цепь — как в учебнике.</p>'
+        html: '<p>Ток <var>i</var><sub>2</sub> даёт МДС <var>w</var><sub>2</sub><var>i</var><sub>2</sub> — поток реакции, встречный основному.</p><p>Первичная отвечает добавкой тока. Основной поток почти не меняется — поэтому напряжение на зажимах держится.</p>',
+        eq: '<var>w</var><sub>1</sub>Δ<var>i</var><sub>1</sub> ≈ −<var>w</var><sub>2</sub><var>i</var><sub>2</sub>',
+        cap: 'Φ₁ встречный Φ₂ · первичная компенсирует МДС'
       }
     };
-    const tabs = ['intro', 'load', 'react', 'circ', 'ref'];
-    const refKeys = ['ref', 'u1', 'i1', 'r1', 'x1', 'r2p', 'x2p', 'zhp'];
     const showEmLoadInfo = (key) => {
       const data = info[key] || info.intro;
       if (panel) panel.innerHTML = `<h3>${data.title}</h3>${data.html}`;
-      const isRef = refKeys.indexOf(key) !== -1;
-      emLoadSlide.classList.toggle('is-ref', isRef);
+      const liveEq = emLoadSlide.querySelector('.em-load-eq-live .char-eq');
+      if (liveEq) liveEq.innerHTML = data.eq;
+      const cap = emLoadSlide.querySelector('.em-load-cap');
+      if (cap) cap.textContent = data.cap;
       emLoadSlide.querySelectorAll('.asutp-tab').forEach((btn) => {
-        const on = btn.dataset.info === key || (isRef && btn.dataset.info === 'ref' && tabs.indexOf(key) === -1);
-        btn.classList.toggle('active', on);
-      });
-      const viewName = key === 'circ' ? 'circ' : isRef ? 'ref' : 'core';
-      emLoadSlide.querySelectorAll('.em-load-view').forEach((view) => {
-        view.classList.toggle('is-on', view.dataset.view === viewName);
+        btn.classList.toggle('active', btn.dataset.info === key);
       });
       emLoadSlide.querySelectorAll('.em-load-react').forEach((el) => {
-        el.classList.toggle('is-on', key === 'react');
+        const on = key === 'react';
+        el.classList.toggle('is-on', on);
+        if (on) el.removeAttribute('display');
+        else el.setAttribute('display', 'none');
       });
-      emLoadSlide.querySelectorAll('.em-load-hit').forEach((el) => {
-        el.classList.toggle('is-active', el.dataset.info === key);
-      });
+      const zn = emLoadSlide.querySelector('.em-load-zn');
+      if (zn) zn.setAttribute('stroke-width', key === 'load' ? '2.4' : '1.5');
+      if (zn) zn.setAttribute('stroke', key === 'load' ? '#2563eb' : '#1e293b');
     };
     emLoadSlide.addEventListener('click', (e) => {
       const tab = e.target.closest('.asutp-tab');
-      const hit = e.target.closest('.em-load-hit');
       if (tab && tab.dataset.info) {
         e.stopPropagation();
         showEmLoadInfo(tab.dataset.info);
-        return;
-      }
-      if (hit && hit.dataset.info) {
-        e.stopPropagation();
-        showEmLoadInfo(hit.dataset.info);
       }
     });
     showEmLoadInfo('intro');
   }
 
-  /* ===== Lecture 4: micromachines ===== */
+  const emFrac = (num, den) =>
+    `<span class="char-frac"><span class="char-frac-part">${num}</span><span class="char-frac-bar"></span><span class="char-frac-part">${den}</span></span>`;
+
+  /* ===== Lecture 5: loaded transformer equations ===== */
+  const emLoadEqSlide = document.querySelector('.slide-em-load-eq-interactive');
+  if (emLoadEqSlide) {
+    const panel = document.getElementById('emLoadEqPanel');
+    const info = {
+      intro: {
+        title: 'Зачем упрощать',
+        html: '<p>На прошлом слайде: сердечник, обмотки, нагрузка. Поток почти не сдвинулся.</p><p>Поэтому железо убираем. Остаются два электрических контура — напряжения, токи и сопротивления, без <var>Φ</var><sub>0</sub>.</p>',
+        eq: '<span class="char-eq">Φ<sub>1</sub> ≈ −Φ<sub>2</sub></span>',
+        note: 'железо убираем · остаются два контура',
+        view: 'two',
+        focus: ''
+      },
+      wind: {
+        title: 'Первичная',
+        html: '<p>Контур сети, ток <var>I</var><sub>1</sub> по часовой: от <var>U</var><sub>1</sub> через <var>r</var><sub>1</sub> и <var>X</var><sub>1</sub> к <var>E</var><sub>1</sub>.</p><p>Кирхгоф: сеть равна сумме падений и ЭДС. Точки на схеме бегут по этому контуру.</p>',
+        eq: '<span class="char-eq"><var>U</var><sub>1</sub> = <var>I</var><sub>1</sub><var>r</var><sub>1</sub> + <var>I</var><sub>1</sub><var>X</var><sub>1</sub> + <var>E</var><sub>1</sub></span>',
+        note: 'I₁ по часовой',
+        view: 'two',
+        focus: 'pri'
+      },
+      sec: {
+        title: 'Вторичная',
+        html: '<p><var>E</var><sub>2</sub> — источник. Ток <var>I</var><sub>2</sub> по часовой через <var>r</var><sub>2</sub>, <var>X</var><sub>2</sub> к нагрузке. На зажимах <var>Z</var><sub>н</sub> снимают <var>U</var><sub>2</sub>.</p><p>ЭДС минус падения на обмотке даёт напряжение нагрузки.</p>',
+        eq: '<span class="char-eq"><var>U</var><sub>2</sub> = <var>E</var><sub>2</sub> − <var>I</var><sub>2</sub>(<var>r</var><sub>2</sub> + <var>X</var><sub>2</sub>)</span>',
+        note: 'ЭДС минус падения на обмотке',
+        view: 'two',
+        focus: 'sec'
+      },
+      n: {
+        title: 'Коэффициент трансформации',
+        html: '<p>Отношение токов <strong>выражают через мощность</strong>. Потери малы, поэтому <var>E</var><sub>1</sub><var>I</var><sub>1</sub> ≈ <var>E</var><sub>2</sub><var>I</var><sub>2</sub> — что вошло, то вышло.</p><p>Переставьте: <var>E</var><sub>1</sub>/<var>E</var><sub>2</sub> = <var>I</var><sub>2</sub>/<var>I</var><sub>1</sub>. Если <var>E</var> упало в <var>n</var> раз, <var>I</var> вырос в <var>n</var> раз. Токи в формуле стоят наоборот.</p><p>Само <var>n</var> = <var>w</var><sub>1</sub>/<var>w</var><sub>2</sub> = <var>E</var><sub>1</sub>/<var>E</var><sub>2</sub> — из витков и одного потока Φ. Пример: 220 В / 22 В = 10, тогда <var>I</var><sub>2</sub> в десять раз больше <var>I</var><sub>1</sub>.</p>',
+        eq: `<span class="char-eq"><var>n</var> = </span>${emFrac('<var>w</var><sub>1</sub>', '<var>w</var><sub>2</sub>')}<span class="char-eq"> = </span>${emFrac('<var>E</var><sub>1</sub>', '<var>E</var><sub>2</sub>')}<span class="char-eq"> = </span>${emFrac('<var>I</var><sub>2</sub>', '<var>I</var><sub>1</sub>')}`,
+        note: 'через мощность: меньше вольт — больше ампер',
+        cap: 'токи из мощности: меньше вольт — больше ампер',
+        view: 'two',
+        focus: 'n'
+      },
+      ref: {
+        title: 'Одна цепь',
+        html: '<p>Две ЭДС неудобны. Вторичную пересчитывают на витки первичной через коэффициент трансформации <var>n</var>: сопротивления умножают на <var>n</var>².</p><p>Получается одна цепь: <var>U</var><sub>1</sub>, <var>r</var><sub>1</sub>, <var>x</var><sub>1</sub> и приведённые <var>r</var>′<sub>2</sub>, <var>x</var>′<sub>2</sub>, <var>Z</var>′<sub>н</sub>. Кружки <var>E</var><sub>1</sub> и <var>E</var><sub>2</sub> больше не нужны.</p>',
+        eq: `<span class="char-eq"><var>r</var>′<sub>2</sub> = <var>n</var>²<var>r</var><sub>2</sub> · <var>x</var>′<sub>2</sub> = <var>n</var>²<var>x</var><sub>2</sub> · <var>Z</var>′<sub>н</sub> = <var>n</var>²<var>Z</var><sub>н</sub></span>`,
+        note: 'штрих = «как будто вторичная с w₁ витками»',
+        view: 'ref',
+        focus: ''
+      }
+    };
+    const showEmLoadEqInfo = (key) => {
+      const data = info[key] || info.intro;
+      if (panel) panel.innerHTML = `<h3>${data.title}</h3>${data.html}`;
+      const formula = emLoadEqSlide.querySelector('.em-loadeq-eq');
+      const note = emLoadEqSlide.querySelector('.em-loadeq-note');
+      if (formula) formula.innerHTML = data.eq;
+      if (note) note.innerHTML = data.note;
+      emLoadEqSlide.querySelectorAll('.asutp-tab').forEach((btn) => {
+        btn.classList.toggle('active', btn.dataset.info === key);
+      });
+      emLoadEqSlide.querySelectorAll('.em-loadeq-leg').forEach((el) => {
+        el.classList.toggle('is-active', el.dataset.info === key);
+      });
+      emLoadEqSlide.querySelectorAll('.em-loadeq-view').forEach((g) => {
+        const on = g.dataset.view === data.view;
+        g.classList.toggle('is-on', on);
+        if (on) g.removeAttribute('display');
+        else g.setAttribute('display', 'none');
+      });
+      emLoadEqSlide.querySelectorAll('[data-focus]').forEach((el) => {
+        const dim = data.focus && el.dataset.focus !== data.focus;
+        el.setAttribute('opacity', dim ? '0.28' : '1');
+      });
+      const twoCap = emLoadEqSlide.querySelector('.em-loadeq-view[data-view="two"] .em-loadeq-cap');
+      if (twoCap) {
+        twoCap.textContent = data.cap || 'I₁ и I₂ по часовой';
+      }
+    };
+    emLoadEqSlide.addEventListener('click', (e) => {
+      const tab = e.target.closest('.asutp-tab');
+      const hit = e.target.closest('.em-loadeq-hit, .em-loadeq-leg');
+      if (tab && tab.dataset.info) {
+        e.stopPropagation();
+        showEmLoadEqInfo(tab.dataset.info);
+        return;
+      }
+      if (hit && hit.dataset.info) {
+        e.stopPropagation();
+        showEmLoadEqInfo(hit.dataset.info);
+      }
+    });
+    showEmLoadEqInfo('intro');
+  }
+
+  /* ===== Lecture 5: micromachines ===== */
   const emMachSlide = document.querySelector('.slide-em-mach-interactive');
   if (emMachSlide) {
     const panel = document.getElementById('emMachPanel');
@@ -6459,7 +6555,7 @@
       },
       speed: {
         title: 'Датчики скорости',
-        html: '<p>Тахогенератор даёт напряжение, пропорциональное скорости вала. Это уже датчик, не привод: якорь крутит механизм, обмотка снимает сигнал в ПЛК или регулятор.</p>'
+        html: '<p>Тахогенератор крепят на вал двигателя. Он всё время говорит системе: сейчас скорость такая-то. Упала — добавляют мощность, выросла — убавляют. Это обратная связь: станки, роботы, лифты, прокатные станы.</p>'
       },
       ang: {
         title: 'Датчики угла',
@@ -6617,67 +6713,336 @@
   const emDcWorkSlide = document.querySelector('.slide-em-dc-work-interactive');
   if (emDcWorkSlide) {
     const panel = document.getElementById('emDcWorkPanel');
+    const coil = emDcWorkSlide.querySelector('#emDcCoil');
+    const comm = emDcWorkSlide.querySelector('#emDcComm');
+    const iFwd = emDcWorkSlide.querySelector('#emDcIFwd');
+    const iRev = emDcWorkSlide.querySelector('#emDcIRev');
+    const plus = emDcWorkSlide.querySelector('#emDcPlus');
+    const minus = emDcWorkSlide.querySelector('#emDcMinus');
+    const plusT = emDcWorkSlide.querySelector('#emDcPlusT');
+    const minusT = emDcWorkSlide.querySelector('#emDcMinusT');
+    const loadFwd = emDcWorkSlide.querySelector('#emDcLoadFwd');
+    const loadRev = emDcWorkSlide.querySelector('#emDcLoadRev');
+    const lamp = emDcWorkSlide.querySelector('#emDcLamp');
+    const clickLab = emDcWorkSlide.querySelector('#emDcClick');
+    const wave = emDcWorkSlide.querySelector('#emDcWave');
+    const dot = emDcWorkSlide.querySelector('#emDcDot');
+    const waveTitle = emDcWorkSlide.querySelector('#emDcWaveTitle');
+    const waveCap = emDcWorkSlide.querySelector('#emDcWaveCap');
+    const phaseEl = emDcWorkSlide.querySelector('#emDcPhase');
+    const playBtn = emDcWorkSlide.querySelector('.em-dc-play');
+    const zeroLine = emDcWorkSlide.querySelector('#emDcZero');
+    const tLab = emDcWorkSlide.querySelector('#emDcTLab');
+    const graphHit = emDcWorkSlide.querySelector('#emDcGraphHit');
+    const coilB = emDcWorkSlide.querySelector('#emDcCoilB');
+    const coilC = emDcWorkSlide.querySelector('#emDcCoilC');
+    const voltLab = emDcWorkSlide.querySelector('#emDcVolt');
+    const plateLab = emDcWorkSlide.querySelector('#emDcPlateLab');
+    const v10Line = emDcWorkSlide.querySelector('#emDcV10Line');
+    const v10Lab = emDcWorkSlide.querySelector('#emDcV10');
+    const v14Lab = emDcWorkSlide.querySelector('#emDcV14');
+    const v0Lab = emDcWorkSlide.querySelector('#emDcV0');
+    const sparkG = emDcWorkSlide.querySelector('#emDcSpark');
+    const idots = Array.from(emDcWorkSlide.querySelectorAll('.em-dc-idot'));
+    const EMDC_SVGNS = 'http://www.w3.org/2000/svg';
+    const EMDC_CX = 140;
+    const EMDC_CY = 104;
+    const EMDC_COMM_X = 252;
+    const EMDC_COMM_Y = 104;
+    const EMDC_GX0 = 372;
+    const EMDC_GY_MID = 108;
+    const EMDC_GY_BASE = 176;
+    const EMDC_GW = 232;
+    const EMDC_AMP = 62;
+    const EMDC_HIST = 72;
+    let emDcKey = 'swing';
+    let emDcPlaying = true;
+    let emDcAngle = 20;
+    let emDcTimer = null;
+    let emDcHist = [];
+    let emDcPrevSign = 1;
+    let emDcPrevIdx = 0;
+    let emDcClickUntil = 0;
+    let emDcNow = 0;
+    let emDcDotU = 0;
+    let emDcPlateN = 2;
     const info = {
-      intro: {
-        title: 'Обзор',
-        html: '<p>Полюсы N–S дают постоянный поток Φ. В зазоре — рамка. Концы рамки выведены на коллекторные полукольца, ток снимают неподвижные щётки.</p>'
-      },
-      gen: {
-        title: 'Генератор',
-        html: '<p>Рамку вращают с частотой <var>n</var>. В активных сторонах (жёлтые) наводится ЭДС. Правило <strong>правой</strong> руки.</p><p>Без коллектора с щёток была бы переменная ЭДС. Полукольца выпрямляют её: на графике два «горба» одного знака.</p>'
-      },
-      mot: {
-        title: 'Двигатель',
-        html: '<p>На щётки подают <var>U</var>, в рамке ток <var>I</var>. Сила Ампера <var>F</var> на противоположных сторонах смотрит в разные стороны — получается момент.</p><p>Правило <strong>левой</strong> руки. Коллектор снова переключает ток в рамке, чтобы момент не менял знак.</p>'
-      },
-      poles: {
-        title: 'Φ',
-        html: '<p>Постоянный магнитный поток полюсов N → S. Для этой модели поле считают неизменным: крутится только рамка.</p>'
-      },
-      frame: {
-        title: 'Рамка',
-        html: '<p>Один виток — модель обмотки якоря. Активные стороны (жёлтые) режут поле. Передняя и задняя стороны ЭДС почти не дают.</p>'
+      swing: {
+        title: '1. Качели',
+        html: '<p>В рамке ток <strong>переменный</strong>: бегает туда-сюда, как нога на педали велосипеда — то вниз, то вверх.</p><p>Снаружи, к лампочке, так нельзя: ей нужен ток <strong>всегда только вперёд</strong>. Тут и выходит на сцену коллектор.</p>',
+        plates: 2,
+        view: 'ac',
+        stamp: 'коллектор'
       },
       comm: {
-        title: 'Коллектор',
-        html: '<p>Два полукольца на валу. Каждые 180° под щёткой оказывается другое полукольцо — полярность на зажимах не меняется.</p>'
+        title: '2. Половинки и щётки',
+        html: '<p>Коллектор — две металлические <strong>половинки</strong> на оси рамки. Они крутятся вместе с рамкой.</p><p>Сбоку к ним прижаты неподвижные <strong>щётки</strong>. Это и есть вращающийся переключатель: провода снаружи не крутятся, крутятся только половинки.</p>',
+        plates: 2,
+        view: 'dc',
+        stamp: 'две половинки'
       },
-      brush: {
-        title: 'Щётки',
-        html: '<p>Неподвижные контакты к полукольцам. С них снимают ЭДС (генератор) или подают <var>U</var> (двигатель).</p>'
+      flip: {
+        title: '3. Перехват',
+        html: '<p>В миг, когда ток <strong>внутри рамки</strong> хочет побежать назад, половинки меняются местами под щётками. Щётки «перехватывают» концы провода.</p><p>Велосипед: нога то опускается, то поднимается, а верёвка всегда тянет груз <strong>вверх</strong>. Коллектор в нужный момент переворачивает направление — снаружи ток снова вперёд.</p>',
+        plates: 2,
+        view: 'dc',
+        stamp: 'перехват'
       },
-      emf: {
-        title: 'e',
-        html: '<p>После коллектора ЭДС пульсирует, но знак один: как |sin|. В реальной машине много секций — пульсации меньше.</p>'
-      },
-      hand: {
-        title: 'Правила руки',
-        html: '<p><strong>Правая</strong> — генератор: поток в ладонь, большой палец по <var>v</var>, пальцы — ЭДС.</p><p><strong>Левая</strong> — двигатель: поток в ладонь, пальцы по <var>I</var>, большой палец — <var>F</var>.</p>'
+      spark: {
+        title: '4. Искры — больная часть',
+        html: '<p>Половинки — <strong>медь</strong>, между ними изоляция, чтобы не замкнулись. Щётки — <strong>графит</strong>, как стержень карандаша, только толще. Они скользят по пластинам.</p><p>Беда: коллектор <strong>трётся и искрит</strong> — пыль, искорки, его чистят и меняют. Снаружи получается постоянный, но <strong>пульсирующий</strong> ток: всегда вперёд, не идеальная прямая батарейки.</p>',
+        plates: 2,
+        view: 'dc',
+        stamp: 'трётся и искрит'
       }
     };
-    const tabs = ['intro', 'gen', 'mot', 'comm', 'hand'];
-    const showEmDcWorkInfo = (key) => {
-      const data = info[key] || info.intro;
-      if (panel) panel.innerHTML = `<h3>${data.title}</h3>${data.html}`;
-      emDcWorkSlide.querySelectorAll('.asutp-tab').forEach((btn) => {
-        const onTab = tabs.indexOf(key) !== -1 && btn.dataset.info === key;
-        const keep = (key === 'poles' || key === 'frame' || key === 'brush' || key === 'emf') && btn.dataset.info === 'intro';
-        btn.classList.toggle('active', onTab || keep);
+    const emDcCoilPoint = (u) => {
+      const x0 = 106;
+      const y0 = 58;
+      const w = 68;
+      const h = 92;
+      const p = 2 * (w + h);
+      let d = (((u % 1) + 1) % 1) * p;
+      if (d < w) return { x: x0 + d, y: y0 };
+      d -= w;
+      if (d < h) return { x: x0 + w, y: y0 + d };
+      d -= h;
+      if (d < w) return { x: x0 + w - d, y: y0 + h };
+      d -= w;
+      return { x: x0, y: y0 + h - d };
+    };
+    const emDcSvgOn = (el, on) => {
+      if (!el) return;
+      if (on) el.removeAttribute('display');
+      else el.setAttribute('display', 'none');
+    };
+    const emDcPairs = (plates) => Math.max(1, Math.round((plates || 2) / 2));
+    const emDcEmfAbs = (rad, plates) => {
+      const n = emDcPairs(plates);
+      let best = 0;
+      for (let i = 0; i < n; i += 1) {
+        const v = Math.abs(Math.cos(rad - (i * Math.PI) / n));
+        if (v > best) best = v;
+      }
+      return best;
+    };
+    const emDcBestIdx = (rad, plates) => {
+      const n = emDcPairs(plates);
+      let best = 0;
+      let idx = 0;
+      for (let i = 0; i < n; i += 1) {
+        const v = Math.abs(Math.cos(rad - (i * Math.PI) / n));
+        if (v > best) {
+          best = v;
+          idx = i;
+        }
+      }
+      return idx;
+    };
+    const emDcPlateWord = (n) => {
+      if (n === 2) return '2 пластины';
+      if (n === 4) return '4 пластины';
+      return `${n} пластин`;
+    };
+    const drawEmDcComm = (plates) => {
+      if (!comm) return;
+      const n = Math.max(2, plates || 2);
+      while (comm.firstChild) comm.removeChild(comm.firstChild);
+      const cx = EMDC_COMM_X;
+      const cy = EMDC_COMM_Y;
+      const r = 16;
+      for (let i = 0; i < n; i += 1) {
+        const a0 = (i / n) * Math.PI * 2 - Math.PI / 2;
+        const a1 = ((i + 1) / n) * Math.PI * 2 - Math.PI / 2;
+        const x0 = cx + r * Math.cos(a0);
+        const y0 = cy + r * Math.sin(a0);
+        const x1 = cx + r * Math.cos(a1);
+        const y1 = cy + r * Math.sin(a1);
+        const large = (2 * Math.PI) / n > Math.PI ? 1 : 0;
+        const path = document.createElementNS(EMDC_SVGNS, 'path');
+        path.setAttribute('d', `M${cx.toFixed(1)} ${cy.toFixed(1)} L${x0.toFixed(1)} ${y0.toFixed(1)} A${r} ${r} 0 ${large} 1 ${x1.toFixed(1)} ${y1.toFixed(1)} Z`);
+        path.setAttribute('fill', i % 2 ? '#fbbf24' : '#d97706');
+        path.setAttribute('stroke', '#9a3412');
+        path.setAttribute('stroke-width', n > 8 ? '0.7' : '1.1');
+        comm.appendChild(path);
+      }
+    };
+    const paintEmDcWork = () => {
+      const data = info[emDcKey] || info.swing;
+      const rad = (emDcAngle * Math.PI) / 180;
+      const eCoil = Math.cos(rad);
+      const mag = Math.abs(eCoil);
+      const dcMode = data.view === 'dc';
+      const plates = data.plates || 2;
+      const eOut = dcMode ? emDcEmfAbs(rad, plates) : eCoil;
+      const sign = eCoil >= 0 ? 1 : -1;
+      const idx = emDcBestIdx(rad, plates);
+      if (dcMode) {
+        if (idx !== emDcPrevIdx) emDcClickUntil = emDcNow + (emDcKey === 'spark' ? 420 : 320);
+        emDcPrevIdx = idx;
+      } else if (sign !== emDcPrevSign) {
+        emDcClickUntil = emDcNow + 520;
+      }
+      emDcPrevSign = sign;
+      if (coil) coil.setAttribute('transform', `rotate(${emDcAngle.toFixed(1)} ${EMDC_CX} ${EMDC_CY})`);
+      if (coilB) coilB.setAttribute('transform', `rotate(${((emDcAngle + 90) % 360).toFixed(1)} ${EMDC_CX} ${EMDC_CY})`);
+      if (coilC) coilC.setAttribute('transform', `rotate(${((emDcAngle + 45) % 360).toFixed(1)} ${EMDC_CX} ${EMDC_CY})`);
+      if (comm) comm.setAttribute('transform', `rotate(${emDcAngle.toFixed(1)} ${EMDC_COMM_X} ${EMDC_COMM_Y})`);
+      const showI = mag > 0.12;
+      if (iFwd) iFwd.setAttribute('opacity', showI && sign > 0 ? '1' : '0');
+      if (iRev) iRev.setAttribute('opacity', showI && sign < 0 ? '1' : '0');
+      if (emDcPlaying) emDcDotU += 0.016 * sign;
+      idots.forEach((el, i) => {
+        const pt = emDcCoilPoint(emDcDotU + i / Math.max(idots.length, 1));
+        el.setAttribute('cx', pt.x.toFixed(1));
+        el.setAttribute('cy', pt.y.toFixed(1));
+        el.setAttribute('opacity', showI ? '1' : '0.15');
       });
-      const motOn = key === 'mot';
-      emDcWorkSlide.querySelectorAll('.em-dc-mode').forEach((el) => {
-        el.classList.toggle('is-on', motOn ? el.dataset.mode === 'mot' : el.dataset.mode === 'gen');
+      const topIsPlus = dcMode || eCoil >= 0;
+      if (plus) plus.setAttribute('fill', topIsPlus ? '#dc2626' : '#1e293b');
+      if (minus) minus.setAttribute('fill', topIsPlus ? '#1e293b' : '#dc2626');
+      if (plusT) plusT.textContent = topIsPlus ? '+' : '−';
+      if (minusT) minusT.textContent = topIsPlus ? '−' : '+';
+      const u = (dcMode ? eOut : eCoil) * 14;
+      const outMag = Math.abs(dcMode ? eOut : eCoil);
+      if (loadFwd) loadFwd.setAttribute('opacity', dcMode || eCoil >= 0 ? String(0.25 + outMag * 0.75) : '0');
+      if (loadRev) loadRev.setAttribute('opacity', !dcMode && eCoil < 0 ? String(0.25 + outMag * 0.75) : '0');
+      if (lamp) {
+        lamp.setAttribute('fill', outMag > 0.12 ? '#fbbf24' : '#e2e8f0');
+        lamp.setAttribute('opacity', String(0.4 + outMag * 0.6));
+      }
+      if (voltLab) voltLab.textContent = `${Math.round(u)} В`;
+      const clicking = emDcNow < emDcClickUntil;
+      if (clickLab) {
+        const showFlip = clicking && emDcKey !== 'swing';
+        clickLab.setAttribute('opacity', showFlip ? (emDcKey === 'flip' || emDcKey === 'comm' ? '1' : '0.7') : '0');
+      }
+      if (sparkG) {
+        const showSpark = clicking && (emDcKey === 'spark' || emDcKey === 'flip');
+        sparkG.setAttribute('opacity', showSpark ? (emDcKey === 'spark' ? '1' : '0.55') : '0');
+      }
+      emDcHist.push(dcMode ? eOut : eCoil);
+      if (emDcHist.length > EMDC_HIST) emDcHist.shift();
+      const gy = dcMode ? EMDC_GY_BASE : EMDC_GY_MID;
+      const amp = dcMode ? EMDC_AMP * 1.55 : EMDC_AMP;
+      const dx = EMDC_GW / (EMDC_HIST - 1);
+      if (wave) {
+        const d = emDcHist.map((v, i) => `${i ? 'L' : 'M'}${(EMDC_GX0 + i * dx).toFixed(1)} ${(gy - v * amp).toFixed(1)}`).join(' ');
+        wave.setAttribute('d', d || `M${EMDC_GX0} ${gy}`);
+        wave.setAttribute('stroke', dcMode ? '#1d4ed8' : '#dc2626');
+      }
+      if (dot && emDcHist.length) {
+        const last = emDcHist[emDcHist.length - 1];
+        dot.setAttribute('cx', (EMDC_GX0 + (emDcHist.length - 1) * dx).toFixed(1));
+        dot.setAttribute('cy', (gy - last * amp).toFixed(1));
+      }
+      if (zeroLine) {
+        zeroLine.setAttribute('y1', String(gy));
+        zeroLine.setAttribute('y2', String(gy));
+        zeroLine.setAttribute('stroke', dcMode ? '#1e293b' : '#94a3b8');
+      }
+      const y14 = gy - amp;
+      const y10 = gy - (10 / 14) * amp;
+      if (v14Lab) {
+        emDcSvgOn(v14Lab, dcMode);
+        v14Lab.setAttribute('y', (y14 + 4).toFixed(1));
+      }
+      const show10 = false;
+      if (v10Line) {
+        emDcSvgOn(v10Line, show10);
+        v10Line.setAttribute('y1', y10.toFixed(1));
+        v10Line.setAttribute('y2', y10.toFixed(1));
+      }
+      if (v10Lab) {
+        emDcSvgOn(v10Lab, show10);
+        v10Lab.setAttribute('y', (y10 + 4).toFixed(1));
+      }
+      if (v0Lab) {
+        v0Lab.setAttribute('y', dcMode ? '180' : '112');
+        v0Lab.textContent = '0';
+      }
+      if (tLab) tLab.setAttribute('y', dcMode ? '182' : '114');
+      if (graphHit) graphHit.dataset.info = emDcKey;
+      if (waveTitle) {
+        const titles = {
+          swing: 'в рамке — качели',
+          comm: 'снаружи — только вперёд',
+          flip: 'перехват: минуса нет',
+          spark: 'пульсирует, не прямая'
+        };
+        waveTitle.textContent = titles[emDcKey] || titles.swing;
+      }
+      if (waveCap) {
+        const caps = {
+          swing: 'туда-сюда, есть минус',
+          comm: 'к лампочке всегда вперёд',
+          flip: 'внутри назад — снаружи вперёд',
+          spark: 'постоянный, но пульсирует'
+        };
+        waveCap.textContent = caps[emDcKey] || caps.swing;
+        waveCap.setAttribute('fill', emDcKey === 'swing' ? '#b91c1c' : '#1e40af');
+      }
+      if (phaseEl) {
+        const phrases = {
+          swing: sign > 0 ? 'ток в рамке вперёд' : 'ток в рамке назад',
+          comm: 'половинки крутятся, щётки стоят',
+          flip: clicking ? 'перехват! концы сменили' : 'ждём, когда ток захочет назад',
+          spark: clicking ? 'искра: графит по меди' : 'коллектор трётся — его чистят'
+        };
+        phaseEl.textContent = phrases[emDcKey] || phrases.swing;
+      }
+    };
+    const showEmDcWorkInfo = (key) => {
+      emDcKey = info[key] ? key : 'swing';
+      const data = info[emDcKey];
+      emDcPlateN = data.plates || 2;
+      emDcHist = [];
+      if (panel) panel.innerHTML = `<h3>${data.title}</h3>${data.html}`;
+      if (graphHit) graphHit.dataset.info = emDcKey;
+      if (plateLab) plateLab.textContent = data.stamp || emDcPlateWord(emDcPlateN);
+      drawEmDcComm(emDcPlateN);
+      emDcSvgOn(coilB, emDcPlateN >= 4 && data.view === 'dc');
+      emDcSvgOn(coilC, emDcPlateN >= 8 && data.view === 'dc');
+      emDcWorkSlide.querySelectorAll('.app-purpose-card').forEach((btn) => {
+        btn.classList.toggle('active', btn.dataset.info === emDcKey);
       });
       emDcWorkSlide.querySelectorAll('.em-dc-hit').forEach((el) => {
-        el.classList.toggle('is-active', el.dataset.info === key);
+        el.classList.toggle('is-active', el.dataset.info === emDcKey);
       });
+      paintEmDcWork();
+    };
+    const stopEmDcWorkLive = () => {
+      if (emDcTimer) {
+        clearInterval(emDcTimer);
+        emDcTimer = null;
+      }
+    };
+    const tickEmDcWorkLive = () => {
+      if (!emDcPlaying || !emDcWorkSlide.classList.contains('active')) return;
+      emDcNow += 40;
+      emDcAngle = (emDcAngle + 2.2) % 360;
+      paintEmDcWork();
+    };
+    const startEmDcWorkLive = () => {
+      if (emDcTimer) return;
+      emDcTimer = setInterval(tickEmDcWorkLive, 40);
+    };
+    const syncEmDcPlay = () => {
+      if (playBtn) playBtn.textContent = emDcPlaying ? 'Пауза' : 'Пуск';
     };
     emDcWorkSlide.addEventListener('click', (e) => {
-      const tab = e.target.closest('.asutp-tab');
-      const hit = e.target.closest('.em-dc-hit');
-      if (tab && tab.dataset.info) {
+      const play = e.target.closest('.em-dc-play');
+      if (play) {
         e.stopPropagation();
-        showEmDcWorkInfo(tab.dataset.info);
+        emDcPlaying = !emDcPlaying;
+        syncEmDcPlay();
+        return;
+      }
+      const card = e.target.closest('.app-purpose-card');
+      const hit = e.target.closest('.em-dc-hit');
+      if (card && card.dataset.info) {
+        e.stopPropagation();
+        showEmDcWorkInfo(card.dataset.info);
         return;
       }
       if (hit && hit.dataset.info) {
@@ -6685,7 +7050,13 @@
         showEmDcWorkInfo(hit.dataset.info);
       }
     });
-    showEmDcWorkInfo('intro');
+    showEmDcWorkInfo('swing');
+    syncEmDcPlay();
+    new MutationObserver(() => {
+      if (emDcWorkSlide.classList.contains('active')) startEmDcWorkLive();
+      else stopEmDcWorkLive();
+    }).observe(emDcWorkSlide, { attributes: true, attributeFilter: ['class'] });
+    startEmDcWorkLive();
   }
 
   /* ===== Lecture 4: DC construction ===== */
@@ -6695,15 +7066,15 @@
     const info = {
       intro: {
         title: 'Обзор',
-        html: '<p>Микромашина постоянного тока в разборе. Статор даёт поле, ротор с коллектором крутится в нём, щётки снимают или подают ток.</p>'
+        html: '<p>Микромашина постоянного тока в разборе. Статор даёт поле, ротор с коллектором крутится в нём.</p><p>Коллектор — вращающийся переключатель на оси: превращает переменный ток в рамке в постоянный (пульсирующий) снаружи. Самая капризная часть: трётся и искрит.</p>'
       },
       stator: {
         title: '1 · статор',
-        html: '<p>Цилиндр из листов электротехнической стали — меньше вихревые токи. Полюса с обмоткой или, у микромашин, постоянные магниты.</p><p>Число пар полюсов <var>p</var>. На фото учебника обычно <var>p</var> = 1. Больше <var>p</var> — у генератора чаще пульсации ЭДС, у двигателя ниже скорость при той же частоте коммутации.</p>'
+        html: '<p>Цилиндр из листов электротехнической стали — меньше вихревые токи. Полюса с обмоткой или, у микромашин, постоянные магниты.</p><p>Число пар полюсов <var>p</var>. У микромашины обычно <var>p</var> = 1. Больше <var>p</var> — у генератора чаще пульсации ЭДС, у двигателя ниже скорость при той же частоте коммутации.</p>'
       },
       rotor: {
         title: '2 · ротор',
-        html: '<p>В машинах постоянного тока ротор называют <strong>якорем</strong>: пакет стали, пазы, обмотка, коллектор и подшипники на одном валу.</p>'
+        html: '<p>В машинах постоянного тока ротор называют <strong>якорем</strong>: пакет стали, пазы, обмотка, коллектор и подшипники на одном валу.</p><p>Коллектор — медные пластины на оси, между ними изоляция, чтобы не замкнулись. Они крутятся вместе с рамкой. Неподвижные щётки прижаты сбоку.</p>'
       },
       cover: {
         title: '3 · торцевые щиты',
@@ -6711,7 +7082,7 @@
       },
       brush: {
         title: '4 · щётка',
-        html: '<p>Угольно-графитовый брусок. Пружина прижимает его к коллектору. Гибкий вывод идёт на зажим машины.</p>'
+        html: '<p>Графитовый брусок — как стержень карандаша, только толще. Пружина прижимает его к коллектору, и щётка скользит по пластинам.</p><p>В миг перехвата половинки меняются под щёткой: ток, который в рамке бежал назад, снаружи снова бежит вперёд. Беда: графит стирается, пыль, иногда проскакивают искры — щётки и коллектор чистят и меняют.</p>'
       },
       plug: {
         title: '5 · пробка',
@@ -6751,32 +7122,32 @@
     const panel = document.getElementById('emDcWindPanel');
     const info = {
       intro: {
-        title: 'Обзор',
-        html: '<p>Ротор называют якорем. Пакет из листов стали, пазы часто скошены — ход ровнее. Секция обмотки: один или несколько витков, концы на соседние или удалённые пластины коллектора.</p>'
+        title: 'Зачем несколько полюсов',
+        html: '<p>Раньше была одна рамка между одним N и одним S. Здесь по кругу <strong>несколько пар</strong>: N S N S… — несколько петель работают сразу, момент больше.</p><p>Цилиндр <strong>разрезали и расплющили</strong>: на круге провода наложились бы. Сверху полюсы, снизу коллектор. Концы сажают по-разному: петля — большой ток, волна — большое напряжение. При двух полюсах оба способа почти одинаковы.</p>'
       },
       lap: {
-        title: 'Петлевая',
-        html: '<p>Секция замыкается «петлёй» на соседние пластины. Число щёток = числу полюсов <var>2p</var>.</p><p>Простая петлевая: <var>2a</var> = <var>2p</var>. Большой ток, относительно малое напряжение.</p>'
+        title: 'Петля — большой ток',
+        html: '<p>Провод делает короткую <strong>петлю</strong> и садится на <strong>две соседние</strong> пластины.</p><p>При нескольких полюсах дорожек столько, сколько полюсов — ток большой, напряжение меньше. Щёток тоже столько, сколько полюсов.</p>'
       },
       wave: {
-        title: 'Волновая',
-        html: '<p>Секция идёт вперёд через полюсное деление — «волна». Ветвей всегда две: <var>2a</var> = 2, сколько бы ни было полюсов.</p><p>Меньший ток, большее напряжение.</p>'
+        title: 'Волна — большое напряжение',
+        html: '<p>Провод не прыгает на соседнюю пластину, а <strong>шагает дальше — через полюс</strong>, «волной».</p><p>Дорожек всегда две, сколько бы ни было полюсов. Ток меньше, <strong>напряжение больше</strong>. Разница с петлёй видна именно когда полюсов несколько.</p>'
       },
       poles: {
-        title: '2p',
-        html: '<p>Число полюсов машины. Пар полюсов — <var>p</var>. У микромашины на разборе часто <var>p</var> = 1.</p>'
+        title: 'Сколько полюсов',
+        html: '<p><strong>2p</strong> — все N и все S на круге. Пара — один N плюс один S, таких пар <strong>p</strong>.</p><p>Несколько пар — это несколько «качелей» сразу: больше мест, где провод режет поле. На развёртке сверху как раз этот ряд: N S N S…</p>'
       },
       paths: {
-        title: '2a',
-        html: '<p>Число параллельных ветвей обмотки. Петлевая: <var>2a</var> = <var>2p</var>. Волновая: <var>2a</var> = 2.</p>'
+        title: 'Дорожки для тока',
+        html: '<p><strong>2a</strong> — сколько параллельных дорожек внутри обмотки. Чем их больше, тем легче пропустить большой ток.</p><p>Петля: дорожек столько же, сколько полюсов. Волна: дорожек всегда две.</p>'
       },
       tau: {
-        title: 'τ',
-        html: '<p>Полюсное деление — дуга между одинаковыми точками соседних полюсов (центры). Связано с диаметром <var>D</var> расточки статора: τ = π<var>D</var> / <var>2p</var>.</p><p>Шаг секции в пазах берут близким к τ — активные стороны секции под разными полюсами.</p>'
+        title: 'Шаг τ',
+        html: '<p><strong>τ</strong> — шаг по кругу от середины N до середины следующего N (или от S до S).</p><p>Секцию кладут примерно на эту длину: одна сторона под N, другая под S — тогда в проводе появляется ЭДС.</p>'
       },
       ncond: {
-        title: 'N',
-        html: '<p>Общее число проводников во всех пазах якоря. Входит в конструктивный коэффициент <var>k</var> формул ЭДС и момента.</p>'
+        title: 'Сколько проводов',
+        html: '<p><strong>N</strong> — сколько всего проводов лежит в пазах ротора.</p><p>Чем их больше, тем сильнее ЭДС и момент. Это не «N-полюс», а просто число жил.</p>'
       }
     };
     const showEmDcWindInfo = (key) => {
@@ -6784,7 +7155,15 @@
       if (panel) panel.innerHTML = `<h3>${data.title}</h3>${data.html}`;
       const waveOn = key === 'wave';
       emDcWindSlide.querySelectorAll('.em-dcw-view').forEach((view) => {
-        view.classList.toggle('is-on', waveOn ? view.dataset.view === 'wave' : view.dataset.view === 'lap');
+        const on = waveOn ? view.dataset.view === 'wave' : view.dataset.view === 'lap';
+        view.classList.toggle('is-on', on);
+        if (on) view.removeAttribute('display');
+        else view.setAttribute('display', 'none');
+      });
+      emDcWindSlide.querySelectorAll('.em-dcw-tau').forEach((g) => {
+        const on = key === 'tau';
+        if (on) g.removeAttribute('display');
+        else g.setAttribute('display', 'none');
       });
       emDcWindSlide.querySelectorAll('.asutp-tab').forEach((btn) => {
         const k = btn.dataset.info;
@@ -6854,48 +7233,32 @@
     const panel = document.getElementById('emDcEqPanel');
     const info = {
       intro: {
-        title: 'Обзор',
-        html: '<p>Обратимость: тот же <var>k</var>. Проводник <var>l</var> в поле <var>B</var>: ЭДС <var>e</var> = <var>B</var><var>l</var><var>v</var>, сила <var>f</var> = <var>B</var><var>l</var><var>i</var>.</p>'
+        title: 'Одна машина',
+        html: '<p>Рамка в магнитах одна и та же. Меняется только, что мы делаем.</p><p><strong>Крутим</strong> вал снаружи — в проводах появляется напряжение <var>E</var>. Это генератор. <strong>Даём ток</strong> в те же провода — магниты толкают рамку, появляется момент <var>M</var>. Это двигатель.</p>'
       },
       gen: {
-        title: 'ЭДС',
-        html: '<p><var>e</var> = <var>B</var><var>l</var><var>v</var>, <var>v</var> = ω<var>r</var>, <var>B</var> = Φ/<var>S</var>. По всем <var>N</var> проводникам: <var>E</var> = <var>k</var> Φ ω.</p><p>Если Φ = const, <var>c</var> = <var>k</var>Φ, тогда <var>E</var> = <var>c</var> ω — ЭДС пропорциональна скорости. Тахогенератор работает именно так.</p>'
+        title: 'Крутим — появляется E',
+        html: '<p>Ротор крутят в поле магнитов. Провода режут поле — появляется напряжение.</p><p>Быстрее крутим — <var>E</var> больше. Магниты сильнее — <var>E</var> тоже больше. Поэтому пишут <var>E</var> = <var>k</var> Φ ω: скорость и сила магнитов. <var>k</var> — как машина собрана, его ручкой не крутят.</p>'
       },
       mot: {
-        title: 'Момент',
-        html: '<p><var>f</var> = <var>B</var><var>l</var><var>i</var>, момент <var>m</var> = <var>f</var><var>r</var>. Ток в проводнике <var>i</var> = <var>I</var><sub>дв</sub> / <var>2a</var>.</p><p>От <var>N</var> проводников: <var>M</var><sub>дв</sub> = <var>k</var> Φ <var>I</var><sub>дв</sub>. При Φ = const → <var>M</var><sub>дв</sub> = <var>c</var> <var>I</var><sub>дв</sub>.</p>'
+        title: 'Ток — появляется M',
+        html: '<p>В те же провода подаём ток. Магниты толкают провода — ротор крутит вал. Это момент <var>M</var>.</p><p>Ток больше — толкает сильнее. Магниты сильнее — тоже сильнее. Поэтому <var>M</var> = <var>k</var> Φ <var>I</var>. Тот же <var>k</var>, что у ЭДС: машина одна.</p>'
       },
       phi: {
-        title: 'Φ',
-        html: '<p>Поток возбуждения. Его держат постоянным при якорном управлении — тогда характеристики линейные.</p>'
+        title: 'Магниты Φ',
+        html: '<p>Φ — насколько сильные магниты. Это возбуждение с прошлого слайда.</p><p>Φ входит и в <var>E</var>, и в <var>M</var>. Если магниты не трогаем: напряжение генератора следует за скоростью, момент двигателя — за током. Следующий слайд — наоборот: скорость не трогаем, крутим магниты.</p>'
       },
       om: {
-        title: 'ω',
-        html: '<p>Угловая скорость якоря. У генератора <var>E</var> ∝ ω при Φ = const.</p>'
-      },
-      i: {
-        title: 'Iдв',
-        html: '<p>Ток якоря (ротора). У двигателя <var>M</var> ∝ <var>I</var><sub>дв</sub> при Φ = const.</p>'
-      },
-      k: {
-        title: 'k',
-        html: '<p>Конструктивный коэффициент: <var>k</var> = <var>p</var><var>N</var> / (2π<var>a</var>). Пары полюсов, число проводников, число пар параллельных ветвей.</p>'
-      },
-      c: {
-        title: 'c',
-        html: '<p><var>c</var> = <var>k</var>Φ, когда поток не меняют. Тогда <var>E</var> = <var>c</var>ω и <var>M</var><sub>дв</sub> = <var>c</var><var>I</var><sub>дв</sub>.</p>'
-      },
-      ctrl: {
-        title: 'Управление',
-        html: '<p>Для САУ берут независимое возбуждение. <strong>Якорное</strong>: Φ фиксирован, управляют током ротора — линейные характеристики. Его учебник разбирает дальше.</p><p><strong>Полюсное</strong>: якорь от неуправляемого источника, крутят ток возбуждения — реже.</p>'
+        title: 'Как быстро крутится',
+        html: '<p>ω — скорость вала. У генератора: быстрее крутим — больше <var>E</var>.</p><p>Тахогенератор на следующем слайде после генератора как раз меряет скорость по этому напряжению.</p>'
       }
     };
-    const tabs = ['intro', 'gen', 'mot', 'ctrl'];
+    const tabOf = { intro: 'intro', gen: 'gen', mot: 'mot', phi: 'phi', om: 'gen' };
     const showEmDcEqInfo = (key) => {
       const data = info[key] || info.intro;
       if (panel) panel.innerHTML = `<h3>${data.title}</h3>${data.html}`;
       emDcEqSlide.querySelectorAll('.asutp-tab').forEach((btn) => {
-        btn.classList.toggle('active', tabs.indexOf(key) !== -1 && btn.dataset.info === key);
+        btn.classList.toggle('active', btn.dataset.info === (tabOf[key] || 'intro'));
       });
       emDcEqSlide.querySelectorAll('.em-dceq-hit').forEach((el) => {
         el.classList.toggle('is-active', el.dataset.info === key);
@@ -6915,6 +7278,1189 @@
       }
     });
     showEmDcEqInfo('intro');
+  }
+
+  /* ===== Lecture 5: controlled DC generator ===== */
+  const emDcGenSlide = document.querySelector('.slide-em-dc-gen-interactive');
+  if (emDcGenSlide) {
+    const panel = document.getElementById('emDcGenPanel');
+    const formula = emDcGenSlide.querySelector('.em-dcg-formula');
+    const note = emDcGenSlide.querySelector('.em-dcg-note');
+    const ivRange = emDcGenSlide.querySelector('.em-dcg-iv');
+    const loadRange = emDcGenSlide.querySelector('.em-dcg-load');
+    const ivVal = emDcGenSlide.querySelector('.em-dcg-iv-val');
+    const loadVal = emDcGenSlide.querySelector('.em-dcg-load-val');
+    const holdBtn = emDcGenSlide.querySelector('.em-dcg-hold-btn');
+    const spin = emDcGenSlide.querySelector('#emDcgSpin');
+    const body = emDcGenSlide.querySelector('#emDcgBody');
+    const coil = emDcGenSlide.querySelector('#emDcgCoil');
+    const phi = emDcGenSlide.querySelector('#emDcgPhi');
+    const lamp = emDcGenSlide.querySelector('#emDcgLamp');
+    const uLab = emDcGenSlide.querySelector('#emDcgULab');
+    const charLine = emDcGenSlide.querySelector('#emDcgChar');
+    const dot = emDcGenSlide.querySelector('#emDcgDot');
+    const holdLine = emDcGenSlide.querySelector('#emDcgHoldLine');
+    const knob = emDcGenSlide.querySelector('#emDcgRyKnob');
+    const cap = emDcGenSlide.querySelector('#emDcgCap');
+    const EMDCG_RY = 2;
+    const EMDCG_E0 = 8;
+    const EMDCG_E1 = 28;
+    const EMDCG_USET = 18;
+    const EMDCG_X0 = 412;
+    const EMDCG_Y0 = 178;
+    const EMDCG_UW = 108;
+    const EMDCG_UH = 132;
+    const EMDCG_UMAX = 30;
+    const EMDCG_IMAX = 7;
+    let emDcgHold = false;
+    let emDcgKey = 'intro';
+    let emDcgAngle = 0;
+    let emDcgTimer = null;
+    const emDcgWord = (t, a, b, c) => (t < 0.34 ? a : t < 0.67 ? b : c);
+    const emDcgSvgOn = (el, on) => {
+      if (!el) return;
+      if (on) el.removeAttribute('display');
+      else el.setAttribute('display', 'none');
+    };
+    const info = {
+      intro: {
+        title: 'Реостат Rу',
+        html: '<p><strong>Rу</strong> — реостат, переменный резистор. Магниты руками не вертим: крутим ток в катушке <var>w</var><sub>в</sub> на статоре. Эта катушка и есть электромагнит.</p><p>Ток <var>I</var><sub>в</sub> больше → Φ сильнее → в роторе больше <var>E</var> → лампочка ярче. Вал при этом крутят снаружи всё так же ровно.</p>'
+      },
+      eqc: {
+        title: 'Почему U меньше E',
+        html: '<p>Внутри получается <var>E</var>. Ток к лампочке идёт по своим проводам ротора — сопротивление <var>r</var><sub>я</sub>.</p><p>На проводах теряется <var>I</var>·<var>r</var><sub>я</sub>. На лампочку приходит <var>U</var> = <var>E</var> − <var>I</var>·<var>r</var><sub>я</sub>. Смотрите живые числа под схемой.</p>'
+      },
+      load: {
+        title: 'Нагрузка сажает U',
+        html: '<p>Магниты не трогайте. Тяните нагрузку вправо: ток больше — потеря в проводах больше — лампочка тускнеет. Точка на графике ползёт вниз.</p><p>Как динамо крутят ровно, а лампочек повесили больше.</p>'
+      },
+      reg: {
+        title: 'Держать U',
+        html: '<p>Нажмите <strong>Держать U</strong> и снова тяните нагрузку. Реостат <var>R</var><sub>у</sub> сам добавляет ток в катушку-магнит: Φ больше, <var>E</var> больше, лампочка не гаснет.</p><p>Это регулирование возбуждением. Если нагрузки слишком много — магнитов не хватит.</p>'
+      }
+    };
+    const showEmDcGenInfo = (key) => {
+      emDcgKey = info[key] ? key : 'intro';
+      const data = info[emDcgKey];
+      if (panel) panel.innerHTML = `<h3>${data.title}</h3>${data.html}`;
+      emDcGenSlide.querySelectorAll('.asutp-tab').forEach((btn) => {
+        btn.classList.toggle('active', btn.dataset.info === emDcgKey);
+      });
+      emDcGenSlide.querySelectorAll('.em-dcg-hit').forEach((el) => {
+        el.classList.toggle('is-active', el.dataset.info === emDcgKey);
+      });
+    };
+    const updateEmDcGenLive = () => {
+      const loadT = Number(loadRange?.value || 30) / 100;
+      const rn = 22 - loadT * 18;
+      if (emDcgHold) {
+        const eNeed = Math.min(EMDCG_E1, Math.max(EMDCG_E0, EMDCG_USET * (EMDCG_RY + rn) / rn));
+        if (ivRange) ivRange.value = String(Math.round(((eNeed - EMDCG_E0) / (EMDCG_E1 - EMDCG_E0)) * 100));
+      }
+      const ivT = Number(ivRange?.value || 55) / 100;
+      const e = EMDCG_E0 + (EMDCG_E1 - EMDCG_E0) * ivT;
+      const i = e / (EMDCG_RY + rn);
+      const drop = i * EMDCG_RY;
+      const u = e - drop;
+      if (ivVal) ivVal.textContent = emDcgWord(ivT, 'слабо', 'средне', 'сильно');
+      if (loadVal) loadVal.textContent = emDcgWord(loadT, 'мало', 'средне', 'много');
+      if (coil) coil.setAttribute('stroke-width', String(1.5 + ivT * 2.2));
+      if (phi) {
+        phi.setAttribute('opacity', String(0.28 + ivT * 0.72));
+        phi.setAttribute('stroke-width', String(1.4 + ivT * 1.6));
+      }
+      if (knob) knob.setAttribute('transform', `translate(${(ivT * 10).toFixed(1)} 0)`);
+      if (body) body.setAttribute('fill', ivT > 0.55 ? '#dbeafe' : '#eff6ff');
+      if (lamp) {
+        lamp.setAttribute('fill-opacity', String(0.18 + 0.82 * Math.max(0, Math.min(1, u / 24))));
+        lamp.setAttribute('fill', u < 10 ? '#e2e8f0' : '#fde68a');
+      }
+      if (uLab) uLab.textContent = `${Math.round(u)} В`;
+      const yE = EMDCG_Y0 - (e / EMDCG_UMAX) * EMDCG_UH;
+      const iEnd = Math.min(EMDCG_IMAX, e / EMDCG_RY);
+      const xEnd = EMDCG_X0 + (iEnd / EMDCG_IMAX) * EMDCG_UW;
+      const yEnd = EMDCG_Y0 - ((e - iEnd * EMDCG_RY) / EMDCG_UMAX) * EMDCG_UH;
+      if (charLine) charLine.setAttribute('x1', String(EMDCG_X0));
+      if (charLine) charLine.setAttribute('y1', yE.toFixed(1));
+      if (charLine) charLine.setAttribute('x2', xEnd.toFixed(1));
+      if (charLine) charLine.setAttribute('y2', yEnd.toFixed(1));
+      const xDot = EMDCG_X0 + (Math.min(i, EMDCG_IMAX) / EMDCG_IMAX) * EMDCG_UW;
+      const yDot = EMDCG_Y0 - (Math.max(0, u) / EMDCG_UMAX) * EMDCG_UH;
+      if (dot) {
+        dot.setAttribute('cx', xDot.toFixed(1));
+        dot.setAttribute('cy', yDot.toFixed(1));
+      }
+      const yHold = EMDCG_Y0 - (EMDCG_USET / EMDCG_UMAX) * EMDCG_UH;
+      if (holdLine) {
+        holdLine.setAttribute('y1', yHold.toFixed(1));
+        holdLine.setAttribute('y2', yHold.toFixed(1));
+        emDcgSvgOn(holdLine, emDcgHold);
+      }
+      if (note) {
+        note.textContent = emDcgHold
+          ? (u + 0.4 < EMDCG_USET ? 'магнитов не хватает — U всё равно сел' : `держим U ≈ ${Math.round(u)} В: нагрузка ↑ — магниты ↑`)
+          : `U = ${Math.round(u)} В · E = ${Math.round(e)} В · I = ${i.toFixed(1)} А · потеря ${drop.toFixed(1)} В`;
+      }
+      if (cap) {
+        cap.textContent = emDcgHold
+          ? 'нагрузка выросла — крутим магниты, лампочка не гаснет'
+          : 'E − потеря в проводах = U на лампочке';
+      }
+      if (holdBtn) holdBtn.textContent = emDcgHold ? 'U держится' : 'Держать U';
+      holdBtn?.classList.toggle('is-on', emDcgHold);
+    };
+    const tickEmDcGenLive = () => {
+      if (!emDcGenSlide.classList.contains('active')) return;
+      emDcgAngle = (emDcgAngle + 6) % 360;
+      if (spin) spin.setAttribute('transform', `rotate(${emDcgAngle} 286 108)`);
+    };
+    const startEmDcGenLive = () => {
+      if (emDcgTimer) return;
+      emDcgTimer = setInterval(tickEmDcGenLive, 40);
+    };
+    const stopEmDcGenLive = () => {
+      if (!emDcgTimer) return;
+      clearInterval(emDcgTimer);
+      emDcgTimer = null;
+    };
+    emDcGenSlide.querySelector('.em-dcg-controls')?.addEventListener('pointerdown', (e) => e.stopPropagation());
+    ivRange?.addEventListener('input', () => {
+      if (emDcgHold) {
+        emDcgHold = false;
+      }
+      showEmDcGenInfo('intro');
+      updateEmDcGenLive();
+    });
+    loadRange?.addEventListener('input', () => {
+      showEmDcGenInfo(emDcgHold ? 'reg' : 'load');
+      updateEmDcGenLive();
+    });
+    holdBtn?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      emDcgHold = !emDcgHold;
+      showEmDcGenInfo('reg');
+      updateEmDcGenLive();
+    });
+    emDcGenSlide.addEventListener('click', (e) => {
+      const tab = e.target.closest('.asutp-tab');
+      const hit = e.target.closest('.em-dcg-hit');
+      if (tab && tab.dataset.info) {
+        e.stopPropagation();
+        showEmDcGenInfo(tab.dataset.info);
+        if (tab.dataset.info === 'reg' && !emDcgHold) {
+          emDcgHold = true;
+          updateEmDcGenLive();
+        }
+        return;
+      }
+      if (hit && hit.dataset.info) {
+        e.stopPropagation();
+        showEmDcGenInfo(hit.dataset.info);
+      }
+    });
+    const watchEmDcGenSlide = () => {
+      if (emDcGenSlide.classList.contains('active')) startEmDcGenLive();
+      else stopEmDcGenLive();
+    };
+    const emDcgObs = new MutationObserver(watchEmDcGenSlide);
+    emDcgObs.observe(emDcGenSlide, { attributes: true, attributeFilter: ['class'] });
+    showEmDcGenInfo('intro');
+    updateEmDcGenLive();
+    watchEmDcGenSlide();
+  }
+
+  /* ===== Lecture 5: DC tachogenerator ===== */
+  const emDcTgSlide = document.querySelector('.slide-em-dc-tg-interactive');
+  if (emDcTgSlide) {
+    const panel = document.getElementById('emDcTgPanel');
+    const emDcTgK = emFrac('<var>c</var> <var>R</var><sub>н</sub>', '<var>R</var><sub>я</sub> + <var>R</var><sub>н</sub>');
+    const emDcTgT = emFrac('<var>L</var><sub>я</sub>', '<var>R</var><sub>я</sub> + <var>R</var><sub>н</sub>');
+    const emDcTgWhere = `<span class="em-dctg-where"><span class="char-eq">где <var>k</var><sub>тг</sub> = </span>${emDcTgK}<span class="char-eq">, <var>T</var><sub>тг</sub> = </span>${emDcTgT}</span>`;
+    const info = {
+      intro: {
+        title: 'Обзор',
+        html: '<p>Тот же генератор, что на прошлом слайде, но лампочку не вешают. Подключили вольтметр: он показывает напряжение, а по нему судят — вал крутится, скажем, со скоростью 1500 оборотов в минуту.</p><p>В станке, роботе, лифте его крепят на вал двигателя: система постоянно знает обороты и подкручивает мощность. Это <strong>обратная связь</strong>.</p>',
+        eq: '<span class="char-eq"><var>e</var><sub>тг</sub> = <var>c</var> ω</span>',
+        note: 'датчик скорости · не лампочка',
+        cap: 'не лампочка · вольтметр → обороты',
+        focus: '',
+        view: 'chain'
+      },
+      chain: {
+        title: 'Цепь',
+        html: '<p>Якорь: ЭДС <var>e</var><sub>тг</sub>, сопротивление <var>R</var><sub>я</sub>, индуктивность <var>L</var><sub>я</sub>. На зажимах — высокоомная нагрузка <var>R</var><sub>н</sub>: это по сути вольтметр, не лампочка.</p><p>Снимают <var>U</var><sub>тг</sub>. По вольтам судят об оборотах вала.</p>',
+        eq: '<span class="char-eq"><var>U</var><sub>тг</sub> = <var>i</var> <var>R</var><sub>н</sub></span>',
+        note: 'схема замещения якорной цепи',
+        cap: 'eтг → Rя → Lя → Rн',
+        focus: '',
+        view: 'chain'
+      },
+      e: {
+        title: 'eтг',
+        html: '<p>ЭДС якоря. Поток не меняют, поэтому <var>e</var><sub>тг</sub> = <var>c</var>ω — сразу пропорциональна скорости.</p>',
+        eq: '<span class="char-eq"><var>e</var><sub>тг</sub> = <var>c</var>ω</span>',
+        note: 'c = kΦ, поток не крутят',
+        cap: 'источник в схеме — это ЭДС якоря',
+        focus: 'e',
+        view: 'chain'
+      },
+      r: {
+        title: 'Rя',
+        html: '<p>Активное сопротивление обмотки якоря. Делит выход с нагрузкой: часть ЭДС остаётся внутри машины.</p>',
+        eq: `<span class="char-eq"><var>k</var><sub>тг</sub> = </span>${emDcTgK}`,
+        note: 'делитель ЭДС между Rя и Rн',
+        cap: 'Rя съедает часть напряжения',
+        focus: 'r',
+        view: 'chain'
+      },
+      l: {
+        title: 'Lя',
+        html: '<p>Индуктивность якоря даёт инерцию: ток (и <var>U</var><sub>тг</sub>) не скачет следом за ω.</p><p>Постоянная времени — в формуле над схемой: <var>L</var><sub>я</sub> делят на сумму сопротивлений.</p>',
+        eq: `<span class="char-eq"><var>T</var><sub>тг</sub> = </span>${emDcTgT}`,
+        note: 'из-за Lя напряжение запаздывает',
+        cap: 'Lя — запаздывание напряжения',
+        focus: 'l',
+        view: 'chain'
+      },
+      load: {
+        title: 'Rн',
+        html: '<p>Нагрузка датчика. Берут высокоомную: <var>R</var><sub>н</sub> ≫ <var>R</var><sub>я</sub>. Тогда почти вся ЭДС на выходе, <var>T</var><sub>тг</sub> мала.</p>',
+        eq: '<span class="char-eq"><var>U</var><sub>тг</sub> = <var>i</var> <var>R</var><sub>н</sub></span>',
+        note: 'высокоомная нагрузка → датчик почти безынерционный',
+        cap: 'снимают Uтг с Rн',
+        focus: 'load',
+        view: 'chain'
+      },
+      eq: {
+        title: 'Уравнения',
+        html: `<p>Три уравнения. 1: ЭДС от скорости, <var>e</var><sub>тг</sub> = <var>c</var> ω. 2: Кирхгоф по контуру, <var>L</var><sub>я</sub> d<var>i</var>/d<var>t</var> + <var>R</var><sub>Σ</sub> <var>i</var> = <var>e</var>, где <var>R</var><sub>Σ</sub> = <var>R</var><sub>я</sub> + <var>R</var><sub>н</sub>. 3: выход <var>U</var><sub>тг</sub> = <var>i</var> <var>R</var><sub>н</sub>.</p><p>Ток <var>i</var> вычёркивают. Остаётся <var>T</var><sub>тг</sub> d<var>U</var><sub>тг</sub>/d<var>t</var> + <var>U</var><sub>тг</sub> = <var>k</var><sub>тг</sub> ω, а по Лапласу <var>W</var><sub>тг</sub>(<var>p</var>) = <var>k</var><sub>тг</sub> / (<var>T</var><sub>тг</sub><var>p</var> + 1), где <var>k</var><sub>тг</sub> = ${emDcTgK}, <var>T</var><sub>тг</sub> = ${emDcTgT}.</p>`,
+        eq: `<span class="em-dctg-eq-line"><span class="char-eq"><var>T</var><sub>тг</sub>·</span>${emFrac('d<var>U</var><sub>тг</sub>', 'd<var>t</var>')}<span class="char-eq"> + <var>U</var><sub>тг</sub> = <var>k</var><sub>тг</sub> ω</span></span>${emDcTgWhere}`,
+        note: 'где kтг и Tтг — из цепи якоря',
+        cap: 'три уравнения → убрали ток → Лаплас',
+        focus: '',
+        view: 'derive'
+      },
+      w: {
+        title: 'W(p)',
+        html: `<p>Лаплас: <var>W</var><sub>тг</sub>(<var>p</var>) = <var>U</var><sub>тг</sub>(<var>p</var>) / ω(<var>p</var>) = <var>k</var><sub>тг</sub> / (<var>T</var><sub>тг</sub><var>p</var> + 1), где <var>k</var><sub>тг</sub> = ${emDcTgK}, <var>T</var><sub>тг</sub> = ${emDcTgT}.</p><p>Слева статика: прямая <var>U</var><sub>тг</sub> = <var>k</var><sub>тг</sub> ω — быстрее вал, больше вольт. Справа скачок скорости: ω сразу новая, а <var>U</var><sub>тг</sub> догоняет экспонентой; <var>T</var><sub>тг</sub> — время этого запаздывания.</p>`,
+        eq: `<span class="em-dctg-eq-line"><span class="char-eq"><var>W</var><sub>тг</sub>(<var>p</var>) = </span>${emFrac('<var>k</var><sub>тг</sub>', '<var>T</var><sub>тг</sub><var>p</var> + 1')}</span>${emDcTgWhere}`,
+        note: 'Uтг(p) / ω(p) · апериодическое звено',
+        cap: 'слева статика · справа скачок ω',
+        focus: '',
+        view: 'graph'
+      },
+      use: {
+        title: 'Обратная связь',
+        html: '<p>В станках, роботах, лифтах, прокатных станах нужно знать и держать скорость двигателя. Тахогенератор крепят на вал: он постоянно сообщает системе управления — «сейчас скорость такая-то».</p><p>Скорость упала — система добавляет мощность. Выросла — убавляет. Это и есть <strong>обратная связь</strong>.</p>',
+        eq: '<span class="char-eq"><var>U</var><sub>тг</sub> = <var>c</var> ω</span>',
+        note: 'вал → тг → САУ → мощность',
+        cap: 'упало — добавить · выросло — убавить',
+        focus: 'use',
+        view: 'chain'
+      }
+    };
+    const tabs = ['intro', 'chain', 'eq', 'w', 'use'];
+    const showEmDcTgInfo = (key, viewOverride) => {
+      const data = info[key] || info.intro;
+      const view = viewOverride || data.view || 'chain';
+      if (panel) panel.innerHTML = `<h3>${data.title}</h3>${data.html}`;
+      const formula = emDcTgSlide.querySelector('.em-dctg-eq');
+      const note = emDcTgSlide.querySelector('.em-dctg-note');
+      const cap = emDcTgSlide.querySelector('.em-dctg-cap');
+      if (formula) formula.innerHTML = data.eq;
+      if (note) note.innerHTML = data.note;
+      if (cap) {
+        cap.textContent = data.cap || 'не лампочка · вольтметр → обороты';
+        cap.setAttribute('visibility', view === 'chain' ? 'visible' : 'hidden');
+      }
+      emDcTgSlide.querySelectorAll('.em-dctg-view').forEach((g) => {
+        const on = g.dataset.view === view;
+        g.classList.toggle('is-on', on);
+        if (on) g.removeAttribute('display');
+        else g.setAttribute('display', 'none');
+      });
+      emDcTgSlide.querySelectorAll('.asutp-tab').forEach((btn) => {
+        const onTab = tabs.indexOf(key) !== -1 && btn.dataset.info === key;
+        const keepChain = (key === 'e' || key === 'r' || key === 'l' || key === 'load') && btn.dataset.info === 'chain' && view === 'chain';
+        const keepEq = (key === 'e' || key === 'r' || key === 'l' || key === 'load') && btn.dataset.info === 'eq' && view === 'derive';
+        const keepW = (key === 'l' || key === 'w') && btn.dataset.info === 'w' && view === 'graph';
+        btn.classList.toggle('active', onTab || keepChain || keepEq || keepW);
+      });
+      emDcTgSlide.querySelectorAll('.em-dctg-hit').forEach((el) => {
+        el.classList.toggle('is-active', el.dataset.info === key);
+        if (el.closest('svg')) {
+          const dim = data.focus && el.dataset.info !== data.focus;
+          el.setAttribute('opacity', dim ? '0.32' : '1');
+        }
+      });
+    };
+    emDcTgSlide.addEventListener('click', (e) => {
+      const tab = e.target.closest('.asutp-tab');
+      const hit = e.target.closest('.em-dctg-hit');
+      if (tab && tab.dataset.info) {
+        e.stopPropagation();
+        showEmDcTgInfo(tab.dataset.info);
+        return;
+      }
+      if (hit && hit.dataset.info) {
+        e.stopPropagation();
+        const fromView = hit.closest('.em-dctg-view')?.dataset.view;
+        const jumpView = hit.dataset.info === 'w' || hit.dataset.info === 'eq';
+        showEmDcTgInfo(hit.dataset.info, fromView && !jumpView ? fromView : undefined);
+      }
+    });
+    showEmDcTgInfo('intro');
+  }
+
+  /* ===== Lecture 5: armature control methods ===== */
+  const emArmWaySlide = document.querySelector('.slide-em-arm-way-interactive');
+  if (emArmWaySlide) {
+    const panel = document.getElementById('emArmWayPanel');
+    const range = emArmWaySlide.querySelector('.em-arm-way-range');
+    const valEl = emArmWaySlide.querySelector('.em-arm-way-val');
+    const labEl = emArmWaySlide.querySelector('.em-arm-way-ctrl-lab');
+    const controls = emArmWaySlide.querySelector('.em-arm-way-controls');
+    const formula = emArmWaySlide.querySelector('.em-arm-way-eq');
+    const note = emArmWaySlide.querySelector('.em-arm-way-note');
+    const cap = emArmWaySlide.querySelector('.em-arm-way-cap');
+    const spin = emArmWaySlide.querySelector('#emArmWaySpin');
+    const wiper = emArmWaySlide.querySelector('#emArmWayWiper');
+    const uFill = emArmWaySlide.querySelector('#emArmWayUFill');
+    const omLab = emArmWaySlide.querySelector('#emArmWayOm');
+    const shared = emArmWaySlide.querySelector('.em-arm-way-shared');
+    const word = (t, a, b, c) => (t < 0.34 ? a : t < 0.67 ? b : c);
+    const svgOn = (el, on) => {
+      if (!el) return;
+      if (on) el.removeAttribute('display');
+      else el.setAttribute('display', 'none');
+    };
+    const info = {
+      rheo: {
+        title: 'Реостат в роторе',
+        html: '<p>В цепь ротора ставят добавочный резистор. Напряжение сети не меняют. Так крутят скорость больших машин — электротранспорт.</p><p>Минус: в резисторе греется мощность. Плюс: просто и дёшево на большой ток. Двигайте ручку: <var>R</var><sub>доб</sub> больше — ток меньше — вал медленнее.</p>',
+        eq: '<span class="char-eq"><var>U</var><sub>сети</sub> = const · крутим <var>R</var><sub>доб</sub></span>',
+        note: 'больше Rдоб → ток меньше → ω меньше',
+        cap: 'сеть не трогаем · крутим Rдоб',
+        view: 'rheo',
+        focus: 'rheo'
+      },
+      uarm: {
+        title: 'Меняем U ротора',
+        html: '<p>Ротор питают от своего регулируемого источника. Напряжение крутим как ручку.</p><p>Так делают микромашины в САУ: меньше потерь, удобнее автоматике. Оба способа дальше описывают одной моделью — якорным управлением. Двигайте ручку: <var>U</var><sub>я</sub> больше — вал быстрее.</p>',
+        eq: '<span class="char-eq">крутим <var>U</var><sub>я</sub> · Φ = const</span>',
+        note: 'больше Uя → ω больше',
+        cap: 'свой источник · крутим Uя',
+        view: 'uarm',
+        focus: 'uarm'
+      },
+      why: {
+        title: 'Почему якорь',
+        html: '<p><strong>Якорь</strong> — обмотка на роторе. В ней рабочий ток: от тока момент, при вращении — противоЭДС. Поэтому эту цепь называют якорной.</p><p><strong>Якорное управление</strong> — скорость меняем именно здесь: добавочным резистором или своим напряжением <var>U</var><sub>я</sub>. Магниты Φ не трогаем, они только задают поле.</p>',
+        eq: '<span class="char-eq">якорь — цепь ротора · ручка здесь</span>',
+        note: 'ток якоря → момент · Φ не крутим',
+        cap: 'ручку ставим в цепь, которая крутится',
+        view: 'why',
+        focus: 'why'
+      },
+      phi: {
+        title: 'Φ не крутим',
+        html: '<p>Возбуждение независимое: катушка магнитов на своём источнике. Φ держат постоянным — тогда момент от тока, противоЭДС от скорости, характеристики прямые.</p><p>Если крутить Φ — это уже полюсное управление, будет дальше. Здесь ручка только в цепи ротора.</p>',
+        eq: '<span class="char-eq">Φ = const · независимое возбуждение</span>',
+        note: 'магниты отдельно · скорость крутим не здесь',
+        cap: 'Φ стоит · ручку магнитов не крутим',
+        view: 'phi',
+        focus: 'phi'
+      },
+      mot: {
+        title: 'Ротор',
+        html: '<p>Обмотка, которая крутится. Скорость вала ω — то, что хотим менять.</p><p>Ток в роторе даёт момент. ПротивоЭДС растёт со скоростью. Ручка управления — в этой цепи, не в магнитах.</p>',
+        eq: '<span class="char-eq">ω — выход · ручка в цепи ротора</span>',
+        note: 'вал крутится быстрее или медленнее',
+        cap: 'ротор — то, чем крутим нагрузку',
+        view: 'rheo',
+        focus: 'mot'
+      }
+    };
+    const tabs = ['rheo', 'uarm', 'why', 'phi'];
+    let emArmWayKey = 'rheo';
+    let emArmWayView = 'rheo';
+    let emArmWayOmega = 0.75;
+    let emArmWayAngle = 0;
+    let emArmWayTimer = null;
+    const updateEmArmWayLive = () => {
+      const t = range ? Number(range.value) / 100 : 0.35;
+      const rheoMode = emArmWayView === 'rheo';
+      const uMode = emArmWayView === 'uarm';
+      emArmWayOmega = rheoMode ? (1 - 0.78 * t) : uMode ? (0.16 + 0.84 * t) : 0.55;
+      if (valEl) valEl.textContent = word(t, 'мало', 'средне', 'много');
+      if (labEl) labEl.textContent = rheoMode ? 'Rдоб' : 'Uя';
+      if (wiper) wiper.setAttribute('transform', `translate(${(t * 52 - 8).toFixed(1)} 0)`);
+      if (uFill) {
+        const h = 10 + t * 46;
+        uFill.setAttribute('height', h.toFixed(1));
+        uFill.setAttribute('y', (122 - h).toFixed(1));
+      }
+      if (omLab) {
+        omLab.textContent = `ω ${word(emArmWayOmega, 'медленно', 'средне', 'быстро')}`;
+      }
+      emArmWaySlide.querySelectorAll('.em-arm-way-dots animateMotion').forEach((el) => {
+        const sec = (0.7 + 2.4 * (1 - emArmWayOmega)).toFixed(2);
+        el.setAttribute('dur', `${sec}s`);
+      });
+    };
+    const showEmArmWay = (key, viewOverride) => {
+      const data = info[key] || info.rheo;
+      emArmWayKey = key;
+      emArmWayView = viewOverride || data.view || 'rheo';
+      if (panel) panel.innerHTML = `<h3>${data.title}</h3>${data.html}`;
+      if (formula) formula.innerHTML = data.eq;
+      if (note) note.innerHTML = data.note;
+      if (cap) {
+        cap.textContent = data.cap || '';
+        cap.setAttribute('visibility', (emArmWayView === 'rheo' || emArmWayView === 'uarm') ? 'visible' : 'hidden');
+      }
+      const live = emArmWayView === 'rheo' || emArmWayView === 'uarm';
+      svgOn(shared, live);
+      if (controls) controls.classList.toggle('is-off', !live);
+      emArmWaySlide.querySelectorAll('.em-arm-way-view').forEach((g) => {
+        const on = g.dataset.view === emArmWayView;
+        g.classList.toggle('is-on', on);
+        if (on) g.removeAttribute('display');
+        else g.setAttribute('display', 'none');
+      });
+      emArmWaySlide.querySelectorAll('.asutp-tab').forEach((btn) => {
+        const onTab = tabs.indexOf(key) !== -1 && btn.dataset.info === key;
+        const keep = key === 'mot' && btn.dataset.info === emArmWayView;
+        btn.classList.toggle('active', onTab || keep);
+      });
+      emArmWaySlide.querySelectorAll('.em-arm-way-hit').forEach((el) => {
+        el.classList.toggle('is-active', el.dataset.info === key);
+        if (el.closest('svg')) {
+          const dim = data.focus && el.dataset.info !== data.focus;
+          el.setAttribute('opacity', dim ? '0.32' : '1');
+        }
+      });
+      updateEmArmWayLive();
+    };
+    const tickEmArmWay = () => {
+      if (!emArmWaySlide.classList.contains('active')) return;
+      emArmWayAngle = (emArmWayAngle + 1.2 + 11 * emArmWayOmega) % 360;
+      if (spin) spin.setAttribute('transform', `rotate(${emArmWayAngle.toFixed(1)} 210 94)`);
+    };
+    const startEmArmWay = () => {
+      if (emArmWayTimer) return;
+      emArmWayTimer = setInterval(tickEmArmWay, 40);
+    };
+    const stopEmArmWay = () => {
+      if (!emArmWayTimer) return;
+      clearInterval(emArmWayTimer);
+      emArmWayTimer = null;
+    };
+    emArmWaySlide.querySelector('.em-arm-way-controls')?.addEventListener('pointerdown', (e) => e.stopPropagation());
+    range?.addEventListener('input', () => {
+      if (emArmWayView === 'rheo') showEmArmWay('rheo');
+      else if (emArmWayView === 'uarm') showEmArmWay('uarm');
+      else updateEmArmWayLive();
+    });
+    emArmWaySlide.addEventListener('click', (e) => {
+      const tab = e.target.closest('.asutp-tab');
+      const hit = e.target.closest('.em-arm-way-hit');
+      if (tab && tab.dataset.info) {
+        e.stopPropagation();
+        showEmArmWay(tab.dataset.info);
+        return;
+      }
+      if (hit && hit.dataset.info) {
+        e.stopPropagation();
+        if (hit.dataset.info === 'mot') {
+          const keep = (emArmWayView === 'rheo' || emArmWayView === 'uarm') ? emArmWayView : 'rheo';
+          showEmArmWay('mot', keep);
+          return;
+        }
+        showEmArmWay(hit.dataset.info);
+      }
+    });
+    const watchEmArmWay = () => {
+      if (emArmWaySlide.classList.contains('active')) startEmArmWay();
+      else stopEmArmWay();
+    };
+    new MutationObserver(watchEmArmWay).observe(emArmWaySlide, { attributes: true, attributeFilter: ['class'] });
+    showEmArmWay('rheo');
+    watchEmArmWay();
+  }
+
+  /* ===== Lecture 5: motor scheme ===== */
+  const emArmSchSlide = document.querySelector('.slide-em-arm-sch-interactive');
+  if (emArmSchSlide) {
+    const panel = document.getElementById('emArmSchPanel');
+    const info = {
+      intro: {
+        title: 'Зачем схема',
+        html: '<p>Двигатель с независимым возбуждением. Для САУ нужен вход и выход: выход — скорость вала ω, входы — напряжение на роторе <var>U</var><sub>я</sub> и момент нагрузки <var>M</var><sub>н</sub>.</p>'
+      },
+      uarm: {
+        title: 'Uя — вход',
+        html: '<p>Напряжение, которое подаём в ротор. Это ручка управления. Магниты питаются отдельно — их сюда не мешаем.</p>'
+      },
+      mot: {
+        title: 'Ротор',
+        html: '<p>Обмотка ротора: сопротивление <var>r</var><sub>я</sub> и индуктивность <var>L</var><sub>я</sub>. Ток здесь даёт момент. Когда ротор крутится, появляется противоЭДС — как у генератора.</p>'
+      },
+      field: {
+        title: 'Магниты Uв',
+        html: '<p>Обмотка возбуждения <var>w</var><sub>в</sub> на своём источнике. Цепи не соединены. Φ считают известным и постоянным.</p>'
+      },
+      om: {
+        title: 'ω — выход',
+        html: '<p>Угловая скорость вала. Её хотим держать или менять. К валу ещё прицеплена нагрузка с моментом <var>M</var><sub>н</sub>.</p>'
+      },
+      mn: {
+        title: 'Mн — момент нагрузки',
+        html: '<p><strong>Момент нагрузки</strong> — насколько тяжело крутить то, что прицеплено к валу. Не сам двигатель, а то, что он тащит.</p><p>Двигатель крутит в одну сторону, нагрузка — назад: лифт с грузом, резец, вентилятор, даже трение в подшипниках. На схеме это вход <var>M</var><sub>н</sub>.</p>'
+      }
+    };
+    const tabOf = { intro: 'intro', uarm: 'uarm', mot: 'intro', field: 'intro', om: 'om', mn: 'mn' };
+    const showEmArmSch = (key) => {
+      const data = info[key] || info.intro;
+      if (panel) panel.innerHTML = `<h3>${data.title}</h3>${data.html}`;
+      emArmSchSlide.querySelectorAll('.asutp-tab').forEach((btn) => {
+        btn.classList.toggle('active', btn.dataset.info === (tabOf[key] || 'intro'));
+      });
+      emArmSchSlide.querySelectorAll('.em-arm-sch-hit').forEach((el) => {
+        el.classList.toggle('is-active', el.dataset.info === key);
+      });
+    };
+    emArmSchSlide.addEventListener('click', (e) => {
+      const tab = e.target.closest('.asutp-tab');
+      const hit = e.target.closest('.em-arm-sch-hit');
+      if (tab && tab.dataset.info) {
+        e.stopPropagation();
+        showEmArmSch(tab.dataset.info);
+        return;
+      }
+      if (hit && hit.dataset.info) {
+        e.stopPropagation();
+        showEmArmSch(hit.dataset.info);
+      }
+    });
+    showEmArmSch('intro');
+  }
+
+  /* ===== Lecture 5: motor equations ===== */
+  const emArmEqSlide = document.querySelector('.slide-em-arm-eq-interactive');
+  if (emArmEqSlide) {
+    const panel = document.getElementById('emArmEqPanel');
+    const info = {
+      intro: {
+        title: 'Обзор',
+        html: '<p>Три уравнения динамики двигателя. <strong>1</strong> — ток в роторе от <var>U</var><sub>я</sub> и противоЭДС. <strong>2</strong> — момент от этого тока. <strong>3</strong> — лишний момент крутит инерцию <var>J</var>, меняется скорость ω.</p><p><var>J</var> — ротор плюс нагрузка. Φ постоянный, поэтому <var>c</var> = <var>k</var>Φ один и тот же в первом и втором уравнении. Нажмите <var>c</var> в обозначениях.</p>'
+      },
+      c: {
+        title: 'c',
+        html: '<p><var>c</var> — одна константа машины в двух местах: противоЭДС <var>c</var>ω в уравнении цепи и момент <var>M</var> = <var>c</var> <var>i</var>. Это «насколько сильно связаны электричество и вал».</p><p><var>c</var> = <var>k</var>Φ: <var>k</var> — конструкция (витки, полюса), Φ — поток магнитов. Φ не крутим, поэтому <var>c</var> не меняется. Один и тот же <var>c</var> в 1 и 2 — не два разных коэффициента.</p>'
+      },
+      kir: {
+        title: 'Цепь ротора',
+        html: '<p><var>U</var><sub>я</sub> = <var>r</var><sub>я</sub> <var>i</var> + <var>L</var><sub>я</sub> d<var>i</var>/d<var>t</var> + <var>c</var>ω.</p><p>Напряжение уходит в падение на сопротивлении, в индуктивность (пока ток меняется) и в противоЭДС. Ротор крутится в магнитах и сам работает как генератор: чем быстрее, тем сильнее <var>c</var>ω мешает току.</p>'
+      },
+      mom: {
+        title: 'Момент',
+        html: '<p><var>M</var> = <var>c</var> <var>i</var>. Тот же <var>c</var>, что в противоЭДС: машина одна, Φ не трогаем.</p><p>Ток больше — вал крутит сильнее. Это мост между электрической цепью и механикой.</p>'
+      },
+      bal: {
+        title: 'Вал',
+        html: '<p><var>J</var> dω/d<var>t</var> = <var>M</var> − <var>M</var><sub>н</sub>. Если момент двигателя больше нагрузки — вал разгоняется. Равны — скорость стоит.</p><p>Разность <var>M</var> − <var>M</var><sub>н</sub> — то, что идёт в разгон инерции.</p>'
+      },
+      mn: {
+        title: 'Mн — момент нагрузки',
+        html: '<p><strong>Момент нагрузки</strong> — насколько тяжело крутить то, что прицеплено к валу. Не сам двигатель, а то, что он тащит: лифт, резец, вентилятор, трение.</p><p>Двигатель крутит вперёд, <var>M</var><sub>н</sub> — назад. <var>M</var> больше <var>M</var><sub>н</sub> — разгон. Равны — скорость стоит. Меньше — вал тормозит.</p>'
+      },
+      stat: {
+        title: 'Статика',
+        html: '<p>Когда уже не разгоняемся, производные ноль: ток не меняется, скорость стоит. Остаётся <var>U</var><sub>я</sub> = <var>r</var><sub>я</sub> <var>I</var> + <var>c</var>ω и <var>M</var> = <var>M</var><sub>н</sub> = <var>c</var> <var>I</var>.</p><p>Отсюда прямые характеристики на следующем слайде: скорость от момента и от <var>U</var><sub>я</sub>.</p>'
+      }
+    };
+    const tabOf = { intro: 'intro', kir: 'kir', mom: 'mom', bal: 'bal', stat: 'stat', c: 'mom', mn: 'bal' };
+    const showEmArmEq = (key) => {
+      const data = info[key] || info.intro;
+      if (panel) panel.innerHTML = `<h3>${data.title}</h3>${data.html}`;
+      const staticOn = key === 'stat';
+      emArmEqSlide.classList.toggle('is-stat', staticOn);
+      const n1 = emArmEqSlide.querySelector('.em-arm-eq-n1');
+      const n2 = emArmEqSlide.querySelector('.em-arm-eq-n2');
+      const n3 = emArmEqSlide.querySelector('.em-arm-eq-n3');
+      if (n1) n1.textContent = staticOn ? 'производная тока ноль' : 'cω — противоЭДС';
+      if (n2) n2.textContent = staticOn ? 'I — ток уже постоянный' : 'ток больше — крутит сильнее';
+      if (n3) n3.textContent = staticOn ? 'не разгоняемся · M = Mн' : 'лишний момент идёт в разгон';
+      emArmEqSlide.querySelectorAll('.asutp-tab').forEach((btn) => {
+        btn.classList.toggle('active', btn.dataset.info === (tabOf[key] || 'intro'));
+      });
+      emArmEqSlide.querySelectorAll('.em-arm-eq-hit').forEach((el) => {
+        const on = staticOn
+          ? (el.dataset.info === 'kir' || el.dataset.info === 'mom' || el.dataset.info === 'bal' || el.dataset.info === 'mn')
+          : key === 'c'
+            ? (el.dataset.info === 'c' || el.dataset.info === 'kir' || el.dataset.info === 'mom')
+            : (key === 'mn' || key === 'bal')
+              ? (el.dataset.info === 'mn' || el.dataset.info === 'bal')
+              : el.dataset.info === key;
+        el.classList.toggle('is-active', key === 'intro' ? false : on);
+        if (el.closest('svg')) {
+          const keep = el.dataset.info === key
+            || (key === 'c' && (el.dataset.info === 'kir' || el.dataset.info === 'mom'))
+            || (key === 'mn' && (el.dataset.info === 'mn' || el.dataset.info === 'bal'));
+          const dim = !staticOn && key !== 'intro' && !keep;
+          el.setAttribute('opacity', dim ? '0.32' : '1');
+        }
+      });
+    };
+    emArmEqSlide.addEventListener('click', (e) => {
+      const tab = e.target.closest('.asutp-tab');
+      const hit = e.target.closest('.em-arm-eq-hit');
+      if (tab && tab.dataset.info) {
+        e.stopPropagation();
+        showEmArmEq(tab.dataset.info);
+        return;
+      }
+      if (hit && hit.dataset.info) {
+        e.stopPropagation();
+        showEmArmEq(hit.dataset.info);
+      }
+    });
+    showEmArmEq('intro');
+  }
+
+  /* ===== Lecture 5: static characteristics ===== */
+  const emArmCharSlide = document.querySelector('.slide-em-arm-char-interactive');
+  if (emArmCharSlide) {
+    const panel = document.getElementById('emArmCharPanel');
+    const info = {
+      intro: {
+        title: 'Зачем прямые',
+        html: '<p>Из уравнений убрали разгон. Осталась скорость от момента и от <var>U</var><sub>я</sub>. Две прямые — потому что <var>c</var> не меняется: Φ стоит.</p>'
+      },
+      c: {
+        title: 'c',
+        html: '<p><var>c</var> — одна константа машины в двух местах: противоЭДС <var>e</var> = <var>c</var>ω и момент <var>M</var> = <var>c</var> <var>i</var>. Это «насколько сильно связаны электричество и вал».</p><p><var>c</var> = <var>k</var>Φ: <var>k</var> — конструкция (витки, полюса), Φ — поток магнитов. Φ не крутим, поэтому <var>c</var> — просто число. В формуле ω холостой ход — <var>U</var><sub>я</sub>/<var>c</var>: магниты сильнее — при том же напряжении вал медленнее.</p>'
+      },
+      mech: {
+        title: 'Механическая',
+        html: '<p><var>U</var><sub>я</sub> зафиксировали. Нагрузка больше — скорость чуть падает. ωх — холостой ход, <var>M</var><sub>п</sub> — пусковой момент, когда вал ещё стоит.</p><p>Холостой ход: напряжение делят на <var>c</var> (ещё вычитают трение). Наклон прямой из-за <var>r</var><sub>я</sub>.</p>'
+      },
+      mn: {
+        title: 'M — момент нагрузки',
+        html: '<p><strong>Момент нагрузки</strong> — насколько тяжело крутить то, что прицеплено к валу. Не сам двигатель, а то, что он тащит: груз, резец, воздух, трение.</p><p>На этом слайде в формуле пишут <var>M</var>: скорость уже стоит, момент двигателя и нагрузки равны. Левый график: груз тяжелее — вал медленнее.</p>'
+      },
+      reg: {
+        title: 'Регулировочная',
+        html: '<p>Момент нагрузки не трогаем, крутим <var>U</var><sub>я</sub>. Больше напряжение — больше скорость. Почти из нуля, прямая.</p><p>Так и управляют микромашиной в САУ: ручка — напряжение ротора.</p>'
+      },
+      lin: {
+        title: 'Линейность',
+        html: '<p>Обе характеристики — прямые, потому что <var>c</var> = <var>k</var>Φ не меняется. Это главное достоинство такого двигателя: автоматике проще, нет сюрпризов кривой.</p>'
+      }
+    };
+    const showEmArmChar = (key) => {
+      const data = info[key] || info.intro;
+      if (panel) panel.innerHTML = `<h3>${data.title}</h3>${data.html}`;
+      emArmCharSlide.querySelectorAll('.asutp-tab').forEach((btn) => {
+        const tabKey = key === 'c' ? 'lin' : key === 'mn' ? 'mech' : key;
+        btn.classList.toggle('active', btn.dataset.info === tabKey);
+      });
+      emArmCharSlide.querySelectorAll('.em-arm-char-hit').forEach((el) => {
+        const on = el.dataset.info === key
+          || (key === 'mn' && el.dataset.info === 'mech')
+          || (key === 'mech' && el.dataset.info === 'mn');
+        el.classList.toggle('is-active', key === 'intro' ? false : on);
+      });
+    };
+    emArmCharSlide.addEventListener('click', (e) => {
+      const tab = e.target.closest('.asutp-tab');
+      const hit = e.target.closest('.em-arm-char-hit');
+      if (tab && tab.dataset.info) {
+        e.stopPropagation();
+        showEmArmChar(tab.dataset.info);
+        return;
+      }
+      if (hit && hit.dataset.info) {
+        e.stopPropagation();
+        showEmArmChar(hit.dataset.info);
+      }
+    });
+    showEmArmChar('intro');
+  }
+
+  /* ===== Lecture 5: rheostat start ===== */
+  const emArmStartSlide = document.querySelector('.slide-em-arm-start-interactive');
+  if (emArmStartSlide) {
+    const panel = document.getElementById('emArmStartPanel');
+    const cap = emArmStartSlide.querySelector('#emArmStCap');
+    const rail = emArmStartSlide.querySelector('#emArmStRail');
+    const sh = [
+      emArmStartSlide.querySelector('#emArmStSh1'),
+      emArmStartSlide.querySelector('#emArmStSh2'),
+      emArmStartSlide.querySelector('#emArmStSh3')
+    ];
+    const boxes = [
+      emArmStartSlide.querySelector('#emArmStR1'),
+      emArmStartSlide.querySelector('#emArmStR2'),
+      emArmStartSlide.querySelector('#emArmStR3')
+    ];
+    const emArmStI = emFrac('<var>U</var><sub>я</sub> − <var>c</var>ω', '<var>r</var><sub>я</sub> + <var>R</var><sub>д</sub>');
+    const info = {
+      s1: {
+        title: 'Ступень 1',
+        html: '<p>Все три добавочных резистора в цепи. Пусковой ток и момент не выше заданных. Разгон до ω₁.</p>',
+        cap: 'ступень 1 · все Rд в цепи',
+        short: [false, false, false]
+      },
+      s2: {
+        title: 'Ступень 2',
+        html: '<p>Закорачивают R3. Сопротивление меньше — ток и момент больше, скорость растёт до ω₂. Снова не выше <var>I</var><sub>пуск</sub>.</p>',
+        cap: 'ступень 2 · R3 замкнут',
+        short: [false, false, true]
+      },
+      s3: {
+        title: 'Ступень 3',
+        html: '<p>Закорачивают ещё R2. Остаётся R1. Ещё меньше <var>R</var><sub>д</sub> — ещё больше момент. Разгон до ω₃.</p>',
+        cap: 'ступень 3 · R2 и R3 замкнуты',
+        short: [false, true, true]
+      },
+      s4: {
+        title: 'Ступень 4',
+        html: `<p>Все <var>R</var><sub>д</sub> закорочены: в знаменателе только <var>r</var><sub>я</sub>. Ток и момент самые большие — рабочая характеристика, линия уходит правее всех по <var>M</var>.</p>`,
+        cap: 'ступень 4 · все Rд закорочены',
+        short: [true, true, true]
+      },
+      graph: {
+        title: 'Четыре прямые',
+        html: `<p>Все из одной ωх: <var>U</var><sub>я</sub> то же. <var>i</var> = ${emArmStI}, <var>M</var> = <var>c</var> <var>i</var>. Меньше <var>R</var><sub>д</sub> — больше ток — линия дальше по оси <var>M</var>.</p>`,
+        cap: null,
+        short: null
+      },
+      rd: {
+        title: 'Меньше Rд — больше M',
+        html: `<p><var>M</var> = <var>c</var> <var>i</var>. Ток <var>i</var> = ${emArmStI}.</p><p>Сопротивление меньше — при том же <var>U</var><sub>я</sub> ток больше — вал крутит сильнее и может тащить более тяжёлую нагрузку.</p>`
+      },
+      ip: {
+        title: 'Зачем тогда Rд',
+        html: '<p>Резисторы грузу не помогают — они режут ток. С места ω = 0, противоЭДС ноль, <var>i</var> = <var>U</var><sub>я</sub> / (<var>r</var><sub>я</sub> + <var>R</var><sub>д</sub>). Без <var>R</var><sub>д</sub> ток огромный: <var>r</var><sub>я</sub> крошечное.</p><p>Поэтому сначала все <var>R</var><sub>д</sub>, потом их закорачивают.</p>'
+      }
+    };
+    let emArmStartKey = 's1';
+    const emArmSvgOn = (el, on) => {
+      if (!el) return;
+      if (on) el.removeAttribute('display');
+      else el.setAttribute('display', 'none');
+    };
+    const showEmArmStart = (key) => {
+      const data = info[key] || info.s1;
+      if (/^s[1-4]$/.test(key)) emArmStartKey = key;
+      const step = /^s[1-4]$/.test(emArmStartKey) ? emArmStartKey : 's1';
+      if (panel) panel.innerHTML = `<h3>${data.title}</h3>${data.html}`;
+      const stepData = info[step] || info.s1;
+      if (cap && stepData.cap) cap.textContent = stepData.cap;
+      if (stepData.short) {
+        stepData.short.forEach((on, i) => {
+          emArmSvgOn(sh[i], on);
+          if (boxes[i]) boxes[i].setAttribute('fill', on ? '#fed7aa' : '#fff');
+        });
+        emArmSvgOn(rail, stepData.short.some(Boolean));
+      }
+      const tabKey = { s1: 's1', s2: 's2', s3: 's3', s4: 's4', rd: 'rd', ip: 'rd', graph: 'rd' }[key] || step;
+      emArmStartSlide.querySelectorAll('.asutp-tab').forEach((btn) => {
+        btn.classList.toggle('active', btn.dataset.info === tabKey);
+      });
+      emArmStartSlide.querySelectorAll('.em-arm-start-legend .em-arm-st-hit, .em-arm-start-eq').forEach((el) => {
+        el.classList.toggle('is-active', el.dataset.info === key || (key === 'graph' && el.dataset.info === 'rd'));
+      });
+      emArmStartSlide.querySelectorAll('.em-arm-st-line').forEach((line) => {
+        const n = line.dataset.step;
+        const on = n === String({ s1: 1, s2: 2, s3: 3, s4: 4 }[step] || 1);
+        line.setAttribute('stroke-width', on ? '2.8' : '1.6');
+        line.setAttribute('opacity', on ? '1' : '0.45');
+      });
+    };
+    emArmStartSlide.addEventListener('click', (e) => {
+      const tab = e.target.closest('.asutp-tab');
+      const hit = e.target.closest('.em-arm-st-hit');
+      if (tab && tab.dataset.info) {
+        e.stopPropagation();
+        showEmArmStart(tab.dataset.info);
+        return;
+      }
+      if (hit && hit.dataset.info) {
+        e.stopPropagation();
+        showEmArmStart(hit.dataset.info);
+      }
+    });
+    showEmArmStart('s1');
+  }
+
+  /* ===== Lecture 5: braking ===== */
+  const emArmBrkSlide = document.querySelector('.slide-em-arm-brk-interactive');
+  if (emArmBrkSlide) {
+    const panel = document.getElementById('emArmBrkPanel');
+    const info = {
+      regn: {
+        title: 'Рекуперация',
+        html: '<p>Нагрузка тянет вал так, что противоЭДС больше напряжения сети. Ток разворачивается, энергия уходит в сеть. Скорость не разгоняется без конца — новая точка равновесия, хоть и с другим знаком.</p>',
+        view: 'regn'
+      },
+      plug: {
+        title: 'Противовключение',
+        html: '<p>В цепь ротора вводят добавочный резистор. При том же моменте нагрузки скорость меняет величину и знак: с ω₁ на ω₂. Резко, в резисторе много тепла.</p>',
+        view: 'plug'
+      },
+      dyn: {
+        title: 'Динамическое',
+        html: '<p>Ключ 1 — обычная работа от сети. Ключ 2 — сеть отцепили, ротор замкнули накоротко. Инерция крутит машину как генератор, энергия уходит в тепло проводов. Скорость падает к нулю.</p>',
+        view: 'dyn'
+      },
+      dyn1: {
+        title: 'Положение 1',
+        html: '<p>Обычный ход от источника <var>U</var><sub>я</sub>. По механической характеристике скорость ω₁.</p>',
+        view: 'dyn'
+      },
+      dyn2: {
+        title: 'Положение 2',
+        html: '<p>Ротор замкнут. Питания нет. Характеристика идёт к нулю: чем меньше скорость, тем меньше ток и момент торможения.</p>',
+        view: 'dyn'
+      }
+    };
+    const tabOf = { regn: 'regn', plug: 'plug', dyn: 'dyn', dyn1: 'dyn', dyn2: 'dyn' };
+    const showEmArmBrk = (key) => {
+      const data = info[key] || info.regn;
+      if (panel) panel.innerHTML = `<h3>${data.title}</h3>${data.html}`;
+      emArmBrkSlide.querySelectorAll('.asutp-tab').forEach((btn) => {
+        btn.classList.toggle('active', btn.dataset.info === (tabOf[key] || 'regn'));
+      });
+      emArmBrkSlide.querySelectorAll('.em-arm-brk-view').forEach((g) => {
+        const on = g.dataset.view === data.view;
+        g.classList.toggle('is-on', on);
+        if (on) g.removeAttribute('display');
+        else g.setAttribute('display', 'none');
+      });
+      emArmBrkSlide.querySelectorAll('.em-arm-brk-hit').forEach((el) => {
+        el.classList.toggle('is-active', el.dataset.info === key);
+      });
+    };
+    emArmBrkSlide.addEventListener('click', (e) => {
+      const tab = e.target.closest('.asutp-tab');
+      const hit = e.target.closest('.em-arm-brk-hit');
+      if (tab && tab.dataset.info) {
+        e.stopPropagation();
+        showEmArmBrk(tab.dataset.info);
+        return;
+      }
+      if (hit && hit.dataset.info) {
+        e.stopPropagation();
+        showEmArmBrk(hit.dataset.info);
+      }
+    });
+    showEmArmBrk('regn');
+  }
+
+  /* ===== Lecture 5: motor W(p) ===== */
+  const emArmWSlide = document.querySelector('.slide-em-arm-w-interactive');
+  if (emArmWSlide) {
+    const panel = document.getElementById('emArmWPanel');
+    const eqEl = document.getElementById('emArmWEq');
+    const noteEl = document.getElementById('emArmWNote');
+    const den1 = '(<var>T</var><sub>м</sub><var>p</var> + 1)';
+    const den2 = '(<var>T</var><sub>э</sub><var>T</var><sub>м</sub><var>p</var>² + <var>T</var><sub>м</sub><var>p</var> + 1)';
+    const eqSimple = `<span class="em-arm-w-line"><span class="char-eq">ω = </span>${emFrac('<var>K</var><sub>дв</sub>', den1)}<span class="char-eq"><var>U</var><sub>я</sub> − </span>${emFrac('<var>K</var><sub>м</sub>', den1)}<span class="char-eq"><var>M</var><sub>н</sub></span></span>`;
+    const eqFull = `<span class="em-arm-w-line"><span class="char-eq">ω = </span>${emFrac('<var>K</var><sub>дв</sub>', den2)}<span class="char-eq"><var>U</var><sub>я</sub></span></span><span class="em-arm-w-line"><span class="char-eq">− </span>${emFrac('<var>K</var><sub>м</sub>(<var>T</var><sub>э</sub><var>p</var> + 1)', den2)}<span class="char-eq">(<var>M</var><sub>н</sub> + <var>M</var><sub>σ</sub>)</span></span>`;
+    const eqStat = `<span class="em-arm-w-line"><span class="char-eq">ω = <var>K</var><sub>дв</sub> <var>U</var><sub>я</sub> − <var>K</var><sub>м</sub> <var>M</var><sub>н</sub></span></span>`;
+    const info = {
+      intro: {
+        title: 'Зачем W(p)',
+        html: '<p>Якорное управление — в основном для замкнутых САУ с микромашинами. Нужна передаточная функция: как скорость отвечает на <var>U</var><sub>я</sub> и на момент нагрузки.</p><p>Силовые регулируемые источники постоянного тока большой мощности долго были неудобны. Сейчас есть силовая электроника, но мощные приводы всё чаще делают на машинах переменного тока.</p>'
+      },
+      te: {
+        title: 'Tэ',
+        html: `<p>Электромагнитная постоянная: <var>T</var><sub>э</sub> = ${emFrac('<var>L</var><sub>я</sub>', '<var>r</var><sub>я</sub>')}. Как быстро нарастает ток в обмотке ротора.</p><p>На практике почти всегда <var>T</var><sub>э</sub> ≪ <var>T</var><sub>м</sub>, поэтому её выбрасывают. Остаётся звено первого порядка.</p>`
+      },
+      tm: {
+        title: 'Без Tэ',
+        html: '<p>Механическая постоянная <var>T</var><sub>м</sub> — «постоянная времени двигателя»: как быстро разгоняется вал.</p><p>Выбросили <var>T</var><sub>э</sub> — осталось (<var>T</var><sub>м</sub><var>p</var> + 1) ω = <var>K</var><sub>дв</sub> <var>U</var><sub>я</sub> − <var>K</var><sub>м</sub> <var>M</var><sub>н</sub>. Инерционное звено.</p>'
+      },
+      kd: {
+        title: 'Kдв',
+        html: '<p>Коэффициент передачи двигателя: сколько скорости даёт вольт на роторе при нулевой нагрузке. По сути наклон регулировочной характеристики.</p>'
+      },
+      km: {
+        title: 'Kм',
+        html: '<p>Коэффициент по моменту: насколько нагрузка съедает скорость. Чем больше <var>r</var><sub>я</sub>, тем сильнее просадка.</p>'
+      },
+      full: {
+        title: 'С Tэ',
+        html: '<p>Из трёх уравнений убрали ток. Трение <var>M</var><sub>σ</sub> считают постоянным, если знак скорости не меняется.</p><p>Получается звено второго порядка: <var>T</var><sub>э</sub><var>T</var><sub>м</sub><var>p</var>² + <var>T</var><sub>м</sub><var>p</var> + 1. Справа ещё (<var>T</var><sub>э</sub><var>p</var> + 1) у момента — нагрузка через электромагнитную инерцию тоже фильтруется.</p>'
+      },
+      stat: {
+        title: 'Как статика',
+        html: '<p>Положили <var>p</var> = 0 — числитель совпадает со статической характеристикой: ω = <var>K</var><sub>дв</sub> <var>U</var><sub>я</sub> − <var>K</var><sub>м</sub> <var>M</var><sub>н</sub>.</p><p>Динамика только добавляет инерцию. Статика не меняется.</p>'
+      }
+    };
+    const tabOf = { intro: 'intro', te: 'full', tm: 'tm', kd: 'tm', km: 'tm', full: 'full', stat: 'stat' };
+    const showEmArmW = (key) => {
+      const data = info[key] || info.intro;
+      if (panel) panel.innerHTML = `<h3>${data.title}</h3>${data.html}`;
+      if (eqEl) {
+        const full = key === 'full' || key === 'te';
+        const stat = key === 'stat';
+        eqEl.innerHTML = full ? eqFull : (stat ? eqStat : eqSimple);
+      }
+      if (noteEl) {
+        if (key === 'full' || key === 'te') {
+          noteEl.textContent = 'полный вид: ток убрали, трение Mσ не меняет знак со скоростью';
+        } else if (key === 'stat') {
+          noteEl.textContent = 'p = 0: знаменатель равен 1, остаётся статика';
+        } else {
+          noteEl.textContent = 'Tэ обычно выбрасывают: электромагнитная постоянная гораздо меньше механической';
+        }
+      }
+      emArmWSlide.querySelectorAll('.asutp-tab').forEach((btn) => {
+        btn.classList.toggle('active', btn.dataset.info === (tabOf[key] || 'intro'));
+      });
+      emArmWSlide.querySelectorAll('.em-arm-w-hit').forEach((el) => {
+        el.classList.toggle('is-active', el.dataset.info === key);
+      });
+    };
+    emArmWSlide.addEventListener('click', (e) => {
+      const tab = e.target.closest('.asutp-tab');
+      const hit = e.target.closest('.em-arm-w-hit');
+      if (tab && tab.dataset.info) {
+        e.stopPropagation();
+        showEmArmW(tab.dataset.info);
+        return;
+      }
+      if (hit && hit.dataset.info) {
+        e.stopPropagation();
+        showEmArmW(hit.dataset.info);
+      }
+    });
+    showEmArmW('intro');
+  }
+
+  /* ===== Lecture 5: motor structure ===== */
+  const emArmStrSlide = document.querySelector('.slide-em-arm-str-interactive');
+  if (emArmStrSlide) {
+    const panel = document.getElementById('emArmStrPanel');
+    const info = {
+      intro: {
+        title: 'Цепочка',
+        html: '<p><var>U</var><sub>я</sub> через <var>K</var><sub>дв</sub>. Момент нагрузки вычитается. Дальше инерционное звено — скорость. Нужен угол вала — ещё интегратор 1/<var>p</var>.</p>'
+      },
+      u: {
+        title: 'Uя',
+        html: '<p>Вход управления. Напряжение на роторе. На переходном процессе его подают скачком в нулевой момент времени.</p>'
+      },
+      kd: {
+        title: 'Kдв',
+        html: '<p>Усилитель по коэффициенту двигателя. Переводит вольты в «желаемую» скорость, которую ещё предстоит отфильтровать инерцией.</p>'
+      },
+      sum: {
+        title: 'Сумматор',
+        html: '<p>Сюда же приходит нагрузка со знаком минус: <var>K</var><sub>м</sub> <var>M</var><sub>н</sub> съедает скорость. Выход сумматора — то, что видит инерционное звено.</p>'
+      },
+      iner: {
+        title: 'Инерция',
+        html: '<p>Звено 1/(<var>T</var><sub>м</sub><var>p</var> + 1). Его выход как раз упрощённое уравнение: скорость не прыгает следом за <var>U</var><sub>я</sub>, а подходит экспонентой.</p>'
+      },
+      om: {
+        title: 'ω',
+        html: '<p>Скорость вала — выход инерционного звена. Если угол не нужен, на этом цепочка заканчивается.</p>'
+      },
+      int: {
+        title: 'Угол φ',
+        html: '<p>Нужен угол поворота вала — после скорости ставят интегратор 1/<var>p</var>. φ — интеграл от ω. На графике угол растёт, пока вал крутится.</p>'
+      },
+      mn: {
+        title: 'Mн — момент нагрузки',
+        html: '<p><strong>Момент нагрузки</strong> — насколько тяжело крутить то, что прицеплено к валу. Не сам двигатель, а то, что он тащит.</p><p>В схему входит через −<var>K</var><sub>м</sub>. На графике в <var>t</var><sub>1</sub> нагрузку дёргают скачком: скорость проседает, угол растёт уже медленнее.</p>'
+      },
+      tr: {
+        title: 'Переходный',
+        html: '<p><var>U</var><sub>я</sub> скачком в нуле — скорость выходит на полку, угол копится. В <var>t</var><sub>1</sub> скачок нагрузки: скорость падает на новую полку, угол после этого растёт положе.</p>'
+      }
+    };
+    const tabOf = { intro: 'intro', u: 'intro', kd: 'intro', sum: 'intro', iner: 'iner', om: 'iner', int: 'int', mn: 'tr', tr: 'tr' };
+    const showEmArmStr = (key) => {
+      const data = info[key] || info.intro;
+      if (panel) panel.innerHTML = `<h3>${data.title}</h3>${data.html}`;
+      emArmStrSlide.querySelectorAll('.asutp-tab').forEach((btn) => {
+        btn.classList.toggle('active', btn.dataset.info === (tabOf[key] || 'intro'));
+      });
+      emArmStrSlide.querySelectorAll('.em-arm-str-hit').forEach((el) => {
+        el.classList.toggle('is-active', el.dataset.info === key);
+      });
+    };
+    emArmStrSlide.addEventListener('click', (e) => {
+      const tab = e.target.closest('.asutp-tab');
+      const hit = e.target.closest('.em-arm-str-hit');
+      if (tab && tab.dataset.info) {
+        e.stopPropagation();
+        showEmArmStr(tab.dataset.info);
+        return;
+      }
+      if (hit && hit.dataset.info) {
+        e.stopPropagation();
+        showEmArmStr(hit.dataset.info);
+      }
+    });
+    showEmArmStr('intro');
+  }
+
+  /* ===== Lecture 5: field control ===== */
+  const emArmFldSlide = document.querySelector('.slide-em-arm-fld-interactive');
+  if (emArmFldSlide) {
+    const panel = document.getElementById('emArmFldPanel');
+    const info = {
+      why: {
+        title: 'Зачем',
+        html: '<p>Якорное управление большой машины требует огромного тока ротора. Полюсное: крутим слабый ток магнитов <var>I</var><sub>в</sub> — меняется Φ. Ток маленький, но характеристика с горбом.</p><p>Ненасыщенный магнитопровод: Φ пропорционален <var>I</var><sub>в</sub>.</p>'
+      },
+      char: {
+        title: 'Горб',
+        html: '<p>ω(<var>I</var><sub>в</sub>) при фиксированном моменте — нелинейная. Особая точка <var>I</var><sub>в</sub> = 0. Есть экстремум: нагрузка больше — горб правее и ниже.</p><p>Около нулевой скорости так не следят: характеристика не годится. Держат скорость вдали от нуля — системы стабилизации.</p>'
+      },
+      start: {
+        title: 'Пуск',
+        html: '<p>Обратную связь на разгоне отключают, двигатель разгоняют с нагрузкой. Связь включают, когда скорость уже близка к уставке.</p><p>До экстремума наклон другой знак: замкнутый контур «скорость → ток магнитов» стал бы положительной обратной связью и потерял устойчивость.</p>'
+      },
+      tm: {
+        title: 'Tэ не выкинуть',
+        html: '<p>Как и при якорном, есть <var>T</var><sub>э</sub> и <var>T</var><sub>м</sub>. Но при полюсном <var>T</var><sub>э</sub> часто сравнима с механической: обмотка возбуждения медленная. Обе постоянные оставляют.</p>'
+      }
+    };
+    const showEmArmFld = (key) => {
+      const data = info[key] || info.why;
+      if (panel) panel.innerHTML = `<h3>${data.title}</h3>${data.html}`;
+      emArmFldSlide.querySelectorAll('.asutp-tab').forEach((btn) => {
+        btn.classList.toggle('active', btn.dataset.info === key);
+      });
+      emArmFldSlide.querySelectorAll('.em-arm-fld-hit').forEach((el) => {
+        el.classList.toggle('is-active', el.dataset.info === key);
+      });
+    };
+    emArmFldSlide.addEventListener('click', (e) => {
+      const tab = e.target.closest('.asutp-tab');
+      const hit = e.target.closest('.em-arm-fld-hit');
+      if (tab && tab.dataset.info) {
+        e.stopPropagation();
+        showEmArmFld(tab.dataset.info);
+        return;
+      }
+      if (hit && hit.dataset.info) {
+        e.stopPropagation();
+        showEmArmFld(hit.dataset.info);
+      }
+    });
+    showEmArmFld('why');
+  }
+
+  /* ===== Lecture 5: PWM amplifier ===== */
+  const emArmPwmSlide = document.querySelector('.slide-em-arm-pwm-interactive');
+  if (emArmPwmSlide) {
+    const panel = document.getElementById('emArmPwmPanel');
+    const info = {
+      hist: {
+        title: 'История',
+        html: '<p>Якорное управление лучше полюсного, но нужен усилитель большого тока ротора. Раньше ЭМУ, потом магнитный усилитель, теперь транзисторный мост с ШИМ.</p>',
+        view: 'hist'
+      },
+      emu: {
+        title: 'ЭМУ',
+        html: '<p>Электромашинный усилитель: управляемый генератор постоянного тока, который крутит внешний двигатель с постоянной скоростью. Генератор и привод — в одном корпусе.</p><p>Хорошие характеристики, но вес, коллектор, щётки. Вытеснили.</p>',
+        view: 'hist'
+      },
+      mag: {
+        title: 'Магнитный',
+        html: '<p>Надёжный и удобный, но инерционный. Постоянная времени близка к сумме постоянных обмоток управления и смещения. Для реверса обмоток много — добавка сравнима с постоянной самого двигателя.</p>',
+        view: 'hist'
+      },
+      tr: {
+        title: 'Транзистор',
+        html: '<p>Сначала тиристоры, потом силовые транзисторы. Компактнее и надёжнее. Силовая часть — мост, ключи работают в ключевом режиме, среднее напряжение крутят ШИМ.</p>',
+        view: 'hist'
+      },
+      bridge: {
+        title: 'Мост',
+        html: '<p>Одна диагональ моста VT1—VT4 на источнике <var>U</var><sub>0</sub>, другая — цепь ротора плюс добавочный резистор, чтобы ограничить пусковой ток.</p><p>Ключи, не линейный усилитель: либо открыт, либо закрыт.</p>',
+        view: 'bridge'
+      },
+      fwd: {
+        title: 'Вперёд',
+        html: '<p>Открывают сразу VT1 и VT3. Ток через ротор в одну сторону. Назад — VT2 и VT4, ток меняет направление.</p>',
+        view: 'bridge'
+      },
+      rev: {
+        title: 'Назад',
+        html: '<p>Пара VT2 и VT4. Ток через ротор наоборот. Две диагонали моста — два направления вращения.</p>',
+        view: 'bridge'
+      },
+      mot: {
+        title: 'Ротор и R',
+        html: '<p>Цепь ротора висит на второй диагонали моста. Резистор ограничивает пусковой ток, пока противоЭДС ещё не выросла.</p>',
+        view: 'bridge'
+      },
+      pwm: {
+        title: 'ШИМ',
+        html: '<p>Средний ток крутят шириной импульсов. Амплитуда и частота следования фиксированы, ширина пропорциональна управляющему сигналу в момент формирования импульса.</p><p>Частоту берут высокой: из-за инерции вал не дёргается.</p>',
+        view: 'pwm'
+      },
+      ia: {
+        title: 'Ток ротора',
+        html: '<p>Результирующий ток через нагрузку при почти постоянной скорости. Пила: ключ открыт — ток растёт, закрыт — спадает через диод, но направление среднее то же.</p>',
+        view: 'pwm'
+      },
+      vt: {
+        title: 'Ток ключа',
+        html: '<p>Через транзистор ток только пока он открыт. Импульсы. Закрылся — ток цепи уходит в обратный диод.</p>',
+        view: 'pwm'
+      },
+      vd: {
+        title: 'Ток диода',
+        html: '<p>Обратные диоды рассасывают энергию, запасённую в индуктивности ротора, когда ключ закрылся. Иначе выброс напряжения пробьёт транзистор.</p>',
+        view: 'pwm'
+      }
+    };
+    const tabOf = {
+      hist: 'hist', emu: 'hist', mag: 'hist', tr: 'hist',
+      bridge: 'bridge', fwd: 'fwd', rev: 'bridge', mot: 'bridge',
+      pwm: 'pwm', ia: 'pwm', vt: 'pwm', vd: 'pwm'
+    };
+    const showEmArmPwm = (key) => {
+      const data = info[key] || info.hist;
+      if (panel) panel.innerHTML = `<h3>${data.title}</h3>${data.html}`;
+      emArmPwmSlide.querySelectorAll('.asutp-tab').forEach((btn) => {
+        btn.classList.toggle('active', btn.dataset.info === (tabOf[key] || 'hist'));
+      });
+      emArmPwmSlide.querySelectorAll('.em-arm-pwm-view').forEach((g) => {
+        const on = g.dataset.view === data.view;
+        g.classList.toggle('is-on', on);
+        if (on) g.removeAttribute('display');
+        else g.setAttribute('display', 'none');
+      });
+      emArmPwmSlide.querySelectorAll('.em-arm-pwm-hit').forEach((el) => {
+        el.classList.toggle('is-active', el.dataset.info === key);
+      });
+    };
+    emArmPwmSlide.addEventListener('click', (e) => {
+      const tab = e.target.closest('.asutp-tab');
+      const hit = e.target.closest('.em-arm-pwm-hit');
+      if (tab && tab.dataset.info) {
+        e.stopPropagation();
+        showEmArmPwm(tab.dataset.info);
+        return;
+      }
+      if (hit && hit.dataset.info) {
+        e.stopPropagation();
+        showEmArmPwm(hit.dataset.info);
+      }
+    });
+    showEmArmPwm('hist');
   }
 
   /* ===== Lecture 5: breaker purpose ===== */

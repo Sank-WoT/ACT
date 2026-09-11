@@ -1296,6 +1296,9 @@
 <p class="asutp-hint">Нажмите способ и двигайте — превью. Дальше каждый разберём отдельно</p>
 <div class="asutp-diagram-wrap">
 <svg class="arc-svg arc-map-svg" viewBox="0 0 520 236" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="Способы гашения дуги">
+<defs>
+<marker id="arcMapFArr" markerWidth="8" markerHeight="7" refX="7" refY="3.5" orient="auto"><path d="M0 0 L8 3.5 L0 7 Z" fill="#1e40af"/></marker>
+</defs>
 <rect width="520" height="236" fill="#fafafa"/>
 <rect class="arc-map-left" x="168" y="148" width="54" height="22" fill="#fff" stroke="#1e293b" stroke-width="1.6"/>
 <rect class="arc-map-right" x="258" y="148" width="54" height="22" fill="#fff" stroke="#1e293b" stroke-width="1.6"/>
@@ -1306,15 +1309,22 @@
 <text x="260" y="28" text-anchor="middle" font-size="12" fill="#64748b">щель камеры</text>
 </g>
 <g class="arc-map-view arc-map-view-blow" display="none">
-<ellipse cx="64" cy="88" rx="26" ry="11" fill="none" stroke="#b45309" stroke-width="1.5"/>
-<ellipse cx="64" cy="100" rx="26" ry="11" fill="none" stroke="#b45309" stroke-width="1.5"/>
-<text x="64" y="68" text-anchor="middle" font-size="12" font-weight="700" fill="#1e40af">катушка</text>
-<text class="arc-map-b" x="108" y="96" font-size="14" font-weight="700" fill="#1e40af">B</text>
-<text x="108" y="114" font-size="14" fill="#94a3b8">×</text>
-<rect x="392" y="24" width="14" height="100" fill="#fff" stroke="#1e293b" stroke-width="1.3"/>
-<rect x="448" y="24" width="14" height="100" fill="#fff" stroke="#1e293b" stroke-width="1.3"/>
-<text x="427" y="18" text-anchor="middle" font-size="11" fill="#64748b">камера</text>
-<text x="240" y="132" text-anchor="middle" font-size="12" fill="#1e40af">F = I × B</text>
+<ellipse cx="48" cy="108" rx="22" ry="9" fill="none" stroke="#b45309" stroke-width="1.6"/>
+<ellipse cx="48" cy="118" rx="22" ry="9" fill="none" stroke="#b45309" stroke-width="1.6"/>
+<ellipse cx="48" cy="128" rx="22" ry="9" fill="none" stroke="#b45309" stroke-width="1.6"/>
+<text x="48" y="90" text-anchor="middle" font-size="13" font-weight="700" fill="#1e40af">катушка</text>
+<g class="arc-map-b">
+<circle cx="96" cy="118" r="10" fill="#eff6ff" stroke="#1e40af" stroke-width="1.5"/>
+<line x1="90" y1="112" x2="102" y2="124" stroke="#1e40af" stroke-width="1.5"/>
+<line x1="102" y1="112" x2="90" y2="124" stroke="#1e40af" stroke-width="1.5"/>
+<text x="96" y="104" text-anchor="middle" font-size="14" font-weight="700" fill="#1e40af">B</text>
+<text x="96" y="150" text-anchor="middle" font-size="11" fill="#64748b">в лист</text>
+</g>
+<rect x="292" y="18" width="18" height="122" fill="#fff" stroke="#1e293b" stroke-width="1.4"/>
+<rect x="350" y="18" width="18" height="122" fill="#fff" stroke="#1e293b" stroke-width="1.4"/>
+<text x="330" y="14" text-anchor="middle" font-size="13" font-weight="700" fill="#64748b">камера</text>
+<text class="arc-map-flab" x="248" y="44" text-anchor="middle" font-size="14" font-weight="700" fill="#1e40af">F = I × B</text>
+<path class="arc-map-farr" d="M210 58 L268 58" fill="none" stroke="#1e40af" stroke-width="1.8" marker-end="url(#arcMapFArr)"/>
 </g>
 <g class="arc-map-view arc-map-view-grid" display="none">
 <rect x="176" y="16" width="7" height="96" fill="#fff" stroke="#1e293b" stroke-width="1.1"/>
@@ -1417,22 +1427,31 @@
 <p class="asutp-hint">Двигайте ток — сила Ампера выдувает дугу в камеру</p>
 <div class="asutp-diagram-wrap">
 <svg class="arc-svg" viewBox="0 0 500 220" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="Магнитное дутьё">
+<defs>
+<marker id="arcBlowFArr" markerWidth="8" markerHeight="7" refX="7" refY="3.5" orient="auto"><path d="M0 0 L8 3.5 L0 7 Z" fill="#1e40af"/></marker>
+</defs>
 <rect width="500" height="220" fill="#fafafa"/>
 <g class="arc-blow-coil">
-<ellipse cx="70" cy="96" rx="28" ry="12" fill="none" stroke="#b45309" stroke-width="1.6"/>
-<ellipse cx="70" cy="108" rx="28" ry="12" fill="none" stroke="#b45309" stroke-width="1.6"/>
-<text x="70" y="72" text-anchor="middle" font-size="13" font-weight="700" fill="#1e40af">катушка</text>
+<ellipse cx="58" cy="88" rx="24" ry="10" fill="none" stroke="#b45309" stroke-width="1.6"/>
+<ellipse cx="58" cy="98" rx="24" ry="10" fill="none" stroke="#b45309" stroke-width="1.6"/>
+<ellipse cx="58" cy="108" rx="24" ry="10" fill="none" stroke="#b45309" stroke-width="1.6"/>
+<text x="58" y="70" text-anchor="middle" font-size="13" font-weight="700" fill="#1e40af">катушка</text>
 </g>
-<text x="118" y="88" font-size="13" font-weight="700" fill="#1e40af">B</text>
-<text x="118" y="108" font-size="16" fill="#64748b">×</text>
-<text x="118" y="128" font-size="16" fill="#64748b">×</text>
-<rect x="150" y="92" width="56" height="24" fill="#fff" stroke="#1e293b" stroke-width="1.6"/>
-<rect x="250" y="92" width="56" height="24" fill="#fff" stroke="#1e293b" stroke-width="1.6"/>
-<path class="arc-blow-bolt" d="M206 104 Q228 70 250 104" fill="none" stroke="#d97706" stroke-width="2.3"/>
-<rect x="330" y="28" width="14" height="100" fill="#fff" stroke="#1e293b" stroke-width="1.3"/>
-<rect x="390" y="28" width="14" height="100" fill="#fff" stroke="#1e293b" stroke-width="1.3"/>
-<text x="367" y="20" text-anchor="middle" font-size="12" fill="#64748b">камера</text>
-<text x="228" y="148" text-anchor="middle" font-size="13" fill="#1e40af">F = I × B</text>
+<g class="arc-blow-b">
+<circle cx="108" cy="98" r="10" fill="#eff6ff" stroke="#1e40af" stroke-width="1.5"/>
+<line x1="102" y1="92" x2="114" y2="104" stroke="#1e40af" stroke-width="1.5"/>
+<line x1="114" y1="92" x2="102" y2="104" stroke="#1e40af" stroke-width="1.5"/>
+<text x="108" y="84" text-anchor="middle" font-size="14" font-weight="700" fill="#1e40af">B</text>
+<text x="108" y="128" text-anchor="middle" font-size="11" fill="#64748b">в лист</text>
+</g>
+<rect x="140" y="100" width="56" height="24" fill="#fff" stroke="#1e293b" stroke-width="1.6"/>
+<rect x="220" y="100" width="56" height="24" fill="#fff" stroke="#1e293b" stroke-width="1.6"/>
+<path class="arc-blow-bolt" d="M196 112 C196 100 208 94 208 94 C208 94 220 100 220 112" fill="none" stroke="#d97706" stroke-width="2.3"/>
+<rect x="300" y="16" width="18" height="116" fill="#fff" stroke="#1e293b" stroke-width="1.4"/>
+<rect x="358" y="16" width="18" height="116" fill="#fff" stroke="#1e293b" stroke-width="1.4"/>
+<text x="338" y="12" text-anchor="middle" font-size="13" font-weight="700" fill="#64748b">камера</text>
+<text class="arc-blow-flab" x="250" y="40" text-anchor="middle" font-size="14" font-weight="700" fill="#1e40af">F = I × B</text>
+<path class="arc-blow-farr" d="M214 52 L272 52" fill="none" stroke="#1e40af" stroke-width="1.8" marker-end="url(#arcBlowFArr)"/>
 <text class="arc-blow-readout" x="250" y="200" text-anchor="middle" font-size="13" font-weight="700" fill="#1e40af">ток мал · дуга у контактов</text>
 </svg>
 </div>
