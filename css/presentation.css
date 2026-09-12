@@ -4924,3 +4924,45 @@ body.overview-mode .slide-diagram { display: none; }
 .enc-opt-hit:hover circle {
   stroke: #2563eb;
 }
+
+.slide-exam-list ol {
+  columns: 1;
+}
+.slide-exam-list .exam-goto {
+  display: inline;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.slide-exam-list .exam-goto:hover {
+  color: #1d4ed8;
+}
+.slide-exam-q1-interactive .app-purpose-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25em;
+  min-height: 4.4em;
+  justify-content: center;
+}
+.slide-exam-q1-interactive .app-purpose-card strong {
+  font-size: 1.05em;
+}
+.slide-exam-q1-interactive .app-purpose-card span {
+  font-weight: 500;
+  font-size: 0.92em;
+  opacity: 0.85;
+}
+.slide-exam-q1-interactive .app-purpose-card.active span {
+  opacity: 0.95;
+}
+.slide-exam-q1-interactive .asutp-panel h3 {
+  font-size: 1.28em;
+}
+.slide-exam-q1-interactive .asutp-panel p {
+  font-size: 1.08em;
+}

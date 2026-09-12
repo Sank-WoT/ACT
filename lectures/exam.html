@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Вопросы к экзамену — Средства автоматизации и управления</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Merriweather:wght@700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/presentation.css">
+</head>
+<body>
+<div class="deck">
+
+<section class="slide slide-title active">
+<span class="tag">К экзамену</span>
+<h1>Список вопросов к экзамену</h1>
+<p>Средства автоматизации и управления</p>
+</section>
+
+<section class="slide slide-agenda slide-exam-list">
+<h2>Список вопросов</h2>
+<div class="slide-body">
+<ol>
+<li><button type="button" class="exam-goto" data-slide-goto="3">Что такое АСУ ТП. АСУП? Дать определение и различие.</button></li>
+</ol>
+</div>
+</section>
+
+<section class="slide slide-exam-q1-interactive">
+<h2>1. АСУ ТП и АСУП</h2>
+<div class="slide-body asutp-interactive">
+<div class="asutp-main">
+<p class="asutp-hint">Определения и различие. Нажмите карточку</p>
+<div class="app-purpose-grid em-fast-grid">
+<button type="button" class="app-purpose-card exam-q-hit active" data-info="tp"><strong>АСУ ТП</strong><span>технологический процесс</span></button>
+<button type="button" class="app-purpose-card exam-q-hit" data-info="up"><strong>АСУП</strong><span>предприятие</span></button>
+<button type="button" class="app-purpose-card exam-q-hit" data-info="diff"><strong>Различие</strong><span>объект и время</span></button>
+<button type="button" class="app-purpose-card exam-q-hit" data-info="ex"><strong>Пример</strong><span>ТЭС</span></button>
+</div>
+<div class="asutp-tabs">
+<button type="button" class="asutp-tab active" data-info="tp">АСУ ТП</button>
+<button type="button" class="asutp-tab" data-info="up">АСУП</button>
+<button type="button" class="asutp-tab" data-info="diff">Различие</button>
+</div>
+</div>
+<aside class="asutp-panel" id="examQ1Panel">
+<h3>АСУ ТП</h3>
+<p>Автоматизированная система управления технологическим процессом. Собирает данные с объекта и сразу им управляет: есть прямой ввод с датчиков и прямой вывод на исполнительные устройства.</p>
+</aside>
+</div>
+</section>
+
+<section class="slide slide-title">
+<span class="tag">К экзамену</span>
+<h1>Вопросы к экзамену</h1>
+<p><a href="../index.html" class="link-home">← На главную</a></p>
+</section>
+
+</div>
+
+<div class="controls">
+<div class="controls-left">
+<a href="../index.html" class="course-title-bar course-title-link">Средства автоматизации и управления</a>
+</div>
+<div class="controls-left">
+<a href="../index.html" class="btn-nav btn-home" title="На главную">⌂</a>
+<button class="btn-nav" id="prevBtn">← Назад</button>
+<button class="btn-nav" id="nextBtn">Вперёд →</button>
+</div>
+<div class="progress-wrap"><div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div></div>
+<span class="slide-counter" id="slideCounter">1 / 4</span>
+<div class="controls-right">
+<button class="btn-nav" id="overviewBtn">Обзор</button>
+<button class="btn-nav" id="fullscreenBtn">⛶</button>
+</div>
+</div>
+<script src="../js/presentation.js"></script>
+</body>
+</html>

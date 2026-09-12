@@ -97,6 +97,17 @@
   if (hash >= 1 && hash <= slides.length) show(hash - 1);
   else updateUI();
 
+  document.addEventListener('click', (e) => {
+    const go = e.target.closest('[data-slide-goto]');
+    if (!go) return;
+    const n = parseInt(go.dataset.slideGoto, 10);
+    if (n >= 1 && n <= slides.length) {
+      e.preventDefault();
+      e.stopPropagation();
+      show(n - 1);
+    }
+  });
+
   /* ===== Interactive ASUTP panel ===== */
   const asutpInfo = {
     intro: {
@@ -11897,6 +11908,55 @@ ${absDiskTracks(grayCodes, 'код Грея на диске', '#1e40af')}
       }
     });
     show('task');
+  }
+
+  /* ===== Exam: Q1 ASUTP vs ASUP ===== */
+  const examQ1Slide = document.querySelector('.slide-exam-q1-interactive');
+  if (examQ1Slide) {
+    const panel = document.getElementById('examQ1Panel');
+    const info = {
+      tp: {
+        title: 'АСУ ТП',
+        html: '<p><strong>АСУ ТП</strong> (АСУТП) — автоматизированная система управления технологическим процессом. Собирает данные с объекта и сразу им управляет: есть прямой ввод с датчиков и прямой вывод на исполнительные устройства.</p><p>Система замкнутая. Работает в темпе процесса — секунды и быстрее. Наверху обычно SCADA.</p>'
+      },
+      up: {
+        title: 'АСУП',
+        html: '<p><strong>АСУП</strong> — автоматизированная система управления предприятием. Планирование, учёт, кадры, деньги, склады, ресурсы.</p><p>Как правило нет прямой двусторонней связи с котлом или станком. Программы — ERP.</p>'
+      },
+      diff: {
+        title: 'Различие',
+        html: '<p>АСУ ТП крутит <strong>процесс</strong>: температура, расход, двигатель — здесь и сейчас, замкнута на объект.</p><p>АСУП крутит <strong>предприятие</strong>: план, склад, зарплата — не в темпе секунд, к объекту обычно не подключена в обе стороны.</p><p>Коротко: процесс против предприятия, SCADA против ERP, есть контур на объект или нет.</p>'
+      },
+      ex: {
+        title: 'Пример · ТЭС',
+        html: '<p>Внизу АСУ ТП держит топливо, воду, воздух, пар: датчики и клапаны работают сами.</p><p>Наверху АСУП / диспетчер смотрит, сколько энергии выдать и как загрузить блоки. Это уже предприятие, не один котёл.</p>'
+      }
+    };
+    const tabOf = { tp: 'tp', up: 'up', diff: 'diff', ex: 'diff' };
+    const showExamQ1 = (key) => {
+      const data = info[key] || info.tp;
+      if (panel) panel.innerHTML = `<h3>${data.title}</h3>${data.html}`;
+      examQ1Slide.querySelectorAll('.asutp-tab').forEach((btn) => {
+        btn.classList.toggle('active', btn.dataset.info === (tabOf[key] || 'tp'));
+      });
+      examQ1Slide.querySelectorAll('.exam-q-hit').forEach((el) => {
+        el.classList.toggle('active', el.dataset.info === key);
+      });
+    };
+    examQ1Slide.addEventListener('click', (e) => {
+      const tab = e.target.closest('.asutp-tab');
+      const hit = e.target.closest('.exam-q-hit');
+      if (tab && tab.dataset.info) {
+        e.stopPropagation();
+        showExamQ1(tab.dataset.info);
+        return;
+      }
+      if (hit && hit.dataset.info) {
+        e.stopPropagation();
+        showExamQ1(hit.dataset.info);
+      }
+    });
+    showExamQ1('tp');
   }
 })();
 
