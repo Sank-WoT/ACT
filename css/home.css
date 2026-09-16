@@ -214,7 +214,8 @@ a { color: inherit; text-decoration: none; }
 
 .exam-list li {
   margin-bottom: 10px;
-  color: #475569;
+  color: #0f172a;
+  font-weight: 600;
 }
 
 .exam-list li:last-child {
@@ -224,15 +225,6 @@ a { color: inherit; text-decoration: none; }
 .exam-list li::marker {
   color: var(--primary);
   font-weight: 700;
-}
-
-.exam-list a {
-  color: #0f172a;
-  font-weight: 600;
-}
-
-.exam-list a:hover {
-  color: var(--primary-dark);
 }
 
 .footer {
