@@ -27,6 +27,9 @@
 <li>Устройство IGBT</li>
 <li>Коммутация и токи фаз</li>
 <li>Генераторы переменного тока</li>
+<li>Три вида нагрузок</li>
+<li>Нагрузка и поток Φ₀</li>
+<li>ЭДС и напряжение</li>
 </ol></div></section>
 
 <section class="slide slide-em-2ph-dyn-interactive slide-em-2ph-bridge-interactive">
@@ -1285,6 +1288,237 @@
 <p>На холостом ходу (без внешней нагрузки) ЭДС обмотки синхронного генератора:</p>
 <p><span class="char-eq"><var>E</var><sub>ген</sub> = 4,44 · <var>R</var> · <var>N</var> · <var>f</var> · Φ</span>.</p>
 <p>Через <span class="char-eq"><var>f</var> = <var>p</var>·ω / 2π</span> та же запись через угловую скорость ротора.</p>
+</aside>
+</div>
+</section>
+
+</section>
+
+<section class="slide slide-em-ac-interactive slide-em-ac-loads-interactive">
+<h2>Три вида нагрузок</h2>
+<div class="slide-body asutp-interactive">
+<div class="asutp-main">
+<p class="asutp-hint">Характер нагрузки задаёт сдвиг фазы ψ между ЭДС и током. Нажмите вид</p>
+<div class="app-purpose-grid em-fast-grid em-ac-loads-cards">
+<button type="button" class="app-purpose-card active" data-info="act"><strong>Активная нагрузка</strong><span>ψ = 0° · I совпадает с E</span></button>
+<button type="button" class="app-purpose-card" data-info="ind"><strong>Индуктивная нагрузка</strong><span>ψ = 90° · I отстаёт</span></button>
+<button type="button" class="app-purpose-card" data-info="cap"><strong>Ёмкостная нагрузка</strong><span>ψ = −90° · I опережает</span></button>
+</div>
+<div class="asutp-diagram-wrap">
+<svg class="em-svg em-ac-svg em-ac-loads-svg" viewBox="0 0 540 220" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="Фазоры ЭДС и тока при трёх видах нагрузки">
+<defs>
+<marker id="loadsArrK" markerWidth="8" markerHeight="7" refX="7" refY="3.5" orient="auto"><path d="M0 0 L8 3.5 L0 7 Z" fill="#1e293b"/></marker>
+<marker id="loadsArrR" markerWidth="8" markerHeight="7" refX="7" refY="3.5" orient="auto"><path d="M0 0 L8 3.5 L0 7 Z" fill="#c2410c"/></marker>
+</defs>
+<rect width="540" height="220" fill="#fafafa"/>
+
+<!-- активная: E и I вверх, слегка разведены -->
+<g class="em-ac-view is-on" data-view="act">
+<g transform="translate(270 130)">
+<line x1="10" y1="0" x2="10" y2="-70" stroke="#1e293b" stroke-width="2.8" marker-end="url(#loadsArrK)"/>
+<text x="24" y="-52" font-size="18" font-weight="700" fill="#1e293b">E</text>
+<line x1="-10" y1="0" x2="-10" y2="-70" stroke="#c2410c" stroke-width="2.8" marker-end="url(#loadsArrR)"/>
+<text x="-48" y="-52" font-size="17" font-weight="700" fill="#c2410c">Iн</text>
+<text x="0" y="48" text-anchor="middle" font-size="16" font-weight="700" fill="#1e3a8a">активная · ψ = 0°</text>
+<text x="0" y="72" text-anchor="middle" font-size="13" fill="#64748b">ток и ЭДС в фазе</text>
+</g>
+</g>
+
+<!-- индуктивная: E вверх, I вправо -->
+<g class="em-ac-view" data-view="ind">
+<g transform="translate(270 130)">
+<line x1="0" y1="0" x2="0" y2="-70" stroke="#1e293b" stroke-width="2.8" marker-end="url(#loadsArrK)"/>
+<text x="14" y="-52" font-size="18" font-weight="700" fill="#1e293b">E</text>
+<line x1="0" y1="0" x2="70" y2="0" stroke="#c2410c" stroke-width="2.8" marker-end="url(#loadsArrR)"/>
+<text x="52" y="-12" font-size="17" font-weight="700" fill="#c2410c">Iн</text>
+<path d="M0 -28 A28 28 0 0 1 28 0" fill="none" stroke="#94a3b8" stroke-width="1.4"/>
+<text x="22" y="-18" font-size="13" font-weight="700" fill="#64748b">ψ</text>
+<text x="0" y="48" text-anchor="middle" font-size="16" font-weight="700" fill="#1e3a8a">индуктивная · ψ = 90°</text>
+<text x="0" y="72" text-anchor="middle" font-size="13" fill="#64748b">ток отстаёт от ЭДС</text>
+</g>
+</g>
+
+<!-- ёмкостная: E вверх, I влево -->
+<g class="em-ac-view" data-view="cap">
+<g transform="translate(270 130)">
+<line x1="0" y1="0" x2="0" y2="-70" stroke="#1e293b" stroke-width="2.8" marker-end="url(#loadsArrK)"/>
+<text x="14" y="-52" font-size="18" font-weight="700" fill="#1e293b">E</text>
+<line x1="0" y1="0" x2="-70" y2="0" stroke="#c2410c" stroke-width="2.8" marker-end="url(#loadsArrR)"/>
+<text x="-58" y="-12" font-size="17" font-weight="700" fill="#c2410c">Iн</text>
+<path d="M0 -28 A28 28 0 0 0 -28 0" fill="none" stroke="#94a3b8" stroke-width="1.4"/>
+<text x="-34" y="-18" font-size="13" font-weight="700" fill="#64748b">ψ</text>
+<text x="0" y="48" text-anchor="middle" font-size="16" font-weight="700" fill="#1e3a8a">ёмкостная · ψ = −90°</text>
+<text x="0" y="72" text-anchor="middle" font-size="13" fill="#64748b">ток опережает ЭДС</text>
+</g>
+</g>
+</svg>
+</div>
+</div>
+<aside class="asutp-panel" id="emAcLoadsPanel">
+<h3>Активная нагрузка</h3>
+<p>Чистый активный приёмник (резистор). Ток нагрузки <span class="char-eq">I<sub>н</sub></span> совпадает по фазе с ЭДС: сдвиг <span class="char-eq">ψ = 0°</span>.</p>
+</aside>
+</div>
+</section>
+
+<section class="slide slide-em-ac-interactive slide-em-ac-reac-interactive">
+<h2>Нагрузка и поток возбуждения</h2>
+<div class="slide-body asutp-interactive">
+<div class="asutp-main">
+<p class="asutp-hint">Тип нагрузки или ψ — смотрите, как меняются Φ₂ и ЭДС</p>
+<div class="em-ac-reac-layout">
+<div class="em-ac-reac-cards" role="group" aria-label="Тип нагрузки">
+<button type="button" class="em-ac-reac-btn active" data-info="act" data-psi="0">
+<span class="em-ac-reac-btn-letter">а</span>
+<span class="em-ac-reac-btn-title">Активная</span>
+<span class="em-ac-reac-btn-meta">ψ = 0°</span>
+</button>
+<button type="button" class="em-ac-reac-btn" data-info="ind" data-psi="90">
+<span class="em-ac-reac-btn-letter">б</span>
+<span class="em-ac-reac-btn-title">Индуктивная</span>
+<span class="em-ac-reac-btn-meta">ψ = 90°</span>
+</button>
+<button type="button" class="em-ac-reac-btn" data-info="cap" data-psi="-90">
+<span class="em-ac-reac-btn-letter">в</span>
+<span class="em-ac-reac-btn-title">Ёмкостная</span>
+<span class="em-ac-reac-btn-meta">ψ = −90°</span>
+</button>
+<button type="button" class="em-ac-reac-btn" data-info="rl" data-psi="45">
+<span class="em-ac-reac-btn-letter">г</span>
+<span class="em-ac-reac-btn-title">Акт.–индукт.</span>
+<span class="em-ac-reac-btn-meta">ψ ≈ 45°</span>
+</button>
+</div>
+<div class="em-ac-reac-slider-row">
+<label for="emAcReacPsi">Сдвиг фазы ψ</label>
+<input type="range" id="emAcReacPsi" min="-90" max="90" value="0" step="5">
+<span class="em-ac-reac-psi-val" id="emAcReacPsiVal">0°</span>
+</div>
+<div class="highlight-box highlight-box-compact em-ac-reac-eq" id="emAcReacEq" aria-live="polite">
+<p class="cap-eq char-eq">E ∼ Φ<sub>рез</sub> · n&nbsp;&nbsp;·&nbsp;&nbsp;Φ<sub>рез</sub> ≈ Φ<sub>0</sub> − Φ<sub>2</sub>·sinψ</p>
+<p class="em-ac-reac-eq-live" id="emAcReacEqLive">sinψ = 0 → Φ<sub>рез</sub> ≈ Φ<sub>0</sub> → E ≈ E<sub>0</sub></p>
+<div class="em-ac-reac-ebar" title="Относительная ЭДС">
+<span class="em-ac-reac-ebar-label">E / E<sub>0</sub></span>
+<div class="em-ac-reac-ebar-track">
+<div class="em-ac-reac-ebar-fill" id="emAcReacEBar" style="width:74%"></div>
+<span class="em-ac-reac-ebar-mark" style="left:74%" title="E₀"></span>
+</div>
+<span class="em-ac-reac-ebar-val" id="emAcReacEVal">1.00</span>
+</div>
+</div>
+<div class="asutp-diagram-wrap">
+<svg class="em-svg em-ac-svg em-ac-reac-svg" id="emAcReacSvg" viewBox="0 0 560 250" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="Реакция якоря при разной нагрузке">
+<defs>
+<marker id="reacArrB" markerWidth="8" markerHeight="7" refX="7" refY="3.5" orient="auto"><path d="M0 0 L8 3.5 L0 7 Z" fill="#1d4ed8"/></marker>
+<marker id="reacArrK" markerWidth="8" markerHeight="7" refX="7" refY="3.5" orient="auto"><path d="M0 0 L8 3.5 L0 7 Z" fill="#1e293b"/></marker>
+<marker id="reacArrR" markerWidth="8" markerHeight="7" refX="7" refY="3.5" orient="auto"><path d="M0 0 L8 3.5 L0 7 Z" fill="#c2410c"/></marker>
+<marker id="reacArrG2" markerWidth="8" markerHeight="7" refX="7" refY="3.5" orient="auto"><path d="M0 0 L8 3.5 L0 7 Z" fill="#059669"/></marker>
+<marker id="reacArrV" markerWidth="7" markerHeight="6" refX="6" refY="3" orient="auto"><path d="M0 0 L7 3 L0 6 Z" fill="#7c3aed"/></marker>
+<marker id="reacArrO" markerWidth="7" markerHeight="6" refX="6" refY="3" orient="auto"><path d="M0 0 L7 3 L0 6 Z" fill="#ea580c"/></marker>
+<marker id="reacArrSpin" markerWidth="6" markerHeight="5" refX="5" refY="2.5" orient="auto"><path d="M0 0 L6 2.5 L0 5 Z" fill="#64748b"/></marker>
+</defs>
+<rect width="560" height="250" fill="#fafafa"/>
+
+<!-- фазоры слева -->
+<g transform="translate(90 128)">
+<rect x="-62" y="-88" width="124" height="168" rx="10" fill="#fff" stroke="#e2e8f0" stroke-width="1.5"/>
+<text x="0" y="-72" text-anchor="middle" font-size="12" font-weight="700" fill="#64748b">фазоры</text>
+<line id="reacELine" x1="10" y1="0" x2="10" y2="-52" stroke="#1e293b" stroke-width="2.4" marker-end="url(#reacArrK)"/>
+<text id="reacELbl" x="22" y="-38" font-size="15" font-weight="700" fill="#1e293b">E</text>
+<g id="reacIPhasor">
+<line id="reacILine" x1="-10" y1="0" x2="-10" y2="-52" stroke="#c2410c" stroke-width="2.4" marker-end="url(#reacArrR)"/>
+<text id="reacILbl" x="-36" y="-40" font-size="14" font-weight="700" fill="#c2410c">Iн</text>
+</g>
+</g>
+
+<!-- машина справа -->
+<g transform="translate(340 120)">
+<circle r="88" fill="#fff" stroke="#1e293b" stroke-width="2"/>
+<circle r="64" fill="none" stroke="#f1f5f9" stroke-width="16"/>
+<circle r="42" fill="#eff6ff" stroke="#1e40af" stroke-width="1.6"/>
+<line x1="0" y1="14" x2="0" y2="-24" stroke="#1d4ed8" stroke-width="2.6" marker-end="url(#reacArrB)"/>
+<text x="12" y="-2" font-size="14" font-weight="700" fill="#1d4ed8">Φ₀</text>
+<path d="M16 14 A18 18 0 0 0 -12 18" fill="none" stroke="#94a3b8" stroke-width="1.4" marker-end="url(#reacArrSpin)"/>
+<g id="reacDot"><circle r="4.5" fill="#1e293b"/></g>
+<g id="reacCross">
+<line x1="-5.5" y1="-5.5" x2="5.5" y2="5.5" stroke="#1e293b" stroke-width="2"/>
+<line x1="-5.5" y1="5.5" x2="5.5" y2="-5.5" stroke="#1e293b" stroke-width="2"/>
+</g>
+<g id="reacPhi2">
+<line id="reacPhi2Line" x1="0" y1="0" x2="48" y2="0" stroke="#059669" stroke-width="2.6" marker-end="url(#reacArrG2)"/>
+<text id="reacPhi2Lbl" x="54" y="-4" font-size="14" font-weight="700" fill="#059669">Φ₂</text>
+</g>
+<g id="reacComp" opacity="0">
+<line x1="0" y1="0" x2="0" y2="42" stroke="#7c3aed" stroke-width="1.8" marker-end="url(#reacArrV)"/>
+<text x="-26" y="40" font-size="12" font-weight="700" fill="#7c3aed">Φ₂d</text>
+<line x1="0" y1="0" x2="42" y2="0" stroke="#ea580c" stroke-width="1.8" marker-end="url(#reacArrO)"/>
+<text x="46" y="-6" font-size="12" font-weight="700" fill="#ea580c">Φ₂q</text>
+</g>
+</g>
+<text id="reacCaption" x="340" y="232" text-anchor="middle" font-size="14" font-weight="700" fill="#1e3a8a">а · активная · ψ = 0°</text>
+</svg>
+</div>
+</div>
+</div>
+<aside class="asutp-panel" id="emAcReacPanel">
+<h3>Активная</h3>
+<p>ЭДС и ток совпадают по фазе (<span class="char-eq">ψ = 0°</span>). <span class="char-eq">sinψ = 0</span> → продольная составляющая реакции нулевая → <span class="char-eq">Φ<sub>рез</sub> ≈ Φ<sub>0</sub></span>, ЭДС почти не меняется.</p>
+</aside>
+</div>
+</section>
+
+<section class="slide slide-em-ac-interactive slide-em-ac-eug-interactive">
+<h2>К чему это приводит</h2>
+<div class="slide-body asutp-interactive">
+<div class="asutp-main">
+<p class="asutp-hint">ЭДС пропорциональна результирующему потоку. Нажмите звено цепочки</p>
+<div class="asutp-diagram-wrap">
+<svg class="em-svg em-ac-svg" viewBox="0 0 540 240" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="ЭДС пропорциональна потоку и скорости">
+<rect width="540" height="240" fill="#fafafa"/>
+
+<g class="em-ac-hit" data-info="eq" style="cursor:pointer">
+<rect x="40" y="16" width="460" height="52" rx="8" fill="#eff6ff" stroke="#1e40af" stroke-width="1.6"/>
+<text x="270" y="50" text-anchor="middle" font-size="22" font-weight="700" fill="#1e3a8a">E ∼ Φ<tspan font-size="14" baseline-shift="sub">рез</tspan> · n</text>
+</g>
+
+<g class="em-ac-hit" data-info="phi" style="cursor:pointer">
+<rect x="24" y="92" width="140" height="110" rx="8" fill="#fff" stroke="#1e293b" stroke-width="1.5"/>
+<text x="94" y="128" text-anchor="middle" font-size="16" font-weight="700" fill="#1d4ed8">Φрез</text>
+<text x="94" y="156" text-anchor="middle" font-size="13" fill="#475569">общий поток</text>
+<text x="94" y="178" text-anchor="middle" font-size="13" fill="#475569">Φ₀ + реакция</text>
+</g>
+
+<text x="180" y="150" text-anchor="middle" font-size="28" font-weight="700" fill="#94a3b8">→</text>
+
+<g class="em-ac-hit" data-info="e" style="cursor:pointer">
+<rect x="200" y="92" width="140" height="110" rx="8" fill="#fff" stroke="#1e293b" stroke-width="1.5"/>
+<text x="270" y="128" text-anchor="middle" font-size="22" font-weight="700" fill="#1e293b">E</text>
+<text x="270" y="156" text-anchor="middle" font-size="13" fill="#475569">ЭДС генератора</text>
+<text x="270" y="178" text-anchor="middle" font-size="13" fill="#475569">растёт / падает</text>
+</g>
+
+<text x="356" y="150" text-anchor="middle" font-size="28" font-weight="700" fill="#94a3b8">→</text>
+
+<g class="em-ac-hit" data-info="ug" style="cursor:pointer">
+<rect x="376" y="92" width="140" height="110" rx="8" fill="#fff" stroke="#1e293b" stroke-width="1.5"/>
+<text x="446" y="128" text-anchor="middle" font-size="22" font-weight="700" fill="#059669">Uг</text>
+<text x="446" y="156" text-anchor="middle" font-size="13" fill="#475569">на клеммах</text>
+<text x="446" y="178" text-anchor="middle" font-size="13" fill="#475569">следует за E</text>
+</g>
+</svg>
+</div>
+<div class="asutp-tabs">
+<button type="button" class="asutp-tab active" data-info="eq">Формула</button>
+<button type="button" class="asutp-tab" data-info="phi">Φрез</button>
+<button type="button" class="asutp-tab" data-info="e">ЭДС</button>
+<button type="button" class="asutp-tab" data-info="ug">Uг</button>
+<button type="button" class="asutp-tab" data-info="drop">Падение</button>
+</div>
+</div>
+<aside class="asutp-panel" id="emAcEugPanel">
+<h3>Формула</h3>
+<p>ЭДС генератора пропорциональна величине общего магнитного потока и скорости вращения:</p>
+<p><span class="char-eq"><var>E</var> ∼ Φ<sub>рез</sub> · <var>n</var></span>.</p>
 </aside>
 </div>
 </section>

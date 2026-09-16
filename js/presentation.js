@@ -9929,6 +9929,220 @@
   }, 'eq');
 
 
+  bindEmAcSlide('.slide-em-ac-loads-interactive', 'emAcLoadsPanel', {
+    act: {
+      title: 'Активная нагрузка',
+      html: '<p>Чистый активный приёмник (резистор). Ток нагрузки <span class="char-eq">I<sub>н</sub></span> совпадает по фазе с ЭДС: сдвиг <span class="char-eq">ψ = 0°</span>.</p><p>На следующем слайде: поток реакции перпендикулярен <span class="char-eq">Φ<sub>0</sub></span> и основной поток почти не меняет.</p>',
+      view: 'act'
+    },
+    ind: {
+      title: 'Индуктивная нагрузка',
+      html: '<p>Индуктивный приёмник. Ток <span class="char-eq">отстаёт</span> от ЭДС на четверть периода: <span class="char-eq">ψ = 90°</span>.</p><p>Такой ток даёт встречный поток — размагничивает машину.</p>',
+      view: 'ind'
+    },
+    cap: {
+      title: 'Ёмкостная нагрузка',
+      html: '<p>Ёмкостный приёмник. Ток <span class="char-eq">опережает</span> ЭДС на четверть периода: <span class="char-eq">ψ = −90°</span>.</p><p>Поток реакции сонаправлен с возбуждением — намагничивает машину.</p>',
+      view: 'cap'
+    }
+  }, 'act');
+
+
+  /* Lecture 7: armature reaction interactive */
+  (() => {
+    const slide = document.querySelector('.slide-em-ac-reac-interactive');
+    if (!slide) return;
+    const panel = document.getElementById('emAcReacPanel');
+    const slider = document.getElementById('emAcReacPsi');
+    const psiVal = document.getElementById('emAcReacPsiVal');
+    const caption = document.getElementById('reacCaption');
+    const iLine = document.getElementById('reacILine');
+    const iLbl = document.getElementById('reacILbl');
+    const eLine = document.getElementById('reacELine');
+    const eLbl = document.getElementById('reacELbl');
+    const eqLive = document.getElementById('emAcReacEqLive');
+    const eBar = document.getElementById('emAcReacEBar');
+    const eVal = document.getElementById('emAcReacEVal');
+    const dot = document.getElementById('reacDot');
+    const cross = document.getElementById('reacCross');
+    const phi2Line = document.getElementById('reacPhi2Line');
+    const phi2Lbl = document.getElementById('reacPhi2Lbl');
+    const comp = document.getElementById('reacComp');
+    const info = {
+      act: {
+        title: 'Активная',
+        html: '<p>ЭДС и ток совпадают по фазе (<span class="char-eq">ψ = 0°</span>). <span class="char-eq">sinψ = 0</span> → продольная составляющая реакции нулевая → <span class="char-eq">Φ<sub>рез</sub> ≈ Φ<sub>0</sub></span>, ЭДС почти не меняется.</p>'
+      },
+      ind: {
+        title: 'Индуктивная',
+        html: '<p>Ток отстаёт на <span class="char-eq">90°</span>. <span class="char-eq">sinψ = 1</span> → <span class="char-eq">Φ<sub>2</sub></span> против <span class="char-eq">Φ<sub>0</sub></span> → <span class="char-eq">Φ<sub>рез</sub></span> падает → падает и <span class="char-eq"><var>E</var> ∼ Φ<sub>рез</sub> · <var>n</var></span>.</p>'
+      },
+      cap: {
+        title: 'Ёмкостная',
+        html: '<p>Ток опережает на <span class="char-eq">90°</span>. <span class="char-eq">sinψ = −1</span> → <span class="char-eq">Φ<sub>2</sub></span> сонаправлен с <span class="char-eq">Φ<sub>0</sub></span> → поток растёт → ЭДС и <span class="char-eq"><var>U</var><sub>г</sub></span> могут вырасти.</p>'
+      },
+      rl: {
+        title: 'Активно-индуктивная',
+        html: '<p>Ток отстаёт меньше чем на <span class="char-eq">90°</span>. Разложение: <span class="char-eq">Φ<sub>2d</sub> = Φ<sub>2</sub>·sinψ</span> размагничивает, <span class="char-eq">Φ<sub>2q</sub></span> искажает. Из‑за <span class="char-eq">Φ<sub>2d</sub></span> ЭДС ниже <span class="char-eq">E<sub>0</sub></span>.</p>'
+      },
+      custom: {
+        title: 'Произвольный ψ',
+        html: '<p>Формула: <span class="char-eq"><var>E</var> ∼ Φ<sub>рез</sub> · <var>n</var></span>, где <span class="char-eq">Φ<sub>рез</sub> ≈ Φ<sub>0</sub> − Φ<sub>2</sub>·sinψ</span>. Ползунок меняет <span class="char-eq">sinψ</span> — смотрите шкалу <span class="char-eq">E / E<sub>0</sub></span>.</p>'
+      }
+    };
+    const presets = { act: 0, ind: 90, cap: -90, rl: 45 };
+    const names = { 0: 'а · активная', 90: 'б · индуктивная', '-90': 'в · ёмкостная', 45: 'г · активно-индуктивная' };
+    // Illustrative reaction depth: E/E0 = 1 − k·sinψ (n fixed)
+    const REAC_K = 0.32;
+
+    const rad = (deg) => (deg * Math.PI) / 180;
+    // ψ: lag of I behind E; E up. Clockwise from up: x = sin(ψ), y = -cos(ψ)
+    const fromUp = (psiDeg, len) => {
+      const a = rad(psiDeg);
+      return { x: Math.sin(a) * len, y: -Math.cos(a) * len };
+    };
+
+    const fmtSin = (s) => {
+      if (Math.abs(s) < 0.02) return '0';
+      if (Math.abs(s - 1) < 0.02) return '1';
+      if (Math.abs(s + 1) < 0.02) return '−1';
+      const t = s.toFixed(2).replace(/^-/, '−');
+      return t;
+    };
+
+    const applyPsi = (psi, key) => {
+      psi = Math.max(-90, Math.min(90, Number(psi)));
+      if (slider) slider.value = String(psi);
+      if (psiVal) psiVal.textContent = `${psi}°`;
+
+      const sinPsi = Math.sin(rad(psi));
+      const eRel = Math.max(0.5, Math.min(1.35, 1 - REAC_K * sinPsi));
+      const eLen = 52 * eRel;
+      if (eLine) {
+        eLine.setAttribute('x1', '10');
+        eLine.setAttribute('y1', '0');
+        eLine.setAttribute('x2', '10');
+        eLine.setAttribute('y2', String(-eLen));
+      }
+      if (eLbl) {
+        eLbl.setAttribute('x', '22');
+        eLbl.setAttribute('y', String(-eLen + 14));
+      }
+      if (eqLive) {
+        let verdict;
+        if (eRel > 1.04) verdict = 'E растёт';
+        else if (eRel < 0.96) verdict = 'E падает';
+        else verdict = 'E ≈ E<sub>0</sub>';
+        eqLive.innerHTML = `sinψ = ${fmtSin(sinPsi)} → Φ<sub>рез</sub> ${eRel > 1.04 ? '>' : eRel < 0.96 ? '<' : '≈'} Φ<sub>0</sub> → ${verdict}`;
+      }
+      // bar: map 0.5…1.35 → 0…100%, mark E0 at (1-0.5)/(1.35-0.5) = 58.8% → use 0.5..1.4 span
+      const barMin = 0.5;
+      const barMax = 1.4;
+      const pct = ((eRel - barMin) / (barMax - barMin)) * 100;
+      const markPct = ((1 - barMin) / (barMax - barMin)) * 100;
+      if (eBar) {
+        eBar.style.width = `${pct}%`;
+        eBar.classList.toggle('is-down', eRel < 0.97);
+        eBar.classList.toggle('is-up', eRel > 1.03);
+      }
+      const mark = slide.querySelector('.em-ac-reac-ebar-mark');
+      if (mark) mark.style.left = `${markPct}%`;
+      if (eVal) eVal.textContent = eRel.toFixed(2);
+
+      // Parallel offset when I ≈ E so labels don't stack
+      const off = Math.abs(psi) < 12 ? 10 : 0;
+      const iLen = 52;
+      const iTip = fromUp(psi, iLen);
+      if (iLine) {
+        iLine.setAttribute('x1', String(-off));
+        iLine.setAttribute('y1', '0');
+        iLine.setAttribute('x2', String(iTip.x - off));
+        iLine.setAttribute('y2', String(iTip.y));
+      }
+      if (iLbl) {
+        const lx = iTip.x - off;
+        const ly = iTip.y;
+        if (Math.abs(psi) < 12) {
+          iLbl.setAttribute('x', String(lx - 26));
+          iLbl.setAttribute('y', String(ly + 12));
+        } else {
+          iLbl.setAttribute('x', String(lx + (lx >= 0 ? 10 : -30)));
+          iLbl.setAttribute('y', String(ly + (ly > -8 ? 14 : 4)));
+        }
+      }
+
+      const rCond = 76;
+      const d = fromUp(psi, rCond);
+      const c = fromUp(psi + 180, rCond);
+      if (dot) dot.setAttribute('transform', `translate(${d.x} ${d.y})`);
+      if (cross) cross.setAttribute('transform', `translate(${c.x} ${c.y})`);
+
+      // Φ₂ = I rotated +90° clockwise → fromUp(ψ+90)
+      const p2 = fromUp(psi + 90, 48);
+      if (phi2Line) {
+        phi2Line.setAttribute('x2', String(p2.x));
+        phi2Line.setAttribute('y2', String(p2.y));
+      }
+      if (phi2Lbl) {
+        phi2Lbl.setAttribute('x', String(p2.x + (p2.x >= 0 ? 8 : -28)));
+        phi2Lbl.setAttribute('y', String(p2.y + (p2.y > 10 ? 14 : -6)));
+      }
+
+      const showComp = Math.abs(psi) > 5 && Math.abs(psi) < 85;
+      if (comp) comp.setAttribute('opacity', showComp ? '1' : '0');
+
+      let k = key;
+      if (!k) {
+        k = Object.keys(presets).find((id) => presets[id] === psi) || 'custom';
+      }
+      const data = info[k] || info.custom;
+      if (panel) panel.innerHTML = `<h3>${data.title}</h3>${data.html}`;
+      slide.querySelectorAll('.em-ac-reac-btn').forEach((btn) => {
+        btn.classList.toggle('active', btn.dataset.info === k);
+      });
+      const base = names[String(psi)] || 'произвольная';
+      if (caption) caption.textContent = `${base} · ψ = ${psi}°`;
+      slide.dataset.ac = k;
+    };
+
+    slide.addEventListener('click', (e) => {
+      const card = e.target.closest('.em-ac-reac-btn');
+      if (!card?.dataset.info) return;
+      e.stopPropagation();
+      applyPsi(Number(card.dataset.psi), card.dataset.info);
+    });
+    if (slider) {
+      slider.addEventListener('input', () => {
+        applyPsi(Number(slider.value), null);
+      });
+    }
+    applyPsi(0, 'act');
+  })();
+
+  bindEmAcSlide('.slide-em-ac-eug-interactive', 'emAcEugPanel', {
+    eq: {
+      title: 'Формула',
+      html: '<p>Электродвижущая сила, которую вырабатывает генератор, прямо пропорциональна величине общего магнитного потока и скорости вращения:</p><p><span class="char-eq"><var>E</var> ∼ Φ<sub>рез</sub> · <var>n</var></span>.</p>'
+    },
+    phi: {
+      title: 'Поток Φрез',
+      html: '<p>Результирующий поток — это поток возбуждения <span class="char-eq">Φ<sub>0</sub></span>, изменённый реакцией якоря (потоком статора <span class="char-eq">Φ<sub>2</sub></span>).</p><p>При индуктивной нагрузке встречный поток статора ослабляет <span class="char-eq">Φ<sub>рез</sub></span>.</p>'
+    },
+    e: {
+      title: 'ЭДС',
+      html: '<p>Если <span class="char-eq">Φ<sub>рез</sub></span> угасает из‑за встречного потока статора, ЭДС падает — при той же скорости вращения <span class="char-eq"><var>n</var></span>.</p>'
+    },
+    ug: {
+      title: 'Напряжение Uг',
+      html: '<p>Вместе с ЭДС падает и напряжение на клеммах генератора <span class="char-eq"><var>U</var><sub>г</sub></span>.</p><p>Поэтому на станции держат возбуждение: компенсируют размагничивание нагрузки.</p>'
+    },
+    drop: {
+      title: 'Падение',
+      html: '<p>Цепочка: размагничивающая нагрузка → слабее <span class="char-eq">Φ<sub>рез</sub></span> → меньше <span class="char-eq"><var>E</var></span> → ниже <span class="char-eq"><var>U</var><sub>г</sub></span> на зажимах.</p><p>При ёмкостной нагрузке наоборот: поток усиливается, ЭДС и напряжение могут вырасти.</p>'
+    }
+  }, 'eq');
+
+
   bindEmAcSlide('.slide-em-ac-srot-interactive', 'emAcSrotPanel', {
     sal: {
       title: 'Торчат',
