@@ -7400,6 +7400,694 @@ body.overview-mode .slide-diagram { display: none; }
   font-weight: 700;
   color: #1e3a8a;
 }
+.slide-ir-types-interactive .slide-body.asutp-interactive {
+  justify-content: stretch;
+  align-content: stretch;
+}
+.slide-ir-types-interactive .asutp-main {
+  min-height: 0;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35em;
+}
+.slide-ir-types-interactive .em-ir-types-cards {
+  flex-shrink: 0;
+}
+.slide-ir-types-interactive .em-ir-types-cards.app-purpose-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+.slide-ir-types-interactive .asutp-diagram-wrap {
+  flex: 1 1 0;
+  min-height: 0;
+}
+.slide-ir-types-interactive .asutp-panel {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.slide-ir-pot-photo-interactive .slide-body.asutp-interactive,
+.slide-ir-pot-scheme-interactive .slide-body.asutp-interactive {
+  justify-content: stretch;
+  align-content: stretch;
+}
+.slide-ir-pot-photo-interactive .asutp-main,
+.slide-ir-pot-scheme-interactive .asutp-main {
+  min-height: 0;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35em;
+}
+.slide-ir-pot-photo-interactive .em-ir-pot-cards,
+.slide-ir-pot-scheme-interactive .em-ir-pot-scheme-cards {
+  flex-shrink: 0;
+}
+.slide-ir-pot-photo-interactive .em-ir-pot-cards.app-purpose-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+.slide-ir-pot-scheme-interactive .em-ir-pot-scheme-cards.app-purpose-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+.slide-ir-pot-photo-interactive .asutp-diagram-wrap,
+.slide-ir-pot-scheme-interactive .asutp-diagram-wrap {
+  flex: 1 1 0;
+  min-height: 0;
+}
+.slide-ir-pot-photo-interactive .em-ir-pot-idea-svg {
+  width: 100%;
+  height: 100%;
+  max-height: none;
+}
+.slide-ir-pot-photo-interactive .app-purpose-card,
+.slide-ir-pot-scheme-interactive .app-purpose-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3em;
+}
+.slide-ir-pot-photo-interactive .app-purpose-card > strong,
+.slide-ir-pot-scheme-interactive .app-purpose-card > strong {
+  display: block;
+  font-size: 1.02em;
+  line-height: 1.2;
+}
+.slide-ir-pot-photo-interactive .app-purpose-card > span,
+.slide-ir-pot-scheme-interactive .app-purpose-card > span {
+  display: block;
+  font-weight: 600;
+  color: #475569;
+  font-size: 0.88em;
+  line-height: 1.25;
+}
+.slide-ir-pot-photo-interactive .app-purpose-card.active > span,
+.slide-ir-pot-scheme-interactive .app-purpose-card.active > span {
+  color: #e2e8f0;
+}
+.slide-ir-pot-photo-interactive .asutp-panel,
+.slide-ir-pot-scheme-interactive .asutp-panel {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.slide-ir-pot-scheme-interactive .em-ir-pot-scheme-svg {
+  width: 100%;
+  height: 100%;
+  max-height: none;
+}
+.slide-ir-pot-pair-interactive .slide-body.asutp-interactive,
+.slide-ir-pot-bridge-interactive .slide-body.asutp-interactive {
+  justify-content: stretch;
+  align-content: stretch;
+}
+.slide-ir-pot-pair-interactive .asutp-main,
+.slide-ir-pot-bridge-interactive .asutp-main {
+  min-height: 0;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35em;
+}
+.slide-ir-pot-pair-interactive .em-ir-pot-pair-cards,
+.slide-ir-pot-bridge-interactive .em-ir-pot-bridge-cards {
+  flex-shrink: 0;
+}
+.slide-ir-pot-pair-interactive .em-ir-pot-pair-cards.app-purpose-grid {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+.slide-ir-pot-bridge-interactive .em-ir-pot-bridge-cards.app-purpose-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+.slide-ir-pot-pair-interactive .asutp-diagram-wrap,
+.slide-ir-pot-bridge-interactive .asutp-diagram-wrap {
+  flex: 1 1 0;
+  min-height: 0;
+}
+.slide-ir-pot-bridge-interactive .em-ir-pot-bridge-eq {
+  flex-shrink: 0;
+  text-align: center;
+  margin: 0;
+  padding: 0.3em 0.6em;
+}
+.slide-ir-pot-bridge-interactive .em-ir-pot-bridge-live {
+  margin: 0;
+  font-size: 0.98em;
+  font-weight: 700;
+  color: #1e3a8a;
+}
+.slide-ir-pot-pair-interactive .app-purpose-card,
+.slide-ir-pot-bridge-interactive .app-purpose-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3em;
+}
+.slide-ir-pot-pair-interactive .app-purpose-card > strong,
+.slide-ir-pot-bridge-interactive .app-purpose-card > strong {
+  display: block;
+  font-size: 1.02em;
+}
+.slide-ir-pot-pair-interactive .app-purpose-card > span,
+.slide-ir-pot-bridge-interactive .app-purpose-card > span {
+  display: block;
+  font-weight: 600;
+  color: #475569;
+  font-size: 0.88em;
+}
+.slide-ir-pot-pair-interactive .app-purpose-card.active > span,
+.slide-ir-pot-bridge-interactive .app-purpose-card.active > span {
+  color: #e2e8f0;
+}
+.slide-ir-pot-pair-interactive .asutp-panel,
+.slide-ir-pot-bridge-interactive .asutp-panel {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.slide-ir-pot-pair-interactive .em-ir-pot-pair-svg,
+.slide-ir-pot-bridge-interactive .em-ir-pot-bridge-svg {
+  width: 100%;
+  height: 100%;
+  max-height: none;
+}
+.slide-ir-pot-balance-interactive .slide-body.asutp-interactive,
+.slide-ir-pot-cont-interactive .slide-body.asutp-interactive {
+  justify-content: stretch;
+  align-content: stretch;
+}
+.slide-ir-pot-balance-interactive .asutp-main,
+.slide-ir-pot-cont-interactive .asutp-main {
+  min-height: 0;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35em;
+}
+.slide-ir-pot-balance-interactive .em-ir-pot-balance-cards {
+  flex-shrink: 0;
+}
+.slide-ir-pot-balance-interactive .em-ir-pot-balance-cards.app-purpose-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+.slide-ir-pot-cont-interactive .em-ir-pot-cont-cards {
+  flex-shrink: 0;
+}
+.slide-ir-pot-cont-interactive .em-ir-pot-cont-cards.app-purpose-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+.slide-ir-pot-balance-interactive .asutp-diagram-wrap,
+.slide-ir-pot-cont-interactive .asutp-diagram-wrap {
+  flex: 1 1 0;
+  min-height: 0;
+}
+.slide-ir-pot-balance-interactive .em-ir-pot-balance-eq {
+  flex-shrink: 0;
+  text-align: center;
+  margin: 0;
+  padding: 0.3em 0.6em;
+}
+.slide-ir-pot-balance-interactive .em-ir-pot-balance-live {
+  margin: 0;
+  font-size: 0.98em;
+  font-weight: 700;
+  color: #1e3a8a;
+}
+.slide-ir-pot-balance-interactive .app-purpose-card,
+.slide-ir-pot-cont-interactive .app-purpose-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3em;
+}
+.slide-ir-pot-balance-interactive .app-purpose-card > strong,
+.slide-ir-pot-cont-interactive .app-purpose-card > strong {
+  display: block;
+  font-size: 1.02em;
+}
+.slide-ir-pot-balance-interactive .app-purpose-card > span,
+.slide-ir-pot-cont-interactive .app-purpose-card > span {
+  display: block;
+  font-weight: 600;
+  color: #475569;
+  font-size: 0.88em;
+}
+.slide-ir-pot-balance-interactive .app-purpose-card.active > span,
+.slide-ir-pot-cont-interactive .app-purpose-card.active > span {
+  color: #e2e8f0;
+}
+.slide-ir-pot-balance-interactive .asutp-panel,
+.slide-ir-pot-cont-interactive .asutp-panel {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.slide-ir-pot-balance-interactive .em-ir-pot-balance-svg,
+.slide-ir-pot-cont-interactive .em-ir-pot-cont-svg {
+  width: 100%;
+  height: 100%;
+  max-height: none;
+}
+.slide-ir-pot-offset-interactive .slide-body.asutp-interactive,
+.slide-ir-pot-pros-interactive .slide-body.asutp-interactive {
+  justify-content: stretch;
+  align-content: stretch;
+}
+.slide-ir-pot-offset-interactive .asutp-main,
+.slide-ir-pot-pros-interactive .asutp-main {
+  min-height: 0;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35em;
+}
+.slide-ir-pot-offset-interactive .em-ir-pot-offset-cards,
+.slide-ir-pot-pros-interactive .em-ir-pot-pros-cards {
+  flex-shrink: 0;
+}
+.slide-ir-pot-offset-interactive .em-ir-pot-offset-cards.app-purpose-grid,
+.slide-ir-pot-pros-interactive .em-ir-pot-pros-cards.app-purpose-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+.slide-ir-pot-offset-interactive .asutp-diagram-wrap,
+.slide-ir-pot-pros-interactive .asutp-diagram-wrap {
+  flex: 1 1 0;
+  min-height: 0;
+}
+.slide-ir-pot-offset-interactive .em-ir-pot-offset-eq {
+  flex-shrink: 0;
+  text-align: center;
+  margin: 0;
+  padding: 0.3em 0.6em;
+}
+.slide-ir-pot-offset-interactive .em-ir-pot-offset-live {
+  margin: 0;
+  font-size: 0.98em;
+  font-weight: 700;
+  color: #1e3a8a;
+}
+.slide-ir-pot-offset-interactive .app-purpose-card,
+.slide-ir-pot-pros-interactive .app-purpose-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3em;
+}
+.slide-ir-pot-offset-interactive .app-purpose-card > strong,
+.slide-ir-pot-pros-interactive .app-purpose-card > strong {
+  display: block;
+  font-size: 1.02em;
+}
+.slide-ir-pot-offset-interactive .app-purpose-card > span,
+.slide-ir-pot-pros-interactive .app-purpose-card > span {
+  display: block;
+  font-weight: 600;
+  color: #475569;
+  font-size: 0.88em;
+}
+.slide-ir-pot-offset-interactive .app-purpose-card.active > span,
+.slide-ir-pot-pros-interactive .app-purpose-card.active > span {
+  color: #e2e8f0;
+}
+.slide-ir-pot-offset-interactive .asutp-panel,
+.slide-ir-pot-pros-interactive .asutp-panel {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.slide-ir-pot-offset-interactive .em-ir-pot-offset-svg,
+.slide-ir-pot-pros-interactive .em-ir-pot-pros-svg {
+  width: 100%;
+  height: 100%;
+  max-height: none;
+}
+.slide-ir-pot-class-interactive .slide-body.asutp-interactive,
+.slide-ir-derr-interactive .slide-body.asutp-interactive {
+  justify-content: stretch;
+  align-content: stretch;
+}
+.slide-ir-pot-class-interactive .asutp-main,
+.slide-ir-derr-interactive .asutp-main {
+  min-height: 0;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35em;
+}
+.slide-ir-pot-class-interactive .em-ir-pot-class-cards,
+.slide-ir-derr-interactive .em-ir-derr-cards {
+  flex-shrink: 0;
+}
+.slide-ir-pot-class-interactive .em-ir-pot-class-cards.app-purpose-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+.slide-ir-derr-interactive .em-ir-derr-cards.app-purpose-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+.slide-ir-pot-class-interactive .asutp-diagram-wrap,
+.slide-ir-derr-interactive .asutp-diagram-wrap {
+  flex: 1 1 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5em;
+}
+.slide-ir-pot-class-interactive .em-ir-pot-class-table {
+  width: 100%;
+  max-width: 52em;
+  border-collapse: collapse;
+  font-size: 0.92em;
+  background: #fff;
+}
+.slide-ir-pot-class-interactive .em-ir-pot-class-table th,
+.slide-ir-pot-class-interactive .em-ir-pot-class-table td {
+  border: 1px solid #cbd5e1;
+  padding: 0.55em 0.7em;
+  text-align: center;
+}
+.slide-ir-pot-class-interactive .em-ir-pot-class-table th {
+  background: #eff6ff;
+  color: #1e3a8a;
+  font-weight: 700;
+}
+.slide-ir-pot-class-interactive .em-ir-pot-class-table tr.em-ac-hit:hover td {
+  background: #f8fafc;
+}
+.slide-ir-pot-class-interactive .em-ir-pot-class-note {
+  margin: 0;
+  font-size: 0.95em;
+  font-weight: 600;
+  color: #475569;
+  text-align: center;
+}
+.slide-ir-pot-class-interactive .em-ir-pot-class-eq {
+  flex-shrink: 0;
+  text-align: center;
+  margin: 0;
+  padding: 0.3em 0.6em;
+}
+.slide-ir-pot-class-interactive .em-ir-pot-class-live {
+  margin: 0;
+  font-size: 0.95em;
+  font-weight: 700;
+  color: #1e3a8a;
+}
+.slide-ir-pot-class-interactive .app-purpose-card,
+.slide-ir-derr-interactive .app-purpose-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3em;
+}
+.slide-ir-pot-class-interactive .app-purpose-card > strong,
+.slide-ir-derr-interactive .app-purpose-card > strong {
+  display: block;
+  font-size: 1.02em;
+}
+.slide-ir-pot-class-interactive .app-purpose-card > span,
+.slide-ir-derr-interactive .app-purpose-card > span {
+  display: block;
+  font-weight: 600;
+  color: #475569;
+  font-size: 0.88em;
+}
+.slide-ir-pot-class-interactive .app-purpose-card.active > span,
+.slide-ir-derr-interactive .app-purpose-card.active > span {
+  color: #e2e8f0;
+}
+.slide-ir-pot-class-interactive .asutp-panel,
+.slide-ir-derr-interactive .asutp-panel {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.slide-ir-derr-interactive .em-ir-derr-eq {
+  flex-shrink: 0;
+  text-align: center;
+  margin: 0;
+  padding: 0.3em 0.6em;
+}
+.slide-ir-derr-interactive .em-ir-derr-svg {
+  width: 100%;
+  height: 100%;
+  max-height: none;
+}
+.slide-ir-pot-pair-interactive .em-ir-pot-pair-cards.app-purpose-grid {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+.slide-ir-selsyn-intro-interactive .slide-body.asutp-interactive,
+.slide-ir-selsyn-types-interactive .slide-body.asutp-interactive {
+  justify-content: stretch;
+  align-content: stretch;
+}
+.slide-ir-selsyn-intro-interactive .asutp-main,
+.slide-ir-selsyn-types-interactive .asutp-main {
+  min-height: 0;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35em;
+}
+.slide-ir-selsyn-intro-interactive .em-ir-selsyn-intro-cards.app-purpose-grid,
+.slide-ir-selsyn-types-interactive .em-ir-selsyn-types-cards.app-purpose-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  flex-shrink: 0;
+}
+.slide-ir-selsyn-intro-interactive .asutp-diagram-wrap,
+.slide-ir-selsyn-types-interactive .asutp-diagram-wrap {
+  flex: 1 1 0;
+  min-height: 0;
+}
+.slide-ir-selsyn-intro-interactive .app-purpose-card,
+.slide-ir-selsyn-types-interactive .app-purpose-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3em;
+}
+.slide-ir-selsyn-intro-interactive .app-purpose-card > strong,
+.slide-ir-selsyn-types-interactive .app-purpose-card > strong {
+  display: block;
+  font-size: 1.02em;
+}
+.slide-ir-selsyn-intro-interactive .app-purpose-card > span,
+.slide-ir-selsyn-types-interactive .app-purpose-card > span {
+  display: block;
+  font-weight: 600;
+  color: #475569;
+  font-size: 0.88em;
+}
+.slide-ir-selsyn-intro-interactive .app-purpose-card.active > span,
+.slide-ir-selsyn-types-interactive .app-purpose-card.active > span {
+  color: #e2e8f0;
+}
+.slide-ir-selsyn-intro-interactive .asutp-panel,
+.slide-ir-selsyn-types-interactive .asutp-panel {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.slide-ir-selsyn-intro-interactive .em-ir-selsyn-intro-svg,
+.slide-ir-selsyn-types-interactive .em-ir-selsyn-types-svg {
+  width: 100%;
+  height: 100%;
+  max-height: none;
+}
+.slide-ir-selsyn-ind-interactive .slide-body.asutp-interactive,
+.slide-ir-selsyn-tr-interactive .slide-body.asutp-interactive {
+  justify-content: stretch;
+  align-content: stretch;
+}
+.slide-ir-selsyn-ind-interactive .asutp-main,
+.slide-ir-selsyn-tr-interactive .asutp-main {
+  min-height: 0;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35em;
+}
+.slide-ir-selsyn-ind-interactive .em-ir-selsyn-ind-cards.app-purpose-grid,
+.slide-ir-selsyn-tr-interactive .em-ir-selsyn-tr-cards.app-purpose-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  flex-shrink: 0;
+}
+.slide-ir-selsyn-ind-interactive .asutp-diagram-wrap,
+.slide-ir-selsyn-tr-interactive .asutp-diagram-wrap {
+  flex: 1 1 0;
+  min-height: 0;
+}
+.slide-ir-selsyn-ind-interactive .app-purpose-card,
+.slide-ir-selsyn-tr-interactive .app-purpose-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3em;
+}
+.slide-ir-selsyn-ind-interactive .app-purpose-card > strong,
+.slide-ir-selsyn-tr-interactive .app-purpose-card > strong {
+  display: block;
+  font-size: 1.02em;
+}
+.slide-ir-selsyn-ind-interactive .app-purpose-card > span,
+.slide-ir-selsyn-tr-interactive .app-purpose-card > span {
+  display: block;
+  font-weight: 600;
+  color: #475569;
+  font-size: 0.88em;
+}
+.slide-ir-selsyn-ind-interactive .app-purpose-card.active > span,
+.slide-ir-selsyn-tr-interactive .app-purpose-card.active > span {
+  color: #e2e8f0;
+}
+.slide-ir-selsyn-ind-interactive .asutp-panel,
+.slide-ir-selsyn-tr-interactive .asutp-panel {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.slide-ir-selsyn-ind-interactive .em-ir-selsyn-ind-svg,
+.slide-ir-selsyn-tr-interactive .em-ir-selsyn-tr-svg {
+  width: 100%;
+  height: 100%;
+  max-height: none;
+}
+.slide-ir-selsyn-how-interactive .slide-body.asutp-interactive {
+  justify-content: stretch;
+  align-content: stretch;
+}
+.slide-ir-selsyn-how-interactive .asutp-main {
+  min-height: 0;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35em;
+}
+.slide-ir-selsyn-how-interactive .em-ir-selsyn-how-cards.app-purpose-grid {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  flex-shrink: 0;
+}
+.slide-ir-selsyn-how-interactive .em-ir-selsyn-how-slider-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  flex-shrink: 0;
+  font-weight: 700;
+  color: #1e3a8a;
+  font-size: 0.95em;
+}
+.slide-ir-selsyn-how-interactive .em-ir-selsyn-how-slider-wrap input[type="range"] {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+.slide-ir-selsyn-how-interactive .em-ir-selsyn-how-eq {
+  flex-shrink: 0;
+  text-align: center;
+  margin: 0;
+  padding: 0.3em 0.6em;
+}
+.slide-ir-selsyn-how-interactive .em-ir-selsyn-how-live {
+  margin: 0;
+  font-size: 0.95em;
+  font-weight: 700;
+  color: #1e3a8a;
+}
+.slide-ir-selsyn-how-interactive .asutp-diagram-wrap {
+  flex: 1 1 0;
+  min-height: 0;
+}
+.slide-ir-selsyn-how-interactive .app-purpose-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3em;
+}
+.slide-ir-selsyn-how-interactive .app-purpose-card > strong {
+  display: block;
+  font-size: 0.95em;
+}
+.slide-ir-selsyn-how-interactive .app-purpose-card > span {
+  display: block;
+  font-weight: 600;
+  color: #475569;
+  font-size: 0.82em;
+}
+.slide-ir-selsyn-how-interactive .app-purpose-card.active > span {
+  color: #e2e8f0;
+}
+.slide-ir-selsyn-how-interactive .asutp-panel {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.slide-ir-selsyn-how-interactive .em-ir-selsyn-how-svg {
+  width: 100%;
+  height: 100%;
+  max-height: none;
+}
+.slide-ir-selsyn-princ-interactive .slide-body.asutp-interactive {
+  justify-content: stretch;
+  align-content: stretch;
+}
+.slide-ir-selsyn-princ-interactive .asutp-main {
+  min-height: 0;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35em;
+}
+.slide-ir-selsyn-princ-interactive .em-ir-selsyn-princ-cards.app-purpose-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  flex-shrink: 0;
+}
+.slide-ir-selsyn-princ-interactive .asutp-diagram-wrap {
+  flex: 1 1 0;
+  min-height: 0;
+}
+.slide-ir-selsyn-princ-interactive .app-purpose-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3em;
+}
+.slide-ir-selsyn-princ-interactive .app-purpose-card > strong {
+  display: block;
+  font-size: 1.02em;
+}
+.slide-ir-selsyn-princ-interactive .app-purpose-card > span {
+  display: block;
+  font-weight: 600;
+  color: #475569;
+  font-size: 0.88em;
+}
+.slide-ir-selsyn-princ-interactive .app-purpose-card.active > span {
+  color: #e2e8f0;
+}
+.slide-ir-selsyn-princ-interactive .asutp-panel {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.slide-ir-selsyn-princ-interactive .em-ir-selsyn-princ-svg {
+  width: 100%;
+  height: 100%;
+  max-height: none;
+}
+.slide-ir-selsyn-princ-interactive .em-ac-view {
+  display: none;
+}
+.slide-ir-selsyn-princ-interactive .em-ac-view.is-on {
+  display: block;
+}
 .slide-ir-loop-interactive .em-ir-loop-svg,
 .slide-ir-what-interactive .em-ir-what-svg,
 .slide-ir-types-interactive .em-ir-types-svg,

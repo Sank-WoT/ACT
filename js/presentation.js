@@ -12268,7 +12268,7 @@
   bindEmAcSlide('.slide-ir-loop-interactive', 'irLoopPanel', {
     sum: {
       title: 'Сумматор',
-      html: '<p>Сравнивает φвх и φн. Внутри пунктирной рамки ИР на рис. 3.61.</p>'
+      html: '<p>Сравнивает φвх и φн. Внутри пунктирной рамки ИР.</p>'
     },
     kizm: {
       title: 'Kизм',
@@ -12356,6 +12356,501 @@
       show(btn.dataset.info);
     });
     show('pot');
+  })();
+
+  bindEmAcSlide('.slide-ir-pot-photo-interactive', 'irPotPhotoPanel', {
+    intro: {
+      title: 'Суть',
+      html: '<p>Потенциометрические ИР выполняют на <strong>круговых</strong> потенциометрах.</p><p><strong>1</strong> — контактный движок, <strong>2</strong> — проволочная обмотка на каркасе.</p>'
+    },
+    wiper: {
+      title: '1 · Движок',
+      html: '<p>Контактный <strong>движок</strong> со скользящим контактом идёт по торцу обмотки.</p><p>Угол вала задаёт положение контакта → меняется снимаемое напряжение.</p>'
+    },
+    wind: {
+      title: '2 · Обмотка',
+      html: '<p><strong>Проволочная обмотка</strong> на цилиндрическом каркасе из изолятора.</p><p>Концы обмотки — выводы питания делителя напряжения.</p>'
+    }
+  }, 'intro');
+
+  bindEmAcSlide('.slide-ir-pot-scheme-interactive', 'irPotSchemePanel', {
+    wind: {
+      title: 'Обмотка',
+      html: '<p>Проволочная обмотка лежит на цилиндрическом каркасе из изолятора.</p><p>По торцу обмотки скользит контакт движка — угол вала задаёт точку съёма напряжения.</p>'
+    },
+    ends: {
+      title: 'Выводы 1 и 2',
+      html: '<p>Концы обмотки выведены на выводы <strong>1</strong> и <strong>2</strong> — сюда подают питание делителя.</p><p>Между ними распределено полное сопротивление потенциометра.</p>'
+    },
+    wiper: {
+      title: 'Движок 3',
+      html: '<p>Вывод <strong>3</strong> — сигнал с движка: напряжение между контактом и одним из концов обмотки.</p><p>Оно пропорционально углу поворота.</p>'
+    },
+    sym: {
+      title: 'Схема (б)',
+      html: '<p>На электрических схемах круговой потенциометр рисуют как прямоугольник (резистор) со стрелкой-движком.</p><p>Те же выводы 1–2–3, что и у конструкции (а).</p>'
+    }
+  }, 'wind');
+
+  bindEmAcSlide('.slide-ir-pot-pair-interactive', 'irPotPairPanel', {
+    idea: {
+      title: 'Идея',
+      html: '<p>Классическая схема <strong>дистанционной передачи угла</strong>: датчик задаёт положение, приёмник его повторяет.</p><p>Поворот движка на датчике меняет доли <strong>R1</strong> и <strong>R2</strong> — между движками появляется <strong>Uизм</strong>. По этому напряжению приёмник доворачивается, пока положения не совпадут.</p><p>В равновесии <strong>Uизм ≈ 0</strong>: приёмник копирует движение датчика.</p>'
+    },
+    sense: {
+      title: 'Датчик',
+      html: '<p>Потенциометр <strong>датчика</strong> на задающем валу: угол <strong>φвх</strong> делит обмотку на <strong>R1</strong> и <strong>R2</strong>.</p><p>Сдвиг движка меняет соотношение сопротивлений — это «команда» для линии.</p>'
+    },
+    recv: {
+      title: 'Приёмник',
+      html: '<p>Потенциометр <strong>приёмника</strong> на валу нагрузки: угол <strong>φн</strong> → доли <strong>R3</strong> и <strong>R4</strong>.</p><p>Система крутит приёмник так, чтобы его движок встал как на датчике.</p>'
+    },
+    supply: {
+      title: 'Uсети',
+      html: '<p>Оба потенциометра питаются от одной <strong>Uсети</strong> — это общая «высота» двух делителей.</p><p>Без общего питания мост между движками не собрать.</p>'
+    },
+    u: {
+      title: 'Uизм',
+      html: '<p><strong>Uизм</strong> — разность потенциалов <em>между двумя движками</em>.</p><p>Есть рассогласование углов — есть напряжение. Углы совпали — Uизм ≈ 0, приёмник «стоит» как датчик.</p>'
+    }
+  }, 'idea');
+
+  (() => {
+    const slide = document.querySelector('.slide-ir-pot-balance-interactive');
+    if (!slide) return;
+    const live = document.getElementById('irPotBalanceLive');
+    const texts = {
+      bal: 'Uизм = 0 → R1/R2 = R3/R4',
+      eq: 'R1 + R2 = R3 + R4 → R1 = R3, R2 = R4',
+      dead: 'угол < 360° → мёртвая зона'
+    };
+    bindEmAcSlide('.slide-ir-pot-balance-interactive', 'irPotBalancePanel', {
+      bal: {
+        title: 'Равновесие',
+        html: '<p>При <strong>Uизм = 0</strong> выполняется <span class="char-eq">R1/R2 = R3/R4</span>.</p><p>Углы задания и нагрузки совпали — мост в равновесии.</p>'
+      },
+      eq: {
+        title: 'Следствие',
+        html: '<p>Так как <span class="char-eq">R1 + R2 = R3 + R4</span>, из равенства отношений следует <strong>R1 = R3</strong> и <strong>R2 = R4</strong>.</p><p>Движки «стоят» на одинаковых долях обмоток.</p>'
+      },
+      dead: {
+        title: 'Мёртвая зона',
+        html: '<p>Обычный потенциометр не поворачивается на полный оборот (&lt; 360°).</p><p>Сектор без обмотки выпадает из зоны управления — <strong>мёртвая зона</strong>.</p>'
+      }
+    }, 'bal');
+    slide.addEventListener('click', (e) => {
+      const el = e.target.closest('[data-info]');
+      if (!el || !slide.contains(el) || !live) return;
+      if (texts[el.dataset.info]) live.textContent = texts[el.dataset.info];
+    });
+  })();
+
+  bindEmAcSlide('.slide-ir-pot-cont-interactive', 'irPotContPanel', {
+    why: {
+      title: 'Зачем',
+      html: '<p>Обычный потенциометр не крутится на полный оборот — появляется <strong>мёртвая зона</strong>.</p><p>Непрерывная обмотка с тремя отводами даёт управление на все <strong>360°</strong>.</p>'
+    },
+    taps: {
+      title: 'Отводы 1–2–3',
+      html: '<p>Три отвода обмотки расположены через <strong>120°</strong>.</p><p>Одинаковые номера датчика и приёмника соединены проводами линии.</p>'
+    },
+    wipers: {
+      title: 'Движки',
+      html: '<p>На каждом потенциометре — <strong>два движка</strong> напротив друг друга, электрически изолированные.</p><p>На датчике к ним подают <strong>Uсети</strong>, с движков приёмника снимают <strong>Uизм</strong>.</p>'
+    },
+    line: {
+      title: '3 провода',
+      html: '<p>Между корпусами датчика и приёмника — <strong>трёхпроводная</strong> линия (отводы 1, 2, 3).</p><p>Так передают угол на расстояние без механической связи валов.</p>'
+    }
+  }, 'why');
+
+  (() => {
+    const slide = document.querySelector('.slide-ir-pot-offset-interactive');
+    if (!slide) return;
+    const live = document.getElementById('irPotOffsetLive');
+    const texts = {
+      eq: 'Uизм = Kизм · (φвх − φвых)',
+      perp: 'согласованное положение → движки ⊥',
+      mount: 'корпуса ставят со сдвигом 90°'
+    };
+    bindEmAcSlide('.slide-ir-pot-offset-interactive', 'irPotOffsetPanel', {
+      eq: {
+        title: 'Формула',
+        html: '<p>Разбор схемы сложнее, но итог тот же: <span class="char-eq">Uизм = Kизм · (φвх − φвых)</span>.</p><p>Выход пропорционален рассогласованию углов.</p>'
+      },
+      perp: {
+        title: 'Электрически',
+        html: '<p>В согласованном (электрическом) положении контактные движки датчика и приёмника взаимно <strong>перпендикулярны</strong>.</p><p>Это особенность непрерывной схемы с отводами.</p>'
+      },
+      mount: {
+        title: 'Монтаж',
+        html: '<p>Чтобы геометрически «ноль» совпал с электрическим, корпуса датчика и приёмника часто ставят со <strong>сдвигом на 90°</strong>.</p><p>Тот же приём используют и в трансформаторных ИР.</p>'
+      }
+    }, 'eq');
+    slide.addEventListener('click', (e) => {
+      const el = e.target.closest('[data-info]');
+      if (!el || !slide.contains(el) || !live) return;
+      if (texts[el.dataset.info]) live.textContent = texts[el.dataset.info];
+    });
+  })();
+
+  bindEmAcSlide('.slide-ir-pot-pros-interactive', 'irPotProsPanel', {
+    pro: {
+      title: 'Достоинства',
+      html: '<p><strong>Малая масса</strong>, <strong>малые габариты</strong>, работа и на постоянном, и на переменном токе.</p>'
+    },
+    con: {
+      title: 'Недостатки',
+      html: '<p>Есть <strong>скользящий контакт</strong>; характеристика ступенчатая (контакт перескакивает с витка на виток); надёжность ниже; при движении — <strong>высокочастотные помехи</strong>.</p>'
+    },
+    err: {
+      title: 'Погрешность',
+      html: '<p>Погрешности в основном от качества провода обмотки.</p><p>Отклонение полного сопротивления от номинала: <span class="char-eq">± (ΔR / Rном) · 100 %</span>.</p>'
+    }
+  }, 'pro');
+
+  bindEmAcSlide('.slide-ir-pot-class-interactive', 'irPotClassPanel', {
+    lin: {
+      title: 'Нелинейность',
+      html: '<p>Погрешность от отклонения статической характеристики от прямой:</p><p><span class="char-eq">± |(ΔR/Δφ)max − Kп| / Kп · 100 %</span>, где <span class="char-eq">Kп = Rном / φмакс</span>.</p>'
+    },
+    r: {
+      title: 'ΔR / Rном',
+      html: '<p>Отклонение полного сопротивления от номинала: <span class="char-eq">± (ΔR / Rном) · 100 %</span>.</p><p>Класс I: ±0.25 %, II: ±0.5 %, III: ±1 %.</p>'
+    },
+    tab: {
+      title: 'Классы I–III',
+      html: '<p>При изготовлении потенциометры проверяют и относят к классам точности по табл. 3.3.</p><p>Нелинейность: I и II — ±5 %, III — ±10 %.</p>'
+    },
+    scrap: {
+      title: 'Брак',
+      html: '<p>Всё, что не попадает в III класс точности, относится к браку и отправляется на переделку.</p>'
+    }
+  }, 'lin');
+
+  (() => {
+    const slide = document.querySelector('.slide-ir-pot-class-interactive');
+    if (!slide) return;
+    const live = document.getElementById('irPotClassLive');
+    const texts = {
+      lin: '± |(ΔR/Δφ)max − Kп| / Kп · 100 % · Kп = Rном/φмакс',
+      r: '± (ΔR / Rном) · 100 %',
+      tab: 'табл. 3.3 · классы I / II / III',
+      scrap: 'ниже III класса → брак → переделка'
+    };
+    slide.addEventListener('click', (e) => {
+      const el = e.target.closest('[data-info]');
+      if (!el || !slide.contains(el) || !live) return;
+      if (texts[el.dataset.info]) live.textContent = texts[el.dataset.info];
+    });
+  })();
+
+  (() => {
+    const slide = document.querySelector('.slide-ir-derr-interactive');
+    if (!slide) return;
+    const live = document.getElementById('irDerrLive');
+    const texts = {
+      all: 'δир = √(δдат² + δпр²)',
+      dat: 'δдат — погрешность датчика',
+      pr: 'δпр — погрешность приёмника'
+    };
+    bindEmAcSlide('.slide-ir-derr-interactive', 'irDerrPanel', {
+      all: {
+        title: 'δир',
+        html: '<p>Погрешность измерителя рассогласования <strong>любого типа</strong> оценивается как</p><p><span class="char-eq">δир = √(δдат² + δпр²)</span> — формула (3.28).</p>'
+      },
+      dat: {
+        title: 'δдат',
+        html: '<p><strong>δдат</strong> — погрешность датчика (задающего потенциометра / сельсина).</p>'
+      },
+      pr: {
+        title: 'δпр',
+        html: '<p><strong>δпр</strong> — погрешность приёмника (потенциометра / сельсина на валу нагрузки).</p>'
+      }
+    }, 'all');
+    slide.addEventListener('click', (e) => {
+      const el = e.target.closest('[data-info]');
+      if (!el || !slide.contains(el) || !live) return;
+      if (texts[el.dataset.info]) live.textContent = texts[el.dataset.info];
+    });
+  })();
+
+  bindEmAcSlide('.slide-ir-selsyn-intro-interactive', 'irSelsynIntroPanel', {
+    what: {
+      title: 'Сельсин',
+      html: '<p>Сельсин для измерителя рассогласования — электрическая машина, по конструкции схожая с синхронным генератором или синхронным двигателем.</p>'
+    },
+    like: {
+      title: 'Как машина',
+      html: '<p>Есть статор и ротор с обмотками — как у синхронной машины.</p><p>Разница в том, <strong>где</strong> лежит трёхфазная обмотка, а где однофазная.</p>'
+    },
+    ir: {
+      title: 'Для ИР',
+      html: '<p>Оба типа сельсинов годятся в <strong>индикаторном</strong> режиме (синхронная связь).</p><p>Для ИР следящих систем берут <strong>первый тип</strong>: 3∅ на статоре, 1∅ на роторе.</p>'
+    },
+    vt: {
+      title: 'ВТ',
+      html: '<p>Рядом с сельсинами в учебнике показывают и <strong>вращающийся трансформатор</strong> (ВТ) — другой трансформаторный датчик угла.</p><p>Его разберём отдельно; сейчас — сельсины.</p>'
+    }
+  }, 'what');
+
+  bindEmAcSlide('.slide-ir-selsyn-types-interactive', 'irSelsynTypesPanel', {
+    t1: {
+      title: 'Тип 1',
+      html: '<p>На <strong>статоре</strong> — трёхфазная обмотка, на <strong>роторе</strong> — однофазная.</p><p>Концы роторной обмотки выводят наружу через <strong>два</strong> коллекторных кольца и щётки.</p>'
+    },
+    t2: {
+      title: 'Тип 2',
+      html: '<p>Наоборот: на <strong>статоре</strong> — однофазная обмотка, на <strong>роторе</strong> — трёхфазная.</p><p>Выводы ротора — через <strong>три</strong> коллекторных кольца со щётками.</p>'
+    },
+    ind: {
+      title: 'Индикаторный режим',
+      html: '<p>Оба типа можно использовать в индикаторном режиме при построении систем синхронной связи.</p>'
+    },
+    servo: {
+      title: 'Следящие системы',
+      html: '<p>Для построения ИР следящих систем используют <strong>первый тип</strong> сельсинов (3∅ на статоре, 1∅ на роторе).</p>'
+    }
+  }, 't1');
+
+  bindEmAcSlide('.slide-ir-selsyn-ind-interactive', 'irSelsynIndPanel', {
+    idea: {
+      title: 'Идея',
+      html: '<p>В <strong>индикаторном</strong> режиме оба сельсина питаются от сети по роторам, статоры связаны тремя проводами.</p><p>Так строят системы синхронной передачи угла.</p>'
+    },
+    rot: {
+      title: 'Роторы',
+      html: '<p>Однофазные обмотки <strong>обоих</strong> роторов подключены параллельно к одной сети.</p>'
+    },
+    st: {
+      title: 'Статоры',
+      html: '<p>Трёхфазные обмотки статоров соединены одноимёнными выводами — <strong>трёхпроводная</strong> линия между сельсинами.</p>'
+    },
+    ang: {
+      title: 'Углы',
+      html: '<p>Углы роторов <strong>φ1</strong> и <strong>φ2</strong>: при рассогласовании появляются токи в статорной цепи, ротор «ведомого» сельсина догоняет задающий.</p>'
+    }
+  }, 'idea');
+
+  bindEmAcSlide('.slide-ir-selsyn-tr-interactive', 'irSelsynTrPanel', {
+    idea: {
+      title: 'Для ИР',
+      html: '<p>Сельсины в <strong>трансформаторном</strong> режиме — схема ИР следящей системы.</p><p>Отличие от индикаторного: питается только ротор датчика, с ротора приёмника снимают напряжение.</p>'
+    },
+    sd: {
+      title: 'СД',
+      html: '<p><strong>Сельсин-датчик</strong>: угол <strong>φвх</strong>, ротор подключён к <strong>Uсети</strong>.</p><p>Задаёт магнитное поле, которое через статорную линию передаётся на приёмник.</p>'
+    },
+    sp: {
+      title: 'СП',
+      html: '<p><strong>Сельсин-приёмник</strong>: угол нагрузки <strong>φн</strong>.</p><p>Ротор <em>не</em> питают от сети — с него снимают сигнал рассогласования.</p>'
+    },
+    u: {
+      title: 'Uизм',
+      html: '<p><strong>Uизм</strong> — напряжение на роторе СП.</p><p>Оно зависит от рассогласования углов φвх и φн — это выход ИР.</p>'
+    }
+  }, 'idea');
+
+  bindEmAcSlide('.slide-ir-selsyn-how-interactive', 'irSelsynHowPanel', {
+    pwr: {
+      title: '1 · Питание',
+      html: '<p>Подаём питание. Оба ротора создают магнитные поля.</p><p>Крутите ползунок <strong>φ1</strong> — второй сельсин догонит сам.</p>'
+    },
+    ok: {
+      title: '2 · Согласовано',
+      html: '<p>Если φ1 = φ2, поля в статорах уравновешены.</p><p>Токи в соединительных проводах минимальны, система в покое.</p>'
+    },
+    err: {
+      title: '3 · Рассогласование',
+      html: '<p>Повернули вал первого сельсина (φ1).</p><p>Магнитное равновесие сразу нарушается — пока φ2 ещё «старый».</p>'
+    },
+    line: {
+      title: '4 · Передача сигнала',
+      html: '<p>В трёх соединительных проводах появляются токи.</p><p>Они создают в статоре второго сельсина поле, «сдвинутое» на угол задания.</p>'
+    },
+    sync: {
+      title: '5 · Синхронизация',
+      html: '<p>Момент <strong>сам</strong>, без электроники, доворачивает φ2, пока снова не станет φ1 = φ2.</p><p>Равновесие восстановлено.</p>'
+    }
+  }, 'pwr');
+
+  (() => {
+    const slide = document.querySelector('.slide-ir-selsyn-how-interactive');
+    if (!slide) return;
+    const slider = document.getElementById('irSelsynHowPhi');
+    const valEl = document.getElementById('irSelsynHowPhiVal');
+    const live = document.getElementById('irSelsynHowLive');
+    const r1 = document.getElementById('irHowRotor1');
+    const r2 = document.getElementById('irHowRotor2');
+    const l1 = document.getElementById('irHowPhi1Lbl');
+    const l2 = document.getElementById('irHowPhi2Lbl');
+    const wires = document.getElementById('irHowWires');
+    const wireLbl = document.getElementById('irHowWireLbl');
+    const status = document.getElementById('irHowStatus');
+    const pwr = document.getElementById('irHowPwr');
+    if (!slider || !r1 || !r2) return;
+
+    let phi1 = 0;
+    let phi2 = 0;
+    let powerOn = true;
+    let autoFollow = true;
+    let raf = 0;
+
+    const setRotor = (el, cx, cy, deg) => {
+      el.setAttribute('transform', 'rotate(' + deg + ' ' + cx + ' ' + cy + ')');
+    };
+
+    const paint = () => {
+      setRotor(r1, 120, 110, phi1);
+      setRotor(r2, 340, 110, phi2);
+      if (l1) l1.textContent = Math.round(phi1) + '°';
+      if (l2) l2.textContent = Math.round(phi2) + '°';
+      if (valEl) valEl.textContent = Math.round(phi1) + '°';
+      const d = Math.abs(phi1 - phi2);
+      const mismatched = d > 1.5;
+      if (wires) wires.setAttribute('opacity', powerOn ? (mismatched ? '1' : '0.25') : '0.12');
+      if (wireLbl) wireLbl.textContent = !powerOn ? 'нет питания' : (mismatched ? 'токи!' : 'токи ≈ 0');
+      if (wireLbl) wireLbl.setAttribute('fill', mismatched && powerOn ? '#16a34a' : '#64748b');
+      if (pwr) pwr.setAttribute('opacity', powerOn ? '1' : '0.3');
+      let st = 'покой';
+      let stColor = '#166534';
+      if (!powerOn) {
+        st = 'без питания';
+        stColor = '#64748b';
+      } else if (mismatched && autoFollow) {
+        st = 'догон…';
+        stColor = '#c2410c';
+      } else if (mismatched) {
+        st = 'рассогласование';
+        stColor = '#c2410c';
+      }
+      if (status) {
+        status.textContent = st;
+        status.setAttribute('fill', stColor);
+      }
+      if (live) {
+        live.textContent =
+          (powerOn ? 'питание ON' : 'питание OFF') +
+          ' · φ1 = ' + Math.round(phi1) + '° · φ2 = ' + Math.round(phi2) + '° · ' +
+          (mismatched ? 'токи в линии' : 'токи ≈ 0');
+      }
+    };
+
+    const tick = () => {
+      raf = 0;
+      if (!autoFollow || !powerOn) {
+        paint();
+        return;
+      }
+      const d = phi1 - phi2;
+      if (Math.abs(d) < 0.4) {
+        phi2 = phi1;
+        paint();
+        return;
+      }
+      phi2 += d * 0.12;
+      paint();
+      raf = requestAnimationFrame(tick);
+    };
+
+    const kick = () => {
+      if (raf) cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(tick);
+    };
+
+    const setScenario = (key) => {
+      if (key === 'pwr') {
+        powerOn = true;
+        autoFollow = true;
+        phi1 = Number(slider.value) || 0;
+      } else if (key === 'ok') {
+        powerOn = true;
+        autoFollow = true;
+        phi1 = 0;
+        phi2 = 0;
+        slider.value = '0';
+      } else if (key === 'err') {
+        powerOn = true;
+        autoFollow = false;
+        phi1 = 45;
+        phi2 = 0;
+        slider.value = '45';
+      } else if (key === 'line') {
+        powerOn = true;
+        autoFollow = false;
+        phi1 = 45;
+        phi2 = 0;
+        slider.value = '45';
+      } else if (key === 'sync') {
+        powerOn = true;
+        autoFollow = true;
+        phi1 = Number(slider.value) || 45;
+        if (Math.abs(phi1 - phi2) < 1) {
+          phi1 = 45;
+          phi2 = 0;
+          slider.value = '45';
+        }
+      }
+      paint();
+      kick();
+    };
+
+    slider.addEventListener('input', () => {
+      powerOn = true;
+      autoFollow = true;
+      phi1 = Number(slider.value);
+      paint();
+      kick();
+    });
+
+    slide.addEventListener('click', (e) => {
+      const btn = e.target.closest('.app-purpose-card');
+      if (!btn || !btn.dataset.info) return;
+      setScenario(btn.dataset.info);
+    });
+
+    setScenario('pwr');
+  })();
+
+  (() => {
+    const slide = document.querySelector('.slide-ir-selsyn-princ-interactive');
+    if (!slide) return;
+    const panel = document.getElementById('irSelsynPrincPanel');
+    const info = {
+      align: {
+        title: 'Согласовано',
+        html: '<p>За согласованное положение принимают <strong>взаимно перпендикулярное</strong> положение обмоток роторов в пространстве.</p><p>Тогда выходное напряжение ИР <strong>UΔ = 0</strong>.</p>'
+      },
+      inph: {
+        title: 'Фаза 0°',
+        html: '<p>Знак рассогласования — по фазовому сдвигу между <strong>Uсети</strong> и напряжением на роторе СП (<strong>UΔ</strong>).</p><p>Сдвиг <strong>0°</strong>: UΔ совпадает по фазе с Uсети.</p>'
+      },
+      opp: {
+        title: 'Фаза 180°',
+        html: '<p>Фазовый сдвиг может быть только <strong>0°</strong> или <strong>180°</strong>.</p><p>Сдвиг <strong>180°</strong>: UΔ в противофазе с Uсети — рассогласование в другую сторону.</p>'
+      },
+      amp: {
+        title: 'Амплитуда',
+        html: '<p>Амплитуда <strong>|UΔ|</strong> зависит от угла между осями обмоток роторов.</p><p>Чем ближе к согласованному (⊥) положению — тем меньше сигнал; максимум — когда оси параллельны.</p>'
+      }
+    };
+    const show = (key) => {
+      slide.querySelectorAll('.em-ac-view').forEach((g) => {
+        g.classList.toggle('is-on', g.getAttribute('data-view') === key);
+      });
+      slide.querySelectorAll('.app-purpose-card').forEach((b) => {
+        b.classList.toggle('active', b.dataset.info === key);
+      });
+      const data = info[key];
+      if (panel && data) panel.innerHTML = '<h3>' + data.title + '</h3>' + data.html;
+    };
+    slide.addEventListener('click', (e) => {
+      const btn = e.target.closest('.app-purpose-card');
+      if (!btn || !btn.dataset.info) return;
+      e.stopPropagation();
+      show(btn.dataset.info);
+    });
+    show('align');
   })();
 
 
