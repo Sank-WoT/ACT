@@ -10143,6 +10143,1319 @@
   }, 'eq');
 
 
+  /* Live async tachogenerator: Uтг ∼ n */
+  (() => {
+    const slide = document.querySelector('.slide-em-ac-atg-interactive');
+    if (!slide) return;
+    const panel = document.getElementById('emAcAtgPanel');
+    const slider = document.getElementById('emAcAtgN');
+    const nVal = document.getElementById('emAcAtgNVal');
+    const eqLive = document.getElementById('emAcAtgEqLive');
+    const uBar = document.getElementById('emAcAtgUBar');
+    const uVal = document.getElementById('emAcAtgUVal');
+    const uLabel = document.getElementById('atgULabel');
+    const phiQ = document.getElementById('atgPhiQ');
+    const phiQLine = document.getElementById('atgPhiQLine');
+    const phiQLbl = document.getElementById('atgPhiQLbl');
+    const rotor = document.getElementById('atgRotor');
+    const info = {
+      still: {
+        title: 'а · ротор стоит',
+        html: '<p>Обмотка возбуждения создаёт пульсирующий поток <span class="char-eq">Φ<sub>0</sub></span>. В роторе — встречный <span class="char-eq">Φ<sub>d</sub></span> (как в трансформаторе).</p><p>Сигнальная обмотка перпендикулярна этим потокам → <span class="char-eq">U<sub>тг</sub> = 0</span>.</p>'
+      },
+      spin: {
+        title: 'Ротор крутится',
+        html: '<p>Проводники ротора пересекают <span class="char-eq">Φ<sub>0</sub></span> → появляется поперечный поток <span class="char-eq">Φ<sub>q</sub></span>.</p><p><span class="char-eq">Φ<sub>q</sub></span> сцеплён с сигнальной обмоткой → наводится ЭДС, растёт <span class="char-eq">U<sub>тг</sub> ∼ n</span>.</p>'
+      },
+      fast: {
+        title: 'б · быстро',
+        html: '<p>Чем выше <span class="char-eq"><var>n</var></span>, тем сильнее <span class="char-eq">Φ<sub>q</sub></span> и больше амплитуда <span class="char-eq">U<sub>тг</sub></span>.</p><p>Частота выходного сигнала равна частоте возбуждения <span class="char-eq">U<sub>в</sub></span>.</p>'
+      },
+      dev: {
+        title: 'Устройство',
+        html: '<p>На статоре две взаимно перпендикулярные обмотки: возбуждения (переменное <span class="char-eq">U<sub>в</sub></span>) и сигнальная. Ротор короткозамкнутый — «беличья клетка» или полый немагнитный стакан.</p>'
+      }
+    };
+
+    const syncButtons = (n, key) => {
+      slide.querySelectorAll('.em-ac-atg-btn').forEach((btn) => {
+        const bn = Number(btn.dataset.n);
+        let active = false;
+        if (key === 'dev') active = btn.dataset.info === 'dev';
+        else if (bn === 0) active = n < 3;
+        else if (bn === 100) active = n >= 85;
+        else if (bn === 40) active = n >= 3 && n < 85;
+        btn.classList.toggle('active', active);
+      });
+    };
+
+    const applyN = (n, key) => {
+      n = Math.max(0, Math.min(100, Number(n)));
+      if (slider) slider.value = String(n);
+      if (nVal) nVal.textContent = `${n}%`;
+      const qLen = (n / 100) * 48;
+      if (phiQ) phiQ.setAttribute('opacity', n > 2 ? '1' : '0');
+      if (phiQLine) {
+        phiQLine.setAttribute('x2', String(Math.max(qLen, 0.1)));
+        phiQLine.setAttribute('y2', '0');
+      }
+      if (phiQLbl) {
+        phiQLbl.setAttribute('x', String(qLen + 8));
+        phiQLbl.setAttribute('y', '-8');
+      }
+      if (uBar) uBar.style.width = `${n}%`;
+      if (uVal) uVal.textContent = `${n}%`;
+      if (uLabel) {
+        uLabel.textContent = n < 3 ? 'Uтг = 0' : `Uтг ≈ ${n}%`;
+        uLabel.setAttribute('fill', n < 3 ? '#94a3b8' : '#b45309');
+      }
+      if (eqLive) {
+        eqLive.innerHTML = n < 3
+          ? 'n = 0 → Φ<sub>q</sub> = 0 → U<sub>тг</sub> = 0'
+          : `n = ${n}% → Φ<sub>q</sub> растёт → U<sub>тг</sub> ≈ ${n}%`;
+      }
+      if (rotor) {
+        rotor.classList.toggle('is-stopped', n < 3);
+        const dur = n < 3 ? 0 : Math.max(0.35, 2.8 - (n / 100) * 2.45);
+        rotor.style.animationDuration = n < 3 ? '0s' : `${dur}s`;
+      }
+      let k = key;
+      if (!k || k === 'spin' || k === 'still' || k === 'fast') {
+        if (n < 3) k = 'still';
+        else if (n >= 85) k = 'fast';
+        else k = 'spin';
+      }
+      if (key === 'dev') k = 'dev';
+      const data = info[k] || info.spin;
+      if (panel) panel.innerHTML = `<h3>${data.title}</h3>${data.html}`;
+      slide.dataset.atg = k;
+      syncButtons(n, k);
+    };
+
+    slide.addEventListener('click', (e) => {
+      const btn = e.target.closest('.em-ac-atg-btn');
+      if (!btn) return;
+      e.stopPropagation();
+      const bn = Number(btn.dataset.n);
+      if (bn < 0) {
+        applyN(Number(slider && slider.value || 0), 'dev');
+        return;
+      }
+      applyN(bn, btn.dataset.info);
+    });
+    if (slider) slider.addEventListener('input', () => applyN(Number(slider.value), null));
+    applyN(0, 'still');
+  })();
+
+
+  bindEmAcSlide('.slide-em-ac-syncm-interactive', 'emAcSyncmPanel', {
+    eq: {
+      title: 'Скорость поля',
+      html: '<p>Конструкция близка к синхронному генератору. На статор — трёхфазное напряжение, внутри — круговое вращающееся поле:</p><p><span class="char-eq">ω<sub>0</sub> = 2π <var>f</var> / <var>p</var></span>.</p><p><span class="char-eq"><var>f</var></span> — частота тока, <span class="char-eq"><var>p</var></span> — число пар полюсов.</p>'
+    },
+    sync: {
+      title: 'Синхронизм',
+      html: '<p>Ротор — постоянный магнит или обмотка с постоянным током. Он вращается <strong>строго</strong> со скоростью поля <span class="char-eq">ω<sub>0</sub></span> — отсюда название «синхронный».</p>'
+    },
+    start: {
+      title: 'Проблема пуска',
+      html: '<p>Сам по себе такой двигатель <strong>не разгоняется</strong> с места до синхронной скорости: инерция ротора не успевает за полем.</p><p>Нужен отдельный способ разгона — асинхронный пуск.</p>'
+    },
+    cage: {
+      title: 'Асинхронный пуск',
+      html: '<p>В полюса ротора встраивают «беличью клетку». Сначала возбуждение ротора выключено: машина разгоняется как асинхронная почти до <span class="char-eq">ω<sub>0</sub></span>.</p><p>Потом подают постоянный ток в обмотку ротора — ротор <strong>втягивается в синхронизм</strong>. На синхронной скорости ток в клетке не течёт.</p>'
+    }
+  }, 'eq');
+
+
+  bindEmAcSlide('.slide-em-ac-syncx-interactive', 'emAcSyncxPanel', {
+    cap: {
+      title: 'Сеть + конденсатор',
+      html: '<p>Исполнительные СД — единицы–десятки ватт. Обычно трёхфазная обмотка на статоре, питание от однофазной сети: фазовый сдвиг даёт конденсатор. Соединение — звезда или треугольник.</p>',
+      view: 'cap'
+    },
+    react: {
+      title: 'Реактивный',
+      html: '<p>Реактивный двигатель с распределённой обмоткой статора. Пусковой момент — за счёт дополнительной реактивной мощности.</p>',
+      view: 'react'
+    },
+    hyst: {
+      title: 'Гистерезисный',
+      html: '<p>Кроме реактивного момента — момент от перемагничивания ротора. Ротор из материала с <strong>прямоугольной</strong> петлей гистерезиса.</p>',
+      view: 'hyst'
+    },
+    gear: {
+      title: 'Редукторный',
+      html: '<p>Понижение скорости без механического редуктора: полюсов на роторе меньше, чем на статоре. Чем больше общее число полюсов и меньше их разность — тем больше коэффициент редукции.</p>',
+      view: 'gear'
+    },
+    roll: {
+      title: 'Катящийся ротор',
+      html: '<p>Конструктивно совмещает синхронный двигатель и эффект планетарного редуктора — низкая скорость вала без внешнего редуктора.</p>',
+      view: 'roll'
+    }
+  }, 'cap');
+
+
+  bindEmAcSlide('.slide-em-ac-stepk-interactive', 'emAcStepkPanel', {
+    dir: {
+      title: 'Куда крутится',
+      html: '<p><strong>Реверсивный</strong> — вал шагает в обе стороны: меняют порядок импульсов на обмотках. Основной тип в САУ.</p><p><strong>Нереверсивный</strong> — только одно направление; схема проще, типичны часовые механизмы.</p><p>Нажмите левую или правую карточку на схеме — уточнение в панели.</p>',
+      view: 'dir'
+    },
+    rotor: {
+      title: 'Чем отличается ротор',
+      html: '<p><strong>Активный</strong> — свои постоянные магниты (N–S), <span class="char-eq"><var>p</var> = 1…4</span>. Поле статора тянет полюса магнита. Тип <em>магнитоэлектрический</em>.</p><p><strong>Реактивный</strong> — магнитов нет, только «гребёнка» из магнитомягкой стали. Зубец сам идёт к возбуждённому полюсу статора (минимум магнитного сопротивления). Тип <em>индукционный</em>.</p>',
+      view: 'rotor'
+    },
+    rev: {
+      title: 'Реверсивный',
+      html: '<p>Вал может шагать <strong>туда и обратно</strong>.</p><p>Принцип: меняют последовательность коммутации обмоток — вектор поля статора поворачивается в нужную сторону, ротор следует за ним.</p><p>Именно такие ШД ставят в автоматике и следящих приводах.</p>',
+      view: 'dir'
+    },
+    nrev: {
+      title: 'Нереверсивный',
+      html: '<p>Крутится <strong>только в одну сторону</strong>.</p><p>Драйвер и обмотки проще: не нужна схема смены порядка фаз. Поэтому широко применяют в часовых механизмах, где направление всегда одно.</p>',
+      view: 'dir'
+    },
+    act: {
+      title: 'Активный ротор',
+      html: '<p>Явнополюсный ротор с <strong>постоянными магнитами</strong>, обычно <span class="char-eq"><var>p</var> = 1…4</span> пар полюсов.</p><p>Отличие: у ротора уже есть своё поле. Статор лишь «переставляет» куда тянуть N и S — шаг и фиксация жёстче.</p><p>Класс: магнитоэлектрический ШД. Число полюсов статора и ротора должно совпадать.</p>',
+      view: 'rotor'
+    },
+    react: {
+      title: 'Реактивный ротор',
+      html: '<p>Сердечник из <strong>магнитомягкого</strong> материала без своих магнитов. Поверхность — выступы и впадины («гребёнка»).</p><p>Отличие: момент появляется из‑за того, что зубец стремится в положение <em>минимального магнитного сопротивления</em> напротив включённого полюса статора.</p><p>Класс: индукционный ШД. Совпадение числа полюсов статора и ротора не обязательно.</p>',
+      view: 'rotor'
+    }
+  }, 'dir');
+
+
+  /* Live stepper motor */
+  (() => {
+    const slide = document.querySelector('.slide-em-ac-step-interactive');
+    if (!slide) return;
+    const panel = document.getElementById('emAcStepPanel');
+    const live = document.getElementById('emAcStepLive');
+    const caption = document.getElementById('emAcStepCaption');
+    const stator = document.getElementById('emAcStepStator');
+    const rotorBody = document.getElementById('emAcStepRotorBody');
+    const rotor = document.getElementById('emAcStepRotor');
+    const pulses = document.getElementById('emAcStepPulses');
+    const btnStep = document.getElementById('emAcStepBtn');
+    const btnAuto = document.getElementById('emAcStepAuto');
+    const btnReset = document.getElementById('emAcStepReset');
+    if (!stator || !rotor || !btnStep) return;
+
+    let phases = 4;
+    let rotorType = 'act';
+    let phase = 0;
+    let angle = 0;
+    let autoTimer = null;
+
+    const NS = 'http://www.w3.org/2000/svg';
+    const el = (name, attrs) => {
+      const node = document.createElementNS(NS, name);
+      Object.keys(attrs || {}).forEach((k) => node.setAttribute(k, String(attrs[k])));
+      return node;
+    };
+
+    const stepDeg = () => 360 / phases;
+
+    const buildStator = () => {
+      while (stator.firstChild) stator.removeChild(stator.firstChild);
+      const R = 82;
+      for (let i = 0; i < phases; i++) {
+        const a = (i * 360) / phases - 90;
+        const rad = (a * Math.PI) / 180;
+        const x = Math.cos(rad) * R;
+        const y = Math.sin(rad) * R;
+        const g = el('g', { class: 'em-ac-step-coil', 'data-i': String(i) });
+        g.appendChild(el('rect', {
+          x: '-11', y: '-16', width: '22', height: '26', rx: '4',
+          fill: '#dbeafe', stroke: '#1d4ed8', 'stroke-width': '1.4',
+          transform: 'translate(' + x.toFixed(1) + ' ' + y.toFixed(1) + ') rotate(' + (a + 90).toFixed(1) + ')'
+        }));
+        const t = el('text', {
+          x: String(x.toFixed(1)),
+          y: String((y + 4).toFixed(1)),
+          'text-anchor': 'middle',
+          'font-size': '12',
+          'font-weight': '700',
+          fill: '#1e3a8a'
+        });
+        t.textContent = String(i + 1);
+        g.appendChild(t);
+        stator.appendChild(g);
+      }
+    };
+
+    const buildRotor = () => {
+      if (!rotorBody) return;
+      while (rotorBody.firstChild) rotorBody.removeChild(rotorBody.firstChild);
+      if (rotorType === 'act') {
+        rotorBody.appendChild(el('path', { d: 'M0 -40 L10 -16 L-10 -16 Z', fill: '#1d4ed8' }));
+        rotorBody.appendChild(el('path', { d: 'M0 40 L10 16 L-10 16 Z', fill: '#c2410c' }));
+        const n = el('text', { x: '0', y: '-46', 'text-anchor': 'middle', 'font-size': '11', 'font-weight': '700', fill: '#1d4ed8' });
+        n.textContent = 'N';
+        const s = el('text', { x: '0', y: '54', 'text-anchor': 'middle', 'font-size': '11', 'font-weight': '700', fill: '#c2410c' });
+        s.textContent = 'S';
+        rotorBody.appendChild(n);
+        rotorBody.appendChild(s);
+      } else {
+        for (let i = 0; i < 8; i++) {
+          rotorBody.appendChild(el('rect', {
+            x: '-6', y: '-52', width: '12', height: '16', rx: '2', fill: '#475569',
+            transform: 'rotate(' + (i * 45) + ')'
+          }));
+        }
+        rotorBody.appendChild(el('circle', { r: '16', fill: '#f1f5f9', stroke: '#94a3b8' }));
+      }
+    };
+
+    const drawPulses = () => {
+      if (!pulses) return;
+      while (pulses.firstChild) pulses.removeChild(pulses.firstChild);
+      for (let i = 0; i < 6; i++) {
+        const x = -45 + i * 18;
+        const active = i === (phase % phases);
+        pulses.appendChild(el('line', {
+          x1: String(x), y1: '24', x2: String(x), y2: active ? '-24' : '10',
+          stroke: active ? '#1d4ed8' : '#cbd5e1',
+          'stroke-width': '3.2',
+          'stroke-linecap': 'round'
+        }));
+      }
+    };
+
+    const highlightCoil = () => {
+      stator.querySelectorAll('.em-ac-step-coil').forEach((g, i) => {
+        const on = i === (phase % phases);
+        const rect = g.querySelector('rect');
+        const t = g.querySelector('text');
+        if (rect) {
+          rect.setAttribute('fill', on ? '#1d4ed8' : '#dbeafe');
+          rect.setAttribute('stroke', on ? '#1e3a8a' : '#1d4ed8');
+        }
+        if (t) t.setAttribute('fill', on ? '#ffffff' : '#1e3a8a');
+      });
+    };
+
+    const updatePanel = () => {
+      if (!panel) return;
+      const rName = rotorType === 'act' ? 'активный (магнитоэлектрический)' : 'реактивный (индукционный)';
+      panel.innerHTML =
+        '<h3>' + phases + '-такт · ' + (rotorType === 'act' ? 'активный' : 'реактивный') + '</h3>' +
+        '<p>Каждый импульс включает очередную обмотку — ротор шагает на <span class="char-eq">Δθ = ' + stepDeg() + '°</span> и фиксируется.</p>' +
+        '<p>Ротор: <strong>' + rName + '</strong>. В САУ чаще реверсивные ШД.</p>';
+    };
+
+    const render = () => {
+      rotor.setAttribute('transform', 'rotate(' + angle + ')');
+      if (live) {
+        const th = Math.round(((angle % 360) + 360) % 360);
+        live.textContent = 'такт ' + ((phase % phases) + 1) + ' / ' + phases + ' · θ = ' + th + '° · шаг ' + stepDeg() + '°';
+      }
+      if (caption) {
+        caption.textContent = (rotorType === 'act' ? 'активный' : 'реактивный') + ' ротор · ' + phases + '-такт';
+      }
+      drawPulses();
+      highlightCoil();
+      updatePanel();
+    };
+
+    const doStep = () => {
+      phase += 1;
+      angle += stepDeg();
+      render();
+    };
+
+    const stopAuto = () => {
+      if (autoTimer) {
+        clearInterval(autoTimer);
+        autoTimer = null;
+      }
+      if (btnAuto) {
+        btnAuto.classList.remove('is-on');
+        btnAuto.textContent = 'Авто';
+      }
+    };
+
+    const rebuild = () => {
+      buildStator();
+      buildRotor();
+      phase = 0;
+      angle = 0;
+      render();
+    };
+
+    slide.addEventListener('click', (e) => {
+      const mode = e.target.closest('.em-ac-step-mode');
+      if (!mode) return;
+      e.stopPropagation();
+      if (mode.dataset.phases) {
+        phases = Number(mode.dataset.phases) || 4;
+        slide.querySelectorAll('.em-ac-step-mode[data-phases]').forEach((b) => {
+          b.classList.toggle('active', b === mode);
+        });
+        stopAuto();
+        rebuild();
+        return;
+      }
+      if (mode.dataset.rotor) {
+        rotorType = mode.dataset.rotor;
+        slide.querySelectorAll('.em-ac-step-mode[data-rotor]').forEach((b) => {
+          b.classList.toggle('active', b === mode);
+        });
+        buildRotor();
+        render();
+      }
+    });
+
+    btnStep.addEventListener('click', (e) => {
+      e.stopPropagation();
+      doStep();
+    });
+    if (btnAuto) {
+      btnAuto.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (autoTimer) {
+          stopAuto();
+          return;
+        }
+        btnAuto.classList.add('is-on');
+        btnAuto.textContent = 'Стоп';
+        autoTimer = setInterval(doStep, 500);
+      });
+    }
+    if (btnReset) {
+      btnReset.addEventListener('click', (e) => {
+        e.stopPropagation();
+        stopAuto();
+        phase = 0;
+        angle = 0;
+        render();
+      });
+    }
+
+    const stopIfHidden = () => {
+      if (!slide.classList.contains('active')) stopAuto();
+    };
+    window.addEventListener('hashchange', stopIfHidden);
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    if (prevBtn) prevBtn.addEventListener('click', stopIfHidden);
+    if (nextBtn) nextBtn.addEventListener('click', stopIfHidden);
+
+    rebuild();
+  })();
+
+
+  /* Stepper commutation + timing (Fig. 3.55 / 3.56) */
+  (() => {
+    const slide = document.querySelector('.slide-em-ac-stepc-interactive');
+    if (!slide) return;
+    const panel = document.getElementById('emAcStepcPanel');
+    const live = document.getElementById('emAcStepcLive');
+    const rotor = document.getElementById('stepcRotor');
+    const wave = document.getElementById('stepcWave');
+    const nowLine = document.getElementById('stepcNow');
+    const btnStep = document.getElementById('emAcStepcBtn');
+    const btnAuto = document.getElementById('emAcStepcAuto');
+    const btnDir = document.getElementById('emAcStepcDir');
+    const btnReset = document.getElementById('emAcStepcReset');
+    const coils = [
+      document.getElementById('stepcW1'),
+      document.getElementById('stepcW2'),
+      document.getElementById('stepcW3'),
+      document.getElementById('stepcW4')
+    ];
+    if (!rotor || !btnStep || !wave || coils.some((c) => !c)) return;
+
+    let mode = 'one';
+    let step = 0;
+    let dir = 1;
+    let autoTimer = null;
+    const Isub = ['I\u2081', 'I\u2082', 'I\u2083', 'I\u2084'];
+
+    const NS = 'http://www.w3.org/2000/svg';
+    const el = (name, attrs) => {
+      const node = document.createElementNS(NS, name);
+      Object.keys(attrs || {}).forEach((k) => node.setAttribute(k, String(attrs[k])));
+      return node;
+    };
+
+    const info = {
+      one: {
+        title: 'а · упрощённый',
+        html: '<p>Ток только в одной обмотке: I\u2081 \u2192 I\u2082 \u2192 I\u2083 \u2192 I\u2084 (импульсы не перекрываются).</p><p>Ротор шагает на <span class="char-eq">90\u00b0</span>: 0\u00b0 / 90\u00b0 / 180\u00b0 / 270\u00b0. Реверс — обратный порядок коммутации.</p>'
+      },
+      two: {
+        title: 'б · больше момент',
+        html: '<p>Две соседние обмотки сразу: I\u2081+I\u2082 \u2192 I\u2082+I\u2083 \u2192 I\u2083+I\u2084 \u2192 I\u2084+I\u2081 (импульсы перекрываются наполовину).</p><p>Ротор между полюсами: <span class="char-eq">45\u00b0, 135\u00b0, 225\u00b0, 315\u00b0</span>. Шаг всё ещё <span class="char-eq">90\u00b0</span>, момент больше.</p>'
+      },
+      half: {
+        title: 'Полшаг · \u0394\u03c6 = 45\u00b0',
+        html: '<p>Чередуют «одна» и «две»: I\u2081 \u2192 I\u2081+I\u2082 \u2192 I\u2082 \u2192 I\u2082+I\u2083 \u2192 \u2026 Тогда шаг <span class="char-eq">45\u00b0</span>.</p><p>Минус: момент за цикл меняется. При четырёх обмотках и p = 1 электрически меньше 45\u00b0 не сделать.</p>'
+      }
+    };
+
+    const patterns = {
+      one: [[0], [1], [2], [3]],
+      two: [[0, 1], [1, 2], [2, 3], [3, 0]],
+      half: [[0], [0, 1], [1], [1, 2], [2], [2, 3], [3], [3, 0]]
+    };
+
+    const angles = {
+      one: [0, 90, 180, 270],
+      two: [45, 135, 225, 315],
+      half: [0, 45, 90, 135, 180, 225, 270, 315]
+    };
+
+    const setCoilOn = (g, on) => {
+      g.querySelectorAll('path').forEach((p) => {
+        p.setAttribute('stroke', on ? '#1d4ed8' : '#94a3b8');
+        p.setAttribute('stroke-width', on ? '2.8' : '2.2');
+      });
+      const t = g.querySelector('text');
+      if (t) t.setAttribute('fill', on ? '#1e3a8a' : '#64748b');
+    };
+
+    const buildWaves = () => {
+      while (wave.firstChild) wave.removeChild(wave.firstChild);
+      const pat = patterns[mode];
+      const n = pat.length;
+      const x0 = 36;
+      const w = 240;
+      const cell = w / n;
+      const rowH = 44;
+      for (let ch = 0; ch < 4; ch++) {
+        const y0 = 28 + ch * rowH;
+        const lbl = el('text', {
+          x: '8', y: String(y0 + 18), 'font-size': '13', 'font-weight': '700', fill: '#475569'
+        });
+        lbl.textContent = Isub[ch];
+        wave.appendChild(lbl);
+        wave.appendChild(el('line', {
+          x1: String(x0), y1: String(y0 + 28), x2: String(x0 + w), y2: String(y0 + 28),
+          stroke: '#e2e8f0', 'stroke-width': '1'
+        }));
+        let s = 0;
+        while (s < n) {
+          const on = pat[s].indexOf(ch) >= 0;
+          if (!on) {
+            const x = x0 + s * cell;
+            wave.appendChild(el('line', {
+              x1: String(x + 1), y1: String(y0 + 26), x2: String(x + cell - 1), y2: String(y0 + 26),
+              stroke: '#cbd5e1', 'stroke-width': '1.5'
+            }));
+            s += 1;
+            continue;
+          }
+          let e = s;
+          while (e + 1 < n && pat[e + 1].indexOf(ch) >= 0) e += 1;
+          const x = x0 + s * cell;
+          const ww = (e - s + 1) * cell;
+          wave.appendChild(el('rect', {
+            x: String(x + 1), y: String(y0 + 4), width: String(ww - 2), height: '22',
+            rx: '2', fill: '#93c5fd', class: 'stepc-seg',
+            'data-s0': String(s), 'data-s1': String(e)
+          }));
+          s = e + 1;
+        }
+      }
+    };
+
+    const highlightWave = () => {
+      const pat = patterns[mode];
+      const n = pat.length;
+      const idx = ((step % n) + n) % n;
+      const x0 = 36;
+      const cell = 240 / n;
+      const x = x0 + idx * cell + cell / 2;
+      if (nowLine) {
+        nowLine.setAttribute('x1', String(x));
+        nowLine.setAttribute('x2', String(x));
+      }
+      wave.querySelectorAll('.stepc-seg').forEach((r) => {
+        const s0 = Number(r.getAttribute('data-s0'));
+        const s1 = Number(r.getAttribute('data-s1'));
+        const active = idx >= s0 && idx <= s1;
+        r.setAttribute('fill', active ? '#1d4ed8' : '#93c5fd');
+      });
+    };
+
+    const render = () => {
+      const pat = patterns[mode];
+      const n = pat.length;
+      const idx = ((step % n) + n) % n;
+      const on = pat[idx];
+      coils.forEach((g, i) => setCoilOn(g, on.indexOf(i) >= 0));
+      const ang = angles[mode][idx];
+      rotor.setAttribute('transform', 'rotate(' + ang + ')');
+      const labels = on.map((i) => Isub[i]).join('+');
+      const stepSz = mode === 'half' ? 45 : 90;
+      const modeName = mode === 'one' ? 'а' : (mode === 'two' ? 'б' : 'полшаг');
+      const arrow = dir > 0 ? '\u2192' : '\u2190';
+      if (live) {
+        live.textContent = modeName + ' · ' + labels + ' · \u03b8 = ' + ang + '\u00b0 · шаг ' + stepSz + '\u00b0 · ' + arrow;
+      }
+      highlightWave();
+      const data = info[mode];
+      if (panel && data) panel.innerHTML = '<h3>' + data.title + '</h3>' + data.html;
+      if (btnDir) btnDir.classList.toggle('is-on', dir < 0);
+    };
+
+    const doStep = () => {
+      step += dir;
+      render();
+    };
+
+    const stopAuto = () => {
+      if (autoTimer) {
+        clearInterval(autoTimer);
+        autoTimer = null;
+      }
+      if (btnAuto) {
+        btnAuto.classList.remove('is-on');
+        btnAuto.textContent = 'Авто';
+      }
+    };
+
+    const setMode = (m) => {
+      mode = m;
+      step = 0;
+      slide.querySelectorAll('.em-ac-stepc-mode').forEach((b) => {
+        b.classList.toggle('active', b.dataset.mode === m);
+      });
+      stopAuto();
+      buildWaves();
+      render();
+    };
+
+    slide.addEventListener('click', (e) => {
+      const btn = e.target.closest('.em-ac-stepc-mode');
+      if (!btn || !btn.dataset.mode) return;
+      e.stopPropagation();
+      setMode(btn.dataset.mode);
+    });
+
+    btnStep.addEventListener('click', (e) => {
+      e.stopPropagation();
+      doStep();
+    });
+    if (btnAuto) {
+      btnAuto.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (autoTimer) {
+          stopAuto();
+          return;
+        }
+        btnAuto.classList.add('is-on');
+        btnAuto.textContent = 'Стоп';
+        autoTimer = setInterval(doStep, 600);
+      });
+    }
+    if (btnDir) {
+      btnDir.addEventListener('click', (e) => {
+        e.stopPropagation();
+        dir = -dir;
+        render();
+      });
+    }
+    if (btnReset) {
+      btnReset.addEventListener('click', (e) => {
+        e.stopPropagation();
+        stopAuto();
+        step = 0;
+        dir = 1;
+        render();
+      });
+    }
+
+    const stopIfHidden = () => {
+      if (!slide.classList.contains('active')) stopAuto();
+    };
+    window.addEventListener('hashchange', stopIfHidden);
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    if (prevBtn) prevBtn.addEventListener('click', stopIfHidden);
+    if (nextBtn) nextBtn.addEventListener('click', stopIfHidden);
+
+    buildWaves();
+    render();
+  })();
+
+
+
+  /* Stepper step division (Fig. 3.57): p magnets + electrical half */
+  (() => {
+    const slide = document.querySelector('.slide-em-ac-stepd-interactive');
+    if (!slide) return;
+    const panel = document.getElementById('emAcStepdPanel');
+    const live = document.getElementById('emAcStepdLive');
+    const formula = document.getElementById('emAcStepdFormula');
+    const rotor = document.getElementById('stepdRotor');
+    const mags = document.getElementById('stepdMags');
+    const polesLbl = document.getElementById('stepdPolesLbl');
+    const wave = document.getElementById('stepdWave');
+    const nowLine = document.getElementById('stepdNow');
+    const btnStep = document.getElementById('emAcStepdBtn');
+    const btnAuto = document.getElementById('emAcStepdAuto');
+    const btnReset = document.getElementById('emAcStepdReset');
+    const coils = [
+      document.getElementById('stepdW1'),
+      document.getElementById('stepdW2'),
+      document.getElementById('stepdW3'),
+      document.getElementById('stepdW4')
+    ];
+    if (!rotor || !btnStep || !wave || !mags || coils.some((c) => !c)) return;
+
+    let p = 1;
+    let elec = 'full';
+    let step = 0;
+    let autoTimer = null;
+    const Isub = ['I\u2081', 'I\u2082', 'I\u2083', 'I\u2084'];
+
+    const NS = 'http://www.w3.org/2000/svg';
+    const el = (name, attrs) => {
+      const node = document.createElementNS(NS, name);
+      Object.keys(attrs || {}).forEach((k) => node.setAttribute(k, String(attrs[k])));
+      return node;
+    };
+
+    // Fig 3.57: sequential non-overlapping; half = one/two alternation
+    const patterns = {
+      full: [[0], [1], [2], [3]],
+      half: [[0], [0, 1], [1], [1, 2], [2], [2, 3], [3], [3, 0]]
+    };
+
+    const panelInfo = {
+      full: {
+        title: 'Полный шаг',
+        html: '<p>Логика рис. 3.57: I\u2081 \u2192 I\u2082 \u2192 I\u2083 \u2192 I\u2084, импульсы не перекрываются.</p><p>Механический шаг <span class="char-eq">\u0394\u03c6 = 90\u00b0 / p</span>. При p = 4 минимум <span class="char-eq">22,5\u00b0</span>.</p>'
+      },
+      half: {
+        title: 'Электрическое дробление',
+        html: '<p>Дробление ещё вдвое: чередуют одну и две обмотки. Шаг <span class="char-eq">\u0394\u03c6 = 45\u00b0 / p</span> \u2014 при p = 4 это <span class="char-eq">11,25\u00b0</span>.</p><p>Дальше у активного ротора трудно: 4 обмотки уже на 16 полюсах. Ещё мельче \u2014 реактивный ротор с \u00abгребёнкой\u00bb (рис. 3.58).</p>'
+      }
+    };
+
+    const setCoilOn = (g, on) => {
+      g.querySelectorAll('path').forEach((path) => {
+        path.setAttribute('stroke', on ? '#1d4ed8' : '#94a3b8');
+        path.setAttribute('stroke-width', on ? '2.8' : '2.2');
+      });
+      const t = g.querySelector('text');
+      if (t) t.setAttribute('fill', on ? '#1e3a8a' : '#64748b');
+    };
+
+    const buildMags = () => {
+      while (mags.firstChild) mags.removeChild(mags.firstChild);
+      const poles = p * 2;
+      for (let i = 0; i < poles; i++) {
+        const ang = (360 / poles) * i;
+        const isN = (i % 2) === 0;
+        const g = el('g', { transform: 'rotate(' + ang + ')' });
+        g.appendChild(el('path', {
+          d: 'M0 -22 L5 -8 L-5 -8 Z',
+          fill: isN ? '#1d4ed8' : '#c2410c'
+        }));
+        const t = el('text', {
+          x: '0', y: '-10', 'text-anchor': 'middle', 'font-size': '9', 'font-weight': '700',
+          fill: isN ? '#1e3a8a' : '#9a3412'
+        });
+        t.textContent = isN ? 'N' : 'S';
+        g.appendChild(t);
+        mags.appendChild(g);
+      }
+      if (polesLbl) {
+        polesLbl.textContent = 'p = ' + p + ' · ' + poles + ' полюсов';
+      }
+    };
+
+    const buildWaves = () => {
+      while (wave.firstChild) wave.removeChild(wave.firstChild);
+      const pat = patterns[elec];
+      const n = pat.length;
+      const x0 = 36;
+      const w = 240;
+      const cell = w / n;
+      const rowH = 44;
+      for (let ch = 0; ch < 4; ch++) {
+        const y0 = 28 + ch * rowH;
+        const lbl = el('text', {
+          x: '8', y: String(y0 + 18), 'font-size': '13', 'font-weight': '700', fill: '#475569'
+        });
+        lbl.textContent = Isub[ch];
+        wave.appendChild(lbl);
+        wave.appendChild(el('line', {
+          x1: String(x0), y1: String(y0 + 28), x2: String(x0 + w), y2: String(y0 + 28),
+          stroke: '#e2e8f0', 'stroke-width': '1'
+        }));
+        let s = 0;
+        while (s < n) {
+          const on = pat[s].indexOf(ch) >= 0;
+          if (!on) {
+            const x = x0 + s * cell;
+            wave.appendChild(el('line', {
+              x1: String(x + 1), y1: String(y0 + 26), x2: String(x + cell - 1), y2: String(y0 + 26),
+              stroke: '#cbd5e1', 'stroke-width': '1.5'
+            }));
+            s += 1;
+            continue;
+          }
+          let e = s;
+          while (e + 1 < n && pat[e + 1].indexOf(ch) >= 0) e += 1;
+          const x = x0 + s * cell;
+          const ww = (e - s + 1) * cell;
+          wave.appendChild(el('rect', {
+            x: String(x + 1), y: String(y0 + 4), width: String(ww - 2), height: '22',
+            rx: '2', fill: '#93c5fd', class: 'stepd-seg',
+            'data-s0': String(s), 'data-s1': String(e)
+          }));
+          s = e + 1;
+        }
+      }
+    };
+
+    const stepDeg = () => (elec === 'half' ? 45 : 90) / p;
+
+    const highlightWave = () => {
+      const pat = patterns[elec];
+      const n = pat.length;
+      const idx = ((step % n) + n) % n;
+      const x0 = 36;
+      const cell = 240 / n;
+      const x = x0 + idx * cell + cell / 2;
+      if (nowLine) {
+        nowLine.setAttribute('x1', String(x));
+        nowLine.setAttribute('x2', String(x));
+      }
+      wave.querySelectorAll('.stepd-seg').forEach((r) => {
+        const s0 = Number(r.getAttribute('data-s0'));
+        const s1 = Number(r.getAttribute('data-s1'));
+        r.setAttribute('fill', (idx >= s0 && idx <= s1) ? '#1d4ed8' : '#93c5fd');
+      });
+    };
+
+    const fmt = (v) => {
+      const s = (Math.round(v * 100) / 100).toString().replace('.', ',');
+      return s;
+    };
+
+    const render = () => {
+      const pat = patterns[elec];
+      const n = pat.length;
+      const idx = ((step % n) + n) % n;
+      const on = pat[idx];
+      coils.forEach((g, i) => setCoilOn(g, on.indexOf(i) >= 0));
+      const dphi = stepDeg();
+      const ang = idx * dphi;
+      rotor.setAttribute('transform', 'rotate(' + ang + ')');
+      const elecName = elec === 'half' ? 'дробление' : 'полный';
+      if (formula) {
+        formula.textContent = (elec === 'half' ? '45' : '90') + '\u00b0 / p';
+      }
+      if (live) {
+        live.textContent = 'p = ' + p + ' · ' + elecName + ' · \u0394\u03c6 = ' + fmt(dphi) + '\u00b0 · \u03b8 = ' + fmt(ang) + '\u00b0';
+      }
+      highlightWave();
+      const data = panelInfo[elec];
+      if (panel && data) {
+        let extra = '';
+        if (p === 4 && elec === 'full') {
+          extra = '<p>При p = 4 четыре обмотки чередуются уже по <strong>16 полюсам</strong> статора.</p>';
+        }
+        panel.innerHTML = '<h3>' + data.title + '</h3>' + data.html + extra;
+      }
+    };
+
+    const doStep = () => {
+      step += 1;
+      render();
+    };
+
+    const stopAuto = () => {
+      if (autoTimer) {
+        clearInterval(autoTimer);
+        autoTimer = null;
+      }
+      if (btnAuto) {
+        btnAuto.classList.remove('is-on');
+        btnAuto.textContent = 'Авто';
+      }
+    };
+
+    const applyModes = () => {
+      slide.querySelectorAll('.em-ac-stepd-mode[data-p]').forEach((b) => {
+        b.classList.toggle('active', Number(b.dataset.p) === p);
+      });
+      slide.querySelectorAll('.em-ac-stepd-mode[data-elec]').forEach((b) => {
+        b.classList.toggle('active', b.dataset.elec === elec);
+      });
+      stopAuto();
+      buildMags();
+      buildWaves();
+      render();
+    };
+
+    slide.addEventListener('click', (e) => {
+      const btn = e.target.closest('.em-ac-stepd-mode');
+      if (!btn) return;
+      e.stopPropagation();
+      if (btn.dataset.p) {
+        p = Number(btn.dataset.p);
+        step = 0;
+        applyModes();
+      } else if (btn.dataset.elec) {
+        elec = btn.dataset.elec;
+        step = 0;
+        applyModes();
+      }
+    });
+
+    btnStep.addEventListener('click', (e) => {
+      e.stopPropagation();
+      doStep();
+    });
+    if (btnAuto) {
+      btnAuto.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (autoTimer) {
+          stopAuto();
+          return;
+        }
+        btnAuto.classList.add('is-on');
+        btnAuto.textContent = 'Стоп';
+        autoTimer = setInterval(doStep, 550);
+      });
+    }
+    if (btnReset) {
+      btnReset.addEventListener('click', (e) => {
+        e.stopPropagation();
+        stopAuto();
+        step = 0;
+        render();
+      });
+    }
+
+    const stopIfHidden = () => {
+      if (!slide.classList.contains('active')) stopAuto();
+    };
+    window.addEventListener('hashchange', stopIfHidden);
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    if (prevBtn) prevBtn.addEventListener('click', stopIfHidden);
+    if (nextBtn) nextBtn.addEventListener('click', stopIfHidden);
+
+    applyModes();
+  })();
+
+
+
+  /* Reactive rotor comb (Fig. 3.58) */
+  (() => {
+    const slide = document.querySelector('.slide-em-ac-stepr-interactive');
+    if (!slide) return;
+    const panel = document.getElementById('emAcSteprPanel');
+    const live = document.getElementById('emAcSteprLive');
+    const rotor = document.getElementById('steprRotor');
+    const flux = document.getElementById('steprFlux');
+    const pole1 = document.getElementById('steprPole1');
+    const pole2 = document.getElementById('steprPole2');
+    const coil1 = document.getElementById('steprCoil1');
+    const coil2 = document.getElementById('steprCoil2');
+    const moveHint = document.getElementById('steprMoveHint');
+    const btnStep = document.getElementById('emAcSteprBtn');
+    const btnAuto = document.getElementById('emAcSteprAuto');
+    const btnReset = document.getElementById('emAcSteprReset');
+    if (!rotor || !flux || !btnStep || !pole1 || !pole2) return;
+
+    const HALF = 14; // half tooth pitch
+    let pole = 1;
+    let stepCount = 0;
+    let autoTimer = null;
+
+    const NS = 'http://www.w3.org/2000/svg';
+    const el = (name, attrs) => {
+      const node = document.createElementNS(NS, name);
+      Object.keys(attrs || {}).forEach((k) => node.setAttribute(k, String(attrs[k])));
+      return node;
+    };
+
+    const info = {
+      1: {
+        title: 'Полюс 1 включён',
+        html: '<p>Зубья ротора и полюса 1 совпали — длина линий в зазоре минимальна, это <strong>минимум магнитного сопротивления</strong> R<sub>м</sub>.</p><p>Под полюсом 2 зубья сдвинуты на <strong>половину зуба</strong> — там совпадения нет.</p><p>Гребёнка на полюсах и роторе даёт очень мелкий шаг: каждый такт сдвигает ротор всего на ½ зуба.</p>'
+      },
+      2: {
+        title: 'Полюс 2 включён',
+        html: '<p>Полюс 1 отключили, включили 2. Линии между зубьями полюса 2 и ротора вытянуты и искривлены → появляется <strong>механический момент</strong>.</p><p>Ротор сдвигается на <span class="char-eq">½ зуба</span>, пока зубья снова не совпадут (снова R<sub>м</sub> мин).</p><p>Так и шагает реактивный ШД: питание полюсов по очереди → ротор «догоняет» минимум сопротивления.</p>'
+      }
+    };
+
+    const setPoleStyle = (g, coil, on) => {
+      g.querySelectorAll('.stepr-stator-tooth').forEach((t) => {
+        t.setAttribute('fill', on ? '#93c5fd' : '#cbd5e1');
+        t.setAttribute('stroke', on ? '#1d4ed8' : '#334155');
+      });
+      if (coil) coil.setAttribute('stroke', on ? '#1d4ed8' : '#94a3b8');
+      const label = g.querySelector('text');
+      if (label) label.setAttribute('fill', on ? '#1d4ed8' : '#64748b');
+    };
+
+    const drawFlux = (activePole) => {
+      while (flux.firstChild) flux.removeChild(flux.firstChild);
+      const centers = activePole === 1 ? [101, 128, 155] : [385, 412, 439];
+      centers.forEach((cx) => {
+        flux.appendChild(el('path', {
+          d: 'M' + cx + ' 116 Q' + (cx - 7) + ' 130 ' + cx + ' 144',
+          fill: 'none', stroke: '#1d4ed8', 'stroke-width': '2', opacity: '0.85'
+        }));
+        flux.appendChild(el('path', {
+          d: 'M' + cx + ' 116 Q' + (cx + 7) + ' 130 ' + cx + ' 144',
+          fill: 'none', stroke: '#1d4ed8', 'stroke-width': '2', opacity: '0.85'
+        }));
+      });
+    };
+
+    const render = () => {
+      const shift = pole === 1 ? 0 : -HALF;
+      rotor.setAttribute('transform', 'translate(' + shift + ' 0)');
+      setPoleStyle(pole1, coil1, pole === 1);
+      setPoleStyle(pole2, coil2, pole === 2);
+      drawFlux(pole);
+      if (moveHint) moveHint.setAttribute('opacity', pole === 2 ? '1' : '0.35');
+      slide.querySelectorAll('.em-ac-stepr-mode').forEach((b) => {
+        b.classList.toggle('active', Number(b.dataset.pole) === pole);
+      });
+      if (live) {
+        if (pole === 1) {
+          live.innerHTML = 'полюс 1 · зубья совпали · R<sub>м</sub> мин · шаг ' + stepCount;
+        } else {
+          live.innerHTML = 'полюс 2 · ротор на ½ зуба влево · R<sub>м</sub> мин · шаг ' + stepCount;
+        }
+      }
+      const data = info[pole];
+      if (panel && data) panel.innerHTML = '<h3>' + data.title + '</h3>' + data.html;
+    };
+
+    const setPole = (n, countStep) => {
+      if (countStep && n !== pole) stepCount += 1;
+      pole = n;
+      render();
+    };
+
+    const doStep = () => {
+      setPole(pole === 1 ? 2 : 1, true);
+    };
+
+    const stopAuto = () => {
+      if (autoTimer) {
+        clearInterval(autoTimer);
+        autoTimer = null;
+      }
+      if (btnAuto) {
+        btnAuto.classList.remove('is-on');
+        btnAuto.textContent = 'Авто';
+      }
+    };
+
+    slide.addEventListener('click', (e) => {
+      const btn = e.target.closest('.em-ac-stepr-mode');
+      if (!btn || !btn.dataset.pole) return;
+      e.stopPropagation();
+      stopAuto();
+      setPole(Number(btn.dataset.pole), true);
+    });
+
+    btnStep.addEventListener('click', (e) => {
+      e.stopPropagation();
+      doStep();
+    });
+    if (btnAuto) {
+      btnAuto.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (autoTimer) {
+          stopAuto();
+          return;
+        }
+        btnAuto.classList.add('is-on');
+        btnAuto.textContent = 'Стоп';
+        autoTimer = setInterval(doStep, 900);
+      });
+    }
+    if (btnReset) {
+      btnReset.addEventListener('click', (e) => {
+        e.stopPropagation();
+        stopAuto();
+        stepCount = 0;
+        pole = 1;
+        render();
+      });
+    }
+
+    const stopIfHidden = () => {
+      if (!slide.classList.contains('active')) stopAuto();
+    };
+    window.addEventListener('hashchange', stopIfHidden);
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    if (prevBtn) prevBtn.addEventListener('click', stopIfHidden);
+    if (nextBtn) nextBtn.addEventListener('click', stopIfHidden);
+
+    render();
+  })();
+
+
+
+  /* Stepper control system (Fig. 3.59) */
+  (() => {
+    const slide = document.querySelector('.slide-em-ac-steps-interactive');
+    if (!slide) return;
+    const panel = document.getElementById('emAcStepsPanel');
+    const live = document.getElementById('emAcStepsLive');
+    const btnRun = document.getElementById('emAcStepsRun');
+    const btnReset = document.getElementById('emAcStepsReset');
+    const rotor = document.getElementById('stepsRotorTick');
+    const integDot = document.getElementById('stepsIntegDot');
+    const amps = [
+      document.getElementById('stepsAmp1'),
+      document.getElementById('stepsAmp2'),
+      document.getElementById('stepsAmp3'),
+      document.getElementById('stepsAmp4')
+    ];
+    if (!panel || !btnRun) return;
+
+    let view = 'chain';
+    let phase = 0;
+    let angle = 0;
+    let timer = null;
+    let integT = 0;
+
+    const info = {
+      chain: {
+        title: 'Функциональная схема',
+        html: '<p>Формирователь импульсов \u2192 коммутатор \u2192 четыре усилителя мощности \u2192 обмотки ШД.</p><p>Коммутатор разводит импульсы по каналам фаз; усилители дают ток в обмотки.</p><p>\u00abПуск\u00bb показывает очередь каналов 1\u20264.</p>',
+        live: 'рис. 3.59 · цепочка управления'
+      },
+      pulse: {
+        title: 'Формирователь импульсов',
+        html: '<p>Задаёт частоту и ритм тактовых импульсов для коммутатора.</p><p>От частоты зависит скорость вала: ШД в САУ \u2014 интегрирующее звено.</p>',
+        live: 'формирователь · частота f'
+      },
+      comm: {
+        title: 'Коммутатор',
+        html: '<p>Распределяет импульсы по четырём каналам \u2014 логика подключения обмоток (одна / две / полшаг).</p><p>Порядок каналов задаёт направление вращения.</p>',
+        live: 'коммутатор · 4 канала'
+      },
+      amp: {
+        title: 'Усилители мощности',
+        html: '<p>Четыре одинаковых канала: слабый сигнал коммутатора превращают в ток обмотки.</p><p>Логического уровня мало \u2014 нужен ток.</p>',
+        live: '4 \u00d7 усилитель мощности'
+      },
+      motor: {
+        title: 'ШД',
+        html: '<p>Четыре обмотки принимают ток по очереди \u2014 ротор шагает и фиксируется.</p><p>Угловая скорость пропорциональна частоте коммутации.</p>',
+        live: '\u03c9 \u223c f\u043a\u043e\u043c\u043c'
+      },
+      integ: {
+        title: 'Интегрирующее звено',
+        html: '<p>ШД в системе управления \u2014 <strong>интегрирующее звено</strong>: скорость вала пропорциональна частоте коммутации обмоток.</p><p>Каждый импульс добавляет фиксированный угол \u0394\u03c6. Угол накапливается: \u03b8 = \u222b \u03c9 dt.</p>',
+        live: '\u03c9 \u223c f \u00b7 \u03b8 растёт с каждым импульсом'
+      },
+      limit: {
+        title: 'Предел частоты',
+        html: '<p>Частоту нельзя поднимать безгранично: переходный процесс (угловые колебания вала) на каждом шаге должен <strong>успеть затухнуть</strong> до следующей коммутации.</p><p>Иначе ротор не \u00abсадится\u00bb на шаг \u2014 пропуск шагов.</p>',
+        live: 'f\u2191 только пока затухнут колебания шага'
+      },
+      hold: {
+        title: 'Удержание позиции',
+        html: '<p>Сравните два типа ротора после снятия питания.</p><p>Нажмите карточку слева или справа.</p>',
+        live: 'активный держит · реактивный — только под током'
+      },
+      holdAct: {
+        title: 'Активный ротор',
+        html: '<p>Постоянные магниты дают свой момент: угол удерживается <strong>даже без питания</strong>.</p><p>Минус: шаг обычно крупнее, чем у реактивного.</p>',
+        live: 'активный · позиция при U = 0'
+      },
+      holdReact: {
+        title: 'Реактивный ротор',
+        html: '<p>Зубчатое железо без магнитов: своего момента нет. Без тока позиция <strong>не держится</strong>.</p><p>Плюс: гребёнка позволяет сделать шаг очень мелким.</p>',
+        live: 'реактивный · нужен ток для фиксации'
+      }
+    };
+
+    const lines = ['stepsL1', 'stepsL2a', 'stepsL2b', 'stepsL2c', 'stepsL2d', 'stepsL3a', 'stepsL3b', 'stepsL3c', 'stepsL3d'];
+
+    const setStroke = (id, on) => {
+      const n = document.getElementById(id);
+      if (!n) return;
+      n.setAttribute('stroke', on ? '#1d4ed8' : '#94a3b8');
+      n.setAttribute('stroke-width', on ? '2.4' : (id === 'stepsL1' ? '2.2' : '1.6'));
+      if (id === 'stepsL1') n.setAttribute('marker-end', on ? 'url(#stepsArrOn)' : 'url(#stepsArr)');
+    };
+
+    const setBlock = (id, on) => {
+      const n = document.getElementById(id);
+      if (!n) return;
+      n.setAttribute('stroke', on ? '#1d4ed8' : '#cbd5e1');
+      n.setAttribute('stroke-width', on ? '2.4' : '1.8');
+      n.setAttribute('fill', on ? '#eff6ff' : '#fff');
+    };
+
+    const setAmp = (g, on) => {
+      if (!g) return;
+      const r = g.querySelector('rect');
+      const t = g.querySelector('text');
+      if (r) {
+        r.setAttribute('stroke', on ? '#1d4ed8' : '#cbd5e1');
+        r.setAttribute('fill', on ? '#dbeafe' : '#fff');
+        r.setAttribute('stroke-width', on ? '2.2' : '1.6');
+      }
+      if (t) t.setAttribute('fill', on ? '#1e3a8a' : '#334155');
+    };
+
+    const showView = (name) => {
+      view = name;
+      slide.querySelectorAll('.em-ac-view').forEach((g) => {
+        g.classList.toggle('is-on', g.getAttribute('data-view') === name);
+      });
+      slide.querySelectorAll('.em-ac-steps-mode').forEach((b) => {
+        b.classList.toggle('active', b.dataset.view === name);
+      });
+    };
+
+    const showTopic = (key) => {
+      const data = info[key] || info.chain;
+      if (panel) panel.innerHTML = '<h3>' + data.title + '</h3>' + data.html;
+      if (live) live.innerHTML = data.live;
+
+      if (key === 'integ' || key === 'limit' || key === 'hold' || key === 'holdAct' || key === 'holdReact') {
+        const v = (key === 'holdAct' || key === 'holdReact') ? 'hold' : key;
+        showView(v);
+      } else if (key === 'chain' || key === 'pulse' || key === 'comm' || key === 'amp' || key === 'motor') {
+        showView('chain');
+        setBlock('stepsBlkPulse', key === 'pulse' || key === 'chain');
+        setBlock('stepsBlkComm', key === 'comm' || key === 'chain');
+        setBlock('stepsBlkMotor', key === 'motor' || key === 'chain');
+        amps.forEach((a) => setAmp(a, key === 'amp' || key === 'chain'));
+        lines.forEach((id) => setStroke(id, key === 'chain'));
+      }
+    };
+
+    const paintPhase = () => {
+      showView('chain');
+      setBlock('stepsBlkPulse', true);
+      setBlock('stepsBlkComm', true);
+      setStroke('stepsL1', true);
+      ['stepsL2a', 'stepsL2b', 'stepsL2c', 'stepsL2d'].forEach((id, i) => setStroke(id, i === phase));
+      amps.forEach((a, i) => setAmp(a, i === phase));
+      ['stepsL3a', 'stepsL3b', 'stepsL3c', 'stepsL3d'].forEach((id, i) => setStroke(id, i === phase));
+      setBlock('stepsBlkMotor', true);
+      angle = (angle + 90) % 360;
+      if (rotor) rotor.setAttribute('transform', 'rotate(' + angle + ' 490 140)');
+      if (live) live.textContent = 'канал ' + (phase + 1) + ' · θ = ' + angle + '° · ω ∼ f';
+    };
+
+    const paintInteg = () => {
+      showView('integ');
+      integT = (integT + 1) % 24;
+      const x = 40 + integT * 20;
+      const y = 200 - integT * 5;
+      if (integDot) {
+        integDot.setAttribute('cx', String(x));
+        integDot.setAttribute('cy', String(y));
+      }
+      if (live) live.textContent = 'f задана · θ растёт · шаг ' + integT;
+    };
+
+    const stopRun = () => {
+      if (timer) {
+        clearInterval(timer);
+        timer = null;
+      }
+      if (btnRun) {
+        btnRun.classList.remove('is-on');
+        btnRun.textContent = 'Пуск';
+      }
+    };
+
+    const startRun = () => {
+      stopRun();
+      btnRun.classList.add('is-on');
+      btnRun.textContent = 'Стоп';
+      if (view === 'integ') {
+        integT = 0;
+        timer = setInterval(paintInteg, 280);
+        paintInteg();
+        return;
+      }
+      showTopic('chain');
+      phase = 0;
+      paintPhase();
+      timer = setInterval(() => {
+        phase = (phase + 1) % 4;
+        paintPhase();
+      }, 550);
+    };
+
+    slide.addEventListener('click', (e) => {
+      const mode = e.target.closest('.em-ac-steps-mode');
+      if (mode && mode.dataset.view) {
+        e.stopPropagation();
+        stopRun();
+        const v = mode.dataset.view;
+        showTopic(v);
+        return;
+      }
+      const hit = e.target.closest('.em-ac-hit');
+      if (hit && hit.dataset.info) {
+        e.stopPropagation();
+        stopRun();
+        showTopic(hit.dataset.info);
+      }
+    });
+
+    btnRun.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (timer) {
+        stopRun();
+        showTopic(view);
+        return;
+      }
+      startRun();
+    });
+    if (btnReset) {
+      btnReset.addEventListener('click', (e) => {
+        e.stopPropagation();
+        stopRun();
+        phase = 0;
+        angle = 0;
+        integT = 0;
+        if (rotor) rotor.setAttribute('transform', 'rotate(0 490 140)');
+        if (integDot) {
+          integDot.setAttribute('cx', '40');
+          integDot.setAttribute('cy', '200');
+        }
+        showTopic('chain');
+      });
+    }
+
+    const stopIfHidden = () => {
+      if (!slide.classList.contains('active')) stopRun();
+    };
+    window.addEventListener('hashchange', stopIfHidden);
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    if (prevBtn) prevBtn.addEventListener('click', stopIfHidden);
+    if (nextBtn) nextBtn.addEventListener('click', stopIfHidden);
+
+    showTopic('chain');
+  })();
+
+
   bindEmAcSlide('.slide-em-ac-srot-interactive', 'emAcSrotPanel', {
     sal: {
       title: 'Торчат',
@@ -10877,6 +12190,175 @@
 
 
   /* ===== Lecture 7/8: breaker purpose ===== */
+
+  /* Lecture 8: mismatch meters (ИР) */
+  bindEmAcSlide('.slide-ir-bridge-interactive', 'irBridgePanel', {
+    cmd: {
+      title: 'φвх · задание',
+      html: '<p>Угол, который нужно отработать: рукоятка, сельсин-датчик, код.</p><p>На лекции 7 мы крутили вал — но ещё не сравнивали его с заданием.</p>'
+    },
+    load: {
+      title: 'φн · вал',
+      html: '<p>Угол нагрузки после ШД / ИД и редуктора — то, что получилось на выходе.</p><p>Его возвращают обратной связью.</p>'
+    },
+    err: {
+      title: 'Δφ = φвх − φн',
+      html: '<p>Рассогласование — разность задания и обратной связи.</p><p>Пока Δφ ≠ 0, привод должен крутить вал в нужную сторону.</p>'
+    },
+    ir: {
+      title: 'ИР',
+      html: '<p>Измеритель рассогласования сравнивает φвх и φн и выдаёт электрический сигнал ошибки.</p>'
+    }
+  }, 'cmd');
+
+  bindEmAcSlide('.slide-ir-what-interactive', 'irWhatPanel', {
+    cmp: {
+      title: '1 · Сравнить',
+      html: '<p>ИР получает два угла: задание <span class="char-eq">φвх</span> и обратную связь <span class="char-eq">φн</span> с вала нагрузки.</p><p>Пока они разные — есть ошибка, которую нужно отработать.</p>',
+      live: 'φвх и φн приходят на сумматор'
+    },
+    dphi: {
+      title: '2 · Рассогласование Δφ',
+      html: '<p><span class="char-eq">Δφ = φвх − φн</span> — разность углов.</p><p>Знак показывает, в какую сторону нагрузка «отстаёт» от задания.</p>',
+      live: 'Δφ = φвх − φн'
+    },
+    u: {
+      title: '3 · Сигнал U',
+      html: '<p><span class="char-eq">U = Kизм · Δφ</span> — электрический сигнал ошибки.</p><p>Его усиливают и подают на исполнительный двигатель: знак — куда крутить, величина — насколько сильно.</p>',
+      live: 'U = Kизм · Δφ · на двигатель'
+    }
+  }, 'cmp');
+
+  (() => {
+    const slide = document.querySelector('.slide-ir-what-interactive');
+    if (!slide) return;
+    const live = document.getElementById('irWhatLive');
+    const texts = {
+      cmp: 'φвх и φн → на сумматор',
+      dphi: 'Δφ = φвх − φн',
+      u: 'U = Kизм · Δφ → двигатель'
+    };
+    slide.addEventListener('click', (e) => {
+      const el = e.target.closest('[data-info]');
+      if (!el || !live) return;
+      const key = el.dataset.info;
+      if (texts[key]) live.textContent = texts[key];
+    });
+  })();
+
+  bindEmAcSlide('.slide-ir-where-interactive', 'irWherePanel', {
+    servo: {
+      title: 'Следящие системы',
+      html: '<p>Главное применение: силовые следящие приводы — нагрузка должна повторять заданный угол.</p><p>ИР — первый блок контура: без ошибки нет управления.</p>'
+    },
+    remote: {
+      title: 'Дистанционная передача угла',
+      html: '<p>Системы автоматической дистанционной передачи угла: угол «здесь» повторяется «там».</p>'
+    },
+    sensor: {
+      title: 'Датчик угла вала',
+      html: '<p>Элементы ИР используют и сами по себе — как датчики углового положения вала.</p>'
+    },
+    digit: {
+      title: 'В цифру для АСУ',
+      html: '<p>Показания часто переводят в цифровой код и отдают автоматизированной системе.</p>'
+    }
+  }, 'servo');
+
+  bindEmAcSlide('.slide-ir-loop-interactive', 'irLoopPanel', {
+    sum: {
+      title: 'Сумматор',
+      html: '<p>Сравнивает φвх и φн. Внутри пунктирной рамки ИР на рис. 3.61.</p>'
+    },
+    kizm: {
+      title: 'Kизм',
+      html: '<p>Коэффициент измерения: масштаб «угол → электрический сигнал».</p>'
+    },
+    ampc: {
+      title: 'Усилительно-преобразующее',
+      html: '<p>Согласует сигнал ИР с входом усилителя мощности (форма, уровень).</p>'
+    },
+    pw: {
+      title: 'Усилитель мощности',
+      html: '<p>Даёт ток/напряжение, достаточные для исполнительного двигателя.</p>'
+    },
+    mot: {
+      title: 'Исполнительный двигатель',
+      html: '<p>Крутит вал в сторону уменьшения рассогласования.</p>'
+    },
+    red: {
+      title: 'Редуктор',
+      html: '<p>Согласует скорость и момент двигателя с нагрузкой; на выходе угол φн.</p>'
+    },
+    load: {
+      title: 'Нагрузка',
+      html: '<p>Исполнительный механизм. С его вала берут обратную связь по углу.</p>'
+    }
+  }, 'kizm');
+
+  (() => {
+    const slide = document.querySelector('.slide-ir-k-interactive');
+    if (!slide) return;
+    const slider = document.getElementById('irKDelta');
+    const val = document.getElementById('irKDeltaVal');
+    const live = document.getElementById('irKLive');
+    const barIn = document.getElementById('irKBarIn');
+    const barOut = document.getElementById('irKBarOut');
+    if (!slider || !barIn || !barOut) return;
+    const K = 1;
+    const render = () => {
+      const d = Number(slider.value);
+      if (val) val.textContent = d + '°';
+      const h = Math.abs(d) * (50 / 90);
+      const y = d >= 0 ? 100 : 100 - h;
+      barIn.setAttribute('y', String(y));
+      barIn.setAttribute('height', String(Math.max(h, 1)));
+      barIn.setAttribute('fill', d >= 0 ? '#93c5fd' : '#fdba74');
+      const hout = Math.abs(d) * K * (50 / 90);
+      const yout = d >= 0 ? 100 : 100 - hout;
+      barOut.setAttribute('y', String(yout));
+      barOut.setAttribute('height', String(Math.max(hout, 1)));
+      barOut.setAttribute('fill', d >= 0 ? '#1d4ed8' : '#c2410c');
+      if (live) live.textContent = 'Kизм = ' + K + ' · Δφ = ' + d + '° · U = ' + (K * d);
+    };
+    slider.addEventListener('input', render);
+    render();
+  })();
+
+  (() => {
+    const slide = document.querySelector('.slide-ir-types-interactive');
+    if (!slide) return;
+    const panel = document.getElementById('irTypesPanel');
+    const info = {
+      pot: {
+        title: 'Потенциометрические',
+        html: '<p>Угол двигает движок делителя — напряжение пропорционально углу.</p><p>Два датчика (задание и нагрузка) дают разность — сигнал рассогласования.</p>'
+      },
+      tr: {
+        title: 'Трансформаторные',
+        html: '<p>Сельсины, вращающиеся трансформаторы: угол меняет магнитную связь обмоток.</p><p>На выходе переменное напряжение, зависящее от рассогласования.</p>'
+      }
+    };
+    const show = (key) => {
+      slide.querySelectorAll('.em-ac-view').forEach((g) => {
+        g.classList.toggle('is-on', g.getAttribute('data-view') === key);
+      });
+      slide.querySelectorAll('.app-purpose-card').forEach((b) => {
+        b.classList.toggle('active', b.dataset.info === key);
+      });
+      const data = info[key];
+      if (panel && data) panel.innerHTML = '<h3>' + data.title + '</h3>' + data.html;
+    };
+    slide.addEventListener('click', (e) => {
+      const btn = e.target.closest('.app-purpose-card');
+      if (!btn || !btn.dataset.info) return;
+      e.stopPropagation();
+      show(btn.dataset.info);
+    });
+    show('pot');
+  })();
+
+
   const cbPurposeSlide = document.querySelector('.slide-cb-purpose-interactive');
   if (cbPurposeSlide) {
     const panel = document.getElementById('cbPurposePanel');

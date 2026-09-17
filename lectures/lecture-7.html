@@ -30,6 +30,15 @@
 <li>Три вида нагрузок</li>
 <li>Нагрузка и поток Φ₀</li>
 <li>ЭДС и напряжение</li>
+<li>Асинхронный тахогенератор</li>
+<li>Синхронные двигатели</li>
+<li>Исполнительные СД</li>
+<li>Виды ШД</li>
+<li>Шаговые двигатели</li>
+<li>Логика обмоток ШД</li>
+<li>Дробление шага</li>
+<li>Реактивный ротор</li>
+<li>Система управления ШД</li>
 </ol></div></section>
 
 <section class="slide slide-em-2ph-dyn-interactive slide-em-2ph-bridge-interactive">
@@ -1292,8 +1301,6 @@
 </div>
 </section>
 
-</section>
-
 <section class="slide slide-em-ac-interactive slide-em-ac-loads-interactive">
 <h2>Три вида нагрузок</h2>
 <div class="slide-body asutp-interactive">
@@ -1523,9 +1530,747 @@
 </div>
 </section>
 
+<section class="slide slide-em-ac-interactive slide-em-ac-atg-interactive">
+<h2>Асинхронные тахогенераторы</h2>
+<div class="slide-body asutp-interactive">
+<div class="asutp-main">
+<p class="asutp-hint">Крутите ползунок n — появятся Φq и Uтг. Частота выхода всегда равна частоте Uв</p>
+<div class="em-ac-atg-layout">
+<div class="em-ac-atg-presets" role="group" aria-label="Режим">
+<button type="button" class="em-ac-atg-btn active" data-n="0" data-info="still">а · стоит</button>
+<button type="button" class="em-ac-atg-btn" data-n="40" data-info="spin">медленно</button>
+<button type="button" class="em-ac-atg-btn" data-n="100" data-info="fast">б · быстро</button>
+<button type="button" class="em-ac-atg-btn" data-n="-1" data-info="dev">устройство</button>
+</div>
+<div class="em-ac-atg-slider-row">
+<label for="emAcAtgN">Частота вращения n</label>
+<input type="range" id="emAcAtgN" min="0" max="100" value="0" step="5">
+<span class="em-ac-atg-n-val" id="emAcAtgNVal">0%</span>
+</div>
+<div class="highlight-box highlight-box-compact em-ac-atg-eq" aria-live="polite">
+<p class="cap-eq char-eq">U<sub>тг</sub> ∼ n</p>
+<p class="em-ac-atg-eq-live" id="emAcAtgEqLive">n = 0 → Φ<sub>q</sub> = 0 → U<sub>тг</sub> = 0</p>
+<div class="em-ac-atg-ubar">
+<span class="em-ac-atg-ubar-label">Uтг</span>
+<div class="em-ac-atg-ubar-track">
+<div class="em-ac-atg-ubar-fill" id="emAcAtgUBar" style="width:0%"></div>
+</div>
+<span class="em-ac-atg-ubar-val" id="emAcAtgUVal">0%</span>
+</div>
+</div>
+<div class="asutp-diagram-wrap">
+<svg class="em-svg em-ac-svg em-ac-atg-svg" id="emAcAtgSvg" viewBox="0 0 520 240" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="Живая схема асинхронного тахогенератора">
+<defs>
+<marker id="atgArrB" markerWidth="8" markerHeight="7" refX="7" refY="3.5" orient="auto"><path d="M0 0 L8 3.5 L0 7 Z" fill="#1d4ed8"/></marker>
+<marker id="atgArrV" markerWidth="8" markerHeight="7" refX="7" refY="3.5" orient="auto"><path d="M0 0 L8 3.5 L0 7 Z" fill="#7c3aed"/></marker>
+<marker id="atgArrG" markerWidth="8" markerHeight="7" refX="7" refY="3.5" orient="auto"><path d="M0 0 L8 3.5 L0 7 Z" fill="#059669"/></marker>
+</defs>
+<rect width="520" height="240" fill="#fafafa"/>
+
+<!-- статор / обмотки -->
+<g transform="translate(260 118)">
+<rect x="-36" y="-108" width="72" height="26" rx="4" fill="#dbeafe" stroke="#1d4ed8" stroke-width="1.6"/>
+<text x="0" y="-90" text-anchor="middle" font-size="14" font-weight="700" fill="#1e3a8a">Uв</text>
+<rect x="-118" y="-28" width="32" height="56" rx="4" fill="#fef3c7" stroke="#d97706" stroke-width="1.6"/>
+<rect x="86" y="-28" width="32" height="56" rx="4" fill="#fef3c7" stroke="#d97706" stroke-width="1.6"/>
+<text x="0" y="108" text-anchor="middle" font-size="16" font-weight="700" fill="#b45309" id="atgULabel">Uтг = 0</text>
+
+<!-- ротор -->
+<circle r="62" fill="#fff" stroke="#1e293b" stroke-width="2.2"/>
+<g id="atgRotor" class="em-ac-atg-rotor is-stopped">
+<line x1="-42" y1="0" x2="42" y2="0" stroke="#64748b" stroke-width="2.4"/>
+<line x1="0" y1="-42" x2="0" y2="42" stroke="#64748b" stroke-width="2.4"/>
+</g>
+
+<!-- Φ0 вниз -->
+<line x1="8" y1="-48" x2="8" y2="-14" stroke="#1d4ed8" stroke-width="2.6" marker-end="url(#atgArrB)"/>
+<text x="20" y="-28" font-size="15" font-weight="700" fill="#1d4ed8">Φ₀</text>
+<!-- Φd вверх -->
+<line x1="-18" y1="8" x2="-18" y2="-28" stroke="#7c3aed" stroke-width="2.2" marker-end="url(#atgArrV)"/>
+<text x="-48" y="-14" font-size="14" font-weight="700" fill="#7c3aed">Φd</text>
+<!-- Φq вправо, длина от n -->
+<g id="atgPhiQ" opacity="0">
+<line id="atgPhiQLine" x1="0" y1="0" x2="40" y2="0" stroke="#059669" stroke-width="2.8" marker-end="url(#atgArrG)"/>
+<text id="atgPhiQLbl" x="46" y="-8" font-size="15" font-weight="700" fill="#059669">Φq</text>
+</g>
+</g>
+</svg>
+</div>
+</div>
+</div>
+<aside class="asutp-panel" id="emAcAtgPanel">
+<h3>а · ротор стоит</h3>
+<p>Обмотка возбуждения создаёт пульсирующий поток <span class="char-eq">Φ<sub>0</sub></span>. В роторе — встречный <span class="char-eq">Φ<sub>d</sub></span>. Сигнальная обмотка перпендикулярна → <span class="char-eq">U<sub>тг</sub> = 0</span>.</p>
+</aside>
+</div>
+</section>
+
+<section class="slide slide-em-ac-interactive slide-em-ac-syncm-interactive">
+<h2>Синхронные двигатели</h2>
+<div class="slide-body asutp-interactive">
+<div class="asutp-main">
+<p class="asutp-hint">Ротор идёт строго с полем. Нажмите звено: формула → проблема пуска → асинхронный пуск</p>
+<div class="asutp-diagram-wrap">
+<svg class="em-svg em-ac-svg em-ac-syncm-svg" viewBox="0 0 540 248" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="Синхронный двигатель: скорость поля и пуск">
+<defs>
+<marker id="syncmArrB" markerWidth="7" markerHeight="6" refX="6" refY="3" orient="auto"><path d="M0 0 L7 3 L0 6 Z" fill="#1d4ed8"/></marker>
+</defs>
+<rect width="540" height="248" fill="#fafafa"/>
+
+<g class="em-ac-hit" data-info="eq" style="cursor:pointer">
+<rect x="24" y="12" width="492" height="56" rx="8" fill="#eff6ff" stroke="#1e40af" stroke-width="1.6"/>
+<text x="270" y="48" text-anchor="middle" font-size="22" font-weight="700" fill="#1e3a8a">ω₀ = 2π f / p</text>
+</g>
+
+<g class="em-ac-hit" data-info="sync" style="cursor:pointer">
+<rect x="24" y="84" width="150" height="140" rx="8" fill="#fff" stroke="#1e293b" stroke-width="1.5"/>
+<circle cx="99" cy="142" r="36" fill="#eff6ff" stroke="#1d4ed8" stroke-width="1.6"/>
+<path d="M99 118 A24 24 0 0 1 123 142" fill="none" stroke="#94a3b8" stroke-width="1.4" marker-end="url(#syncmArrB)"/>
+<text x="99" y="148" text-anchor="middle" font-size="13" font-weight="700" fill="#1d4ed8">ω₀</text>
+<text x="99" y="198" text-anchor="middle" font-size="13" font-weight="700" fill="#1e293b">ротор = поле</text>
+<text x="99" y="216" text-anchor="middle" font-size="12" fill="#64748b">синхронизм</text>
+</g>
+
+<text x="194" y="158" text-anchor="middle" font-size="26" font-weight="700" fill="#94a3b8">→</text>
+
+<g class="em-ac-hit" data-info="start" style="cursor:pointer">
+<rect x="214" y="84" width="150" height="140" rx="8" fill="#fff" stroke="#1e293b" stroke-width="1.5"/>
+<text x="289" y="128" text-anchor="middle" font-size="15" font-weight="700" fill="#c2410c">сам не пускается</text>
+<text x="289" y="158" text-anchor="middle" font-size="13" fill="#475569">с места до ω₀</text>
+<text x="289" y="186" text-anchor="middle" font-size="13" fill="#475569">нужен разгон</text>
+<text x="289" y="208" text-anchor="middle" font-size="12" fill="#64748b">асинхронный пуск</text>
+</g>
+
+<text x="384" y="158" text-anchor="middle" font-size="26" font-weight="700" fill="#94a3b8">→</text>
+
+<g class="em-ac-hit" data-info="cage" style="cursor:pointer">
+<rect x="404" y="84" width="112" height="140" rx="8" fill="#fff" stroke="#1e293b" stroke-width="1.5"/>
+<circle cx="460" cy="138" r="28" fill="#f8fafc" stroke="#059669" stroke-width="1.8"/>
+<line x1="442" y1="138" x2="478" y2="138" stroke="#059669" stroke-width="2"/>
+<line x1="460" y1="120" x2="460" y2="156" stroke="#059669" stroke-width="2"/>
+<text x="460" y="188" text-anchor="middle" font-size="12" font-weight="700" fill="#047857">клетка</text>
+<text x="460" y="208" text-anchor="middle" font-size="12" fill="#64748b">→ синхр.</text>
+</g>
+</svg>
+</div>
+<div class="asutp-tabs">
+<button type="button" class="asutp-tab active" data-info="eq">ω₀</button>
+<button type="button" class="asutp-tab" data-info="sync">Синхронизм</button>
+<button type="button" class="asutp-tab" data-info="start">Пуск</button>
+<button type="button" class="asutp-tab" data-info="cage">Клетка</button>
+</div>
+</div>
+<aside class="asutp-panel" id="emAcSyncmPanel">
+<h3>Скорость поля</h3>
+<p>На статор подают трёхфазное напряжение — круговое вращающееся поле. Его угловая скорость:</p>
+<p><span class="char-eq">ω<sub>0</sub> = 2π <var>f</var> / <var>p</var></span>, где <span class="char-eq"><var>f</var></span> — частота сети, <span class="char-eq"><var>p</var></span> — число пар полюсов.</p>
+</aside>
+</div>
+</section>
+
+<section class="slide slide-em-ac-interactive slide-em-ac-syncx-interactive">
+<h2>Исполнительные синхронные</h2>
+<div class="slide-body asutp-interactive">
+<div class="asutp-main">
+<p class="asutp-hint">Маломощные СД для САУ — как обходят трудный пуск. Нажмите тип</p>
+<div class="app-purpose-grid em-fast-grid em-ac-syncx-cards">
+<button type="button" class="app-purpose-card active" data-info="cap"><strong>Сеть + C</strong><span>однофазный пуск</span></button>
+<button type="button" class="app-purpose-card" data-info="react"><strong>Реактивный</strong><span>распред. обмотка</span></button>
+<button type="button" class="app-purpose-card" data-info="hyst"><strong>Гистерезисный</strong><span>петля ротора</span></button>
+<button type="button" class="app-purpose-card" data-info="gear"><strong>Редукторный</strong><span>разные полюса</span></button>
+<button type="button" class="app-purpose-card" data-info="roll"><strong>Катящийся</strong><span>как планетарка</span></button>
+</div>
+<div class="asutp-diagram-wrap">
+<svg class="em-svg em-ac-svg em-ac-syncx-svg" viewBox="0 0 540 200" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="Исполнительные синхронные двигатели">
+<rect width="540" height="200" fill="#fafafa"/>
+
+<g class="em-ac-view is-on" data-view="cap">
+<rect x="70" y="36" width="400" height="128" rx="10" fill="#fff" stroke="#e2e8f0" stroke-width="1.5"/>
+<text x="270" y="72" text-anchor="middle" font-size="16" font-weight="700" fill="#1e3a8a">трёхфазная обмотка → однофазная сеть</text>
+<text x="270" y="104" text-anchor="middle" font-size="15" fill="#334155">конденсатор C даёт сдвиг ≈ 90°</text>
+<text x="270" y="136" text-anchor="middle" font-size="14" fill="#64748b">звезда или треугольник · до десятков Вт</text>
+</g>
+
+<g class="em-ac-view" data-view="react">
+<rect x="70" y="36" width="400" height="128" rx="10" fill="#fff" stroke="#e2e8f0" stroke-width="1.5"/>
+<text x="270" y="78" text-anchor="middle" font-size="16" font-weight="700" fill="#1e3a8a">реактивный момент</text>
+<text x="270" y="112" text-anchor="middle" font-size="14" fill="#475569">распределённая обмотка статора</text>
+<text x="270" y="140" text-anchor="middle" font-size="14" fill="#64748b">пусковой момент от реактивной мощности</text>
+</g>
+
+<g class="em-ac-view" data-view="hyst">
+<rect x="70" y="36" width="400" height="128" rx="10" fill="#fff" stroke="#e2e8f0" stroke-width="1.5"/>
+<text x="270" y="78" text-anchor="middle" font-size="16" font-weight="700" fill="#1e3a8a">+ перемагничивание ротора</text>
+<text x="270" y="112" text-anchor="middle" font-size="14" fill="#475569">материал с прямоугольной петлей гистерезиса</text>
+<text x="270" y="140" text-anchor="middle" font-size="14" fill="#64748b">доп. момент без «клетки» на полюсах</text>
+</g>
+
+<g class="em-ac-view" data-view="gear">
+<rect x="70" y="36" width="400" height="128" rx="10" fill="#fff" stroke="#e2e8f0" stroke-width="1.5"/>
+<text x="270" y="78" text-anchor="middle" font-size="16" font-weight="700" fill="#1e3a8a">редукция без механики</text>
+<text x="270" y="112" text-anchor="middle" font-size="14" fill="#475569">полюсов на роторе меньше, чем на статоре</text>
+<text x="270" y="140" text-anchor="middle" font-size="14" fill="#64748b">больше полюсов, меньше разность → сильнее редукция</text>
+</g>
+
+<g class="em-ac-view" data-view="roll">
+<rect x="70" y="36" width="400" height="128" rx="10" fill="#fff" stroke="#e2e8f0" stroke-width="1.5"/>
+<text x="270" y="78" text-anchor="middle" font-size="16" font-weight="700" fill="#1e3a8a">катящийся ротор</text>
+<text x="270" y="112" text-anchor="middle" font-size="14" fill="#475569">синхронный двигатель + эффект планетарки</text>
+<text x="270" y="140" text-anchor="middle" font-size="14" fill="#64748b">низкая скорость вала без внешнего редуктора</text>
+</g>
+</svg>
+</div>
+</div>
+<aside class="asutp-panel" id="emAcSyncxPanel">
+<h3>Сеть + конденсатор</h3>
+<p>Исполнительные СД — единицы–десятки ватт. Обычно трёхфазная обмотка на статоре, но питание от однофазной сети: фазовый сдвиг даёт конденсатор. Соединение обмоток — звезда или треугольник.</p>
+</aside>
+</div>
+</section>
+
+<section class="slide slide-em-ac-interactive slide-em-ac-stepk-interactive">
+<h2>Виды шаговых двигателей</h2>
+<div class="slide-body asutp-interactive">
+<div class="asutp-main">
+<p class="asutp-hint">Два вопроса: куда может крутиться вал и из чего сделан ротор. Нажмите пару для сравнения</p>
+<div class="app-purpose-grid em-fast-grid em-ac-stepk-cards">
+<button type="button" class="app-purpose-card active" data-info="dir"><strong>Реверс</strong><span>куда крутится</span></button>
+<button type="button" class="app-purpose-card" data-info="rotor"><strong>Ротор</strong><span>магнит или «гребёнка»</span></button>
+</div>
+<div class="asutp-diagram-wrap">
+<svg class="em-svg em-ac-svg em-ac-stepk-svg" viewBox="0 0 540 230" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="Чем отличаются виды ШД">
+<defs>
+<marker id="stepkArrL" markerWidth="7" markerHeight="6" refX="6" refY="3" orient="auto"><path d="M0 0 L7 3 L0 6 Z" fill="#1d4ed8"/></marker>
+<marker id="stepkArrR" markerWidth="7" markerHeight="6" refX="6" refY="3" orient="auto"><path d="M0 0 L7 3 L0 6 Z" fill="#c2410c"/></marker>
+</defs>
+<rect width="540" height="230" fill="#fafafa"/>
+
+<!-- сравнение реверса -->
+<g class="em-ac-view is-on" data-view="dir">
+<g class="em-ac-hit" data-info="rev" style="cursor:pointer">
+<rect x="20" y="16" width="240" height="196" rx="10" fill="#eff6ff" stroke="#1d4ed8" stroke-width="1.8"/>
+<text x="140" y="44" text-anchor="middle" font-size="16" font-weight="700" fill="#1e3a8a">реверсивный</text>
+<path d="M100 90 A28 28 0 1 1 140 118" fill="none" stroke="#1d4ed8" stroke-width="2.2" marker-end="url(#stepkArrL)"/>
+<path d="M180 90 A28 28 0 1 0 140 118" fill="none" stroke="#1d4ed8" stroke-width="2.2" marker-end="url(#stepkArrL)"/>
+<text x="140" y="150" text-anchor="middle" font-size="13" fill="#334155">туда и обратно</text>
+<text x="140" y="174" text-anchor="middle" font-size="13" fill="#475569">порядок импульсов</text>
+<text x="140" y="196" text-anchor="middle" font-size="13" font-weight="700" fill="#1e3a8a">САУ, приводы</text>
+</g>
+<g class="em-ac-hit" data-info="nrev" style="cursor:pointer">
+<rect x="280" y="16" width="240" height="196" rx="10" fill="#fff" stroke="#cbd5e1" stroke-width="1.6"/>
+<text x="400" y="44" text-anchor="middle" font-size="16" font-weight="700" fill="#334155">нереверсивный</text>
+<path d="M360 90 A28 28 0 1 1 400 118" fill="none" stroke="#94a3b8" stroke-width="2.2" marker-end="url(#stepkArrL)"/>
+<text x="400" y="150" text-anchor="middle" font-size="13" fill="#64748b">только одно направление</text>
+<text x="400" y="174" text-anchor="middle" font-size="13" fill="#64748b">схема проще</text>
+<text x="400" y="196" text-anchor="middle" font-size="13" font-weight="700" fill="#475569">часовые механизмы</text>
+</g>
+</g>
+
+<!-- сравнение роторов -->
+<g class="em-ac-view" data-view="rotor">
+<g class="em-ac-hit" data-info="act" style="cursor:pointer">
+<rect x="20" y="12" width="240" height="204" rx="10" fill="#eff6ff" stroke="#1d4ed8" stroke-width="1.8"/>
+<text x="140" y="36" text-anchor="middle" font-size="15" font-weight="700" fill="#1e3a8a">активный ротор</text>
+<g transform="translate(140 100)">
+<circle r="48" fill="#fff" stroke="#1e293b" stroke-width="1.8"/>
+<path d="M0 -36 L8 -14 L-8 -14 Z" fill="#1d4ed8"/>
+<path d="M0 36 L8 14 L-8 14 Z" fill="#c2410c"/>
+<path d="M36 0 L14 8 L14 -8 Z" fill="#1d4ed8"/>
+<path d="M-36 0 L-14 8 L-14 -8 Z" fill="#c2410c"/>
+</g>
+<text x="140" y="168" text-anchor="middle" font-size="12" fill="#334155">свои магниты N–S</text>
+<text x="140" y="188" text-anchor="middle" font-size="12" fill="#475569">p = 1…4 · магнитоэлектр.</text>
+<text x="140" y="206" text-anchor="middle" font-size="12" fill="#64748b">тянутся к полю статора</text>
+</g>
+<g class="em-ac-hit" data-info="react" style="cursor:pointer">
+<rect x="280" y="12" width="240" height="204" rx="10" fill="#fff" stroke="#cbd5e1" stroke-width="1.6"/>
+<text x="400" y="36" text-anchor="middle" font-size="15" font-weight="700" fill="#334155">реактивный ротор</text>
+<g transform="translate(400 100)">
+<circle r="48" fill="#fff" stroke="#1e293b" stroke-width="1.8"/>
+<rect x="-6" y="-44" width="12" height="16" rx="2" fill="#475569"/>
+<rect x="-6" y="28" width="12" height="16" rx="2" fill="#475569"/>
+<rect x="28" y="-6" width="16" height="12" rx="2" fill="#475569"/>
+<rect x="-44" y="-6" width="16" height="12" rx="2" fill="#475569"/>
+<circle r="14" fill="#f1f5f9" stroke="#94a3b8"/>
+</g>
+<text x="400" y="168" text-anchor="middle" font-size="12" fill="#334155">нет своих магнитов</text>
+<text x="400" y="188" text-anchor="middle" font-size="12" fill="#475569">«гребёнка» · индукционный</text>
+<text x="400" y="206" text-anchor="middle" font-size="12" fill="#64748b">зубцы к минимуму сопр.</text>
+</g>
+</g>
+</svg>
+</div>
+</div>
+<aside class="asutp-panel" id="emAcStepkPanel">
+<h3>Куда крутится</h3>
+<p><strong>Реверсивный</strong> — вал может шагать в обе стороны: меняют порядок подачи импульсов на обмотки. Это основной тип в САУ.</p>
+<p><strong>Нереверсивный</strong> — только одно направление; схема проще, типичны часовые механизмы.</p>
+</aside>
+</div>
+</section>
+
+<section class="slide slide-em-ac-interactive slide-em-ac-step-interactive">
+<h2>Шаговые двигатели</h2>
+<div class="slide-body asutp-interactive">
+<div class="asutp-main">
+<p class="asutp-hint">Импульс → дискретный шаг. Жмите «Шаг» или «Авто»</p>
+<div class="em-ac-step-layout">
+<div class="em-ac-step-toolbar">
+<div class="em-ac-step-modes" role="group" aria-label="Тактность">
+<button type="button" class="em-ac-step-mode active" data-phases="4">4-такт</button>
+<button type="button" class="em-ac-step-mode" data-phases="6">6-такт</button>
+</div>
+<div class="em-ac-step-modes" role="group" aria-label="Тип ротора">
+<button type="button" class="em-ac-step-mode active" data-rotor="act">активный</button>
+<button type="button" class="em-ac-step-mode" data-rotor="react">реактивный</button>
+</div>
+<div class="em-ac-step-actions">
+<button type="button" class="em-ac-step-run" id="emAcStepBtn">Шаг</button>
+<button type="button" class="em-ac-step-run" id="emAcStepAuto">Авто</button>
+<button type="button" class="em-ac-step-run" id="emAcStepReset">Сброс</button>
+</div>
+</div>
+<div class="highlight-box highlight-box-compact em-ac-step-eq" aria-live="polite">
+<p class="cap-eq char-eq">Δθ = 360° / N<sub>такт</sub></p>
+<p class="em-ac-step-eq-live" id="emAcStepLive">такт 1 / 4 · θ = 0° · шаг 90°</p>
+</div>
+<div class="asutp-diagram-wrap">
+<svg class="em-svg em-ac-svg em-ac-step-svg" viewBox="0 0 540 240" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="Живой шаговый двигатель">
+<defs>
+<marker id="stepArrR" markerWidth="8" markerHeight="7" refX="7" refY="3.5" orient="auto"><path d="M0 0 L8 3.5 L0 7 Z" fill="#c2410c"/></marker>
+</defs>
+<rect width="540" height="240" fill="#fafafa"/>
+
+<!-- импульсы -->
+<g transform="translate(95 120)">
+<rect x="-72" y="-90" width="144" height="180" rx="10" fill="#fff" stroke="#e2e8f0"/>
+<text x="0" y="-66" text-anchor="middle" font-size="13" font-weight="700" fill="#64748b">импульсы U</text>
+<g id="emAcStepPulses"></g>
+<text x="0" y="72" text-anchor="middle" font-size="12" fill="#94a3b8">коммутация обмоток</text>
+</g>
+
+<!-- машина -->
+<g transform="translate(340 115)">
+<g id="emAcStepStator"></g>
+<circle r="64" fill="#fff" stroke="#1e293b" stroke-width="2.2"/>
+<g id="emAcStepRotor">
+<g id="emAcStepRotorBody"></g>
+<line x1="0" y1="0" x2="0" y2="-50" stroke="#c2410c" stroke-width="2.6" marker-end="url(#stepArrR)"/>
+</g>
+<text id="emAcStepCaption" x="0" y="108" text-anchor="middle" font-size="13" font-weight="700" fill="#1e3a8a">активный ротор · 4-такт</text>
+</g>
+</svg>
+</div>
+</div>
+</div>
+<aside class="asutp-panel" id="emAcStepPanel">
+<h3>Шаговый двигатель</h3>
+<p>Импульс коммутирует обмотку — ротор шагает и фиксируется.</p>
+</aside>
+</div>
+</section>
+
+<section class="slide slide-em-ac-interactive slide-em-ac-stepc-interactive">
+<h2>Логика обмоток ШД</h2>
+<div class="slide-body asutp-interactive">
+<div class="asutp-main">
+<p class="asutp-hint">Рис. 3.56: токи I₁…I₄ во времени. а — упрощённо, б — больше момент, полшаг — Δφ = 45°</p>
+<div class="em-ac-stepc-layout">
+<div class="em-ac-stepc-toolbar">
+<div class="em-ac-stepc-modes" role="group" aria-label="Схема">
+<button type="button" class="em-ac-stepc-mode active" data-mode="one">а · одна</button>
+<button type="button" class="em-ac-stepc-mode" data-mode="two">б · две</button>
+<button type="button" class="em-ac-stepc-mode" data-mode="half">полшаг</button>
+</div>
+<div class="em-ac-stepc-actions">
+<button type="button" class="em-ac-stepc-run" id="emAcStepcBtn">Шаг</button>
+<button type="button" class="em-ac-stepc-run" id="emAcStepcAuto">Авто</button>
+<button type="button" class="em-ac-stepc-run" id="emAcStepcDir" title="Реверс: обратный порядок коммутации">↔ Реверс</button>
+<button type="button" class="em-ac-stepc-run" id="emAcStepcReset">Сброс</button>
+</div>
+</div>
+<div class="highlight-box highlight-box-compact em-ac-stepc-eq" aria-live="polite">
+<p class="em-ac-stepc-eq-live" id="emAcStepcLive">а · I₁ · θ = 0° · шаг 90°</p>
+</div>
+<div class="asutp-diagram-wrap">
+<svg class="em-svg em-ac-svg em-ac-stepc-svg" id="emAcStepcSvg" viewBox="0 0 560 250" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="Логика токов обмоток ШД">
+<defs>
+<marker id="stepcArr" markerWidth="7" markerHeight="6" refX="6" refY="3" orient="auto"><path d="M0 0 L7 3 L0 6 Z" fill="#c2410c"/></marker>
+</defs>
+<rect width="560" height="250" fill="#fafafa"/>
+
+<!-- машина слева -->
+<g transform="translate(120 120)">
+<circle r="78" fill="#fff" stroke="#1e293b" stroke-width="1.8"/>
+<g id="stepcW1" class="em-ac-stepc-w">
+<path d="M-16 -58 Q-10 -70 0 -70 Q10 -70 16 -58" fill="none" stroke="#94a3b8" stroke-width="2.2"/>
+<text x="0" y="-44" text-anchor="middle" font-size="13" font-weight="700" fill="#64748b">1</text>
+</g>
+<g id="stepcW2" class="em-ac-stepc-w">
+<path d="M58 -16 Q70 -10 70 0 Q70 10 58 16" fill="none" stroke="#94a3b8" stroke-width="2.2"/>
+<text x="44" y="5" text-anchor="middle" font-size="13" font-weight="700" fill="#64748b">2</text>
+</g>
+<g id="stepcW3" class="em-ac-stepc-w">
+<path d="M-16 58 Q-10 70 0 70 Q10 70 16 58" fill="none" stroke="#94a3b8" stroke-width="2.2"/>
+<text x="0" y="52" text-anchor="middle" font-size="13" font-weight="700" fill="#64748b">3</text>
+</g>
+<g id="stepcW4" class="em-ac-stepc-w">
+<path d="M-58 -16 Q-70 -10 -70 0 Q-70 10 -58 16" fill="none" stroke="#94a3b8" stroke-width="2.2"/>
+<text x="-44" y="5" text-anchor="middle" font-size="13" font-weight="700" fill="#64748b">4</text>
+</g>
+<g id="stepcRotor">
+<circle r="28" fill="#eff6ff" stroke="#1e293b" stroke-width="1.5"/>
+<path d="M0 -20 L6 -6 L-6 -6 Z" fill="#1d4ed8"/>
+<path d="M0 20 L6 6 L-6 6 Z" fill="#c2410c"/>
+<line x1="0" y1="0" x2="0" y2="-24" stroke="#c2410c" stroke-width="2" marker-end="url(#stepcArr)"/>
+</g>
+</g>
+
+<!-- осциллограммы I1…I4 справа -->
+<g transform="translate(250 18)">
+<text x="140" y="14" text-anchor="middle" font-size="13" font-weight="700" fill="#64748b">токи обмоток · t →</text>
+<g id="stepcWave"></g>
+<line id="stepcNow" x1="40" y1="22" x2="40" y2="210" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="3 3"/>
+</g>
+</svg>
+</div>
+</div>
+</div>
+<aside class="asutp-panel" id="emAcStepcPanel">
+<h3>а · упрощённый</h3>
+<p>В каждый момент ток только в одной обмотке (I₁ → I₂ → I₃ → I₄). Ротор шагает на <span class="char-eq">90°</span>. Реверс — обратный порядок коммутации.</p>
+</aside>
+</div>
+</section>
+
+
+<section class="slide slide-em-ac-interactive slide-em-ac-stepd-interactive">
+<h2>Дробление шага ШД</h2>
+<div class="slide-body asutp-interactive">
+<div class="asutp-main">
+<p class="asutp-hint">Рис. 3.57: уменьшить шаг — больше магнитов на роторе (p) и электрическое дробление</p>
+<div class="em-ac-stepd-layout">
+<div class="em-ac-stepd-toolbar">
+<div class="em-ac-stepd-modes" role="group" aria-label="Пары полюсов">
+<button type="button" class="em-ac-stepd-mode active" data-p="1">p = 1</button>
+<button type="button" class="em-ac-stepd-mode" data-p="4">p = 4</button>
+</div>
+<div class="em-ac-stepd-modes" role="group" aria-label="Электрическое дробление">
+<button type="button" class="em-ac-stepd-mode active" data-elec="full">полный</button>
+<button type="button" class="em-ac-stepd-mode" data-elec="half">дробление ×½</button>
+</div>
+<div class="em-ac-stepd-actions">
+<button type="button" class="em-ac-stepd-run" id="emAcStepdBtn">Шаг</button>
+<button type="button" class="em-ac-stepd-run" id="emAcStepdAuto">Авто</button>
+<button type="button" class="em-ac-stepd-run" id="emAcStepdReset">Сброс</button>
+</div>
+</div>
+<div class="highlight-box highlight-box-compact em-ac-stepd-eq" aria-live="polite">
+<p class="cap-eq char-eq">Δφ = <span id="emAcStepdFormula">90° / p</span></p>
+<p class="em-ac-stepd-eq-live" id="emAcStepdLive">p = 1 · полный · Δφ = 90° · θ = 0°</p>
+</div>
+<div class="asutp-diagram-wrap">
+<svg class="em-svg em-ac-svg em-ac-stepd-svg" id="emAcStepdSvg" viewBox="0 0 560 250" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="Дробление шага ШД">
+<defs>
+<marker id="stepdArr" markerWidth="7" markerHeight="6" refX="6" refY="3" orient="auto"><path d="M0 0 L7 3 L0 6 Z" fill="#c2410c"/></marker>
+</defs>
+<rect width="560" height="250" fill="#fafafa"/>
+
+<g transform="translate(120 120)">
+<circle r="78" fill="#fff" stroke="#1e293b" stroke-width="1.8"/>
+<g id="stepdW1" class="em-ac-stepd-w">
+<path d="M-16 -58 Q-10 -70 0 -70 Q10 -70 16 -58" fill="none" stroke="#94a3b8" stroke-width="2.2"/>
+<text x="0" y="-44" text-anchor="middle" font-size="13" font-weight="700" fill="#64748b">1</text>
+</g>
+<g id="stepdW2" class="em-ac-stepd-w">
+<path d="M58 -16 Q70 -10 70 0 Q70 10 58 16" fill="none" stroke="#94a3b8" stroke-width="2.2"/>
+<text x="44" y="5" text-anchor="middle" font-size="13" font-weight="700" fill="#64748b">2</text>
+</g>
+<g id="stepdW3" class="em-ac-stepd-w">
+<path d="M-16 58 Q-10 70 0 70 Q10 70 16 58" fill="none" stroke="#94a3b8" stroke-width="2.2"/>
+<text x="0" y="52" text-anchor="middle" font-size="13" font-weight="700" fill="#64748b">3</text>
+</g>
+<g id="stepdW4" class="em-ac-stepd-w">
+<path d="M-58 -16 Q-70 -10 -70 0 Q-70 10 -58 16" fill="none" stroke="#94a3b8" stroke-width="2.2"/>
+<text x="-44" y="5" text-anchor="middle" font-size="13" font-weight="700" fill="#64748b">4</text>
+</g>
+<g id="stepdRotor">
+<circle r="30" fill="#eff6ff" stroke="#1e293b" stroke-width="1.5"/>
+<g id="stepdMags"></g>
+<line x1="0" y1="0" x2="0" y2="-26" stroke="#c2410c" stroke-width="2" marker-end="url(#stepdArr)"/>
+</g>
+<text id="stepdPolesLbl" x="0" y="100" text-anchor="middle" font-size="12" font-weight="700" fill="#475569">p = 1 · 1 пара</text>
+</g>
+
+<g transform="translate(250 18)">
+<text x="140" y="14" text-anchor="middle" font-size="13" font-weight="700" fill="#64748b">рис. 3.57 · I₁…I₄ · t →</text>
+<g id="stepdWave"></g>
+<line id="stepdNow" x1="40" y1="22" x2="40" y2="210" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="3 3"/>
+</g>
+</svg>
+</div>
+</div>
+</div>
+<aside class="asutp-panel" id="emAcStepdPanel">
+<h3>Механика + электрика</h3>
+<p>Больше магнитов на роторе — меньше механический шаг. Электрическое дробление уменьшает его ещё вдвое.</p>
+</aside>
+</div>
+</section>
+
+
+<section class="slide slide-em-ac-interactive slide-em-ac-stepr-interactive">
+<h2>Реактивный ротор ШД</h2>
+<div class="slide-body asutp-interactive">
+<div class="asutp-main">
+<p class="asutp-hint">Рис. 3.58: гребёнка на полюсах и роторе. Питаем полюс — зубья совпадают, шаг = ½ зуба</p>
+<div class="em-ac-stepr-layout">
+<div class="em-ac-stepr-toolbar">
+<div class="em-ac-stepr-modes" role="group" aria-label="Полюс">
+<button type="button" class="em-ac-stepr-mode active" data-pole="1">полюс 1</button>
+<button type="button" class="em-ac-stepr-mode" data-pole="2">полюс 2</button>
+</div>
+<div class="em-ac-stepr-actions">
+<button type="button" class="em-ac-stepr-run" id="emAcSteprBtn">Шаг</button>
+<button type="button" class="em-ac-stepr-run" id="emAcSteprAuto">Авто</button>
+<button type="button" class="em-ac-stepr-run" id="emAcSteprReset">Сброс</button>
+</div>
+</div>
+<div class="highlight-box highlight-box-compact em-ac-stepr-eq" aria-live="polite">
+<p class="em-ac-stepr-eq-live" id="emAcSteprLive">полюс 1 · зубья совпали · R<sub>м</sub> мин · шаг 0</p>
+</div>
+<div class="asutp-diagram-wrap">
+<svg class="em-svg em-ac-svg em-ac-stepr-svg" id="emAcSteprSvg" viewBox="0 0 560 300" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="ШД с реактивным ротором">
+<defs>
+<marker id="steprArr" markerWidth="7" markerHeight="6" refX="6" refY="3" orient="auto"><path d="M0 0 L7 3 L0 6 Z" fill="#c2410c"/></marker>
+</defs>
+<rect width="560" height="300" fill="#fafafa"/>
+
+<!-- полюс 1 -->
+<g id="steprPole1">
+<rect x="78" y="36" width="100" height="20" rx="3" fill="#e2e8f0" stroke="#64748b" stroke-width="1.4"/>
+<path d="M88 56 L88 92 L168 92 L168 56" fill="none" stroke="#334155" stroke-width="2.4"/>
+<path d="M98 60 Q93 70 98 80 Q103 70 98 60 M108 60 Q103 70 108 80 Q113 70 108 60 M118 60 Q113 70 118 80 Q123 70 118 60 M128 60 Q123 70 128 80 Q133 70 128 60 M138 60 Q133 70 138 80 Q143 70 138 60 M148 60 Q143 70 148 80 Q153 70 148 60" fill="none" stroke="#94a3b8" stroke-width="1.8" id="steprCoil1"/>
+<text x="128" y="28" text-anchor="middle" font-size="18" font-weight="700" fill="#1e3a8a">1</text>
+<rect class="stepr-stator-tooth" x="92" y="92" width="18" height="26" fill="#cbd5e1" stroke="#334155" stroke-width="1.2"/>
+<rect class="stepr-stator-tooth" x="119" y="92" width="18" height="26" fill="#cbd5e1" stroke="#334155" stroke-width="1.2"/>
+<rect class="stepr-stator-tooth" x="146" y="92" width="18" height="26" fill="#cbd5e1" stroke="#334155" stroke-width="1.2"/>
+</g>
+
+<!-- полюс 2 -->
+<g id="steprPole2">
+<rect x="348" y="36" width="100" height="20" rx="3" fill="#e2e8f0" stroke="#64748b" stroke-width="1.4"/>
+<path d="M358 56 L358 92 L438 92 L438 56" fill="none" stroke="#334155" stroke-width="2.4"/>
+<path d="M368 60 Q363 70 368 80 Q373 70 368 60 M378 60 Q373 70 378 80 Q383 70 378 60 M388 60 Q383 70 388 80 Q393 70 388 60 M398 60 Q393 70 398 80 Q403 70 398 60 M408 60 Q403 70 408 80 Q413 70 408 60 M418 60 Q413 70 418 80 Q423 70 418 60" fill="none" stroke="#94a3b8" stroke-width="1.8" id="steprCoil2"/>
+<text x="398" y="28" text-anchor="middle" font-size="18" font-weight="700" fill="#1e3a8a">2</text>
+<rect class="stepr-stator-tooth" x="376" y="92" width="18" height="26" fill="#cbd5e1" stroke="#334155" stroke-width="1.2"/>
+<rect class="stepr-stator-tooth" x="403" y="92" width="18" height="26" fill="#cbd5e1" stroke="#334155" stroke-width="1.2"/>
+<rect class="stepr-stator-tooth" x="430" y="92" width="18" height="26" fill="#cbd5e1" stroke="#334155" stroke-width="1.2"/>
+</g>
+
+<g id="steprFlux"></g>
+
+<g id="steprRotor" transform="translate(0 0)">
+<rect x="40" y="168" width="480" height="42" fill="#eff6ff" stroke="#1e293b" stroke-width="1.6"/>
+<g id="steprRotorTeeth">
+<rect x="65" y="144" width="18" height="26" fill="#93c5fd" stroke="#1e3a8a" stroke-width="1.1"/>
+<rect x="92" y="144" width="18" height="26" fill="#93c5fd" stroke="#1e3a8a" stroke-width="1.1"/>
+<rect x="119" y="144" width="18" height="26" fill="#93c5fd" stroke="#1e3a8a" stroke-width="1.1"/>
+<rect x="146" y="144" width="18" height="26" fill="#93c5fd" stroke="#1e3a8a" stroke-width="1.1"/>
+<rect x="173" y="144" width="18" height="26" fill="#93c5fd" stroke="#1e3a8a" stroke-width="1.1"/>
+<rect x="200" y="144" width="18" height="26" fill="#93c5fd" stroke="#1e3a8a" stroke-width="1.1"/>
+<rect x="227" y="144" width="18" height="26" fill="#93c5fd" stroke="#1e3a8a" stroke-width="1.1"/>
+<rect x="254" y="144" width="18" height="26" fill="#93c5fd" stroke="#1e3a8a" stroke-width="1.1"/>
+<rect x="281" y="144" width="18" height="26" fill="#93c5fd" stroke="#1e3a8a" stroke-width="1.1"/>
+<rect x="308" y="144" width="18" height="26" fill="#93c5fd" stroke="#1e3a8a" stroke-width="1.1"/>
+<rect x="335" y="144" width="18" height="26" fill="#93c5fd" stroke="#1e3a8a" stroke-width="1.1"/>
+<rect x="362" y="144" width="18" height="26" fill="#93c5fd" stroke="#1e3a8a" stroke-width="1.1"/>
+<rect x="389" y="144" width="18" height="26" fill="#93c5fd" stroke="#1e3a8a" stroke-width="1.1"/>
+<rect x="416" y="144" width="18" height="26" fill="#93c5fd" stroke="#1e3a8a" stroke-width="1.1"/>
+<rect x="443" y="144" width="18" height="26" fill="#93c5fd" stroke="#1e3a8a" stroke-width="1.1"/>
+<rect x="470" y="144" width="18" height="26" fill="#93c5fd" stroke="#1e3a8a" stroke-width="1.1"/>
+</g>
+<text x="280" y="195" text-anchor="middle" font-size="15" font-weight="700" fill="#334155">Ротор</text>
+</g>
+
+<g id="steprMoveHint" opacity="0.85">
+<line x1="300" y1="228" x2="220" y2="228" stroke="#c2410c" stroke-width="2.4" marker-end="url(#steprArr)"/>
+<text x="260" y="248" text-anchor="middle" font-size="14" fill="#9a3412">½ зуба за шаг</text>
+</g>
+
+<!-- нижние карточки-пояснения -->
+<g>
+<rect x="40" y="258" width="230" height="32" rx="6" fill="#eff6ff" stroke="#93c5fd" stroke-width="1.2"/>
+<text x="155" y="279" text-anchor="middle" font-size="13" font-weight="700" fill="#1e3a8a">совпали → Rм мин</text>
+<rect x="290" y="258" width="230" height="32" rx="6" fill="#fff7ed" stroke="#fdba74" stroke-width="1.2"/>
+<text x="405" y="279" text-anchor="middle" font-size="13" font-weight="700" fill="#9a3412">сдвиг → момент шага</text>
+</g>
+</svg>
+</div>
+</div>
+</div>
+<aside class="asutp-panel" id="emAcSteprPanel">
+<h3>Полюс 1 включён</h3>
+<p>Зубья ротора и полюса 1 совпали — длина линий в зазоре минимальна, это <strong>минимум магнитного сопротивления</strong> R<sub>м</sub>.</p>
+<p>Под полюсом 2 зубья сдвинуты на <strong>половину зуба</strong> — там совпадения нет.</p>
+<p>Гребёнка на полюсах и роторе даёт очень мелкий шаг: каждый такт сдвигает ротор всего на ½ зуба.</p>
+</aside>
+</div>
+</section>
+
+
+<section class="slide slide-em-ac-interactive slide-em-ac-steps-interactive">
+<h2>Система управления ШД</h2>
+<div class="slide-body asutp-interactive">
+<div class="asutp-main">
+<p class="asutp-hint">Рис. 3.59: от импульсов до вала. Выберите тему — схема справа меняется</p>
+<div class="em-ac-steps-layout">
+<div class="em-ac-steps-toolbar">
+<div class="em-ac-steps-modes" role="group" aria-label="Тема">
+<button type="button" class="em-ac-steps-mode active" data-view="chain">схема</button>
+<button type="button" class="em-ac-steps-mode" data-view="integ">ω ∼ f</button>
+<button type="button" class="em-ac-steps-mode" data-view="limit">предел f</button>
+<button type="button" class="em-ac-steps-mode" data-view="hold">удержание</button>
+</div>
+<div class="em-ac-steps-actions">
+<button type="button" class="em-ac-steps-run" id="emAcStepsRun">Пуск</button>
+<button type="button" class="em-ac-steps-run" id="emAcStepsReset">Сброс</button>
+</div>
+</div>
+<div class="highlight-box highlight-box-compact em-ac-steps-eq" aria-live="polite">
+<p class="cap-eq char-eq">ω ∼ f<sub>комм</sub></p>
+<p class="em-ac-steps-eq-live" id="emAcStepsLive">формирователь → коммутатор → 4 усилителя → ШД</p>
+</div>
+<div class="asutp-diagram-wrap">
+<svg class="em-svg em-ac-svg em-ac-steps-svg" id="emAcStepsSvg" viewBox="0 0 560 300" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="Система управления ШД">
+<defs>
+<marker id="stepsArr" markerWidth="7" markerHeight="6" refX="6" refY="3" orient="auto"><path d="M0 0 L7 3 L0 6 Z" fill="#64748b"/></marker>
+<marker id="stepsArrOn" markerWidth="7" markerHeight="6" refX="6" refY="3" orient="auto"><path d="M0 0 L7 3 L0 6 Z" fill="#1d4ed8"/></marker>
+</defs>
+<rect width="560" height="300" fill="#fafafa"/>
+
+<!-- ===== VIEW: chain (рис. 3.59) ===== -->
+<g class="em-ac-view is-on" data-view="chain">
+<g class="em-ac-hit em-ac-steps-block" data-info="pulse" style="cursor:pointer">
+<rect id="stepsBlkPulse" x="18" y="100" width="92" height="80" rx="8" fill="#eff6ff" stroke="#1d4ed8" stroke-width="2.2"/>
+<text x="64" y="130" text-anchor="middle" font-size="13" font-weight="700" fill="#1e3a8a">Формиро-</text>
+<text x="64" y="148" text-anchor="middle" font-size="13" font-weight="700" fill="#1e3a8a">ватель</text>
+<text x="64" y="166" text-anchor="middle" font-size="11" fill="#64748b">импульсов</text>
+</g>
+<line id="stepsL1" x1="110" y1="140" x2="136" y2="140" stroke="#94a3b8" stroke-width="2.2" marker-end="url(#stepsArr)"/>
+<g class="em-ac-hit em-ac-steps-block" data-info="comm" style="cursor:pointer">
+<rect id="stepsBlkComm" x="138" y="100" width="92" height="80" rx="8" fill="#fff" stroke="#cbd5e1" stroke-width="1.8"/>
+<text x="184" y="136" text-anchor="middle" font-size="14" font-weight="700" fill="#334155">Комму-</text>
+<text x="184" y="156" text-anchor="middle" font-size="14" font-weight="700" fill="#334155">татор</text>
+</g>
+<line id="stepsL2a" x1="230" y1="112" x2="262" y2="48" stroke="#94a3b8" stroke-width="1.6"/>
+<line id="stepsL2b" x1="230" y1="128" x2="262" y2="108" stroke="#94a3b8" stroke-width="1.6"/>
+<line id="stepsL2c" x1="230" y1="152" x2="262" y2="172" stroke="#94a3b8" stroke-width="1.6"/>
+<line id="stepsL2d" x1="230" y1="168" x2="262" y2="232" stroke="#94a3b8" stroke-width="1.6"/>
+<g class="em-ac-hit em-ac-steps-block" data-info="amp" style="cursor:pointer">
+<g id="stepsAmp1"><rect x="264" y="28" width="128" height="40" rx="6" fill="#fff" stroke="#cbd5e1" stroke-width="1.6"/><text x="328" y="53" text-anchor="middle" font-size="12" font-weight="700" fill="#334155">Ус. мощности 1</text></g>
+<g id="stepsAmp2"><rect x="264" y="88" width="128" height="40" rx="6" fill="#fff" stroke="#cbd5e1" stroke-width="1.6"/><text x="328" y="113" text-anchor="middle" font-size="12" font-weight="700" fill="#334155">Ус. мощности 2</text></g>
+<g id="stepsAmp3"><rect x="264" y="152" width="128" height="40" rx="6" fill="#fff" stroke="#cbd5e1" stroke-width="1.6"/><text x="328" y="177" text-anchor="middle" font-size="12" font-weight="700" fill="#334155">Ус. мощности 3</text></g>
+<g id="stepsAmp4"><rect x="264" y="212" width="128" height="40" rx="6" fill="#fff" stroke="#cbd5e1" stroke-width="1.6"/><text x="328" y="237" text-anchor="middle" font-size="12" font-weight="700" fill="#334155">Ус. мощности 4</text></g>
+</g>
+<line id="stepsL3a" x1="392" y1="48" x2="438" y2="112" stroke="#94a3b8" stroke-width="1.6"/>
+<line id="stepsL3b" x1="392" y1="108" x2="438" y2="128" stroke="#94a3b8" stroke-width="1.6"/>
+<line id="stepsL3c" x1="392" y1="172" x2="438" y2="152" stroke="#94a3b8" stroke-width="1.6"/>
+<line id="stepsL3d" x1="392" y1="232" x2="438" y2="168" stroke="#94a3b8" stroke-width="1.6"/>
+<g class="em-ac-hit em-ac-steps-block" data-info="motor" style="cursor:pointer">
+<circle id="stepsBlkMotor" cx="490" cy="140" r="52" fill="#fff" stroke="#cbd5e1" stroke-width="2.2"/>
+<text x="490" y="134" text-anchor="middle" font-size="24" font-weight="800" fill="#334155">ШД</text>
+<text x="490" y="156" text-anchor="middle" font-size="12" fill="#64748b">4 обмотки</text>
+<g id="stepsRotorTick" transform="rotate(0 490 140)">
+<line x1="490" y1="140" x2="490" y2="102" stroke="#c2410c" stroke-width="2.6"/>
+</g>
+</g>
+<text x="280" y="288" text-anchor="middle" font-size="13" fill="#64748b">рис. 3.59 · функциональная схема</text>
+</g>
+
+<!-- ===== VIEW: integ ===== -->
+<g class="em-ac-view" data-view="integ">
+<text x="280" y="28" text-anchor="middle" font-size="15" font-weight="700" fill="#1e3a8a">ШД = интегрирующее звено</text>
+<!-- импульсы f -->
+<text x="40" y="58" font-size="13" font-weight="700" fill="#475569">импульсы f</text>
+<path id="stepsIntegPulses" d="M40 90 H70 V60 H100 V90 H130 V60 H160 V90 H190 V60 H220 V90 H250 V60 H280 V90 H310 V60 H340 V90 H370 V60 H400 V90 H430 V60 H460 V90 H490 V60 H520" fill="none" stroke="#1d4ed8" stroke-width="2.2"/>
+<!-- угол θ -->
+<text x="40" y="130" font-size="13" font-weight="700" fill="#475569">угол θ вала</text>
+<path id="stepsIntegTheta" d="M40 200 L520 80" fill="none" stroke="#c2410c" stroke-width="2.6"/>
+<circle id="stepsIntegDot" cx="40" cy="200" r="6" fill="#c2410c"/>
+<text x="280" y="240" text-anchor="middle" font-size="14" fill="#334155">каждый импульс → +Δφ · чем чаще f, тем быстрее растёт θ</text>
+<rect x="60" y="255" width="200" height="32" rx="6" fill="#eff6ff" stroke="#93c5fd"/>
+<text x="160" y="276" text-anchor="middle" font-size="14" font-weight="700" fill="#1e3a8a">ω ∼ fкомм</text>
+<rect x="300" y="255" width="200" height="32" rx="6" fill="#fff7ed" stroke="#fdba74"/>
+<text x="400" y="276" text-anchor="middle" font-size="14" font-weight="700" fill="#9a3412">θ = ∫ ω dt</text>
+</g>
+
+<!-- ===== VIEW: limit ===== -->
+<g class="em-ac-view" data-view="limit">
+<text x="280" y="28" text-anchor="middle" font-size="15" font-weight="700" fill="#1e3a8a">Предел частоты коммутации</text>
+<text x="40" y="58" font-size="13" fill="#475569">θ(t) на одном шаге</text>
+<!-- good: settles -->
+<text x="150" y="78" text-anchor="middle" font-size="13" font-weight="700" fill="#15803d">норма · успел затухнуть</text>
+<path d="M40 160 C70 160 85 70 110 110 C130 145 145 118 170 125 L280 125" fill="none" stroke="#16a34a" stroke-width="2.4"/>
+<line x1="40" y1="160" x2="40" y2="70" stroke="#94a3b8" stroke-width="1" stroke-dasharray="3 3"/>
+<line x1="170" y1="160" x2="170" y2="70" stroke="#94a3b8" stroke-width="1" stroke-dasharray="3 3"/>
+<text x="105" y="178" text-anchor="middle" font-size="12" fill="#64748b">шаг · переходный процесс</text>
+<!-- bad: next too soon -->
+<text x="420" y="78" text-anchor="middle" font-size="13" font-weight="700" fill="#b91c1c">f слишком велика</text>
+<path d="M320 160 C345 160 358 70 380 115 C395 150 405 90 420 130 C435 165 448 100 470 140" fill="none" stroke="#dc2626" stroke-width="2.4"/>
+<line x1="320" y1="160" x2="320" y2="70" stroke="#fca5a5" stroke-width="1" stroke-dasharray="3 3"/>
+<line x1="400" y1="160" x2="400" y2="70" stroke="#fca5a5" stroke-width="1.5"/>
+<text x="400" y="188" text-anchor="middle" font-size="12" fill="#b91c1c">след. импульс рано</text>
+<rect x="80" y="220" width="400" height="56" rx="8" fill="#fef2f2" stroke="#fecaca"/>
+<text x="280" y="245" text-anchor="middle" font-size="14" font-weight="700" fill="#991b1b">Колебания вала должны затухнуть до следующей коммутации</text>
+<text x="280" y="266" text-anchor="middle" font-size="13" fill="#7f1d1d">иначе — пропуск шага</text>
+</g>
+
+<!-- ===== VIEW: hold ===== -->
+<g class="em-ac-view" data-view="hold">
+<text x="280" y="26" text-anchor="middle" font-size="15" font-weight="700" fill="#1e3a8a">Удержание угла без питания</text>
+<!-- active -->
+<g class="em-ac-hit" data-info="holdAct" style="cursor:pointer">
+<rect x="28" y="48" width="240" height="220" rx="10" fill="#eff6ff" stroke="#1d4ed8" stroke-width="2"/>
+<text x="148" y="78" text-anchor="middle" font-size="16" font-weight="700" fill="#1e3a8a">Активный ротор</text>
+<circle cx="148" cy="140" r="48" fill="#fff" stroke="#1e293b" stroke-width="1.8"/>
+<path d="M148 100 L158 128 L138 128 Z" fill="#1d4ed8"/>
+<path d="M148 180 L158 152 L138 152 Z" fill="#c2410c"/>
+<text x="120" y="128" font-size="12" font-weight="700" fill="#1d4ed8">N</text>
+<text x="120" y="168" font-size="12" font-weight="700" fill="#c2410c">S</text>
+<text x="148" y="212" text-anchor="middle" font-size="13" font-weight="700" fill="#15803d">держит позицию</text>
+<text x="148" y="232" text-anchor="middle" font-size="12" fill="#475569">даже при U = 0</text>
+<text x="148" y="252" text-anchor="middle" font-size="12" fill="#64748b">шаг обычно крупнее</text>
+</g>
+<!-- reactive -->
+<g class="em-ac-hit" data-info="holdReact" style="cursor:pointer">
+<rect x="292" y="48" width="240" height="220" rx="10" fill="#fff" stroke="#cbd5e1" stroke-width="1.8"/>
+<text x="412" y="78" text-anchor="middle" font-size="16" font-weight="700" fill="#334155">Реактивный ротор</text>
+<circle cx="412" cy="140" r="48" fill="#fff" stroke="#1e293b" stroke-width="1.8"/>
+<!-- comb teeth hint -->
+<path d="M380 108 L388 108 L388 100 L396 100 L396 108 L404 108 L404 100 L412 100 L412 108 L420 108 L420 100 L428 100 L428 108 L436 108 L436 100 L444 100" fill="none" stroke="#64748b" stroke-width="1.6"/>
+<text x="412" y="168" text-anchor="middle" font-size="12" fill="#64748b">зубья · без магнитов</text>
+<text x="412" y="212" text-anchor="middle" font-size="13" font-weight="700" fill="#b91c1c">не держит без тока</text>
+<text x="412" y="232" text-anchor="middle" font-size="12" fill="#475569">своего момента нет</text>
+<text x="412" y="252" text-anchor="middle" font-size="12" fill="#64748b">зато шаг очень мелкий</text>
+</g>
+</g>
+</svg>
+</div>
+</div>
+</div>
+<aside class="asutp-panel" id="emAcStepsPanel">
+<h3>Функциональная схема</h3>
+<p>Формирователь импульсов → коммутатор → четыре усилителя мощности → обмотки ШД.</p>
+<p>Коммутатор разводит импульсы по каналам фаз; усилители дают ток в обмотки.</p>
+<p>Жмите «Пуск» — увидите, как по очереди вспыхивают каналы 1…4.</p>
+</aside>
+</div>
+</section>
+
 <section class="slide slide-title"><span class="tag">Конец лекции 7</span>
 <h1>Спасибо за внимание!</h1>
-<p><a href="lecture-8.html" class="link-home">Лекция 8. Автоматические выключатели →</a></p>
+<p><a href="lecture-8.html" class="link-home">Лекция 8. Измерители рассогласования →</a></p>
 <p><a href="../index.html" class="link-home">← На главную</a></p></section>
 </div>
 
