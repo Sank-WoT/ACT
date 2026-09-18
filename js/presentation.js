@@ -12816,41 +12816,1245 @@
     const slide = document.querySelector('.slide-ir-selsyn-princ-interactive');
     if (!slide) return;
     const panel = document.getElementById('irSelsynPrincPanel');
+    const slider = document.getElementById('irSelsynPrincTheta');
+    const valEl = document.getElementById('irSelsynPrincThetaVal');
+    const live = document.getElementById('irSelsynPrincLive');
+    const uc = document.getElementById('irPrincUc');
+    const geomLbl = document.getElementById('irPrincGeomLbl');
+    const wave = document.getElementById('irPrincWave');
+    const waveGhost = document.getElementById('irPrincWaveGhost');
+    const waveLbl = document.getElementById('irPrincWaveLbl');
+
     const info = {
       align: {
         title: 'Согласовано',
-        html: '<p>За согласованное положение принимают <strong>взаимно перпендикулярное</strong> положение обмоток роторов в пространстве.</p><p>Тогда выходное напряжение ИР <strong>UΔ = 0</strong>.</p>'
+        html: '<p>За согласованное положение принимают <strong>взаимно перпендикулярное</strong> положение обмоток роторов.</p><p>Крутите <strong>θ</strong> — смотрите фазу и амплитуду <strong>UΔ</strong>.</p>',
+        theta: 0
       },
       inph: {
         title: 'Фаза 0°',
-        html: '<p>Знак рассогласования — по фазовому сдвигу между <strong>Uсети</strong> и напряжением на роторе СП (<strong>UΔ</strong>).</p><p>Сдвиг <strong>0°</strong>: UΔ совпадает по фазе с Uсети.</p>'
+        html: '<p>При <strong>θ &gt; 0</strong> напряжение UΔ совпадает по фазе с <strong>Uсети</strong>.</p><p>Знак рассогласования читают по фазе: 0° или 180°.</p>',
+        theta: 45
       },
       opp: {
         title: 'Фаза 180°',
-        html: '<p>Фазовый сдвиг может быть только <strong>0°</strong> или <strong>180°</strong>.</p><p>Сдвиг <strong>180°</strong>: UΔ в противофазе с Uсети — рассогласование в другую сторону.</p>'
+        html: '<p>При <strong>θ &lt; 0</strong> UΔ в противофазе с Uсети — рассогласование в другую сторону.</p><p>Фазовый сдвиг бывает только <strong>0°</strong> или <strong>180°</strong>.</p>',
+        theta: -45
       },
       amp: {
         title: 'Амплитуда',
-        html: '<p>Амплитуда <strong>|UΔ|</strong> зависит от угла между осями обмоток роторов.</p><p>Чем ближе к согласованному (⊥) положению — тем меньше сигнал; максимум — когда оси параллельны.</p>'
+        html: '<p><span class="char-eq">|UΔ| ∼ |sin θ|</span>: чем дальше от согласованного положения, тем больше амплитуда.</p><p>Максимум при параллельных осях (|θ| = 90°).</p>',
+        theta: 90
       }
     };
-    const show = (key) => {
-      slide.querySelectorAll('.em-ac-view').forEach((g) => {
-        g.classList.toggle('is-on', g.getAttribute('data-view') === key);
-      });
-      slide.querySelectorAll('.app-purpose-card').forEach((b) => {
-        b.classList.toggle('active', b.dataset.info === key);
-      });
-      const data = info[key];
-      if (panel && data) panel.innerHTML = '<h3>' + data.title + '</h3>' + data.html;
+
+    const wavePath = (amp, phaseOpp) => {
+      const y0 = 120;
+      const x0 = 310;
+      const x1 = 490;
+      const n = 48;
+      let d = '';
+      for (let i = 0; i <= n; i += 1) {
+        const t = i / n;
+        const x = x0 + t * (x1 - x0);
+        const s = Math.sin(2 * Math.PI * t + (phaseOpp ? Math.PI : 0));
+        const y = y0 - amp * s;
+        d += `${i ? 'L' : 'M'}${x.toFixed(1)} ${y.toFixed(1)}`;
+      }
+      return d;
     };
+
+    const paint = (theta) => {
+      const th = Number(theta);
+      if (uc) uc.setAttribute('transform', `rotate(${th} 100 120)`);
+      if (valEl) valEl.textContent = `${th}°`;
+      const mag = Math.abs(Math.sin((th * Math.PI) / 180));
+      const ampPx = 48 * mag;
+      const opp = th < 0;
+      if (wave) {
+        if (mag < 0.02) {
+          wave.setAttribute('d', 'M310 120 H490');
+          wave.setAttribute('stroke', '#16a34a');
+        } else {
+          wave.setAttribute('d', wavePath(ampPx, opp));
+          wave.setAttribute('stroke', opp ? '#c2410c' : '#1d4ed8');
+        }
+      }
+      if (waveGhost) {
+        waveGhost.setAttribute('opacity', mag > 0.05 && mag < 0.95 ? '0.7' : '0');
+      }
+      if (waveLbl) {
+        if (mag < 0.02) {
+          waveLbl.textContent = 'UΔ = 0';
+          waveLbl.setAttribute('fill', '#166534');
+        } else {
+          waveLbl.textContent = opp ? `UΔ · фаза 180° · |sin θ|=${mag.toFixed(2)}` : `UΔ · фаза 0° · |sin θ|=${mag.toFixed(2)}`;
+          waveLbl.setAttribute('fill', opp ? '#9a3412' : '#1e3a8a');
+        }
+      }
+      if (geomLbl) {
+        if (mag < 0.02) {
+          geomLbl.textContent = '⊥ · согласовано';
+          geomLbl.setAttribute('fill', '#166534');
+        } else if (Math.abs(th) >= 85) {
+          geomLbl.textContent = '∥ · максимум |UΔ|';
+          geomLbl.setAttribute('fill', '#9a3412');
+        } else {
+          geomLbl.textContent = `угол связи · θ = ${th}°`;
+          geomLbl.setAttribute('fill', '#475569');
+        }
+      }
+      if (live) {
+        if (mag < 0.02) live.textContent = 'θ = 0° · |UΔ| = 0 · согласовано (оси ⊥)';
+        else live.textContent = `θ = ${th}° · |UΔ| ∼ |sin θ| = ${mag.toFixed(2)} · фаза ${opp ? '180°' : '0°'}`;
+      }
+      let mode = 'amp';
+      if (mag < 0.02) mode = 'align';
+      else if (th > 0) mode = 'inph';
+      else if (th < 0) mode = 'opp';
+      slide.querySelectorAll('.app-purpose-card').forEach((b) => {
+        b.classList.toggle('active', b.dataset.info === mode);
+      });
+      const data = info[mode];
+      if (panel && data) panel.innerHTML = `<h3>${data.title}</h3>${data.html}`;
+    };
+
+    if (slider) {
+      slider.addEventListener('input', () => paint(slider.value));
+    }
     slide.addEventListener('click', (e) => {
       const btn = e.target.closest('.app-purpose-card');
       if (!btn || !btn.dataset.info) return;
       e.stopPropagation();
+      const data = info[btn.dataset.info];
+      if (!data) return;
+      if (slider) slider.value = String(data.theta);
+      paint(data.theta);
+    });
+    paint(slider ? slider.value : 0);
+  })();
+
+  (() => {
+    const slide = document.querySelector('.slide-ir-selsyn-u-interactive');
+    if (!slide) return;
+    const panel = document.getElementById('irSelsynUPanel');
+    const slider = document.getElementById('irSelsynUTheta');
+    const valEl = document.getElementById('irSelsynUThetaVal');
+    const live = document.getElementById('irSelsynULive');
+    const num = document.getElementById('irSelsynUNum');
+    const sine = document.getElementById('irSelsynUSine');
+    const lin = document.getElementById('irSelsynULin');
+    const dot = document.getElementById('irSelsynUDot');
+
+    const info = {
+      eq: {
+        title: 'Формула',
+        html: '<p>Выход сельсинного ИР: <span class="char-eq">Uизм = Um · sin θ</span>.</p><p><strong>Um</strong> — амплитуда при максимальной связи; <strong>θ</strong> — угол рассогласования.</p>'
+      },
+      theta: {
+        title: 'θ',
+        html: '<p><span class="char-eq">θ = φвх − φн</span> — разность углов датчика (СД) и приёмника (СП).</p><p>Этот угол задаёт амплитуду и знак Uизм.</p>'
+      },
+      sign: {
+        title: 'Знак',
+        html: '<p>Знак — по фазе относительно <strong>Uсети</strong>: <strong>0°</strong> при θ &gt; 0, <strong>180°</strong> при θ &lt; 0.</p>'
+      },
+      k: {
+        title: 'Kизм',
+        html: '<p>При малых θ: <span class="char-eq">sin θ ≈ θ</span> → <span class="char-eq">Uизм ≈ Kизм · θ</span>, как у потенциометрического ИР.</p>'
+      }
+    };
+
+    const x0 = 300;
+    const x1 = 540;
+    const y0 = 110;
+    const amp = 70;
+
+    const buildPaths = () => {
+      let ds = '';
+      let dl = '';
+      for (let i = 0; i <= 60; i += 1) {
+        const t = i / 60;
+        const deg = -90 + t * 180;
+        const rad = (deg * Math.PI) / 180;
+        const x = x0 + t * (x1 - x0);
+        const ys = y0 - amp * Math.sin(rad);
+        const yl = y0 - amp * rad;
+        ds += `${i ? 'L' : 'M'}${x.toFixed(1)} ${ys.toFixed(1)}`;
+        if (Math.abs(deg) <= 50) {
+          dl += `${dl ? 'L' : 'M'}${x.toFixed(1)} ${yl.toFixed(1)}`;
+        }
+      }
+      if (sine) sine.setAttribute('d', ds);
+      if (lin) lin.setAttribute('d', dl);
+    };
+
+    let mode = 'eq';
+
+    const paint = () => {
+      const th = Number(slider?.value || 0);
+      const rad = (th * Math.PI) / 180;
+      const s = Math.sin(rad);
+      const phase = th < 0 ? '180°' : th > 0 ? '0°' : '—';
+      if (valEl) valEl.textContent = `${th}°`;
+      if (num) num.textContent = `sin ${th}° = ${s.toFixed(2)}`;
+      if (live) {
+        live.textContent = th === 0
+          ? 'θ = 0 · Uизм = 0 · согласовано'
+          : `Uизм / Um = sin ${th}° = ${s.toFixed(2)} · фаза ${phase}`;
+      }
+      const t = (th + 90) / 180;
+      const x = x0 + t * (x1 - x0);
+      const y = y0 - amp * s;
+      if (dot) {
+        dot.setAttribute('cx', x.toFixed(1));
+        dot.setAttribute('cy', y.toFixed(1));
+        dot.setAttribute('fill', th < 0 ? '#c2410c' : '#1d4ed8');
+      }
+      slide.querySelectorAll('.em-ac-view').forEach((g) => {
+        g.classList.toggle('is-on', g.getAttribute('data-view') === mode);
+      });
+      slide.querySelectorAll('.app-purpose-card').forEach((b) => {
+        b.classList.toggle('active', b.dataset.info === mode);
+      });
+      const data = info[mode];
+      if (panel && data) panel.innerHTML = `<h3>${data.title}</h3>${data.html}`;
+    };
+
+    buildPaths();
+    slide.addEventListener('click', (e) => {
+      const btn = e.target.closest('.app-purpose-card');
+      if (!btn || !btn.dataset.info) return;
+      e.stopPropagation();
+      mode = btn.dataset.info;
+      paint();
+    });
+    slider?.addEventListener('input', paint);
+    paint();
+  })();
+
+  (() => {
+    const slide = document.querySelector('.slide-ir-selsyn-load-interactive');
+    if (!slide) return;
+    const panel = document.getElementById('irSelsynLoadPanel');
+    const phiSl = document.getElementById('irSelsynLoadPhi');
+    const rhSl = document.getElementById('irSelsynLoadRh');
+    const phiVal = document.getElementById('irSelsynLoadPhiVal');
+    const rhVal = document.getElementById('irSelsynLoadRhVal');
+    const live = document.getElementById('irSelsynLoadLive');
+    const rotor = document.getElementById('irLoadRotor');
+    const phi2d = document.getElementById('irLoadPhi2d');
+    const phi2q = document.getElementById('irLoadPhi2q');
+    const phi2vec = document.getElementById('irLoadPhi2Vec');
+    const eqLbl = document.getElementById('irLoadEqLbl');
+    const rhBox = document.getElementById('irLoadRhBox');
+    const i2Lbl = document.getElementById('irLoadI2Lbl');
+
+    const info = {
+      load: {
+        title: 'Нагрузка',
+        html: '<p>Обмотку ротора СП замыкают на <strong>RH</strong> — течёт ток <strong>I₂</strong>, появляется поток реакции <strong>Φ₂</strong>.</p><p>На нагрузке снимают <strong>UΔ</strong>.</p>'
+      },
+      phi2: {
+        title: 'Φ₂',
+        html: '<p>Поток реакции <strong>Φ₂</strong> направлен по оси обмотки ротора приёмника.</p><p>Его раскладывают на продольную и поперечную составляющие.</p>'
+      },
+      d: {
+        title: 'Φ₂d',
+        html: '<p><span class="char-eq">Φ₂d = Φ₂ · sin φ</span> — продольная составляющая.</p><p>Она <strong>ослабляет</strong> основной поток <strong>Φ₀</strong> от датчика. Ослабление зависит от угла рассогласования — погрешность <strong>нелинейна</strong>.</p>'
+      },
+      hi: {
+        title: 'Высокоомная',
+        html: '<p>Чем больше <strong>RH</strong>, тем меньше I₂ и Φ₂ — меньше погрешность.</p><p>Поэтому сельсинные ИР работают на <strong>высокоомную</strong> нагрузку.</p>'
+      }
+    };
+
+    let mode = 'load';
+
+    const paint = () => {
+      const phi = Number(phiSl?.value || 40);
+      const rh = Number(rhSl?.value || 6);
+      const phiRad = (phi * Math.PI) / 180;
+      const phi2Mag = 70 * (11 - rh) / 10;
+      const dMag = phi2Mag * Math.sin(phiRad);
+      const qMag = phi2Mag * Math.cos(phiRad);
+
+      if (phiVal) phiVal.textContent = `${phi}°`;
+      if (rhVal) {
+        rhVal.textContent = rh <= 3 ? 'малая' : rh >= 8 ? 'высокая' : 'средняя';
+      }
+      if (rotor) rotor.setAttribute('transform', `rotate(${-phi} 140 150)`);
+
+      const ox = 470;
+      const oy = 140;
+      const x2 = ox - qMag;
+      const y2 = oy - dMag;
+      if (phi2d) phi2d.setAttribute('d', `M${ox} ${oy} V${(oy - dMag).toFixed(1)}`);
+      if (phi2q) phi2q.setAttribute('d', `M${ox} ${oy} H${x2.toFixed(1)}`);
+      if (phi2vec) phi2vec.setAttribute('d', `M${ox} ${oy} L${x2.toFixed(1)} ${y2.toFixed(1)}`);
+
+      const sinV = Math.sin(phiRad).toFixed(2);
+      if (eqLbl) eqLbl.textContent = `Φ₂d = Φ₂ · sin φ = Φ₂ · ${sinV}`;
+      if (live) {
+        const err = (dMag / 70 * 100).toFixed(0);
+        live.textContent = rh >= 8
+          ? `RH высокая · I₂ мал · Φ₂d слабее · погрешность ≈ ${err}% шкалы`
+          : `Φ₂d = Φ₂·sin φ · ослабляет Φ₀ · оценка влияния ≈ ${err}%`;
+      }
+      if (rhBox) {
+        rhBox.setAttribute('fill', rh >= 8 ? '#ecfdf5' : rh <= 3 ? '#fef2f2' : '#fff7ed');
+        rhBox.setAttribute('stroke', rh >= 8 ? '#16a34a' : rh <= 3 ? '#ef4444' : '#fb923c');
+      }
+      if (i2Lbl) {
+        i2Lbl.textContent = rh >= 8 ? 'I₂↓' : rh <= 3 ? 'I₂↑' : 'I₂';
+        i2Lbl.setAttribute('fill', rh <= 3 ? '#b91c1c' : '#1e3a8a');
+      }
+
+      const data = info[mode];
+      if (panel && data) panel.innerHTML = `<h3>${data.title}</h3>${data.html}`;
+      slide.querySelectorAll('.app-purpose-card').forEach((b) => {
+        b.classList.toggle('active', b.dataset.info === mode);
+      });
+    };
+
+    const show = (key) => {
+      mode = key;
+      if (key === 'hi' && rhSl) rhSl.value = '9';
+      if (key === 'd' && phiSl) phiSl.value = '60';
+      if (key === 'phi2' && phiSl) phiSl.value = '40';
+      paint();
+    };
+
+    slide.addEventListener('click', (e) => {
+      const btn = e.target.closest('.app-purpose-card, .em-ac-hit');
+      if (!btn || !btn.dataset.info) return;
+      e.stopPropagation();
       show(btn.dataset.info);
     });
-    show('align');
+    phiSl?.addEventListener('input', paint);
+    rhSl?.addEventListener('input', paint);
+    paint();
+  })();
+
+  (() => {
+    const slide = document.querySelector('.slide-ir-selsyn-dyn-interactive');
+    if (!slide) return;
+    const panel = document.getElementById('irSelsynDynPanel');
+    const wSl = document.getElementById('irSelsynDynW');
+    const wVal = document.getElementById('irSelsynDynWVal');
+    const live = document.getElementById('irSelsynDynLive');
+    const wave = document.getElementById('irDynWave');
+    const envP = document.getElementById('irDynEnvP');
+    const envN = document.getElementById('irDynEnvN');
+    const period = document.getElementById('irDynPeriod');
+
+    const info = {
+      what: {
+        title: 'Суть',
+        html: '<p>Динамическая погрешность связана с <strong>переходными процессами</strong>, которые фиксирует обмотка ротора сельсина-приёмника.</p>'
+      },
+      setup: {
+        title: 'Опыт',
+        html: '<p>Ротор <strong>СД</strong> вращают с частотой <strong>ωвр</strong>, ротор <strong>СП</strong> зафиксирован.</p><p>С обмотки ротора СП снимают <strong>UΔ</strong> — как на рис. 3.72.</p>'
+      },
+      w0: {
+        title: 'ω₀',
+        html: '<p><strong>ω₀</strong> — частота сети (несущая). Внутри огибающей — быстрые колебания с частотой питания.</p>'
+      },
+      wvr: {
+        title: 'ωвр',
+        html: '<p><strong>ωвр</strong> — частота вращения датчика. Задаёт <strong>огибающую</strong>: период <span class="char-eq">2π / ωвр</span>.</p><p>Чем быстрее крутят СД — тем чаще «лепестки» UΔ.</p>'
+      }
+    };
+
+    let mode = 'what';
+    const X0 = 70;
+    const X1 = 570;
+    const Y0 = 130;
+    const AMP = 75;
+    const fCar = 28;
+
+    const paint = () => {
+      const wvr = Number(wSl?.value || 2);
+      if (wVal) {
+        wVal.textContent = wvr === 1 ? 'медленная' : wvr === 4 ? 'быстрая' : 'средняя';
+      }
+      const n = 420;
+      let dw = '';
+      let de = '';
+      let den = '';
+      for (let i = 0; i <= n; i += 1) {
+        const t = i / n;
+        const x = X0 + t * (X1 - X0);
+        const env = Math.sin(2 * Math.PI * wvr * t);
+        const car = Math.sin(2 * Math.PI * fCar * t);
+        const y = Y0 - AMP * env * car;
+        const ye = Y0 - AMP * Math.abs(env);
+        const yen = Y0 + AMP * Math.abs(env);
+        dw += `${i ? 'L' : 'M'}${x.toFixed(1)} ${y.toFixed(1)}`;
+        de += `${i ? 'L' : 'M'}${x.toFixed(1)} ${ye.toFixed(1)}`;
+        den += `${i ? 'L' : 'M'}${x.toFixed(1)} ${yen.toFixed(1)}`;
+      }
+      if (wave) wave.setAttribute('d', dw);
+      if (envP) envP.setAttribute('d', de);
+      if (envN) envN.setAttribute('d', den);
+      if (period) period.textContent = '2π / ωвр';
+      if (live) {
+        live.textContent = `UΔ ∼ sin(ωвр·t)·sin(ω₀·t) · лепестков за период: ${wvr}`;
+      }
+      slide.querySelectorAll('.app-purpose-card').forEach((b) => {
+        b.classList.toggle('active', b.dataset.info === mode);
+      });
+      const data = info[mode];
+      if (panel && data) panel.innerHTML = `<h3>${data.title}</h3>${data.html}`;
+    };
+
+    slide.addEventListener('click', (e) => {
+      const btn = e.target.closest('.app-purpose-card');
+      if (!btn || !btn.dataset.info) return;
+      e.stopPropagation();
+      mode = btn.dataset.info;
+      paint();
+    });
+    wSl?.addEventListener('input', paint);
+    paint();
+  })();
+
+  /* ===== Lecture 9: UPE (усилительно-преобразовательные элементы) ===== */
+  (() => {
+    const bindSimple = (slideSel, panelId, info, defaultKey) => {
+      bindEmAcSlide(slideSel, panelId, info, defaultKey);
+    };
+
+    bindSimple('.slide-upe-bridge-interactive', 'upeBridgePanel', {
+      ir: {
+        title: 'ИР',
+        html: '<p>На лекции 8 измеритель рассогласования сравнил углы и выдал слабый сигнал ошибки.</p><p>Сам по себе он силовой усилитель не «прокормит» — нужен промежуточный блок.</p>'
+      },
+      upe: {
+        title: 'УПЭ',
+        html: '<p><strong>Усилительно-преобразовательный элемент</strong> — тема этой лекции.</p><p>Согласует уровни и формы, предварительно усиливает и при необходимости корректирует динамику.</p>'
+      },
+      pwr: {
+        title: 'Силовой усилитель',
+        html: '<p>Каскад большой мощности: из подготовленного сигнала УПЭ получается ток и напряжение для привода.</p><p>УПЭ стоит <strong>перед</strong> силовым каскадом.</p>'
+      },
+      mot: {
+        title: 'Привод',
+        html: '<p>Исполнительный двигатель (ИД) или шаговый привод (ШД) — конец цепи.</p><p>Ошибка в итоге превращается в движение или момент на объекте.</p>'
+      }
+    }, 'ir');
+
+    bindSimple('.slide-upe-where-interactive', 'upeWherePanel', {
+      sens: {
+        title: 'Датчики',
+        html: '<p>С датчиков обратной связи и измерителей рассогласования приходят сигналы разного уровня и формы.</p><p>Их нельзя сразу подать на силовой усилитель.</p>'
+      },
+      upe: {
+        title: 'УПЭ',
+        html: '<p>УПЭ ставят <strong>перед силовым каскадом</strong> одноконтурной системы.</p><p>Здесь согласование, предусиление и преобразование формы сигнала.</p>'
+      },
+      pa: {
+        title: 'Силовые усилители',
+        html: '<p>Работают на больших токах и напряжениях привода.</p><p>Им нужен уже «правильный» по уровню и форме вход — его готовит УПЭ.</p>'
+      },
+      plant: {
+        title: 'Объект',
+        html: '<p>Механизм или привод — то, чем управляем.</p><p>Обратная связь замыкает контур через датчики и ИР.</p>'
+      }
+    }, 'sens');
+
+    bindSimple('.slide-upe-job-interactive', 'upeJobPanel', {
+      match: {
+        title: 'Согласовать',
+        html: '<p>Сигналы с датчиков и ИР имеют разный уровень, полярность и форму.</p><p>УПЭ приводит их к виду, который «понимает» следующий каскад.</p>'
+      },
+      amp: {
+        title: 'Усилить',
+        html: '<p><strong>Предварительное усиление</strong> — форма та же, амплитуда больше.</p><p>Слабый сигнал ошибки доводят до уровня, с которым может работать силовой каскад.</p>'
+      },
+      corr: {
+        title: 'Скорректировать',
+        html: '<p>Корректирующие звенья сглаживают переходные процессы.</p><p>Контур ведёт себя спокойнее — меньше выбросов при смене режима.</p>'
+      }
+    }, 'match');
+
+    bindSimple('.slide-upe-parts-interactive', 'upePartsPanel', {
+      conv: {
+        title: 'Преобразователи',
+        html: '<p>Чаще всего — <strong>модуляторы и демодуляторы</strong>: меняют форму сигнала (например, аналог ↔ АМ).</p><p>В следящих системах такие преобразователи встречаются особенно часто.</p>'
+      },
+      pre: {
+        title: 'Усилители',
+        html: '<p>Предварительные каскады на переменном и постоянном токе.</p><p>Поднимают уровень, не меняя принципиально назначение блока.</p>'
+      },
+      logic: {
+        title: 'Логика',
+        html: '<p>Дискретные схемы: ключи, ограничения, формирование импульсов.</p><p>Стык аналоговой части с цифровой логикой регулятора.</p>'
+      },
+      corr: {
+        title: 'Корректоры',
+        html: '<p>Задают нужную динамику до микропроцессорного регулятора или силового каскада.</p><p>Часто — RC- или активные фильтры и звенья.</p>'
+      }
+    }, 'conv');
+
+    bindSimple('.slide-upe-carrier-interactive', 'upeCarrierPanel', {
+      x: {
+        title: 'Модулирующий',
+        html: '<p><strong>Модулирующий сигнал X(t)</strong> — полезный, обычно медленный: с датчика или ИР.</p><p>Он задаёт, как менять несущую (при АМ — её амплитуду).</p>'
+      },
+      c: {
+        title: 'Несущий',
+        html: '<p><strong>Am·sin(ωt+φ₀)</strong> — высокочастотная «опорная» составляющая.</p><p>Её параметр (амплитуда, частота, фаза) несёт информацию после модуляции.</p>'
+      },
+      mod: {
+        title: 'Модулятор',
+        html: '<p>Блок, который по X(t) изменяет несущую и формирует <strong>Y(t)</strong>.</p><p>На схеме — центральный прямоугольник «Модулятор».</p>'
+      },
+      y: {
+        title: 'Сигнал модулирования',
+        html: '<p><strong>Y(t)</strong> — результат: модулированный сигнал на выходе.</p><p>Его дальше передают по линии связи или в следующий каскад УПЭ.</p>'
+      }
+    }, 'x');
+
+    bindSimple('.slide-upe-demod-interactive', 'upeDemodPanel', {
+      role: {
+        title: 'Роль',
+        html: '<p><strong>Демодулятор</strong> — АМ → аналог. <strong>Модулятор</strong> — аналог → АМ.</p><p>Это преобразовательные устройства внутри УПЭ.</p>'
+      },
+      rev: {
+        title: 'Обратимы',
+        html: '<p>Устройства <strong>обратимы</strong>: поменяли вход и выход — роль сменилась.</p><p>Один и тот же ключевой каскад может работать в обе стороны.</p>'
+      },
+      sw: {
+        title: 'Ключи',
+        html: '<p>Работа строится на быстродействующих переключателях: <strong>реле</strong>, <strong>диоды</strong>, <strong>транзисторы</strong>.</p><p>Именно ключ «отрезает» или пропускает полупериоды несущей.</p>'
+      },
+      wave: {
+        title: 'Исполнение',
+        html: '<p>По принципу — <strong>однополупериодные</strong> и <strong>двухполупериодные</strong> схемы.</p><p>От этого зависит форма пульсаций на выходе и нужная фильтрация.</p>'
+      }
+    }, 'role');
+
+    bindSimple('.slide-upe-relay-demod-interactive', 'upeRelayDemodPanel', {
+      am: {
+        title: 'X(t)',
+        html: '<p>Входное АМ-напряжение <strong>X(t) = Uвх</strong> подаётся на первичную обмотку трансформатора Тр.</p>'
+      },
+      tr: {
+        title: 'Тр',
+        html: '<p>Трансформатор согласует уровень и гальванически разделяет цепи.</p><p>Вторичное напряжение идёт на поляризованное реле.</p>'
+      },
+      rel: {
+        title: 'Реле',
+        html: '<p><strong>Поляризованное реле</strong>: обмотка от <strong>Uсети</strong>, контакты 1–2–3 работают как ключ.</p><p>В однополупериодной схеме пропускают выбранную половину периода.</p>'
+      },
+      out: {
+        title: 'Y → Z',
+        html: '<p><strong>Y(t) = Uвых</strong> — пульсирующее напряжение после ключа.</p><p>Фильтр <strong>RфCф</strong> выделяет медленный аналог <strong>Z(t)</strong>.</p>'
+      }
+    }, 'am');
+
+    const pathFromFn = (x0, x1, yBase, amp, fn, steps) => {
+      const n = steps || 400;
+      const w = x1 - x0;
+      let d = '';
+      for (let i = 0; i <= n; i += 1) {
+        const t = i / n;
+        const x = x0 + t * w;
+        const y = yBase - amp * fn(t);
+        d += `${i ? 'L' : 'M'}${x.toFixed(2)} ${y.toFixed(2)}`;
+      }
+      return d;
+    };
+
+    const sigSlide = document.querySelector('.slide-upe-sigs-interactive');
+    if (sigSlide) {
+      const panel = document.getElementById('upeSigsPanel');
+      const wave = document.getElementById('upeSigWave');
+      const caption = document.getElementById('upeSigCaption');
+      const info = {
+        an: {
+          title: 'Аналоговые',
+          html: '<p>Медленно меняющиеся <strong>непрерывные</strong> сигналы: напряжение или ток «следят» за величиной плавно.</p><p>Типичный пример — выход потенциометрического ИР.</p>',
+          cap: 'медленный непрерывный сигнал',
+          fn: (t) => Math.sin(2 * Math.PI * 1.2 * t)
+        },
+        mod: {
+          title: 'Модулированные',
+          html: '<p>Несущая высокой частоты, параметр которой несёт информацию: <strong>АМ</strong>, <strong>ЧМ</strong>, <strong>ШИМ</strong> и др.</p><p>Удобны для передачи и ключевой обработки в УПЭ.</p>',
+          cap: 'АМ: огибающая «дышит»',
+          fn: (t) => (1 + 0.55 * Math.sin(2 * Math.PI * 1.5 * t)) * Math.sin(2 * Math.PI * 28 * t)
+        },
+        dig: {
+          title: 'Цифровые',
+          html: '<p>Дискретные <strong>уровни</strong> или коды: «0» и «1», импульсные последовательности.</p><p>Используются в логике и микропроцессорных регуляторах.</p>',
+          cap: 'уровни · импульсы',
+          fn: (t) => {
+            const k = Math.floor(t * 8);
+            return k % 2 === 0 ? 0.85 : -0.35;
+          }
+        }
+      };
+      const paintSig = (key) => {
+        const data = info[key] || info.an;
+        if (wave) wave.setAttribute('d', pathFromFn(50, 520, 110, key === 'dig' ? 55 : 48, data.fn, key === 'mod' ? 520 : 200));
+        if (caption) caption.textContent = data.cap;
+        if (panel) panel.innerHTML = `<h3>${data.title}</h3>${data.html}`;
+        sigSlide.querySelectorAll('.app-purpose-card').forEach((b) => {
+          b.classList.toggle('active', b.dataset.info === key);
+        });
+      };
+      sigSlide.addEventListener('click', (e) => {
+        const btn = e.target.closest('.app-purpose-card');
+        if (!btn?.dataset.info) return;
+        e.stopPropagation();
+        paintSig(btn.dataset.info);
+      });
+      paintSig('an');
+    }
+
+    const modSlide = document.querySelector('.slide-upe-mod-interactive');
+    if (modSlide) {
+      const panel = document.getElementById('upeModPanel');
+      const wave = document.getElementById('upeModWave');
+      const env = document.getElementById('upeModEnv');
+      const envNeg = document.getElementById('upeModEnvNeg');
+      const capEl = document.getElementById('upeModCaption');
+      const live = document.getElementById('upeModLive');
+      const paramRange = document.getElementById('upeModParam');
+      const paramName = document.getElementById('upeModParamName');
+      const paramVal = document.getElementById('upeModParamVal');
+      const amSteps = document.getElementById('upeModAmSteps');
+      let kind = 'am';
+      let amStep = 'out';
+
+      const panelInfo = {
+        am: {
+          title: 'АМ',
+          html: '<p><strong>Амплитудная модуляция</strong>: информация в изменении амплитуды несущей.</p><p>Крутите <strong>глубину m</strong> — огибающая сильнее или слабее «дышит».</p>'
+        },
+        fm: {
+          title: 'ЧМ',
+          html: '<p><strong>Частотная модуляция</strong>: полезный сигнал меняет мгновенную частоту несущей.</p><p>Крутите параметр — густота «зубцов» на графике меняется.</p>'
+        },
+        pm: {
+          title: 'ФМ',
+          html: '<p><strong>Фазовая модуляция</strong>: сдвигается фаза высокочастотного колебания.</p><p>На графике видно «сжатие» и «растяжение» участков синусоиды.</p>'
+        },
+        pam: {
+          title: 'АИМ',
+          html: '<p><strong>Амплитудно-импульсная модуляция</strong>: амплитуда импульсов несёт информацию.</p><p>Параметр задаёт высоту импульсов при фиксированной частоте следования.</p>'
+        },
+        pwm: {
+          title: 'ШИМ',
+          html: '<p><strong>Широтно-импульсная модуляция</strong>: постоянная амплитуда, меняется ширина импульсов.</p><p>Крутите параметр — меняется скважность.</p>'
+        }
+      };
+
+      const param = () => (Number(paramRange?.value) || 55) / 100;
+
+      const paintMod = () => {
+        const p = param();
+        const m = Math.min(0.95, Math.max(0, p));
+        if (paramVal) paramVal.textContent = kind === 'pwm' ? `${Math.round(p * 100)}%` : p.toFixed(2);
+        if (env) env.setAttribute('opacity', '0');
+        if (envNeg) envNeg.setAttribute('opacity', '0');
+
+        let fn = (t) => Math.sin(2 * Math.PI * 24 * t);
+        let cap = 'несущая';
+        let liveTxt = '';
+
+        if (kind === 'am') {
+          if (paramName) paramName.textContent = 'глубина m';
+          if (amSteps) amSteps.hidden = false;
+          const car = (t) => Math.sin(2 * Math.PI * 24 * t);
+          const x = (t) => Math.sin(2 * Math.PI * 2 * t);
+          if (amStep === 'car') {
+            fn = car;
+            cap = 'несущая sin ω₀t';
+            liveTxt = 'шаг 1: чистая несущая';
+          } else if (amStep === 'x') {
+            fn = x;
+            cap = 'полезный X(t) = sin Ωt';
+            liveTxt = 'шаг 2: медленный модулирующий сигнал';
+          } else if (amStep === 'mul') {
+            fn = (t) => (1 + m * x(t)) * 0.55;
+            cap = 'огибающая (1 + m·sin Ωt)';
+            liveTxt = 'шаг 3: огибающая перед умножением на несущую';
+          } else {
+            fn = (t) => (1 + m * Math.sin(2 * Math.PI * 2 * t)) * Math.sin(2 * Math.PI * 24 * t);
+            cap = 'несущая · амплитуда меняется';
+            liveTxt = `АМ: U = (1 + m·sin Ωt) · sin ω₀t · m = ${m.toFixed(2)}`;
+            if (env) {
+              env.setAttribute('d', pathFromFn(50, 520, 110, 52, (t) => 1 + m * Math.sin(2 * Math.PI * 2 * t), 160));
+              env.setAttribute('opacity', '1');
+            }
+            if (envNeg) {
+              envNeg.setAttribute('d', pathFromFn(50, 520, 110, 52, (t) => -(1 + m * Math.sin(2 * Math.PI * 2 * t)), 160));
+              envNeg.setAttribute('opacity', '1');
+            }
+          }
+        } else {
+          if (amSteps) amSteps.hidden = true;
+          amStep = 'out';
+          if (kind === 'fm') {
+            if (paramName) paramName.textContent = 'индекс β';
+            fn = (t) => Math.sin(2 * Math.PI * (18 + 14 * m) * t + 4 * m * Math.sin(2 * Math.PI * 2 * t));
+            cap = 'ЧМ: частота «гуляет»';
+            liveTxt = `ЧМ: мгновенная частота зависит от sin Ωt · β = ${m.toFixed(2)}`;
+          } else if (kind === 'pm') {
+            if (paramName) paramName.textContent = 'индекс φ';
+            fn = (t) => Math.sin(2 * Math.PI * 22 * t + m * 2.8 * Math.sin(2 * Math.PI * 2 * t));
+            cap = 'ФМ: фаза сдвигается';
+            liveTxt = `ФМ: φ(t) = φ₀ + m·sin Ωt · m = ${m.toFixed(2)}`;
+          } else if (kind === 'pam') {
+            if (paramName) paramName.textContent = 'амплитуда';
+            fn = (t) => {
+              const ph = (t * 16) % 1;
+              return ph < 0.35 ? m * Math.sin(2 * Math.PI * 24 * t) : 0;
+            };
+            cap = 'АИМ: высота импульсов';
+            liveTxt = `АИМ: амплитуда импульсов ∝ ${m.toFixed(2)}`;
+          } else if (kind === 'pwm') {
+            if (paramName) paramName.textContent = 'скважность';
+            fn = (t) => {
+              const ph = (t * 14) % 1;
+              return ph < m ? 1 : -1;
+            };
+            cap = 'ШИМ: ширина импульсов';
+            liveTxt = `ШИМ: импульс «открыт» ${Math.round(m * 100)}% периода`;
+          }
+        }
+
+        if (wave) wave.setAttribute('d', pathFromFn(50, 520, 110, 48, fn, kind === 'pwm' || kind === 'pam' ? 480 : 520));
+        if (capEl) capEl.textContent = cap;
+        if (live) live.textContent = liveTxt;
+      };
+
+      const showModKind = (key) => {
+        kind = key;
+        const data = panelInfo[key] || panelInfo.am;
+        if (panel) panel.innerHTML = `<h3>${data.title}</h3>${data.html}`;
+        modSlide.querySelectorAll('.app-purpose-card').forEach((b) => {
+          b.classList.toggle('active', b.dataset.info === key);
+        });
+        paintMod();
+      };
+
+      modSlide.addEventListener('click', (e) => {
+        const card = e.target.closest('.app-purpose-card');
+        if (card?.dataset.info) {
+          e.stopPropagation();
+          showModKind(card.dataset.info);
+          return;
+        }
+        const step = e.target.closest('.em-upe-mod-step');
+        if (step?.dataset.amstep) {
+          e.stopPropagation();
+          amStep = step.dataset.amstep;
+          modSlide.querySelectorAll('.em-upe-mod-step').forEach((b) => {
+            b.classList.toggle('active', b.dataset.amstep === amStep);
+          });
+          paintMod();
+        }
+      });
+      paramRange?.addEventListener('input', paintMod);
+      showModKind('am');
+    }
+
+    const fchvSlide = document.querySelector('.slide-upe-fchv-interactive');
+    if (fchvSlide) {
+      const panel = document.getElementById('upeFchvPanel');
+      const gatesG = document.getElementById('upeFchvGates');
+      const elNet = document.getElementById('upeFchvNet');
+      const elIn = document.getElementById('upeFchvIn');
+      const elEnvP = document.getElementById('upeFchvEnvP');
+      const elEnvN = document.getElementById('upeFchvEnvN');
+      const elOut = document.getElementById('upeFchvOut');
+      const elZ = document.getElementById('upeFchvZ');
+      const elZIdeal = document.getElementById('upeFchvZIdeal');
+      const elZFill = document.getElementById('upeFchvZFill');
+      const elZBig = document.getElementById('upeFchvZBig');
+      const elZBigIdeal = document.getElementById('upeFchvZBigIdeal');
+      const elCap = document.getElementById('upeFchvCap');
+      const X0 = 70;
+      const X1 = 620;
+      const W = X1 - X0;
+      const m = 0.55;
+      const fGrid = 3;
+      const fCar = 14;
+      const fMod = 1;
+      let sigPhase = 0;
+
+      const info = {
+        sync: {
+          title: 'Всё сразу',
+          html: '<p><strong>Uвх</strong> — АМ. <strong>Uвых</strong> — куски после ключа. <strong>Z(t)</strong> — сглаженный аналог, который идёт дальше.</p>',
+          view: 'sync'
+        },
+        inv: {
+          title: 'Сдвиг 180°',
+          html: '<p>Если полезная составляющая сдвинута на <strong>180°</strong> относительно Uсети, <strong>Z(t)</strong> уходит в отрицательную область.</p><p>Так ФЧВ кодирует направление рассогласования.</p>',
+          view: 'sync'
+        },
+        fchv: {
+          title: 'ФЧВ',
+          html: '<p><strong>Фазочувствительный выпрямитель</strong>: знак Z(t) зависит от фазы входа относительно опорной Uсети.</p><p>Именно поэтому однополупериодный демодулятор на реле — ФЧВ.</p>',
+          view: 'fchv'
+        },
+        flt: {
+          title: 'Что уходит',
+          html: '<p>После <strong>RфCф</strong> в следующий каскад идёт медленный <strong>Z(t)</strong> — уже без высокочастотных пульсаций.</p>',
+          view: 'flt'
+        }
+      };
+
+      const gridOpen = (t) => Math.sin(2 * Math.PI * fGrid * t) > 0;
+      const env = (t) => 1 + m * Math.sin(2 * Math.PI * fMod * t + sigPhase);
+      const amIn = (t) => env(t) * Math.sin(2 * Math.PI * fCar * t);
+
+      /** Path that lifts the pen when gate is closed — clear RF packets, no zero-line clutter. */
+      const gatedPath = (yBase, amp, fn, steps) => {
+        const n = steps || 480;
+        let d = '';
+        let pen = false;
+        for (let i = 0; i <= n; i += 1) {
+          const t = i / n;
+          const x = X0 + t * W;
+          if (!gridOpen(t)) {
+            pen = false;
+            continue;
+          }
+          const y = yBase - amp * fn(t);
+          d += `${pen ? 'L' : 'M'}${x.toFixed(2)} ${y.toFixed(2)}`;
+          pen = true;
+        }
+        return d;
+      };
+
+      const paintFchv = () => {
+        if (elNet) {
+          elNet.setAttribute('d', pathFromFn(X0, X1, 48, 22, (t) => Math.sin(2 * Math.PI * fGrid * t), 240));
+        }
+        if (gatesG) {
+          let html = '';
+          let open = false;
+          let sx = X0;
+          const steps = 240;
+          for (let i = 0; i <= steps; i += 1) {
+            const t = i / steps;
+            const x = X0 + t * W;
+            const on = gridOpen(t);
+            if (on && !open) {
+              sx = x;
+              open = true;
+            } else if (!on && open) {
+              const w = Math.max(0, x - sx);
+              html += `<rect x="${sx.toFixed(1)}" y="20" width="${w.toFixed(1)}" height="340" fill="#7c3aed" fill-opacity="0.06"/>`;
+              html += `<rect x="${sx.toFixed(1)}" y="22" width="${w.toFixed(1)}" height="10" fill="#7c3aed" fill-opacity="0.22" rx="2"/>`;
+              open = false;
+            }
+          }
+          gatesG.innerHTML = html;
+        }
+        if (elEnvP) {
+          elEnvP.setAttribute('d', pathFromFn(X0, X1, 128, 36, (t) => env(t), 160));
+        }
+        if (elEnvN) {
+          elEnvN.setAttribute('d', pathFromFn(X0, X1, 128, 36, (t) => -env(t), 160));
+        }
+        if (elIn) {
+          elIn.setAttribute('d', pathFromFn(X0, X1, 128, 34, amIn, 420));
+        }
+        if (elOut) {
+          /* Half-wave packets while relay is closed. 180° → negative packets. */
+          const outFn = sigPhase > 0.1
+            ? (t) => Math.min(0, amIn(t))
+            : (t) => Math.max(0, amIn(t));
+          elOut.setAttribute('d', gatedPath(218, 32, outFn, 480));
+        }
+
+        const zIdealFn = (t) => (sigPhase > 0.1 ? -1 : 1) * m * Math.sin(2 * Math.PI * fMod * t);
+        const zSmoothFn = (t) => {
+          const ideal = zIdealFn(t);
+          let sum = 0;
+          const k = 6;
+          for (let j = 0; j < k; j += 1) {
+            const tt = Math.min(1, t + j / (k * fCar * 3));
+            sum += gridOpen(tt) ? Math.max(0, amIn(tt)) : 0;
+          }
+          const ripple = (sum / k) * 0.05 - 0.02;
+          return ideal * 0.9 + ripple;
+        };
+        const zPath = pathFromFn(X0, X1, 308, 1, (t) => 28 * zSmoothFn(t), 280);
+        const zIdealPath = pathFromFn(X0, X1, 308, 1, (t) => 28 * zIdealFn(t), 160);
+        if (elZ) elZ.setAttribute('d', zPath);
+        if (elZIdeal) elZIdeal.setAttribute('d', zIdealPath);
+        if (elZFill) {
+          elZFill.setAttribute('d', `${zPath} L${X1} 308 L${X0} 308 Z`);
+        }
+        if (elZBig) elZBig.setAttribute('d', pathFromFn(X0, X1, 260, 1, (t) => 40 * zSmoothFn(t), 280));
+        if (elZBigIdeal) elZBigIdeal.setAttribute('d', pathFromFn(X0, X1, 260, 1, (t) => 40 * zIdealFn(t), 160));
+        if (elCap) {
+          elCap.textContent = sigPhase > 0.1
+            ? 'сдвиг 180°: Z(t) ниже нуля — другое направление рассогласования'
+            : 'Uвых — пульсации · Z(t) — полезный аналог дальше';
+        }
+      };
+
+      const showFchv = (key) => {
+        const data = info[key] || info.sync;
+        sigPhase = key === 'inv' ? Math.PI : 0;
+        fchvSlide.querySelectorAll('.app-purpose-card').forEach((b) => {
+          b.classList.toggle('active', b.dataset.info === key);
+        });
+        fchvSlide.querySelectorAll('.em-ac-view').forEach((g) => {
+          const v = g.getAttribute('data-view');
+          const on = data.view === 'sync'
+            ? v === 'sync'
+            : v === data.view;
+          g.classList.toggle('is-on', on);
+        });
+        if (panel) panel.innerHTML = `<h3>${data.title}</h3>${data.html}`;
+        paintFchv();
+      };
+
+      fchvSlide.addEventListener('click', (e) => {
+        const btn = e.target.closest('.app-purpose-card');
+        if (!btn?.dataset.info) return;
+        e.stopPropagation();
+        showFchv(btn.dataset.info);
+      });
+      showFchv('sync');
+    }
+
+    bindSimple('.slide-upe-k-interactive', 'upeKPanel', {
+      flt: {
+        title: 'Фильтр',
+        html: '<p>После ключа <strong>Uвых</strong> пульсирует. Цепь <strong>RфCф</strong> выделяет медленную составляющую.</p><p>На выходе фильтра: постоянная <strong>Y₀</strong> и переменная <strong>Y₁(t)</strong>.</p>'
+      },
+      uin: {
+        title: 'Uвх',
+        html: '<p>Вход — <strong>АМ</strong> (или уже выпрямленные импульсы перед фильтром).</p><p>Быстрая «несущая» часть фильтром подавляется.</p>'
+      },
+      y: {
+        title: 'Y = Y₀ + Y₁',
+        html: '<p><strong>Y₀</strong> — постоянная (полезный уровень). <strong>Y₁(t)</strong> — остаточная пульсация на частоте 2f или выше.</p><p>Чем больше RфCф, тем меньше Y₁ — но медленнее переход.</p>'
+      },
+      k: {
+        title: 'K',
+        html: '<p><strong>K = Y₀/Umax = 1/π ≈ 0,318</strong> — за <strong>один период T</strong> сигнала (однополупериодное выпрямление).</p><p>Пик входа принимаем за Umax = 1 — среднее за T даёт 1/π.</p>'
+      }
+    }, 'flt');
+
+    const kSlide = document.querySelector('.slide-upe-k-interactive');
+    if (kSlide) {
+      const live = document.getElementById('upeKLive');
+      const elUin = document.getElementById('upeKUin');
+      const elY = document.getElementById('upeKY');
+      const paintK = (key) => {
+        const am = (t) => Math.max(0, Math.sin(2 * Math.PI * 3 * t)) * Math.sin(2 * Math.PI * 28 * t);
+        const y0 = 1 / Math.PI;
+        if (elUin) elUin.setAttribute('d', pathFromFn(50, 520, 120, 42, am, 480));
+        if (elY) {
+          elY.setAttribute('d', pathFromFn(50, 520, 145, 22, (t) => y0 + 0.08 * Math.sin(2 * Math.PI * 6 * t), 240));
+        }
+        const msgs = {
+          flt: 'RфCф: Y = Y₀ + Y₁(t) — постоянная и ripple',
+          uin: 'Uвх — АМ / импульсы до фильтра',
+          y: 'Y₀ (зелёная) + пульсация Y₁ вокруг постоянной',
+          k: 'K = Y₀/Umax = 1/π ≈ 0,318 за период T (полуволна sin)'
+        };
+        if (live) live.textContent = msgs[key] || msgs.flt;
+      };
+      kSlide.addEventListener('click', (e) => {
+        const btn = e.target.closest('.app-purpose-card');
+        if (!btn?.dataset.info) return;
+        paintK(btn.dataset.info);
+      });
+      paintK('flt');
+    }
+
+    bindSimple('.slide-upe-vt-demod-interactive', 'upeVtDemodPanel', {
+      why: {
+        title: 'Зачем VT',
+        html: '<p>Транзистор в ключевом режиме заменяет контакты реле — пропускает или отрезает полупериоды АМ.</p><p>Выше быстродействие, меньше габариты.</p>'
+      },
+      ik0: {
+        title: 'Iк0',
+        html: '<p>Один VT плохо закрывается из‑за <strong>Iк0</strong> — обратного тока коллектора.</p><p>Утечка в «закрытом» состоянии даёт ошибку демодуляции.</p>'
+      },
+      pair: {
+        title: 'Пара VT',
+        html: '<p><strong>Встречное включение</strong> двух транзисторов компенсирует утечки.</p><p>Остаточный ток падает на <strong>3–4 порядка</strong>.</p>'
+      },
+      sch: {
+        title: 'Схема',
+        html: '<p>Как на рис. 4.6: <strong>коллекторы соединены</strong>, эмиттеры — на общую шину.</p><p>На входе Uвх, на выходе Y после фильтра.</p>'
+      }
+    }, 'why');
+
+    bindSimple('.slide-upe-vt-mod-interactive', 'upeVtModPanel', {
+      rev: {
+        title: 'Обратимо',
+        html: '<p>Ключевой каскад на транзисторах <strong>обратим</strong>: АМ → аналог или аналог → АМ.</p>'
+      },
+      how: {
+        title: 'Как',
+        html: '<p>Ключ «рубит» несущую по закону <strong>модулирующего</strong> сигнала — умножение аналога на опорные импульсы.</p>'
+      },
+      wave: {
+        title: 'Форма',
+        html: '<p>На выходе снова <strong>АМ</strong>: амплитуда следует за X(t).</p>'
+      },
+      same: {
+        title: 'Та же схема',
+        html: '<p>Меняют местами вход и выход — получают модулятор вместо демодулятора (и наоборот).</p>'
+      }
+    }, 'rev');
+
+    const vtModSlide = document.querySelector('.slide-upe-vt-mod-interactive');
+    if (vtModSlide) {
+      const w = document.getElementById('upeVtModWave');
+      const paintVtMod = () => {
+        if (w) {
+          w.setAttribute('d', pathFromFn(40, 520, 110, 44, (t) => (1 + 0.5 * Math.sin(2 * Math.PI * 2 * t)) * Math.sin(2 * Math.PI * 26 * t), 520));
+        }
+      };
+      vtModSlide.addEventListener('click', (e) => {
+        if (e.target.closest('.app-purpose-card')) paintVtMod();
+      });
+      paintVtMod();
+    }
+
+    bindSimple('.slide-upe-fullwave-interactive', 'upeFullwavePanel', {
+      why: {
+        title: 'Зачем',
+        html: '<p>Однополупериодная схема «выбрасывает» половину периода. Двухполупериодная работает <strong>оба раза за T</strong>.</p>'
+      },
+      how: {
+        title: 'Как',
+        html: '<p>Два ключа (мост, два VT, трансформатор с серединой) поочерёдно пропускают полупериоды.</p>'
+      },
+      gain: {
+        title: 'K ×2',
+        html: '<p><strong>K = 2/π ≈ 0,637</strong> — в два раза больше, чем 1/π у однополупериодной.</p><p>Частота пульсаций <strong>fпульс ×2</strong> — проще фильтровать.</p>'
+      },
+      prac: {
+        title: 'Практика',
+        html: '<p>Меньше Y₁ при том же RфCф · лучше коэффициент использования сигнала.</p><p>Двухполупериодные схемы типичны в силовых УПЭ.</p>'
+      }
+    }, 'why');
+
+    const fwSlide = document.querySelector('.slide-upe-fullwave-interactive');
+    if (fwSlide) {
+      const live = document.getElementById('upeFwLive');
+      const wave = document.getElementById('upeFwWave');
+      const msgs = {
+        why: 'два «горба» за период T — оба полупериода работают',
+        how: 'мост / два VT — чередование ключей',
+        gain: 'K = 2/π ≈ 0,637 · fпульс в 2 раза выше однополупериодной',
+        prac: 'меньше ripple · выше K — выгоднее для фильтра'
+      };
+      const paintFw = (key) => {
+        if (wave) {
+          wave.setAttribute('d', pathFromFn(40, 520, 130, 50, (t) => Math.abs(Math.sin(2 * Math.PI * 3 * t)), 320));
+        }
+        if (live) live.textContent = msgs[key] || msgs.why;
+      };
+      fwSlide.addEventListener('click', (e) => {
+        const btn = e.target.closest('.app-purpose-card');
+        if (!btn?.dataset.info) return;
+        paintFw(btn.dataset.info);
+      });
+      paintFw('why');
+    }
+
+    const adSlide = document.querySelector('.slide-upe-ad-interactive');
+    if (adSlide) {
+      const panel = document.getElementById('upeAdPanel');
+      const info = {
+        path: {
+          title: 'Путь сигнала',
+          html: '<p>После демодуляции аналог идёт в каскады на <strong>ОУ</strong> — усиление, суммирование, коррекция.</p>'
+        },
+        uni: {
+          title: 'Униполярные',
+          html: '<p>Сигналы и питание <strong>0…+U</strong> — часто после однополупериодного выпрямления.</p>'
+        },
+        both: {
+          title: 'Биполярные',
+          html: '<p><strong>±U</strong> — ФЧВ, питание ОУ ±E, знак ошибки сохраняется.</p>'
+        },
+        next: {
+          title: 'Дальше',
+          html: '<p><strong>W(p) = −Z₀/Z₁</strong> — коррекция и суммирование на ОУ (формула 4.2).</p>'
+        }
+      };
+      const showAd = (key) => {
+        const data = info[key] || info.path;
+        if (panel) panel.innerHTML = `<h3>${data.title}</h3>${data.html}`;
+        adSlide.querySelectorAll('.upe-ad-step').forEach((b) => {
+          b.classList.toggle('active', b.dataset.info === key);
+        });
+        adSlide.querySelectorAll('.em-ac-view').forEach((g) => {
+          g.classList.toggle('is-on', g.getAttribute('data-view') === key);
+        });
+      };
+      adSlide.addEventListener('click', (e) => {
+        const step = e.target.closest('.upe-ad-step');
+        if (!step?.dataset.info) return;
+        e.stopPropagation();
+        showAd(step.dataset.info);
+      });
+      showAd('path');
+    }
+
+    bindSimple('.slide-upe-opamp-interactive', 'upeOpampPanel', {
+      fn: {
+        title: 'Функция',
+        html: '<p>ОУ с обратной связью <strong>усиливает разность</strong> входов (с учётом Z₁, Z₂, Z₀).</p><p>В УПЭ — аналог, АМ‑цепи, корректирующие фильтры.</p>'
+      },
+      x1: {
+        title: 'X₁',
+        html: '<p><strong>Инвертирующий</strong> вход через Z₁. Знак «−» на схеме ОУ.</p>'
+      },
+      x2: {
+        title: 'X₂',
+        html: '<p><strong>Неинвертирующий</strong> вход через Z₂.</p>'
+      },
+      z0: {
+        title: 'Z₀',
+        html: '<p><strong>Обратная связь</strong> Z₀ задаёт передаточную функцию вместе с Z₁.</p>'
+      },
+      y: {
+        title: 'Y',
+        html: '<p>Выходное напряжение <strong>Y</strong> — результат суммы токов в узле ОС.</p>'
+      },
+      sup: {
+        title: '±E',
+        html: '<p>Питание <strong>+E / −E</strong> — рабочий диапазон без насыщения.</p>'
+      }
+    }, 'fn');
+
+    const oaSlide = document.querySelector('.slide-upe-opamp-interactive');
+    if (oaSlide) {
+      oaSlide.classList.add('is-picking');
+      const syncOa = (key) => {
+        oaSlide.querySelectorAll('.upe-oa-node').forEach((n) => {
+          n.classList.toggle('is-on', n.dataset.info === key || key === 'fn');
+        });
+      };
+      oaSlide.addEventListener('click', (e) => {
+        const hit = e.target.closest('.em-ac-hit');
+        if (hit?.dataset.info) syncOa(hit.dataset.info);
+        const card = e.target.closest('.app-purpose-card');
+        if (card?.dataset.info) syncOa(card.dataset.info);
+      });
+      syncOa('fn');
+    }
+
+    const oaTfSlide = document.querySelector('.slide-upe-opamp-tf-interactive');
+    if (oaTfSlide) {
+      const panel = document.getElementById('upeOaTfPanel');
+      const live = document.getElementById('upeOaTfLive');
+      const pathIx = document.getElementById('upeOaTfPathIx');
+      const pathIy = document.getElementById('upeOaTfPathIy');
+      const info = {
+        goal: {
+          title: 'Цель',
+          html: '<p>Найти <strong>Ẏ/Ẋ₁</strong> через импедансы Z₁ и Z₀ при K → ∞.</p>',
+          live: 'Ẏ/Ẋ₁ ≈ −Z₀/Z₁ — цель вывода'
+        },
+        why: {
+          title: 'Идея',
+          html: '<p>При K → ∞ напряжения на входах ОУ выравниваются; токи через Z₁, Z₀ задают Ẋ и Ẏ.</p>',
+          live: 'K → ∞ ⇒ U₊ ≈ U₋ · считаем токи в Z'
+        },
+        ix1: {
+          title: 'I_x₁',
+          html: '<p><strong>Синий путь:</strong> X₁ → Z₁ → Z₀ → земля, выход Y закорочен.</p><p>İ_x₁ = Ẋ₁/Z₁, U̇_x₁ = İ_x₁·Z₁.</p>',
+          live: 'İ_x₁ = Ẋ₁/Z₁ · U̇_x₁ = İ_x₁·Z₁'
+        },
+        iy: {
+          title: 'I_y',
+          html: '<p><strong>Фиолетовый путь:</strong> Y → Z₀ → Z₁ → земля, X₁ закорочен.</p><p>İ_y = Ẏ/Z₀, U̇_y = İ_y·Z₀.</p>',
+          live: 'İ_y = Ẏ/Z₀ · U̇_y = İ_y·Z₀'
+        },
+        u: {
+          title: 'U',
+          html: '<p>Сложение падений: <strong>U̇ = U̇_x₁ + U̇_y = Ẏ/K</strong> (виртуальное K большое).</p>',
+          live: 'U̇ = U̇_x₁ + U̇_y = Ẏ/K'
+        },
+        res: {
+          title: 'Итог',
+          html: '<p>Из равенства токов получаем <strong>Ẏ/Ẋ₁ ≈ −Z₀/Z₁</strong>.</p>',
+          live: 'Ẏ/Ẋ₁ ≈ −Z₀/Z₁'
+        }
+      };
+      const showTf = (key) => {
+        const data = info[key] || info.goal;
+        if (panel) panel.innerHTML = `<h3>${data.title}</h3>${data.html}`;
+        if (live) live.textContent = data.live;
+        oaTfSlide.querySelectorAll('.app-purpose-card').forEach((b) => {
+          b.classList.toggle('active', b.dataset.info === key);
+        });
+        oaTfSlide.querySelectorAll('.em-ac-view').forEach((g) => {
+          g.classList.toggle('is-on', g.getAttribute('data-view') === key);
+        });
+        if (pathIx) {
+          pathIx.setAttribute('opacity', key === 'ix1' ? '1' : '0');
+          pathIx.setAttribute('d', 'M60 130 H240 V140 H400 V220 H120 V220 H240');
+        }
+        if (pathIy) {
+          pathIy.setAttribute('opacity', key === 'iy' ? '1' : '0');
+          pathIy.setAttribute('d', 'M480 140 H320 V140 H240 V220 H120 V220 H240');
+        }
+      };
+      oaTfSlide.addEventListener('click', (e) => {
+        const btn = e.target.closest('.app-purpose-card');
+        if (!btn?.dataset.info) return;
+        e.stopPropagation();
+        showTf(btn.dataset.info);
+      });
+      showTf('goal');
+    }
+
+    bindSimple('.slide-upe-opamp-w-interactive', 'upeOaWPanel', {
+      use: {
+        title: 'Зачем',
+        html: '<p>На ОУ собирают <strong>сумму сигналов</strong> и задают нужную <strong>W(p)</strong> для коррекции контура.</p>'
+      },
+      how: {
+        title: 'Как',
+        html: '<p>Несколько входов Xᵢ через свои Z₁ᵢ на инвертирующий вход; общая Z₀ в обратной связи.</p>'
+      },
+      w: {
+        title: 'W(p)',
+        html: '<p><strong>W(p) = −Z₀(p)/Z₁(p)</strong> — формула (4.2), частотная коррекция.</p>'
+      },
+      sum: {
+        title: 'Сумматор',
+        html: '<p><strong>Ẏ = −Σ (Z₀/Z₁ᵢ)·Ẋᵢ</strong> — несколько команд на один каскад ОУ.</p>'
+      }
+    }, 'use');
+
+    const oaWSlide = document.querySelector('.slide-upe-opamp-w-interactive');
+    if (oaWSlide) {
+      const live = document.getElementById('upeOaWLive');
+      const msgs = {
+        use: 'W(p) = −Z₀(p)/Z₁(p) — коррекция в обратной связи',
+        how: 'несколько Z₁ᵢ → один инвертирующий вход',
+        w: 'формула (4.2): W(p) = −Z₀(p)/Z₁(p)',
+        sum: 'Ẏ = −Σ (Z₀/Z₁ᵢ)·Ẋᵢ — суммирующий усилитель'
+      };
+      oaWSlide.addEventListener('click', (e) => {
+        const btn = e.target.closest('.app-purpose-card');
+        if (!btn?.dataset.info || !live) return;
+        live.textContent = msgs[btn.dataset.info] || msgs.use;
+      });
+    }
   })();
 
 
