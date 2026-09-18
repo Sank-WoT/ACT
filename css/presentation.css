@@ -5132,8 +5132,14 @@ body.overview-mode .slide-diagram { display: none; }
 .hall-svg,
 .sensor-test-svg {
   width: 100%;
-  max-height: 48vh;
+  max-height: 52vh;
   display: block;
+}
+.photo-pv-char-view {
+  display: none;
+}
+.photo-pv-char-view.is-on {
+  display: inline;
 }
 .hall-view {
   display: none;
@@ -8923,6 +8929,10 @@ body.overview-mode .slide-diagram { display: none; }
 .slide-upe-opamp-tf-interactive .em-ac-view.is-on {
   display: block;
 }
+.slide-upe-opamp-tf-interactive .upe-oa-tf-path {
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
 .slide-upe-opamp-tf-interactive .em-upe-oa-tf-live {
   margin: 0;
   font-weight: 700;
@@ -8978,6 +8988,13 @@ body.overview-mode .slide-diagram { display: none; }
 .slide-upe-opamp-w-interactive .em-ac-view.is-on {
   display: block;
 }
+.slide-upe-opamp-w-interactive .upe-ow-branch {
+  opacity: 1;
+  transition: opacity 0.18s ease;
+}
+.slide-upe-opamp-w-interactive .upe-ow-branch.is-dim {
+  opacity: 0.28;
+}
 .slide-upe-opamp-w-interactive .em-upe-oa-w-live {
   margin: 0;
   font-weight: 700;
@@ -8994,18 +9011,242 @@ body.overview-mode .slide-diagram { display: none; }
   transition: opacity 0.15s;
 }
 .slide-upe-opamp-interactive.is-picking .upe-oa-node {
-  opacity: 0.35;
+  opacity: 0.38;
 }
 .slide-upe-opamp-interactive.is-picking .upe-oa-node.is-on {
   opacity: 1;
 }
-/* hit-площадки не подсвечивать синим прямоугольником */
-.slide-upe-opamp-interactive .em-ac-hit:hover rect,
-.slide-upe-opamp-interactive .em-ac-hit.is-active rect,
-.slide-upe-opamp-interactive .em-ac-hit:hover path,
-.slide-upe-opamp-interactive .em-ac-hit.is-active path {
-  fill: transparent !important;
-  stroke: none !important;
+.slide-upe-opamp-interactive .em-ac-hit.is-active,
+.slide-upe-opamp-interactive .upe-oa-node.is-on {
+  filter: none;
+}
+.slide-upe-opamp-interactive .em-upe-opamp-svg {
+  width: 100%;
+  height: 100%;
+  max-height: none;
+}
+
+.slide-upe-opamp-schemes-interactive .em-upe-opamp-schemes-cards.app-purpose-grid {
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  flex-shrink: 0;
+  gap: 0.28em;
+}
+.slide-upe-opamp-schemes-interactive .slide-body.asutp-interactive {
+  gap: 0.4em;
+}
+.slide-upe-opamp-schemes-interactive .asutp-main {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3em;
+  min-height: 0;
+}
+.slide-upe-opamp-schemes-interactive .asutp-diagram-wrap {
+  flex: 1.3 1 0;
+  min-height: 0;
+}
+.slide-upe-opamp-schemes-interactive .app-purpose-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.15em;
+  padding: 0.3em 0.25em;
+}
+.slide-upe-opamp-schemes-interactive .asutp-panel {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  font-size: 0.92em;
+}
+.slide-upe-opamp-schemes-interactive .asutp-panel .char-eq {
+  margin: 0.25em 0;
+}
+.slide-upe-opamp-schemes-interactive .em-upe-opamp-schemes-svg {
+  width: 100%;
+  height: 100%;
+  max-height: none;
+}
+.slide-upe-opamp-schemes-interactive .em-ac-view {
+  display: none;
+}
+.slide-upe-opamp-schemes-interactive .em-ac-view.is-on {
+  display: block;
+}
+.slide-upe-opamp-schemes-interactive .em-upe-oa-sch-live {
+  margin: 0;
+  font-weight: 700;
+  color: #1e293b;
+  font-size: 0.9em;
+}
+.slide-upe-opamp-schemes-interactive .highlight-box-compact {
+  flex-shrink: 0;
+  margin: 0;
+  padding: 0.35em 0.65em;
+}
+
+.slide-upe-digital-interactive .em-upe-digital-cards.app-purpose-grid {
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  flex-shrink: 0;
+  gap: 0.28em;
+}
+.slide-upe-digital-interactive .slide-body.asutp-interactive {
+  gap: 0.4em;
+}
+.slide-upe-digital-interactive .asutp-main {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3em;
+  min-height: 0;
+}
+.slide-upe-digital-interactive .asutp-diagram-wrap {
+  flex: 1.3 1 0;
+  min-height: 0;
+}
+.slide-upe-digital-interactive .app-purpose-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.15em;
+  padding: 0.3em 0.3em;
+}
+.slide-upe-digital-interactive .asutp-panel {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  font-size: 0.95em;
+}
+.slide-upe-digital-interactive .em-upe-digital-svg {
+  width: 100%;
+  height: 100%;
+  max-height: none;
+}
+.slide-upe-digital-interactive .em-ac-view {
+  display: none;
+}
+.slide-upe-digital-interactive .em-ac-view.is-on {
+  display: block;
+}
+.slide-upe-digital-interactive .em-upe-digital-live {
+  margin: 0;
+  font-weight: 700;
+  color: #1e293b;
+  font-size: 0.9em;
+}
+.slide-upe-digital-interactive .highlight-box-compact {
+  flex-shrink: 0;
+  margin: 0;
+  padding: 0.35em 0.65em;
+}
+
+.slide-upe-ekeys-interactive .em-upe-ekeys-cards.app-purpose-grid {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  flex-shrink: 0;
+  gap: 0.28em;
+}
+.slide-upe-ekeys-interactive .slide-body.asutp-interactive {
+  gap: 0.4em;
+}
+.slide-upe-ekeys-interactive .asutp-main {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3em;
+  min-height: 0;
+}
+.slide-upe-ekeys-interactive .asutp-diagram-wrap {
+  flex: 1.3 1 0;
+  min-height: 0;
+}
+.slide-upe-ekeys-interactive .app-purpose-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.15em;
+  padding: 0.3em 0.3em;
+}
+.slide-upe-ekeys-interactive .asutp-panel {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  font-size: 0.95em;
+}
+.slide-upe-ekeys-interactive .em-upe-ekeys-svg {
+  width: 100%;
+  height: 100%;
+  max-height: none;
+}
+.slide-upe-ekeys-interactive .em-ac-view {
+  display: none;
+}
+.slide-upe-ekeys-interactive .em-ac-view.is-on {
+  display: block;
+}
+.slide-upe-ekeys-interactive .em-upe-ekeys-live {
+  margin: 0;
+  font-weight: 700;
+  color: #1e293b;
+  font-size: 0.9em;
+}
+.slide-upe-ekeys-interactive .highlight-box-compact {
+  flex-shrink: 0;
+  margin: 0;
+  padding: 0.35em 0.65em;
+}
+
+.slide-upe-logic-interactive .em-upe-logic-cards.app-purpose-grid {
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  flex-shrink: 0;
+  gap: 0.28em;
+}
+.slide-upe-logic-interactive .slide-body.asutp-interactive {
+  gap: 0.4em;
+}
+.slide-upe-logic-interactive .asutp-main {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3em;
+  min-height: 0;
+}
+.slide-upe-logic-interactive .asutp-diagram-wrap {
+  flex: 1.3 1 0;
+  min-height: 0;
+}
+.slide-upe-logic-interactive .app-purpose-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.15em;
+  padding: 0.3em 0.3em;
+}
+.slide-upe-logic-interactive .asutp-panel {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  font-size: 0.95em;
+}
+.slide-upe-logic-interactive .em-upe-logic-svg {
+  width: 100%;
+  height: 100%;
+  max-height: none;
+}
+.slide-upe-logic-interactive .em-ac-view {
+  display: none;
+}
+.slide-upe-logic-interactive .em-ac-view.is-on {
+  display: block;
+}
+.slide-upe-logic-interactive .em-upe-logic-live {
+  margin: 0;
+  font-weight: 700;
+  color: #1e293b;
+  font-size: 0.9em;
+}
+.slide-upe-logic-interactive .highlight-box-compact {
+  flex-shrink: 0;
+  margin: 0;
+  padding: 0.35em 0.65em;
 }
 
 .slide-upe-fullwave-interactive .em-upe-fw-live {

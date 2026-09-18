@@ -1479,48 +1479,62 @@
 <h2>Характеристики вентильного фотоэлемента</h2>
 <div class="slide-body asutp-interactive">
 <div class="asutp-main">
-<p class="asutp-hint">Нажмите схему — при росте R<sub>н</sub> кривая гнётся, чувствительность выше при слабом свете</p>
+<p class="asutp-hint">Схема в цепи прибора · световые кривые при разной R<sub>н</sub>. Жмите вкладку</p>
 <div class="asutp-diagram-wrap">
-<svg class="photo-pv-char-svg" viewBox="0 0 520 215" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="Схема вентильного фотоэлемента и световые характеристики">
-<rect width="520" height="215" fill="#fafafa"/>
+<svg class="photo-pv-char-svg" viewBox="0 0 560 250" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="Схема вентильного фотоэлемента и световые характеристики">
+<rect width="560" height="250" fill="#fff"/>
+
+<!-- а) схема -->
 <g class="photo-pv-char-view is-on" data-info="circ">
-<path d="M118 18 L118 38 M148 12 L148 38 M178 18 L178 38 M208 12 L208 38" stroke="#f59e0b" stroke-width="1.8" fill="none"/>
-<text x="163" y="10" text-anchor="middle" font-size="15" font-weight="700" fill="#b45309">свет</text>
-<rect x="70" y="42" width="186" height="24" fill="#e0f2fe" stroke="#0369a1" stroke-width="1.5"/>
-<text x="163" y="59" text-anchor="middle" font-size="14" font-weight="700" fill="#0369a1">4</text>
-<rect x="70" y="66" width="186" height="22" fill="#fef9c3" stroke="#a16207" stroke-width="1.5"/>
-<text x="163" y="82" text-anchor="middle" font-size="14" font-weight="700" fill="#854d0e">3</text>
-<rect x="70" y="88" width="186" height="28" fill="#dbeafe" stroke="#1e40af" stroke-width="1.5"/>
-<text x="163" y="107" text-anchor="middle" font-size="14" font-weight="700" fill="#1e40af">2</text>
-<rect x="70" y="116" width="186" height="22" fill="#e2e8f0" stroke="#1e293b" stroke-width="1.5"/>
-<text x="163" y="132" text-anchor="middle" font-size="14" font-weight="700" fill="#334155">1</text>
-<line x1="70" y1="54" x2="36" y2="54" stroke="#1e293b" stroke-width="1.6"/>
-<line x1="36" y1="54" x2="36" y2="168" stroke="#1e293b" stroke-width="1.6"/>
-<line x1="256" y1="127" x2="300" y2="127" stroke="#1e293b" stroke-width="1.6"/>
-<line x1="300" y1="127" x2="300" y2="168" stroke="#1e293b" stroke-width="1.6"/>
+<path d="M130 22 L130 42 M160 16 L160 42 M190 22 L190 42 M220 16 L220 42" stroke="#f59e0b" stroke-width="1.8" fill="none"/>
+<text x="175" y="14" text-anchor="middle" font-size="14" font-weight="700" fill="#b45309">свет</text>
+<!-- layers 4→1 -->
+<rect x="80" y="46" width="190" height="26" fill="#e0f2fe" stroke="#0369a1" stroke-width="1.5"/>
+<text x="175" y="64" text-anchor="middle" font-size="13" font-weight="700" fill="#0369a1">4 · полупрозрачный контакт</text>
+<rect x="80" y="72" width="190" height="24" fill="#fef9c3" stroke="#a16207" stroke-width="1.5"/>
+<text x="175" y="89" text-anchor="middle" font-size="13" font-weight="700" fill="#854d0e">3 · запирающий слой</text>
+<rect x="80" y="96" width="190" height="30" fill="#dbeafe" stroke="#1e40af" stroke-width="1.5"/>
+<text x="175" y="116" text-anchor="middle" font-size="13" font-weight="700" fill="#1e40af">2 · полупроводник</text>
+<rect x="80" y="126" width="190" height="26" fill="#e2e8f0" stroke="#1e293b" stroke-width="1.5"/>
+<text x="175" y="144" text-anchor="middle" font-size="13" font-weight="700" fill="#334155">1 · металлическая подложка</text>
+<!-- leads: 4 left, 1 right → meter + Rн -->
+<line x1="80" y1="59" x2="40" y2="59" stroke="#1e293b" stroke-width="1.8"/>
+<line x1="40" y1="59" x2="40" y2="200" stroke="#1e293b" stroke-width="1.8"/>
+<line x1="270" y1="139" x2="420" y2="139" stroke="#1e293b" stroke-width="1.8"/>
+<line x1="420" y1="139" x2="420" y2="200" stroke="#1e293b" stroke-width="1.8"/>
+<rect x="340" y="186" width="50" height="28" rx="3" fill="#fff7ed" stroke="#c2410c" stroke-width="1.5"/>
+<text x="365" y="205" text-anchor="middle" font-size="14" font-weight="800" fill="#9a3412">R<tspan font-size="10" baseline-shift="sub">н</tspan></text>
 <g class="photo-pv-char-hit" data-info="circ" style="cursor:pointer">
-<circle cx="168" cy="168" r="22" fill="#fff" stroke="#1e40af" stroke-width="1.7"/>
-<line x1="154" y1="182" x2="182" y2="154" stroke="#1e40af" stroke-width="1.6"/>
-<polygon points="180,156 174,154 178,162" fill="#1e40af"/>
+<circle cx="160" cy="200" r="24" fill="#fff" stroke="#1e40af" stroke-width="1.8"/>
+<text x="160" y="196" text-anchor="middle" font-size="11" font-weight="700" fill="#1e40af">µA</text>
+<path d="M148 208 L172 192" stroke="#1e40af" stroke-width="1.6"/>
+<polygon points="170,194 164,192 168,200" fill="#1e40af"/>
 </g>
-<line x1="36" y1="168" x2="146" y2="168" stroke="#1e293b" stroke-width="1.6"/>
-<line x1="190" y1="168" x2="300" y2="168" stroke="#1e293b" stroke-width="1.6"/>
-<text x="168" y="206" text-anchor="middle" font-size="16" fill="#475569">а — вентильный фотоэлемент в цепи прибора</text>
+<line x1="40" y1="200" x2="136" y2="200" stroke="#1e293b" stroke-width="1.8"/>
+<line x1="184" y1="200" x2="340" y2="200" stroke="#1e293b" stroke-width="1.8"/>
+<line x1="390" y1="200" x2="420" y2="200" stroke="#1e293b" stroke-width="1.8"/>
+<text x="280" y="238" text-anchor="middle" font-size="14" fill="#475569">а — вентильный фотоэлемент в цепи прибора (без внешнего питания)</text>
 </g>
+
+<!-- б) кривые -->
 <g class="photo-pv-char-view" data-info="curve">
-<line x1="70" y1="168" x2="470" y2="168" stroke="#1e293b" stroke-width="1.5"/>
-<line x1="70" y1="168" x2="70" y2="28" stroke="#1e293b" stroke-width="1.5"/>
-<text x="46" y="40" font-size="16" font-weight="700" fill="#1e40af">I</text>
-<text x="458" y="190" font-size="16" font-weight="700" fill="#1e40af">E</text>
+<line x1="70" y1="190" x2="500" y2="190" stroke="#1e293b" stroke-width="1.5"/>
+<line x1="70" y1="190" x2="70" y2="30" stroke="#1e293b" stroke-width="1.5"/>
+<polygon points="70,30 66,42 74,42" fill="#1e293b"/>
+<polygon points="500,190 488,186 488,194" fill="#1e293b"/>
+<text x="48" y="42" font-size="16" font-weight="800" fill="#1e40af">I</text>
+<text x="490" y="214" font-size="16" font-weight="800" fill="#1e40af">E</text>
+<text x="100" y="28" font-size="12" fill="#64748b">фототок</text>
+<text x="420" y="214" font-size="12" fill="#64748b">освещённость</text>
 <g class="photo-pv-char-hit" data-info="rh" style="cursor:pointer">
-<path d="M70 168 C150 70 280 42 450 34" fill="none" stroke="#1e40af" stroke-width="2.3"/>
-<path d="M70 168 C150 92 280 78 450 72" fill="none" stroke="#0d9488" stroke-width="2.3"/>
-<path d="M70 168 C150 118 280 112 450 108" fill="none" stroke="#b91c1c" stroke-width="2.3"/>
-<text x="458" y="38" font-size="14" font-weight="700" fill="#1e40af">R<tspan font-size="11" baseline-shift="sub">н</tspan> мал.</text>
-<text x="458" y="76" font-size="14" font-weight="700" fill="#0d9488">R<tspan font-size="11" baseline-shift="sub">н</tspan></text>
-<text x="458" y="112" font-size="14" font-weight="700" fill="#b91c1c">R<tspan font-size="11" baseline-shift="sub">н</tspan> бол.</text>
+<path d="M70 190 C140 80 260 48 480 40" fill="none" stroke="#1e40af" stroke-width="2.4"/>
+<path d="M70 190 C140 105 260 88 480 82" fill="none" stroke="#0d9488" stroke-width="2.4"/>
+<path d="M70 190 C140 135 260 128 480 124" fill="none" stroke="#b91c1c" stroke-width="2.4"/>
+<text x="492" y="44" font-size="13" font-weight="700" fill="#1e40af">Rн мал.</text>
+<text x="492" y="86" font-size="13" font-weight="700" fill="#0d9488">Rн</text>
+<text x="492" y="128" font-size="13" font-weight="700" fill="#b91c1c">Rн бол.</text>
 </g>
-<text x="260" y="208" text-anchor="middle" font-size="16" fill="#475569">б — световые характеристики при разной нагрузке</text>
+<text x="280" y="238" text-anchor="middle" font-size="14" fill="#475569">б — световые характеристики I = f(E) при разной нагрузке</text>
 </g>
 </svg>
 </div>
@@ -1533,7 +1547,7 @@
 </div>
 <aside class="asutp-panel" id="photoPvCharPanel">
 <h3>Схема</h3>
-<p>Свет падает на слои 4–1. ЭДС снимают с контактов и измеряют прибором — отдельный источник питания не нужен.</p>
+<p>Свет падает на слои 4–1. ЭДС снимают с контактов <strong>4</strong> и <strong>1</strong> и измеряют прибором — отдельный источник питания не нужен.</p>
 </aside>
 </div>
 </section>

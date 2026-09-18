@@ -13779,21 +13779,44 @@
     bindSimple('.slide-upe-vt-demod-interactive', 'upeVtDemodPanel', {
       why: {
         title: 'Зачем VT',
-        html: '<p>Транзистор в ключевом режиме заменяет контакты реле — пропускает или отрезает полупериоды АМ.</p><p>Выше быстродействие, меньше габариты.</p>'
+        html: '<p>Транзистор в <strong>ключевом</strong> режиме заменяет контакты реле: пропускает или отрезает полупериоды АМ.</p><p>Быстрее, компактнее, удобнее в электронном исполнении.</p>',
+        view: 'why'
       },
       ik0: {
         title: 'Iк0',
-        html: '<p>Один VT плохо закрывается из‑за <strong>Iк0</strong> — обратного тока коллектора.</p><p>Утечка в «закрытом» состоянии даёт ошибку демодуляции.</p>'
+        html: '<p>Один VT плохо «закрывается»: остаётся <strong>Iк0</strong> — обратный ток коллектора.</p><p>Утечка в закрытом состоянии искажает Y и даёт ошибку демодуляции.</p>',
+        view: 'ik0'
       },
       pair: {
         title: 'Пара VT',
-        html: '<p><strong>Встречное включение</strong> двух транзисторов компенсирует утечки.</p><p>Остаточный ток падает на <strong>3–4 порядка</strong>.</p>'
+        html: '<p><strong>Встречное</strong> включение двух транзисторов (коллекторы вместе): утечки компенсируют друг друга.</p><p>Остаточный ток падает на <strong>3–4 порядка</strong>.</p>',
+        view: 'pair'
       },
       sch: {
         title: 'Схема',
-        html: '<p>Как на рис. 4.6: <strong>коллекторы соединены</strong>, эмиттеры — на общую шину.</p><p>На входе Uвх, на выходе Y после фильтра.</p>'
+        html: '<p>Ключ на VT1–VT2 синхронизирован с <strong>Uсети</strong> (базы). На выходе ключа — <strong>Y</strong>, после <strong>RфCф</strong> — полезный <strong>Z(t)</strong>.</p><p>Логика та же, что у демодулятора на реле.</p>',
+        view: 'why'
       }
     }, 'why');
+
+    (() => {
+      const slide = document.querySelector('.slide-upe-vt-demod-interactive');
+      if (!slide) return;
+      const syncViews = () => {
+        const active = slide.querySelector('.app-purpose-card.active');
+        const key = active?.dataset.info || 'why';
+        const view = key === 'ik0' || key === 'pair' ? key : 'why';
+        slide.querySelectorAll('.em-ac-view').forEach((g) => {
+          g.classList.toggle('is-on', g.getAttribute('data-view') === view);
+        });
+      };
+      slide.addEventListener('click', (e) => {
+        if (e.target.closest('.app-purpose-card, .em-ac-hit')) {
+          requestAnimationFrame(syncViews);
+        }
+      });
+      syncViews();
+    })();
 
     bindSimple('.slide-upe-vt-mod-interactive', 'upeVtModPanel', {
       rev: {
@@ -13889,7 +13912,7 @@
         },
         next: {
           title: 'Дальше',
-          html: '<p><strong>W(p) = −Z₀/Z₁</strong> — коррекция и суммирование на ОУ (формула 4.2).</p>'
+          html: '<p><strong>W(p) = −Z₀/Z₁</strong> — коррекция и суммирование на ОУ.</p>'
         }
       };
       const showAd = (key) => {
@@ -13918,23 +13941,23 @@
       },
       x1: {
         title: 'X₁',
-        html: '<p><strong>Инвертирующий</strong> вход через Z₁. Знак «−» на схеме ОУ.</p>'
+        html: '<p><strong>Инвертирующий</strong> вход (−) через импеданс <strong>Z₁</strong>.</p><p>Сигнал X₁ задаёт ток во входной цепи ОС.</p>'
       },
       x2: {
         title: 'X₂',
-        html: '<p><strong>Неинвертирующий</strong> вход через Z₂.</p>'
+        html: '<p><strong>Неинвертирующий</strong> вход (+) через <strong>Z₂</strong>.</p><p>Часто X₂ = 0 (вход на «землю» через Z₂).</p>'
       },
       z0: {
         title: 'Z₀',
-        html: '<p><strong>Обратная связь</strong> Z₀ задаёт передаточную функцию вместе с Z₁.</p>'
+        html: '<p><strong>Обратная связь</strong> Z₀: с выхода Y на инвертирующий узел.</p><p>Вместе с Z₁ задаёт передачу: примерно <span class="char-eq">−Z₀/Z₁</span>.</p>'
       },
       y: {
         title: 'Y',
-        html: '<p>Выходное напряжение <strong>Y</strong> — результат суммы токов в узле ОС.</p>'
+        html: '<p>Выход <strong>Y</strong> — усиленная разность входов с учётом цепей Z.</p>'
       },
       sup: {
         title: '±E',
-        html: '<p>Питание <strong>+E / −E</strong> — рабочий диапазон без насыщения.</p>'
+        html: '<p>Питание <strong>+E</strong> и <strong>−E</strong>: без насыщения выход держится в рабочем диапазоне.</p>'
       }
     }, 'fn');
 
@@ -13964,32 +13987,32 @@
       const info = {
         goal: {
           title: 'Цель',
-          html: '<p>Найти <strong>Ẏ/Ẋ₁</strong> через импедансы Z₁ и Z₀ при K → ∞.</p>',
+          html: '<p>Найти <strong>Ẏ/Ẋ₁</strong> через импедансы Z₁ и Z₀ при X₂ = 0 и большом K.</p>',
           live: 'Ẏ/Ẋ₁ ≈ −Z₀/Z₁ — цель вывода'
         },
         why: {
           title: 'Идея',
-          html: '<p>При K → ∞ напряжения на входах ОУ выравниваются; токи через Z₁, Z₀ задают Ẋ и Ẏ.</p>',
-          live: 'K → ∞ ⇒ U₊ ≈ U₋ · считаем токи в Z'
+          html: '<p>Большой K, высокий Rвх, малый Rвых → передачу задают <strong>Z₁</strong> и <strong>Z₀</strong>.</p><p>ОС через Z₀ параллельна входу — токи суммируются; считаем по <strong>суперпозиции</strong>.</p>',
+          live: 'суперпозиция · X₂ = 0 · передачу задают Z₁ и Z₀'
         },
         ix1: {
-          title: 'I_x₁',
-          html: '<p><strong>Синий путь:</strong> X₁ → Z₁ → Z₀ → земля, выход Y закорочен.</p><p>İ_x₁ = Ẋ₁/Z₁, U̇_x₁ = İ_x₁·Z₁.</p>',
-          live: 'İ_x₁ = Ẋ₁/Z₁ · U̇_x₁ = İ_x₁·Z₁'
+          title: 'İₓ₁',
+          html: '<p>Ток от X₁ при <strong>закороченном и заземлённом</strong> выходе Y:</p><p class="char-eq">İₓ₁ = Ẋ₁ / (Z₀ + Z₁)</p><p>Составляющая на входе усилителя:</p><p class="char-eq">U̇ₓ₁ = Ẋ₁ · Z₀ / (Z₀ + Z₁)</p>',
+          live: 'İₓ₁ = Ẋ₁/(Z₀+Z₁) · U̇ₓ₁ = Ẋ₁·Z₀/(Z₀+Z₁)'
         },
         iy: {
-          title: 'I_y',
-          html: '<p><strong>Фиолетовый путь:</strong> Y → Z₀ → Z₁ → земля, X₁ закорочен.</p><p>İ_y = Ẏ/Z₀, U̇_y = İ_y·Z₀.</p>',
-          live: 'İ_y = Ẏ/Z₀ · U̇_y = İ_y·Z₀'
+          title: 'İᵧ',
+          html: '<p>Ток от Y при <strong>закороченном</strong> источнике X₁:</p><p class="char-eq">İᵧ = Ẏ / (Z₀ + Z₁)</p><p>Составляющая на входе:</p><p class="char-eq">U̇ᵧ = Ẏ · Z₁ / (Z₀ + Z₁)</p>',
+          live: 'İᵧ = Ẏ/(Z₀+Z₁) · U̇ᵧ = Ẏ·Z₁/(Z₀+Z₁)'
         },
         u: {
-          title: 'U',
-          html: '<p>Сложение падений: <strong>U̇ = U̇_x₁ + U̇_y = Ẏ/K</strong> (виртуальное K большое).</p>',
-          live: 'U̇ = U̇_x₁ + U̇_y = Ẏ/K'
+          title: 'U̇',
+          html: '<p>Сумма составляющих на входе ОУ:</p><p class="char-eq">U̇ = U̇ₓ₁ + U̇ᵧ = Ẏ / K</p>',
+          live: 'U̇ = U̇ₓ₁ + U̇ᵧ = Ẏ/K'
         },
         res: {
           title: 'Итог',
-          html: '<p>Из равенства токов получаем <strong>Ẏ/Ẋ₁ ≈ −Z₀/Z₁</strong>.</p>',
+          html: '<p>Подставляя U̇ₓ₁ и U̇ᵧ и полагая K ≫ 1, получаем</p><p class="char-eq">Ẏ / Ẋ₁ ≈ − Z₀ / Z₁</p>',
           live: 'Ẏ/Ẋ₁ ≈ −Z₀/Z₁'
         }
       };
@@ -14003,14 +14026,8 @@
         oaTfSlide.querySelectorAll('.em-ac-view').forEach((g) => {
           g.classList.toggle('is-on', g.getAttribute('data-view') === key);
         });
-        if (pathIx) {
-          pathIx.setAttribute('opacity', key === 'ix1' ? '1' : '0');
-          pathIx.setAttribute('d', 'M60 130 H240 V140 H400 V220 H120 V220 H240');
-        }
-        if (pathIy) {
-          pathIy.setAttribute('opacity', key === 'iy' ? '1' : '0');
-          pathIy.setAttribute('d', 'M480 140 H320 V140 H240 V220 H120 V220 H240');
-        }
+        if (pathIx) pathIx.setAttribute('opacity', key === 'ix1' ? '1' : '0');
+        if (pathIy) pathIy.setAttribute('opacity', key === 'iy' ? '1' : '0');
       };
       oaTfSlide.addEventListener('click', (e) => {
         const btn = e.target.closest('.app-purpose-card');
@@ -14021,39 +14038,278 @@
       showTf('goal');
     }
 
-    bindSimple('.slide-upe-opamp-w-interactive', 'upeOaWPanel', {
-      use: {
-        title: 'Зачем',
-        html: '<p>На ОУ собирают <strong>сумму сигналов</strong> и задают нужную <strong>W(p)</strong> для коррекции контура.</p>'
-      },
-      how: {
-        title: 'Как',
-        html: '<p>Несколько входов Xᵢ через свои Z₁ᵢ на инвертирующий вход; общая Z₀ в обратной связи.</p>'
-      },
-      w: {
-        title: 'W(p)',
-        html: '<p><strong>W(p) = −Z₀(p)/Z₁(p)</strong> — формула (4.2), частотная коррекция.</p>'
-      },
-      sum: {
-        title: 'Сумматор',
-        html: '<p><strong>Ẏ = −Σ (Z₀/Z₁ᵢ)·Ẋᵢ</strong> — несколько команд на один каскад ОУ.</p>'
-      }
-    }, 'use');
-
     const oaWSlide = document.querySelector('.slide-upe-opamp-w-interactive');
     if (oaWSlide) {
+      const panel = document.getElementById('upeOaWPanel');
       const live = document.getElementById('upeOaWLive');
-      const msgs = {
-        use: 'W(p) = −Z₀(p)/Z₁(p) — коррекция в обратной связи',
-        how: 'несколько Z₁ᵢ → один инвертирующий вход',
-        w: 'формула (4.2): W(p) = −Z₀(p)/Z₁(p)',
-        sum: 'Ẏ = −Σ (Z₀/Z₁ᵢ)·Ẋᵢ — суммирующий усилитель'
+      const info = {
+        use: {
+          title: 'Зачем',
+          html: '<p>На ОУ собирают <strong>сумму сигналов</strong> и задают нужную <strong>W(p)</strong> — коррекция контура через Z₀(p) и Z₁(p).</p>',
+          live: 'сумма команд + корректирующий фильтр в ОС',
+          hl: 'all'
+        },
+        how: {
+          title: 'Схема',
+          html: '<p>Каждый вход Xᵢ идёт через свой <strong>Z₁ᵢ</strong> на общий инвертирующий узел. В обратной связи — одна <strong>Z₀(p)</strong>.</p>',
+          live: 'Xᵢ → Z₁ᵢ → (−) · общая Z₀(p)',
+          hl: 'in'
+        },
+        w: {
+          title: 'W(p)',
+          html: '<p>Для одного входа передача:</p><p class="char-eq">W(p) = −Z₀(p)/Z₁(p)</p><p>Подбором импедансов получают нужную частотную коррекцию.</p>',
+          live: 'W(p) = −Z₀(p)/Z₁(p)',
+          hl: 'z0'
+        },
+        sum: {
+          title: 'Сумматор',
+          html: '<p>Несколько команд на один каскад:</p><p class="char-eq">Ẏ = −Σᵢ (Z₀/Z₁ᵢ)·Ẋᵢ</p>',
+          live: 'Ẏ = −Σᵢ (Z₀/Z₁ᵢ)·Ẋᵢ',
+          hl: 'all'
+        }
+      };
+      const showW = (key) => {
+        const data = info[key] || info.use;
+        if (panel) panel.innerHTML = `<h3>${data.title}</h3>${data.html}`;
+        if (live) live.textContent = data.live;
+        oaWSlide.querySelectorAll('.app-purpose-card').forEach((b) => {
+          b.classList.toggle('active', b.dataset.info === key);
+        });
+        oaWSlide.querySelectorAll('.em-ac-view').forEach((g) => {
+          g.classList.toggle('is-on', g.getAttribute('data-view') === key);
+        });
+        oaWSlide.querySelectorAll('.upe-ow-branch').forEach((g) => {
+          const mark = g.getAttribute('data-hl');
+          const on = data.hl === 'all' || data.hl === mark;
+          g.classList.toggle('is-dim', !on);
+        });
       };
       oaWSlide.addEventListener('click', (e) => {
         const btn = e.target.closest('.app-purpose-card');
-        if (!btn?.dataset.info || !live) return;
-        live.textContent = msgs[btn.dataset.info] || msgs.use;
+        if (!btn?.dataset.info) return;
+        e.stopPropagation();
+        showW(btn.dataset.info);
       });
+      showW('use');
+    }
+
+    const oaSchSlide = document.querySelector('.slide-upe-opamp-schemes-interactive');
+    if (oaSchSlide) {
+      const panel = document.getElementById('upeOaSchPanel');
+      const live = document.getElementById('upeOaSchLive');
+      const info = {
+        s1: {
+          title: '1. Пропорциональный',
+          html: '<p>Инвертирующий усилитель на R₁ и R₀.</p><p class="char-eq">W(p) = K</p><p class="char-eq">K = R₀ / R₁</p>',
+          live: 'W(p) = K, где K = R₀/R₁'
+        },
+        s2: {
+          title: '2. Интегратор',
+          html: '<p>Вход — R₁, в ОС — конденсатор C₀.</p><p class="char-eq">W(p) = K / p</p><p class="char-eq">K = 1 / (C₀ R₁)</p>',
+          live: 'W(p) = K/p, где K = 1/(C₀ R₁)'
+        },
+        s3: {
+          title: '3. Инерционный',
+          html: '<p>Вход — R₁, в ОС — параллель R₀ ∥ C₀.</p><p class="char-eq">W(p) = K / (Tp + 1)</p><p class="char-eq">K = R₀/R₁</p><p class="char-eq">T = C₀ R₀</p>',
+          live: 'W(p) = K/(Tp+1), где K = R₀/R₁, T = C₀ R₀'
+        },
+        s4: {
+          title: '4. Интегро-дифференцирующий',
+          html: '<p>На входе R₁ ∥ C₁, в ОС — R₀ ∥ C₀.</p><p class="char-eq">W(p) = K(T₁p + 1)/(T₀p + 1)</p><p class="char-eq">K = R₀/R₁</p><p class="char-eq">T₁ = C₁ R₁, T₀ = C₀ R₀</p>',
+          live: 'W(p) = K(T₁p+1)/(T₀p+1), где K = R₀/R₁'
+        },
+        s5: {
+          title: '5. Дифференцирующий 1',
+          html: '<p>Вход — C₁, в ОС — R₀ ∥ C₀.</p><p class="char-eq">W(p) = Kp / (T₀p + 1)</p><p class="char-eq">K = C₁ R₀</p><p class="char-eq">T₀ = C₀ R₀</p>',
+          live: 'W(p) = Kp/(T₀p+1), где K = C₁ R₀, T₀ = C₀ R₀'
+        },
+        s6: {
+          title: '6. Дифференцирующий 2',
+          html: '<p>Вход — R₁ и C₁ последовательно, в ОС — R₀.</p><p class="char-eq">W(p) = Kp / (T₀p + 1)</p><p class="char-eq">K = C₁ R₀</p><p class="char-eq">T₀ = C₁ R₁</p>',
+          live: 'W(p) = Kp/(T₀p+1), где K = C₁ R₀, T₀ = C₁ R₁'
+        }
+      };
+      const showSch = (key) => {
+        const data = info[key] || info.s1;
+        if (panel) panel.innerHTML = `<h3>${data.title}</h3>${data.html}`;
+        if (live) live.textContent = data.live;
+        oaSchSlide.querySelectorAll('.app-purpose-card').forEach((b) => {
+          b.classList.toggle('active', b.dataset.info === key);
+        });
+        oaSchSlide.querySelectorAll('.em-ac-view').forEach((g) => {
+          g.classList.toggle('is-on', g.getAttribute('data-view') === key);
+        });
+      };
+      oaSchSlide.addEventListener('click', (e) => {
+        const btn = e.target.closest('.app-purpose-card');
+        if (!btn?.dataset.info) return;
+        e.stopPropagation();
+        showSch(btn.dataset.info);
+      });
+      showSch('s1');
+    }
+
+    const digSlide = document.querySelector('.slide-upe-digital-interactive');
+    if (digSlide) {
+      const panel = document.getElementById('upeDigitalPanel');
+      const live = document.getElementById('upeDigitalLive');
+      const info = {
+        where: {
+          title: 'Где',
+          html: '<p>Дискретные и цифровые сигналы широко применяют в автоматике и САУ.</p><p>Верхний уровень (SCADA) и нижний — тоже цифровой: преобразования АЦП/ЦАП через микропроцессорные устройства.</p>',
+          live: 'дискретные и цифровые сигналы — верхний и нижний уровни'
+        },
+        ctrl: {
+          title: 'Регуляторы',
+          html: '<p>Микропроцессорные контроллеры реализуют <strong>дискретные ПИД</strong>-алгоритмы, а также регуляторы с <strong>самонастройкой</strong> и <strong>адаптивные</strong>.</p>',
+          live: 'ПИД · самонастройка · адаптивные — в цифре'
+        },
+        key: {
+          title: 'Ключи',
+          html: '<p>База дискретной техники — <strong>электронные ключи</strong>.</p><p>На них строят <strong>мультиплексоры</strong> и <strong>демультиплексоры</strong>.</p>',
+          live: 'ключ → мультиплексор / демультиплексор'
+        },
+        logic: {
+          title: 'Логика',
+          html: '<p>Базовые логические схемы: <strong>НЕ</strong>, <strong>ИЛИ</strong>, <strong>И</strong>.</p>',
+          live: 'НЕ · ИЛИ · И — базовые логические схемы'
+        },
+        cmp: {
+          title: 'Компараторы',
+          html: '<p><strong>Компараторы</strong> сравнивают два напряжения и выдают логический уровень (0/1).</p>',
+          live: 'сравнение U₁ и U₂ → логический выход'
+        },
+        ff: {
+          title: 'Триггеры',
+          html: '<p><strong>Триггеры</strong> — основа счётчиков и элементов памяти.</p><p>Организация памяти, АЦП и ЦАП — тема 5. Далее — пример схемы управления силовым блоком по ШИМ.</p>',
+          live: 'триггер → счётчик · память · далее ШИМ'
+        }
+      };
+      const showDig = (key) => {
+        const data = info[key] || info.where;
+        if (panel) panel.innerHTML = `<h3>${data.title}</h3>${data.html}`;
+        if (live) live.textContent = data.live;
+        digSlide.querySelectorAll('.app-purpose-card').forEach((b) => {
+          b.classList.toggle('active', b.dataset.info === key);
+        });
+        digSlide.querySelectorAll('.em-ac-view').forEach((g) => {
+          g.classList.toggle('is-on', g.getAttribute('data-view') === key);
+        });
+      };
+      digSlide.addEventListener('click', (e) => {
+        const btn = e.target.closest('.app-purpose-card');
+        if (!btn?.dataset.info) return;
+        e.stopPropagation();
+        showDig(btn.dataset.info);
+      });
+      showDig('where');
+    }
+
+    const ekeysSlide = document.querySelector('.slide-upe-ekeys-interactive');
+    if (ekeysSlide) {
+      const panel = document.getElementById('upeEkeysPanel');
+      const live = document.getElementById('upeEkeysLive');
+      const info = {
+        why: {
+          title: 'Обзор',
+          html: '<p>Электронные ключи: <strong>а</strong> — транзистор в ключевом режиме; <strong>б</strong> — оптопара (оптрон).</p><p>Чаще всего — транзисторы в ключевом режиме; также широко применяют ключи на оптопарах.</p>',
+          live: 'а — VT в ключевом режиме · б — оптопара'
+        },
+        vt: {
+          title: 'а) VT',
+          html: '<p>Простейший вариант — ключ на <strong>p-n-p</strong> транзисторе.</p><p>Прямоугольные импульсы <strong>отрицательной</strong> полярности на базу переводят VT из закрытого состояния в открытое.</p>',
+          live: 'p-n-p · отриц. импульсы на базу → VT открыт'
+        },
+        lvl: {
+          title: '0 / 1',
+          html: '<p><strong>«1»</strong> — отриц. импульс, VT открыт, есть ток коллектора.</p><p><strong>«0»</strong> — высокий потенциал базы, VT закрыт, тока почти нет.</p>',
+          live: '«1» = ток коллектора · «0» = тока нет'
+        },
+        opto: {
+          title: 'б) ОП',
+          html: '<p>В одном корпусе — <strong>светодиод</strong> и <strong>фототранзистор</strong>.</p><p>Ток через светодиод → световой поток → фототранзистор открывается. Вместе с R и источником E формируется <strong>Uᵧ</strong> для базы силового транзистора.</p>',
+          live: 'светодиод + фото VT → Uᵧ на силовой каскад'
+        },
+        iso: {
+          title: 'Развязка',
+          html: '<p>Главное преимущество ключей на оптопарах — <strong>нет гальванической связи</strong> между цепью дискретных управляющих сигналов и силовыми цепями.</p><p>Это повышает надёжность устройств.</p>',
+          live: 'гальваническая развязка → выше надёжность'
+        }
+      };
+      const showEk = (key) => {
+        const data = info[key] || info.why;
+        if (panel) panel.innerHTML = `<h3>${data.title}</h3>${data.html}`;
+        if (live) live.textContent = data.live;
+        ekeysSlide.querySelectorAll('.app-purpose-card').forEach((b) => {
+          b.classList.toggle('active', b.dataset.info === key);
+        });
+        ekeysSlide.querySelectorAll('.em-ac-view').forEach((g) => {
+          g.classList.toggle('is-on', g.getAttribute('data-view') === key);
+        });
+      };
+      ekeysSlide.addEventListener('click', (e) => {
+        const btn = e.target.closest('.app-purpose-card');
+        if (!btn?.dataset.info) return;
+        e.stopPropagation();
+        showEk(btn.dataset.info);
+      });
+      showEk('why');
+    }
+
+    const logicSlide = document.querySelector('.slide-upe-logic-interactive');
+    if (logicSlide) {
+      const panel = document.getElementById('upeLogicPanel');
+      const live = document.getElementById('upeLogicLive');
+      const info = {
+        why: {
+          title: 'Обзор',
+          html: '<p>Обозначения <strong>ГОСТ МЭК</strong>: прямоугольники с <strong>1</strong>, <strong>≥1</strong>, <strong>&amp;</strong>, <strong>=</strong>.</p><p>Жмите элемент — схема и таблица состояний.</p>',
+          live: 'НЕ · ИЛИ · И · компаратор — базовые логические элементы'
+        },
+        not: {
+          title: 'а) НЕ',
+          html: '<p>В прямоугольнике — <strong>1</strong>, на выходе кружок инверсии.</p><p>Таблица: 0→1, 1→0. Транзисторный ключ может выполнять функцию НЕ.</p>',
+          live: 'НЕ: X=0 → Y=1 · X=1 → Y=0'
+        },
+        or: {
+          title: 'б) ИЛИ',
+          html: '<p>В прямоугольнике — <strong>≥1</strong> (не просто «1»). Входы X₁, X₂, выход Y.</p><p>00→0, 01→1, 10→1, 11→1.</p>',
+          live: 'ИЛИ (≥1): Y=1, если хотя бы один вход = 1'
+        },
+        and: {
+          title: 'в) И',
+          html: '<p>В прямоугольнике — <strong>&amp;</strong>. Входы X₁, X₂, выход Y.</p><p>00→0, 01→0, <strong>10→0</strong>, 11→1.</p>',
+          live: 'И (&): Y=1 только при X₁=1 и X₂=1'
+        },
+        cmp: {
+          title: 'г) Компаратор',
+          html: '<p>Прямоугольник с <strong>=</strong>. На входе X₂ — кружок инверсии.</p><p>Сравнивает уровни на входах.</p>',
+          live: 'компаратор: = в корпусе · инверсия на X₂'
+        },
+        tt: {
+          title: 'Таблицы истинности',
+          html: '<p><strong>НЕ:</strong> 0→1, 1→0.</p><p><strong>ИЛИ:</strong> 00→0, 01→1, 10→1, 11→1.</p><p><strong>И:</strong> 00→0, 01→0, 10→0, 11→1.</p><p>На практике — микросхемы серии <strong>К155</strong> (ТТЛ).</p>',
+          live: 'таблицы 0/1 · на практике К155 (ТТЛ)'
+        }
+      };
+      const showLogic = (key) => {
+        const data = info[key] || info.why;
+        if (panel) panel.innerHTML = `<h3>${data.title}</h3>${data.html}`;
+        if (live) live.textContent = data.live;
+        logicSlide.querySelectorAll('.app-purpose-card').forEach((b) => {
+          b.classList.toggle('active', b.dataset.info === key);
+        });
+        logicSlide.querySelectorAll('.em-ac-view').forEach((g) => {
+          g.classList.toggle('is-on', g.getAttribute('data-view') === key);
+        });
+      };
+      logicSlide.addEventListener('click', (e) => {
+        const btn = e.target.closest('.app-purpose-card');
+        if (!btn?.dataset.info) return;
+        e.stopPropagation();
+        showLogic(btn.dataset.info);
+      });
+      showLogic('why');
     }
   })();
 
@@ -16430,19 +16686,19 @@
     const info = {
       circ: {
         title: 'Схема',
-        html: '<p>Свет падает на слои 4–1. ЭДС снимают с контактов и измеряют прибором — отдельный источник питания не нужен.</p>'
+        html: '<p>Свет падает на слои 4–1. ЭДС снимают с контактов <strong>4</strong> и <strong>1</strong>, в цепи — прибор и нагрузка R<sub>н</sub>. Отдельный источник питания не нужен.</p>'
       },
       curve: {
         title: 'Характеристика',
-        html: '<p>Световая характеристика: ток <var>I</var> от освещённости <var>E</var>. При малой нагрузке ближе к прямой, при большой <var>R</var><sub>н</sub> гнётся.</p>'
+        html: '<p>Световая характеристика: ток <var>I</var> от освещённости <var>E</var>. При малой нагрузке ближе к прямой, при большой R<sub>н</sub> — сильнее гнётся.</p>'
       },
       rh: {
         title: 'Нагрузка',
-        html: '<p>Чем больше сопротивление нагрузки <var>R</var><sub>н</sub>, тем сильнее нелинейность световой характеристики.</p>'
+        html: '<p>Чем больше сопротивление нагрузки <strong>R<sub>н</sub></strong>, тем сильнее нелинейность световой характеристики и меньше ток.</p>'
       },
       sens: {
         title: 'Чувствительность',
-        html: '<p>С ростом освещённости чувствительность падает. Наибольшая — при малых значениях освещённости.</p>'
+        html: '<p>С ростом освещённости чувствительность падает. Наибольшая — при <strong>малых</strong> значениях освещённости (начало кривой).</p>'
       }
     };
     const charViews = { circ: 'circ', curve: 'curve', rh: 'curve', sens: 'curve' };
@@ -17411,7 +17667,6 @@ ${absDiskTracks(grayCodes, 'код Грея на диске', '#1e40af')}
     const fig = document.getElementById('sensorTestFig');
     const figStand = `<svg class="sensor-test-svg" viewBox="0 0 520 200" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="Стенд испытаний датчиков">
 <rect width="520" height="200" fill="#fafafa"/>
-<text x="260" y="20" text-anchor="middle" font-size="13" font-weight="700" fill="#1e40af">рис. 2.30 — стенд испытаний</text>
 <g class="stest-hit" data-info="cu" style="cursor:pointer">
   <rect x="200" y="32" width="120" height="40" rx="6" fill="#fef3c7" stroke="#b45309" stroke-width="1.5"/>
   <text x="260" y="56" text-anchor="middle" font-size="14" font-weight="700" fill="#92400e">УУ</text>
