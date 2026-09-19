@@ -16213,10 +16213,10 @@
     };
     const RTD_R0 = 100;
     const RTD_A = 0.00385;
-    const RTD_X0 = 70;
-    const RTD_X1 = 230;
-    const RTD_Y0 = 128;
-    const RTD_Y1 = 56;
+    const RTD_X0 = 80;
+    const RTD_X1 = 380;
+    const RTD_Y0 = 140;
+    const RTD_Y1 = 50;
     const rtdFmt = (n, d) => n.toFixed(d).replace('.', ',');
     const rtdRof = (t) => RTD_R0 * (1 + RTD_A * t);
     const rtdToX = (t) => RTD_X0 + (t / 100) * (RTD_X1 - RTD_X0);
@@ -16235,19 +16235,38 @@
       const raw = Number(rtdAlphaSlide.querySelector('.rtd-t-range')?.value);
       const t = Number.isFinite(raw) ? Math.max(0, Math.min(100, raw)) : 0;
       const r = rtdRof(t);
+      const x = rtdToX(t);
+      const y = rtdToY(r);
       const point = rtdAlphaSlide.querySelector('.rtd-alpha-point');
+      const guide = rtdAlphaSlide.querySelector('.rtd-alpha-guide');
       const readout = rtdAlphaSlide.querySelector('.rtd-alpha-readout');
       const tVal = rtdAlphaSlide.querySelector('.rtd-t-val');
       if (point) {
-        point.setAttribute('cx', String(rtdToX(t)));
-        point.setAttribute('cy', String(rtdToY(r)));
+        point.setAttribute('cx', String(x));
+        point.setAttribute('cy', String(y));
       }
-      if (readout) readout.textContent = `${Math.round(t)} °C · ${rtdFmt(r, 1)} Ом`;
+      if (guide) {
+        guide.setAttribute('x1', String(x));
+        guide.setAttribute('x2', String(x));
+        guide.setAttribute('y1', String(y));
+        guide.setAttribute('y2', '160');
+      }
+      if (readout) {
+        const label = `${Math.round(t)} °C · ${rtdFmt(r, 1)} Ом`;
+        readout.textContent = label;
+        const placeRight = x < 280;
+        readout.setAttribute('text-anchor', placeRight ? 'start' : 'end');
+        readout.setAttribute('x', String(placeRight ? x + 12 : x - 12));
+        readout.setAttribute('y', String(Math.max(42, y - 12)));
+      }
       if (tVal) tVal.textContent = `${Math.round(t)} °C`;
     };
     const curve = rtdAlphaSlide.querySelector('.rtd-alpha-curve');
     if (curve) {
-      curve.setAttribute('d', `M${rtdToX(0).toFixed(1)} ${rtdToY(rtdRof(0)).toFixed(1)} L${rtdToX(200).toFixed(1)} ${rtdToY(rtdRof(200)).toFixed(1)}`);
+      curve.setAttribute(
+        'd',
+        `M${rtdToX(0).toFixed(1)} ${rtdToY(rtdRof(0)).toFixed(1)} L${rtdToX(100).toFixed(1)} ${rtdToY(rtdRof(100)).toFixed(1)}`
+      );
     }
     rtdAlphaSlide.addEventListener('click', (e) => {
       const tab = e.target.closest('.asutp-tab');

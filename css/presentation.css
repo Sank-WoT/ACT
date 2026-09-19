@@ -4984,29 +4984,29 @@ body.overview-mode .slide-diagram { display: none; }
   line-height: 1.5;
 }
 .slide.slide-us-props-interactive h2 {
-  font-size: clamp(1.45em, 2.6vw, 2.05em);
+  font-size: clamp(1.65em, 3vw, 2.35em);
 }
 .slide.slide-us-props-interactive .asutp-hint {
-  font-size: 1.22em;
+  font-size: 1.4em;
 }
 .slide.slide-us-props-interactive .xfmr-prop-col h3 {
-  font-size: 1.38em;
+  font-size: 1.55em;
 }
 .slide.slide-us-props-interactive .xfmr-prop-item {
-  padding: 0.4em 0.7em;
-  gap: 0.14em;
+  padding: 0.5em 0.8em;
+  gap: 0.2em;
 }
 .slide.slide-us-props-interactive .xfmr-prop-item strong {
-  font-size: 1.38em;
+  font-size: 1.55em;
 }
 .slide.slide-us-props-interactive .xfmr-prop-item span {
-  font-size: 1.2em;
+  font-size: 1.35em;
 }
 .slide.slide-us-props-interactive .asutp-panel h3 {
-  font-size: 1.42em;
+  font-size: 1.6em;
 }
 .slide.slide-us-props-interactive .asutp-panel p {
-  font-size: 1.22em;
+  font-size: 1.4em;
   line-height: 1.5;
 }
 .slide.slide-str-interactive .str-svg {
