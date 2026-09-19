@@ -9640,8 +9640,7 @@ body.overview-mode .slide-diagram { display: none; }
 
 /* Lecture 12 — ПЛК */
 .slide-plk-def-interactive .em-plk-cards.app-purpose-grid,
-.slide-plk-hist-interactive .em-plk-cards.app-purpose-grid,
-.slide-plk-rtu-interactive .em-plk-cards.app-purpose-grid {
+.slide-plk-hist-interactive .em-plk-cards.app-purpose-grid {
   grid-template-columns: repeat(4, minmax(0, 1fr));
   flex-shrink: 0;
   gap: 0.3em;
@@ -9656,25 +9655,16 @@ body.overview-mode .slide-diagram { display: none; }
   flex-shrink: 0;
   gap: 0.4em;
 }
-.slide-plk-plc-interactive .em-plk-cards-3.app-purpose-grid {
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  flex-shrink: 0;
-  gap: 0.35em;
-}
 .slide-plk-def-interactive .slide-body.asutp-interactive,
 .slide-plk-fn-interactive .slide-body.asutp-interactive,
 .slide-plk-use-interactive .slide-body.asutp-interactive,
-.slide-plk-hist-interactive .slide-body.asutp-interactive,
-.slide-plk-plc-interactive .slide-body.asutp-interactive,
-.slide-plk-rtu-interactive .slide-body.asutp-interactive {
+.slide-plk-hist-interactive .slide-body.asutp-interactive {
   gap: 0.4em;
 }
 .slide-plk-def-interactive .asutp-main,
 .slide-plk-fn-interactive .asutp-main,
 .slide-plk-use-interactive .asutp-main,
-.slide-plk-hist-interactive .asutp-main,
-.slide-plk-plc-interactive .asutp-main,
-.slide-plk-rtu-interactive .asutp-main {
+.slide-plk-hist-interactive .asutp-main {
   display: flex;
   flex-direction: column;
   gap: 0.3em;
@@ -9683,18 +9673,14 @@ body.overview-mode .slide-diagram { display: none; }
 .slide-plk-def-interactive .asutp-diagram-wrap,
 .slide-plk-fn-interactive .asutp-diagram-wrap,
 .slide-plk-use-interactive .asutp-diagram-wrap,
-.slide-plk-hist-interactive .asutp-diagram-wrap,
-.slide-plk-plc-interactive .asutp-diagram-wrap,
-.slide-plk-rtu-interactive .asutp-diagram-wrap {
+.slide-plk-hist-interactive .asutp-diagram-wrap {
   flex: 1.3 1 0;
   min-height: 0;
 }
 .slide-plk-def-interactive .app-purpose-card,
 .slide-plk-fn-interactive .app-purpose-card,
 .slide-plk-use-interactive .app-purpose-card,
-.slide-plk-hist-interactive .app-purpose-card,
-.slide-plk-plc-interactive .app-purpose-card,
-.slide-plk-rtu-interactive .app-purpose-card {
+.slide-plk-hist-interactive .app-purpose-card {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -9706,9 +9692,7 @@ body.overview-mode .slide-diagram { display: none; }
 .slide-plk-def-interactive .asutp-panel,
 .slide-plk-fn-interactive .asutp-panel,
 .slide-plk-use-interactive .asutp-panel,
-.slide-plk-hist-interactive .asutp-panel,
-.slide-plk-plc-interactive .asutp-panel,
-.slide-plk-rtu-interactive .asutp-panel {
+.slide-plk-hist-interactive .asutp-panel {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -9717,9 +9701,7 @@ body.overview-mode .slide-diagram { display: none; }
 .slide-plk-def-interactive .em-plk-svg,
 .slide-plk-fn-interactive .em-plk-svg,
 .slide-plk-use-interactive .em-plk-svg,
-.slide-plk-hist-interactive .em-plk-svg,
-.slide-plk-plc-interactive .em-plk-svg,
-.slide-plk-rtu-interactive .em-plk-svg {
+.slide-plk-hist-interactive .em-plk-svg {
   width: 100%;
   height: 100%;
   max-height: none;
@@ -9732,32 +9714,24 @@ body.overview-mode .slide-diagram { display: none; }
 }
 .slide-plk-def-interactive .plk-node,
 .slide-plk-fn-interactive .plk-node,
-.slide-plk-hist-interactive .plk-node,
-.slide-plk-plc-interactive .plk-node,
-.slide-plk-rtu-interactive .plk-node {
+.slide-plk-hist-interactive .plk-node {
   opacity: 1;
   transition: opacity 0.15s;
 }
 .slide-plk-def-interactive.is-picking .plk-node,
 .slide-plk-fn-interactive.is-picking .plk-node,
-.slide-plk-hist-interactive.is-picking .plk-node,
-.slide-plk-plc-interactive.is-picking .plk-node,
-.slide-plk-rtu-interactive.is-picking .plk-node {
+.slide-plk-hist-interactive.is-picking .plk-node {
   opacity: 0.4;
 }
 .slide-plk-def-interactive.is-picking .plk-node.is-on,
 .slide-plk-fn-interactive.is-picking .plk-node.is-on,
-.slide-plk-hist-interactive.is-picking .plk-node.is-on,
-.slide-plk-plc-interactive.is-picking .plk-node.is-on,
-.slide-plk-rtu-interactive.is-picking .plk-node.is-on {
+.slide-plk-hist-interactive.is-picking .plk-node.is-on {
   opacity: 1;
 }
 .slide-plk-def-interactive .em-plk-live,
 .slide-plk-fn-interactive .em-plk-live,
 .slide-plk-use-interactive .em-plk-live,
-.slide-plk-hist-interactive .em-plk-live,
-.slide-plk-plc-interactive .em-plk-live,
-.slide-plk-rtu-interactive .em-plk-live {
+.slide-plk-hist-interactive .em-plk-live {
   margin: 0;
   font-weight: 700;
   color: #1e293b;
@@ -9766,25 +9740,22 @@ body.overview-mode .slide-diagram { display: none; }
 .slide-plk-def-interactive .highlight-box-compact,
 .slide-plk-fn-interactive .highlight-box-compact,
 .slide-plk-use-interactive .highlight-box-compact,
-.slide-plk-hist-interactive .highlight-box-compact,
-.slide-plk-plc-interactive .highlight-box-compact,
-.slide-plk-rtu-interactive .highlight-box-compact {
+.slide-plk-hist-interactive .highlight-box-compact {
   flex-shrink: 0;
   margin: 0;
   padding: 0.4em 0.7em;
 }
 
-.slide-plk-comp-interactive .em-plk-cards-6.app-purpose-grid {
-  grid-template-columns: repeat(6, minmax(0, 1fr));
+.slide-plk-mod-interactive .em-plk-cards.app-purpose-grid,
+.slide-plk-exp-interactive .em-plk-cards.app-purpose-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   flex-shrink: 0;
-  gap: 0.25em;
+  gap: 0.3em;
 }
-.slide-plk-comp-interactive .slide-body.asutp-interactive,
 .slide-plk-mod-interactive .slide-body.asutp-interactive,
 .slide-plk-exp-interactive .slide-body.asutp-interactive {
   gap: 0.4em;
 }
-.slide-plk-comp-interactive .asutp-main,
 .slide-plk-mod-interactive .asutp-main,
 .slide-plk-exp-interactive .asutp-main {
   display: flex;
@@ -9792,13 +9763,11 @@ body.overview-mode .slide-diagram { display: none; }
   gap: 0.3em;
   min-height: 0;
 }
-.slide-plk-comp-interactive .asutp-diagram-wrap,
 .slide-plk-mod-interactive .asutp-diagram-wrap,
 .slide-plk-exp-interactive .asutp-diagram-wrap {
   flex: 1.3 1 0;
   min-height: 0;
 }
-.slide-plk-comp-interactive .app-purpose-card,
 .slide-plk-mod-interactive .app-purpose-card,
 .slide-plk-exp-interactive .app-purpose-card {
   display: flex;
@@ -9809,13 +9778,6 @@ body.overview-mode .slide-diagram { display: none; }
   padding: 0.3em 0.25em;
   font-size: 1.02em;
 }
-.slide-plk-mod-interactive .em-plk-cards.app-purpose-grid,
-.slide-plk-exp-interactive .em-plk-cards.app-purpose-grid {
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  flex-shrink: 0;
-  gap: 0.3em;
-}
-.slide-plk-comp-interactive .asutp-panel,
 .slide-plk-mod-interactive .asutp-panel,
 .slide-plk-exp-interactive .asutp-panel {
   display: flex;
@@ -9823,7 +9785,6 @@ body.overview-mode .slide-diagram { display: none; }
   justify-content: center;
   font-size: 1.12em;
 }
-.slide-plk-comp-interactive .em-plk-svg,
 .slide-plk-mod-interactive .em-plk-svg,
 .slide-plk-exp-interactive .em-plk-svg {
   width: 100%;
@@ -9838,17 +9799,6 @@ body.overview-mode .slide-diagram { display: none; }
 .slide-plk-exp-interactive .em-ac-view.is-on {
   display: block;
 }
-.slide-plk-comp-interactive .plk-node {
-  opacity: 1;
-  transition: opacity 0.15s;
-}
-.slide-plk-comp-interactive.is-picking .plk-node {
-  opacity: 0.4;
-}
-.slide-plk-comp-interactive.is-picking .plk-node.is-on {
-  opacity: 1;
-}
-.slide-plk-comp-interactive .em-plk-live,
 .slide-plk-mod-interactive .em-plk-live,
 .slide-plk-exp-interactive .em-plk-live {
   margin: 0;
@@ -9856,7 +9806,6 @@ body.overview-mode .slide-diagram { display: none; }
   color: #1e293b;
   font-size: 1.05em;
 }
-.slide-plk-comp-interactive .highlight-box-compact,
 .slide-plk-mod-interactive .highlight-box-compact,
 .slide-plk-exp-interactive .highlight-box-compact {
   flex-shrink: 0;
@@ -10089,6 +10038,757 @@ body.overview-mode .slide-diagram { display: none; }
 }
 .slide-plk-ram-interactive .highlight-box-compact,
 .slide-plk-ram2-interactive .highlight-box-compact {
+  flex-shrink: 0;
+  margin: 0;
+  padding: 0.4em 0.7em;
+}
+
+.slide-plk-rom-interactive .em-plk-cards.app-purpose-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  flex-shrink: 0;
+  gap: 0.3em;
+}
+.slide-plk-flash-interactive .em-plk-cards.app-purpose-grid {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  flex-shrink: 0;
+  gap: 0.25em;
+}
+.slide-plk-rom-interactive .slide-body.asutp-interactive,
+.slide-plk-flash-interactive .slide-body.asutp-interactive {
+  gap: 0.4em;
+}
+.slide-plk-rom-interactive .asutp-main,
+.slide-plk-flash-interactive .asutp-main {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3em;
+  min-height: 0;
+}
+.slide-plk-rom-interactive .asutp-diagram-wrap,
+.slide-plk-flash-interactive .asutp-diagram-wrap {
+  flex: 1.3 1 0;
+  min-height: 0;
+}
+.slide-plk-rom-interactive .app-purpose-card,
+.slide-plk-flash-interactive .app-purpose-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.12em;
+  padding: 0.3em 0.25em;
+  font-size: 1.02em;
+}
+.slide-plk-rom-interactive .asutp-panel,
+.slide-plk-flash-interactive .asutp-panel {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  font-size: 1.12em;
+}
+.slide-plk-rom-interactive .em-plk-svg,
+.slide-plk-flash-interactive .em-plk-svg {
+  width: 100%;
+  height: 100%;
+  max-height: none;
+}
+.slide-plk-flash-interactive .em-ac-view {
+  display: none;
+}
+.slide-plk-flash-interactive .em-ac-view.is-on {
+  display: block;
+}
+.slide-plk-rom-interactive .plk-node {
+  opacity: 1;
+  transition: opacity 0.15s;
+}
+.slide-plk-rom-interactive.is-picking .plk-node {
+  opacity: 0.4;
+}
+.slide-plk-rom-interactive.is-picking .plk-node.is-on {
+  opacity: 1;
+}
+.slide-plk-rom-interactive .em-plk-live,
+.slide-plk-flash-interactive .em-plk-live {
+  margin: 0;
+  font-weight: 700;
+  color: #1e293b;
+  font-size: 1.05em;
+}
+.slide-plk-rom-interactive .highlight-box-compact,
+.slide-plk-flash-interactive .highlight-box-compact {
+  flex-shrink: 0;
+  margin: 0;
+  padding: 0.4em 0.7em;
+}
+
+.slide-plk-rtc-interactive .em-plk-cards.app-purpose-grid,
+.slide-plk-gps-interactive .em-plk-cards.app-purpose-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  flex-shrink: 0;
+  gap: 0.3em;
+}
+.slide-plk-rtc-interactive .slide-body.asutp-interactive,
+.slide-plk-gps-interactive .slide-body.asutp-interactive {
+  gap: 0.4em;
+}
+.slide-plk-rtc-interactive .asutp-main,
+.slide-plk-gps-interactive .asutp-main {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3em;
+  min-height: 0;
+}
+.slide-plk-rtc-interactive .asutp-diagram-wrap,
+.slide-plk-gps-interactive .asutp-diagram-wrap {
+  flex: 1.3 1 0;
+  min-height: 0;
+}
+.slide-plk-rtc-interactive .app-purpose-card,
+.slide-plk-gps-interactive .app-purpose-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.12em;
+  padding: 0.3em 0.25em;
+  font-size: 1.02em;
+}
+.slide-plk-rtc-interactive .asutp-panel,
+.slide-plk-gps-interactive .asutp-panel {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  font-size: 1.12em;
+}
+.slide-plk-rtc-interactive .em-plk-svg,
+.slide-plk-gps-interactive .em-plk-svg {
+  width: 100%;
+  height: 100%;
+  max-height: none;
+}
+.slide-plk-gps-interactive .em-ac-view {
+  display: none;
+}
+.slide-plk-gps-interactive .em-ac-view.is-on {
+  display: block;
+}
+.slide-plk-rtc-interactive .plk-node {
+  opacity: 1;
+  transition: opacity 0.15s;
+}
+.slide-plk-rtc-interactive.is-picking .plk-node {
+  opacity: 0.4;
+}
+.slide-plk-rtc-interactive.is-picking .plk-node.is-on {
+  opacity: 1;
+}
+.slide-plk-rtc-interactive .em-plk-live,
+.slide-plk-gps-interactive .em-plk-live {
+  margin: 0;
+  font-weight: 700;
+  color: #1e293b;
+  font-size: 1.05em;
+}
+.slide-plk-rtc-interactive .highlight-box-compact,
+.slide-plk-gps-interactive .highlight-box-compact {
+  flex-shrink: 0;
+  margin: 0;
+  padding: 0.4em 0.7em;
+}
+
+.slide-plk-ports-interactive .em-plk-cards.app-purpose-grid,
+.slide-plk-iface-interactive .em-plk-cards.app-purpose-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  flex-shrink: 0;
+  gap: 0.3em;
+}
+.slide-plk-ports-interactive .slide-body.asutp-interactive,
+.slide-plk-iface-interactive .slide-body.asutp-interactive {
+  gap: 0.4em;
+}
+.slide-plk-ports-interactive .asutp-main,
+.slide-plk-iface-interactive .asutp-main {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3em;
+  min-height: 0;
+}
+.slide-plk-ports-interactive .asutp-diagram-wrap,
+.slide-plk-iface-interactive .asutp-diagram-wrap {
+  flex: 1.3 1 0;
+  min-height: 0;
+}
+.slide-plk-ports-interactive .app-purpose-card,
+.slide-plk-iface-interactive .app-purpose-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.12em;
+  padding: 0.3em 0.25em;
+  font-size: 1.02em;
+}
+.slide-plk-ports-interactive .asutp-panel,
+.slide-plk-iface-interactive .asutp-panel {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  font-size: 1.12em;
+}
+.slide-plk-ports-interactive .em-plk-svg,
+.slide-plk-iface-interactive .em-plk-svg {
+  width: 100%;
+  height: 100%;
+  max-height: none;
+}
+.slide-plk-iface-interactive .em-ac-view {
+  display: none;
+}
+.slide-plk-iface-interactive .em-ac-view.is-on {
+  display: block;
+}
+.slide-plk-ports-interactive .plk-node {
+  opacity: 1;
+  transition: opacity 0.15s;
+}
+.slide-plk-ports-interactive.is-picking .plk-node {
+  opacity: 0.4;
+}
+.slide-plk-ports-interactive.is-picking .plk-node.is-on {
+  opacity: 1;
+}
+.slide-plk-ports-interactive .em-plk-live,
+.slide-plk-iface-interactive .em-plk-live {
+  margin: 0;
+  font-weight: 700;
+  color: #1e293b;
+  font-size: 1.05em;
+}
+.slide-plk-ports-interactive .highlight-box-compact,
+.slide-plk-iface-interactive .highlight-box-compact {
+  flex-shrink: 0;
+  margin: 0;
+  padding: 0.4em 0.7em;
+}
+
+.slide-plk-bat-interactive .em-plk-cards.app-purpose-grid,
+.slide-plk-ui-interactive .em-plk-cards.app-purpose-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  flex-shrink: 0;
+  gap: 0.3em;
+}
+.slide-plk-bat-interactive .slide-body.asutp-interactive,
+.slide-plk-ui-interactive .slide-body.asutp-interactive {
+  gap: 0.4em;
+}
+.slide-plk-bat-interactive .asutp-main,
+.slide-plk-ui-interactive .asutp-main {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3em;
+  min-height: 0;
+}
+.slide-plk-bat-interactive .asutp-diagram-wrap,
+.slide-plk-ui-interactive .asutp-diagram-wrap {
+  flex: 1.3 1 0;
+  min-height: 0;
+}
+.slide-plk-bat-interactive .app-purpose-card,
+.slide-plk-ui-interactive .app-purpose-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.12em;
+  padding: 0.3em 0.25em;
+  font-size: 1.02em;
+}
+.slide-plk-bat-interactive .asutp-panel,
+.slide-plk-ui-interactive .asutp-panel {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  font-size: 1.12em;
+}
+.slide-plk-bat-interactive .em-plk-svg,
+.slide-plk-ui-interactive .em-plk-svg {
+  width: 100%;
+  height: 100%;
+  max-height: none;
+}
+.slide-plk-ui-interactive .em-ac-view {
+  display: none;
+}
+.slide-plk-ui-interactive .em-ac-view.is-on {
+  display: block;
+}
+.slide-plk-bat-interactive .plk-node {
+  opacity: 1;
+  transition: opacity 0.15s;
+}
+.slide-plk-bat-interactive.is-picking .plk-node {
+  opacity: 0.4;
+}
+.slide-plk-bat-interactive.is-picking .plk-node.is-on {
+  opacity: 1;
+}
+.slide-plk-bat-interactive .em-plk-live,
+.slide-plk-ui-interactive .em-plk-live {
+  margin: 0;
+  font-weight: 700;
+  color: #1e293b;
+  font-size: 1.05em;
+}
+.slide-plk-bat-interactive .highlight-box-compact,
+.slide-plk-ui-interactive .highlight-box-compact {
+  flex-shrink: 0;
+  margin: 0;
+  padding: 0.4em 0.7em;
+}
+
+.slide-plk-io-interactive .em-plk-cards.app-purpose-grid,
+.slide-plk-di-interactive .em-plk-cards.app-purpose-grid,
+.slide-plk-wet-interactive .em-plk-cards.app-purpose-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  flex-shrink: 0;
+  gap: 0.3em;
+}
+.slide-plk-pts-interactive .em-plk-cards.app-purpose-grid {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  flex-shrink: 0;
+  gap: 0.25em;
+}
+.slide-plk-io-interactive .slide-body.asutp-interactive,
+.slide-plk-pts-interactive .slide-body.asutp-interactive,
+.slide-plk-di-interactive .slide-body.asutp-interactive,
+.slide-plk-wet-interactive .slide-body.asutp-interactive {
+  gap: 0.4em;
+}
+.slide-plk-io-interactive .asutp-main,
+.slide-plk-pts-interactive .asutp-main,
+.slide-plk-di-interactive .asutp-main,
+.slide-plk-wet-interactive .asutp-main {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3em;
+  min-height: 0;
+}
+.slide-plk-io-interactive .asutp-diagram-wrap,
+.slide-plk-pts-interactive .asutp-diagram-wrap,
+.slide-plk-di-interactive .asutp-diagram-wrap,
+.slide-plk-wet-interactive .asutp-diagram-wrap {
+  flex: 1.3 1 0;
+  min-height: 0;
+}
+.slide-plk-io-interactive .app-purpose-card,
+.slide-plk-pts-interactive .app-purpose-card,
+.slide-plk-di-interactive .app-purpose-card,
+.slide-plk-wet-interactive .app-purpose-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.12em;
+  padding: 0.3em 0.25em;
+  font-size: 1.02em;
+}
+.slide-plk-io-interactive .asutp-panel,
+.slide-plk-pts-interactive .asutp-panel,
+.slide-plk-di-interactive .asutp-panel,
+.slide-plk-wet-interactive .asutp-panel {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  font-size: 1.12em;
+}
+.slide-plk-io-interactive .em-plk-svg,
+.slide-plk-pts-interactive .em-plk-svg,
+.slide-plk-di-interactive .em-plk-svg,
+.slide-plk-wet-interactive .em-plk-svg {
+  width: 100%;
+  height: 100%;
+  max-height: none;
+}
+.slide-plk-pts-interactive .em-ac-view,
+.slide-plk-di-interactive .em-ac-view {
+  display: none;
+}
+.slide-plk-pts-interactive .em-ac-view.is-on,
+.slide-plk-di-interactive .em-ac-view.is-on {
+  display: block;
+}
+.slide-plk-io-interactive .plk-node,
+.slide-plk-wet-interactive .plk-node {
+  opacity: 1;
+  transition: opacity 0.15s;
+}
+.slide-plk-io-interactive.is-picking .plk-node,
+.slide-plk-wet-interactive.is-picking .plk-node {
+  opacity: 0.4;
+}
+.slide-plk-io-interactive.is-picking .plk-node.is-on,
+.slide-plk-wet-interactive.is-picking .plk-node.is-on {
+  opacity: 1;
+}
+.slide-plk-io-interactive .em-plk-live,
+.slide-plk-pts-interactive .em-plk-live,
+.slide-plk-di-interactive .em-plk-live,
+.slide-plk-wet-interactive .em-plk-live {
+  margin: 0;
+  font-weight: 700;
+  color: #1e293b;
+  font-size: 1.05em;
+}
+.slide-plk-io-interactive .highlight-box-compact,
+.slide-plk-pts-interactive .highlight-box-compact,
+.slide-plk-di-interactive .highlight-box-compact,
+.slide-plk-wet-interactive .highlight-box-compact {
+  flex-shrink: 0;
+  margin: 0;
+  padding: 0.4em 0.7em;
+}
+
+.slide-plk-do-interactive .em-plk-cards.app-purpose-grid,
+.slide-plk-dorel-interactive .em-plk-cards.app-purpose-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  flex-shrink: 0;
+  gap: 0.3em;
+}
+.slide-plk-do-interactive .slide-body.asutp-interactive,
+.slide-plk-dorel-interactive .slide-body.asutp-interactive {
+  gap: 0.4em;
+}
+.slide-plk-do-interactive .asutp-main,
+.slide-plk-dorel-interactive .asutp-main {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3em;
+  min-height: 0;
+}
+.slide-plk-do-interactive .asutp-diagram-wrap,
+.slide-plk-dorel-interactive .asutp-diagram-wrap {
+  flex: 1.3 1 0;
+  min-height: 0;
+}
+.slide-plk-do-interactive .app-purpose-card,
+.slide-plk-dorel-interactive .app-purpose-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.12em;
+  padding: 0.3em 0.25em;
+  font-size: 1.02em;
+}
+.slide-plk-do-interactive .asutp-panel,
+.slide-plk-dorel-interactive .asutp-panel {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  font-size: 1.12em;
+}
+.slide-plk-do-interactive .em-plk-svg,
+.slide-plk-dorel-interactive .em-plk-svg {
+  width: 100%;
+  height: 100%;
+  max-height: none;
+}
+.slide-plk-dorel-interactive .em-ac-view {
+  display: none;
+}
+.slide-plk-dorel-interactive .em-ac-view.is-on {
+  display: block;
+}
+.slide-plk-do-interactive .plk-node {
+  opacity: 1;
+  transition: opacity 0.15s;
+}
+.slide-plk-do-interactive.is-picking .plk-node {
+  opacity: 0.4;
+}
+.slide-plk-do-interactive.is-picking .plk-node.is-on {
+  opacity: 1;
+}
+.slide-plk-do-interactive .em-plk-live,
+.slide-plk-dorel-interactive .em-plk-live {
+  margin: 0;
+  font-weight: 700;
+  color: #1e293b;
+  font-size: 1.05em;
+}
+.slide-plk-do-interactive .highlight-box-compact,
+.slide-plk-dorel-interactive .highlight-box-compact {
+  flex-shrink: 0;
+  margin: 0;
+  padding: 0.4em 0.7em;
+}
+
+.slide-plk-ai-interactive .em-plk-cards.app-purpose-grid,
+.slide-plk-aidiff-interactive .em-plk-cards.app-purpose-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  flex-shrink: 0;
+  gap: 0.3em;
+}
+.slide-plk-ai-interactive .slide-body.asutp-interactive,
+.slide-plk-aidiff-interactive .slide-body.asutp-interactive {
+  gap: 0.4em;
+}
+.slide-plk-ai-interactive .asutp-main,
+.slide-plk-aidiff-interactive .asutp-main {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3em;
+  min-height: 0;
+}
+.slide-plk-ai-interactive .asutp-diagram-wrap,
+.slide-plk-aidiff-interactive .asutp-diagram-wrap {
+  flex: 1.3 1 0;
+  min-height: 0;
+}
+.slide-plk-ai-interactive .app-purpose-card,
+.slide-plk-aidiff-interactive .app-purpose-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.12em;
+  padding: 0.3em 0.25em;
+  font-size: 1.02em;
+}
+.slide-plk-ai-interactive .asutp-panel,
+.slide-plk-aidiff-interactive .asutp-panel {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  font-size: 1.12em;
+}
+.slide-plk-ai-interactive .em-plk-svg,
+.slide-plk-aidiff-interactive .em-plk-svg {
+  width: 100%;
+  height: 100%;
+  max-height: none;
+}
+.slide-plk-aidiff-interactive .em-ac-view {
+  display: none;
+}
+.slide-plk-aidiff-interactive .em-ac-view.is-on {
+  display: block;
+}
+.slide-plk-ai-interactive .plk-node {
+  opacity: 1;
+  transition: opacity 0.15s;
+}
+.slide-plk-ai-interactive.is-picking .plk-node {
+  opacity: 0.4;
+}
+.slide-plk-ai-interactive.is-picking .plk-node.is-on {
+  opacity: 1;
+}
+.slide-plk-ai-interactive .em-plk-live,
+.slide-plk-aidiff-interactive .em-plk-live {
+  margin: 0;
+  font-weight: 700;
+  color: #1e293b;
+  font-size: 1.05em;
+}
+.slide-plk-ai-interactive .highlight-box-compact,
+.slide-plk-aidiff-interactive .highlight-box-compact {
+  flex-shrink: 0;
+  margin: 0;
+  padding: 0.4em 0.7em;
+}
+
+.slide-plk-hmi-interactive .em-plk-cards.app-purpose-grid,
+.slide-plk-hmisoft-interactive .em-plk-cards.app-purpose-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  flex-shrink: 0;
+  gap: 0.3em;
+}
+.slide-plk-hmi-interactive .slide-body.asutp-interactive,
+.slide-plk-hmisoft-interactive .slide-body.asutp-interactive {
+  gap: 0.4em;
+}
+.slide-plk-hmi-interactive .asutp-main,
+.slide-plk-hmisoft-interactive .asutp-main {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3em;
+  min-height: 0;
+}
+.slide-plk-hmi-interactive .asutp-diagram-wrap,
+.slide-plk-hmisoft-interactive .asutp-diagram-wrap {
+  flex: 1.3 1 0;
+  min-height: 0;
+}
+.slide-plk-hmi-interactive .app-purpose-card,
+.slide-plk-hmisoft-interactive .app-purpose-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.12em;
+  padding: 0.3em 0.25em;
+  font-size: 1.02em;
+}
+.slide-plk-hmi-interactive .asutp-panel,
+.slide-plk-hmisoft-interactive .asutp-panel {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  font-size: 1.12em;
+}
+.slide-plk-hmi-interactive .em-plk-svg,
+.slide-plk-hmisoft-interactive .em-plk-svg {
+  width: 100%;
+  height: 100%;
+  max-height: none;
+}
+.slide-plk-hmisoft-interactive .em-ac-view {
+  display: none;
+}
+.slide-plk-hmisoft-interactive .em-ac-view.is-on {
+  display: block;
+}
+.slide-plk-hmi-interactive .plk-node {
+  opacity: 1;
+  transition: opacity 0.15s;
+}
+.slide-plk-hmi-interactive.is-picking .plk-node {
+  opacity: 0.4;
+}
+.slide-plk-hmi-interactive.is-picking .plk-node.is-on {
+  opacity: 1;
+}
+.slide-plk-hmi-interactive .em-plk-live,
+.slide-plk-hmisoft-interactive .em-plk-live {
+  margin: 0;
+  font-weight: 700;
+  color: #1e293b;
+  font-size: 1.05em;
+}
+.slide-plk-hmi-interactive .highlight-box-compact,
+.slide-plk-hmisoft-interactive .highlight-box-compact {
+  flex-shrink: 0;
+  margin: 0;
+  padding: 0.4em 0.7em;
+}
+
+.slide-plk-rs232-interactive .em-plk-cards.app-purpose-grid,
+.slide-plk-rs232lim-interactive .em-plk-cards.app-purpose-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  flex-shrink: 0;
+  gap: 0.3em;
+}
+.slide-plk-rs232sig-interactive .em-plk-cards-5.app-purpose-grid {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  flex-shrink: 0;
+  gap: 0.25em;
+}
+.slide-plk-rs232sig-interactive .em-plk-cards-sig.app-purpose-grid {
+  grid-template-columns: repeat(9, minmax(0, 1fr));
+  flex-shrink: 0;
+  gap: 0.2em;
+}
+.slide-plk-rs232sig-interactive .em-plk-cards-sig .app-purpose-card {
+  padding: 0.25em 0.15em;
+  font-size: 0.92em;
+}
+.slide-plk-rs232-interactive .slide-body.asutp-interactive,
+.slide-plk-rs232sig-interactive .slide-body.asutp-interactive,
+.slide-plk-rs232lim-interactive .slide-body.asutp-interactive {
+  gap: 0.4em;
+}
+.slide-plk-rs232-interactive .asutp-main,
+.slide-plk-rs232sig-interactive .asutp-main,
+.slide-plk-rs232lim-interactive .asutp-main {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3em;
+  min-height: 0;
+}
+.slide-plk-rs232-interactive .asutp-diagram-wrap,
+.slide-plk-rs232sig-interactive .asutp-diagram-wrap,
+.slide-plk-rs232lim-interactive .asutp-diagram-wrap {
+  flex: 1.3 1 0;
+  min-height: 0;
+}
+.slide-plk-rs232-interactive .app-purpose-card,
+.slide-plk-rs232sig-interactive .app-purpose-card,
+.slide-plk-rs232lim-interactive .app-purpose-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.12em;
+  padding: 0.3em 0.25em;
+  font-size: 1.02em;
+}
+.slide-plk-rs232-interactive .asutp-panel,
+.slide-plk-rs232sig-interactive .asutp-panel,
+.slide-plk-rs232lim-interactive .asutp-panel {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  font-size: 1.12em;
+}
+.slide-plk-rs232-interactive .em-plk-svg,
+.slide-plk-rs232sig-interactive .em-plk-svg,
+.slide-plk-rs232lim-interactive .em-plk-svg {
+  width: 100%;
+  height: 100%;
+  max-height: none;
+}
+.slide-plk-rs232sig-interactive .em-ac-view {
+  display: none;
+}
+.slide-plk-rs232sig-interactive .em-ac-view.is-on {
+  display: block;
+}
+.slide-plk-rs232-interactive .plk-node,
+.slide-plk-rs232lim-interactive .plk-node {
+  opacity: 1;
+  transition: opacity 0.15s;
+}
+.slide-plk-rs232sig-interactive .plk-node {
+  opacity: 1;
+  transition: opacity 0.15s, filter 0.15s;
+}
+.slide-plk-rs232sig-interactive .plk-sig {
+  opacity: 1;
+  transition: opacity 0.15s;
+}
+.slide-plk-rs232-interactive.is-picking .plk-node,
+.slide-plk-rs232lim-interactive.is-picking .plk-node {
+  opacity: 0.4;
+}
+.slide-plk-rs232sig-interactive.is-picking .plk-node {
+  opacity: 0.28;
+}
+.slide-plk-rs232sig-interactive.is-picking .plk-sig {
+  opacity: 0.3;
+}
+.slide-plk-rs232-interactive.is-picking .plk-node.is-on,
+.slide-plk-rs232lim-interactive.is-picking .plk-node.is-on {
+  opacity: 1;
+}
+.slide-plk-rs232sig-interactive.is-picking .plk-node.is-on {
+  opacity: 1;
+}
+.slide-plk-rs232sig-interactive.is-picking .plk-sig.is-on {
+  opacity: 1;
+}
+.slide-plk-rs232-interactive .em-plk-live,
+.slide-plk-rs232sig-interactive .em-plk-live,
+.slide-plk-rs232lim-interactive .em-plk-live {
+  margin: 0;
+  font-weight: 700;
+  color: #1e293b;
+  font-size: 1.05em;
+}
+.slide-plk-rs232-interactive .highlight-box-compact,
+.slide-plk-rs232sig-interactive .highlight-box-compact,
+.slide-plk-rs232lim-interactive .highlight-box-compact {
   flex-shrink: 0;
   margin: 0;
   padding: 0.4em 0.7em;
