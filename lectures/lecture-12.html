@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="UTF-8"><title>Лекция 12</title>
+<link rel="stylesheet" href="../css/presentation.css"></head><body>
+<div class="deck">
+<section class="slide slide-title active"><span class="tag">Лекция 12 · Тема 6</span>
+<h1>Программируемые логические контроллеры в системах автоматизации и управления</h1>
+<p>Средства автоматизации и управления</p></section>
+
+<section class="slide slide-agenda"><h2>Содержание</h2><div class="slide-body"><ol>
+<li>Что такое ПЛК</li>
+<li>Функции ПЛК</li>
+<li>Области применения</li>
+<li>Локальные системы</li>
+<li>Распределённые системы</li>
+<li>ПЛК и RTU · история</li>
+<li>ПЛК: локальное управление</li>
+<li>RTU: телемеханика</li>
+<li>Состав ПЛК</li>
+<li>Схема: батарея · БП · ЦПУ · слоты</li>
+<li>Модули: БП · ЦПУ · ВВ · связь</li>
+<li>Резерв и расширение</li>
+<li>Модуль ЦПУ</li>
+<li>Состав платы ЦПУ</li>
+<li>Микропроцессор · для программиста</li>
+<li>ОЗУ (SRAM)</li>
+<li>Объём ОЗУ и доступ программисту</li>
+</ol></div></section>
+
+<section class="slide slide-em-ac-interactive slide-plk-def-interactive is-picking">
+<h2>Что такое ПЛК</h2>
+<div class="slide-body asutp-interactive">
+<div class="asutp-main">
+<p class="asutp-hint">§ 6.1 · PLC = programmable logic controller. Жмите блок</p>
+<div class="app-purpose-grid em-fast-grid em-plk-cards">
+<button type="button" class="app-purpose-card active" data-info="name"><strong>ПЛК</strong><span>PLC</span></button>
+<button type="button" class="app-purpose-card" data-info="mp"><strong>Микропроцессор</strong><span>устройство</span></button>
+<button type="button" class="app-purpose-card" data-info="obj"><strong>Объект</strong><span>информация</span></button>
+<button type="button" class="app-purpose-card" data-info="cmd"><strong>Команды</strong><span>управление</span></button>
+</div>
+<div class="highlight-box highlight-box-compact"><p class="em-plk-live" id="plkDefLive">ПЛК (PLC) — программируемый логический контроллер</p></div>
+<div class="asutp-diagram-wrap">
+<svg class="em-svg em-plk-svg" viewBox="0 0 640 280" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="Понятие ПЛК">
+<defs><marker id="plkDefArr" markerWidth="7" markerHeight="6" refX="6" refY="3" orient="auto"><path d="M0 0 L7 3 L0 6 Z" fill="#64748b"/></marker></defs>
+<rect width="640" height="280" fill="#fff"/>
+<g class="plk-node" data-info="obj" style="cursor:pointer">
+<rect x="24" y="100" width="120" height="80" rx="10" fill="#eff6ff" stroke="#1d4ed8" stroke-width="1.8"/>
+<text x="84" y="135" text-anchor="middle" font-size="15" font-weight="800" fill="#1e3a8a">объект</text>
+<text x="84" y="160" text-anchor="middle" font-size="13" fill="#64748b">управление</text>
+</g>
+<path d="M144 140 H190" fill="none" stroke="#94a3b8" stroke-width="2" marker-end="url(#plkDefArr)"/>
+<g class="plk-node is-on" data-info="name" style="cursor:pointer">
+<rect x="190" y="70" width="260" height="140" rx="12" fill="#ecfdf5" stroke="#16a34a" stroke-width="2.2"/>
+<text x="320" y="120" text-anchor="middle" font-size="26" font-weight="800" fill="#166534">ПЛК</text>
+<text x="320" y="150" text-anchor="middle" font-size="15" fill="#475569">PLC · programmable</text>
+<text x="320" y="175" text-anchor="middle" font-size="15" fill="#475569">logic controller</text>
+</g>
+<path d="M450 140 H496" fill="none" stroke="#94a3b8" stroke-width="2" marker-end="url(#plkDefArr)"/>
+<g class="plk-node" data-info="cmd" style="cursor:pointer">
+<rect x="496" y="100" width="120" height="80" rx="10" fill="#fff7ed" stroke="#c2410c" stroke-width="1.8"/>
+<text x="556" y="135" text-anchor="middle" font-size="14" font-weight="800" fill="#9a3412">команды</text>
+<text x="556" y="160" text-anchor="middle" font-size="13" fill="#64748b">управления</text>
+</g>
+<g class="plk-node" data-info="mp" style="cursor:pointer">
+<rect x="190" y="230" width="260" height="36" rx="8" fill="#f8fafc" stroke="#94a3b8" stroke-width="1.5"/>
+<text x="320" y="254" text-anchor="middle" font-size="14" font-weight="700" fill="#475569">микропроцессорное устройство</text>
+</g>
+</svg>
+</div>
+</div>
+<aside class="asutp-panel" id="plkDefPanel">
+<h3>ПЛК</h3>
+<p>Программируемый логический контроллер (ПЛК), международное название <strong>PLC</strong> — programmable logic controller.</p>
+</aside>
+</div>
+</section>
+
+<section class="slide slide-em-ac-interactive slide-plk-fn-interactive is-picking">
+<h2>Функции ПЛК</h2>
+<div class="slide-body asutp-interactive">
+<div class="asutp-main">
+<p class="asutp-hint">Сбор → преобразование → обработка → хранение → команды. Жмите</p>
+<div class="app-purpose-grid em-fast-grid em-plk-cards-5">
+<button type="button" class="app-purpose-card active" data-info="in"><strong>Сбор</strong><span>данных</span></button>
+<button type="button" class="app-purpose-card" data-info="conv"><strong>Преобраз.</strong><span>сигналов</span></button>
+<button type="button" class="app-purpose-card" data-info="proc"><strong>Обработка</strong><span>логика</span></button>
+<button type="button" class="app-purpose-card" data-info="mem"><strong>Хранение</strong><span>память</span></button>
+<button type="button" class="app-purpose-card" data-info="out"><strong>Команды</strong><span>выход</span></button>
+</div>
+<div class="highlight-box highlight-box-compact"><p class="em-plk-live" id="plkFnLive">сбор информации с объекта управления</p></div>
+<div class="asutp-diagram-wrap">
+<svg class="em-svg em-plk-svg" viewBox="0 0 640 260" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="Функции ПЛК">
+<defs><marker id="plkFnArr" markerWidth="7" markerHeight="6" refX="6" refY="3" orient="auto"><path d="M0 0 L7 3 L0 6 Z" fill="#64748b"/></marker></defs>
+<rect width="640" height="260" fill="#fff"/>
+<g class="plk-node is-on" data-info="in" style="cursor:pointer">
+<rect x="16" y="90" width="100" height="80" rx="8" fill="#eff6ff" stroke="#1d4ed8" stroke-width="1.8"/>
+<text x="66" y="135" text-anchor="middle" font-size="15" font-weight="800" fill="#1e3a8a">сбор</text>
+</g>
+<path d="M116 130 H140" fill="none" stroke="#94a3b8" stroke-width="2" marker-end="url(#plkFnArr)"/>
+<g class="plk-node" data-info="conv" style="cursor:pointer">
+<rect x="140" y="90" width="100" height="80" rx="8" fill="#ecfdf5" stroke="#16a34a" stroke-width="1.8"/>
+<text x="190" y="125" text-anchor="middle" font-size="14" font-weight="800" fill="#166534">преоб-</text>
+<text x="190" y="148" text-anchor="middle" font-size="14" font-weight="800" fill="#166534">разов.</text>
+</g>
+<path d="M240 130 H264" fill="none" stroke="#94a3b8" stroke-width="2" marker-end="url(#plkFnArr)"/>
+<g class="plk-node" data-info="proc" style="cursor:pointer">
+<rect x="264" y="90" width="100" height="80" rx="8" fill="#fef9c3" stroke="#ca8a04" stroke-width="1.8"/>
+<text x="314" y="135" text-anchor="middle" font-size="14" font-weight="800" fill="#854d0e">обработка</text>
+</g>
+<path d="M364 130 H388" fill="none" stroke="#94a3b8" stroke-width="2" marker-end="url(#plkFnArr)"/>
+<g class="plk-node" data-info="mem" style="cursor:pointer">
+<rect x="388" y="90" width="100" height="80" rx="8" fill="#faf5ff" stroke="#7c3aed" stroke-width="1.8"/>
+<text x="438" y="135" text-anchor="middle" font-size="14" font-weight="800" fill="#6d28d9">хранение</text>
+</g>
+<path d="M488 130 H512" fill="none" stroke="#94a3b8" stroke-width="2" marker-end="url(#plkFnArr)"/>
+<g class="plk-node" data-info="out" style="cursor:pointer">
+<rect x="512" y="90" width="112" height="80" rx="8" fill="#fff7ed" stroke="#c2410c" stroke-width="1.8"/>
+<text x="568" y="125" text-anchor="middle" font-size="14" font-weight="800" fill="#9a3412">команды</text>
+<text x="568" y="148" text-anchor="middle" font-size="13" fill="#64748b">управления</text>
+</g>
+<text x="320" y="230" text-anchor="middle" font-size="15" fill="#64748b">информация с объекта → команды на объект</text>
+</svg>
+</div>
+</div>
+<aside class="asutp-panel" id="plkFnPanel">
+<h3>Сбор</h3>
+<p>ПЛК предназначен для <strong>сбора</strong> информации с объекта управления.</p>
+</aside>
+</div>
+</section>
+
+<section class="slide slide-em-ac-interactive slide-plk-use-interactive">
+<h2>Области применения</h2>
+<div class="slide-body asutp-interactive">
+<div class="asutp-main">
+<p class="asutp-hint">ПЛК работают и локально, и в распределённых системах. Жмите</p>
+<div class="app-purpose-grid em-fast-grid em-plk-cards-2">
+<button type="button" class="app-purpose-card active" data-info="loc"><strong>Локальные</strong><span>станки · конвейеры</span></button>
+<button type="button" class="app-purpose-card" data-info="dist"><strong>Распределённые</strong><span>сбор и обработка</span></button>
+</div>
+<div class="highlight-box highlight-box-compact"><p class="em-plk-live" id="plkUseLive">локальные системы автоматики: станки, конвейеры и т. п.</p></div>
+<div class="asutp-diagram-wrap">
+<svg class="em-svg em-plk-svg" viewBox="0 0 640 280" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="Области применения">
+<g class="em-ac-view is-on" data-view="loc">
+<rect width="640" height="280" fill="#fff"/>
+<rect x="80" y="50" width="480" height="150" rx="14" fill="#eff6ff" stroke="#1d4ed8" stroke-width="2.2"/>
+<text x="320" y="105" text-anchor="middle" font-size="22" font-weight="800" fill="#1e3a8a">локальные системы автоматики</text>
+<text x="320" y="145" text-anchor="middle" font-size="17" fill="#475569">управление станками, конвейерами</text>
+<text x="320" y="175" text-anchor="middle" font-size="16" fill="#64748b">и другими отдельными объектами</text>
+<text x="320" y="250" text-anchor="middle" font-size="15" fill="#94a3b8">ПЛК рядом с объектом · команды на месте</text>
+</g>
+<g class="em-ac-view" data-view="dist">
+<rect width="640" height="280" fill="#fff"/>
+<rect x="80" y="50" width="480" height="150" rx="14" fill="#ecfdf5" stroke="#16a34a" stroke-width="2.2"/>
+<text x="320" y="105" text-anchor="middle" font-size="22" font-weight="800" fill="#166534">распределённые системы</text>
+<text x="320" y="145" text-anchor="middle" font-size="17" fill="#475569">сбор и обработка информации</text>
+<text x="320" y="175" text-anchor="middle" font-size="16" fill="#64748b">в составе распределённого управления</text>
+<text x="320" y="250" text-anchor="middle" font-size="15" fill="#94a3b8">ПЛК — узлы сети сбора / обработки данных</text>
+</g>
+</svg>
+</div>
+</div>
+<aside class="asutp-panel" id="plkUsePanel">
+<h3>Локальные</h3>
+<p>ПЛК широко используют в <strong>локальных</strong> системах автоматики: станки, конвейеры и т. п.</p>
+</aside>
+</div>
+</section>
+
+<section class="slide slide-em-ac-interactive slide-plk-hist-interactive is-picking">
+<h2>ПЛК и RTU · история</h2>
+<div class="slide-body asutp-interactive">
+<div class="asutp-main">
+<p class="asutp-hint">На старте микропроцессорных контроллеров роли разделили. Жмите</p>
+<div class="app-purpose-grid em-fast-grid em-plk-cards">
+<button type="button" class="app-purpose-card active" data-info="split"><strong>Разделение</strong><span>PLC ≠ RTU</span></button>
+<button type="button" class="app-purpose-card" data-info="plc"><strong>PLC</strong><span>локально</span></button>
+<button type="button" class="app-purpose-card" data-info="rtu"><strong>RTU</strong><span>телемеханика</span></button>
+<button type="button" class="app-purpose-card" data-info="now"><strong>Сейчас</strong><span>границы размыты</span></button>
+</div>
+<div class="highlight-box highlight-box-compact"><p class="em-plk-live" id="plkHistLive">на начальном этапе было чёткое разделение на PLC и RTU</p></div>
+<div class="asutp-diagram-wrap">
+<svg class="em-svg em-plk-svg" viewBox="0 0 640 260" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="ПЛК и RTU">
+<rect width="640" height="260" fill="#fff"/>
+<g class="plk-node is-on" data-info="split" style="cursor:pointer">
+<text x="320" y="36" text-anchor="middle" font-size="16" font-weight="800" fill="#1e3a8a">ранний этап: два разных назначения</text>
+</g>
+<g class="plk-node" data-info="plc" style="cursor:pointer">
+<rect x="40" y="60" width="260" height="140" rx="12" fill="#eff6ff" stroke="#1d4ed8" stroke-width="2"/>
+<text x="170" y="115" text-anchor="middle" font-size="22" font-weight="800" fill="#1e3a8a">PLC / ПЛК</text>
+<text x="170" y="150" text-anchor="middle" font-size="15" fill="#475569">локальное управление</text>
+<text x="170" y="175" text-anchor="middle" font-size="14" fill="#64748b">широкие вычисления</text>
+</g>
+<g class="plk-node" data-info="rtu" style="cursor:pointer">
+<rect x="340" y="60" width="260" height="140" rx="12" fill="#fff7ed" stroke="#c2410c" stroke-width="2"/>
+<text x="470" y="115" text-anchor="middle" font-size="22" font-weight="800" fill="#9a3412">RTU</text>
+<text x="470" y="150" text-anchor="middle" font-size="15" fill="#475569">удалённое оконечное</text>
+<text x="470" y="175" text-anchor="middle" font-size="14" fill="#64748b">телемеханика КП</text>
+</g>
+<g class="plk-node" data-info="now" style="cursor:pointer">
+<text x="320" y="240" text-anchor="middle" font-size="14" fill="#94a3b8">сегодня ПЛК часто закрывают и локальные, и сетевые задачи</text>
+</g>
+</svg>
+</div>
+</div>
+<aside class="asutp-panel" id="plkHistPanel">
+<h3>Разделение</h3>
+<p>На начальном этапе развития микропроцессорных контроллеров было чёткое разделение на <strong>PLC</strong> и <strong>RTU</strong>.</p>
+</aside>
+</div>
+</section>
+
+<section class="slide slide-em-ac-interactive slide-plk-plc-interactive is-picking">
+<h2>ПЛК: локальное управление</h2>
+<div class="slide-body asutp-interactive">
+<div class="asutp-main">
+<p class="asutp-hint">Изначально PLC — у объекта, с сильной вычислительной частью. Жмите</p>
+<div class="app-purpose-grid em-fast-grid em-plk-cards-3">
+<button type="button" class="app-purpose-card active" data-info="local"><strong>Локально</strong><span>у объекта</span></button>
+<button type="button" class="app-purpose-card" data-info="cpu"><strong>Вычисления</strong><span>широкие</span></button>
+<button type="button" class="app-purpose-card" data-info="cmd"><strong>Команды</strong><span>управление</span></button>
+</div>
+<div class="highlight-box highlight-box-compact"><p class="em-plk-live" id="plkPlcLive">PLC предназначался для локального управления</p></div>
+<div class="asutp-diagram-wrap">
+<svg class="em-svg em-plk-svg" viewBox="0 0 640 260" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="Роль PLC">
+<defs><marker id="plkPlcArr" markerWidth="7" markerHeight="6" refX="6" refY="3" orient="auto"><path d="M0 0 L7 3 L0 6 Z" fill="#64748b"/></marker></defs>
+<rect width="640" height="260" fill="#fff"/>
+<g class="plk-node is-on" data-info="local" style="cursor:pointer">
+<rect x="40" y="80" width="160" height="100" rx="10" fill="#f8fafc" stroke="#94a3b8" stroke-width="1.6"/>
+<text x="120" y="135" text-anchor="middle" font-size="16" font-weight="800" fill="#475569">объект</text>
+</g>
+<path d="M200 130 H250" fill="none" stroke="#94a3b8" stroke-width="2" marker-end="url(#plkPlcArr)"/>
+<g class="plk-node" data-info="cpu" style="cursor:pointer">
+<rect x="250" y="60" width="220" height="140" rx="12" fill="#eff6ff" stroke="#1d4ed8" stroke-width="2.2"/>
+<text x="360" y="115" text-anchor="middle" font-size="22" font-weight="800" fill="#1e3a8a">PLC</text>
+<text x="360" y="145" text-anchor="middle" font-size="14" fill="#475569">широкие вычислительные</text>
+<text x="360" y="168" text-anchor="middle" font-size="14" fill="#475569">возможности</text>
+</g>
+<path d="M470 130 H520" fill="none" stroke="#94a3b8" stroke-width="2" marker-end="url(#plkPlcArr)"/>
+<g class="plk-node" data-info="cmd" style="cursor:pointer">
+<rect x="520" y="80" width="100" height="100" rx="10" fill="#ecfdf5" stroke="#16a34a" stroke-width="1.8"/>
+<text x="570" y="125" text-anchor="middle" font-size="14" font-weight="800" fill="#166534">команды</text>
+<text x="570" y="150" text-anchor="middle" font-size="13" fill="#64748b">на объект</text>
+</g>
+</svg>
+</div>
+</div>
+<aside class="asutp-panel" id="plkPlcPanel">
+<h3>Локально</h3>
+<p>Programmable logic controller предназначался для <strong>локального управления</strong>.</p>
+</aside>
+</div>
+</section>
+
+<section class="slide slide-em-ac-interactive slide-plk-rtu-interactive is-picking">
+<h2>RTU: телемеханика</h2>
+<div class="slide-body asutp-interactive">
+<div class="asutp-main">
+<p class="asutp-hint">RTU — удалённое оконечное устройство контролируемого пункта. Жмите</p>
+<div class="app-purpose-grid em-fast-grid em-plk-cards">
+<button type="button" class="app-purpose-card active" data-info="what"><strong>RTU</strong><span>удалённое</span></button>
+<button type="button" class="app-purpose-card" data-info="sense"><strong>Датчики</strong><span>сбор</span></button>
+<button type="button" class="app-purpose-card" data-info="pack"><strong>Пакеты</strong><span>цифр. канал</span></button>
+<button type="button" class="app-purpose-card" data-info="back"><strong>Обратно</strong><span>команды</span></button>
+</div>
+<div class="highlight-box highlight-box-compact"><p class="em-plk-live" id="plkRtuLive">RTU — remote terminal unit · удалённое оконечное устройство</p></div>
+<div class="asutp-diagram-wrap">
+<svg class="em-svg em-plk-svg" viewBox="0 0 640 280" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="RTU">
+<defs><marker id="plkRtuArr" markerWidth="7" markerHeight="6" refX="6" refY="3" orient="auto"><path d="M0 0 L7 3 L0 6 Z" fill="#64748b"/></marker></defs>
+<rect width="640" height="280" fill="#fff"/>
+<g class="plk-node" data-info="sense" style="cursor:pointer">
+<rect x="20" y="100" width="110" height="70" rx="8" fill="#eff6ff" stroke="#1d4ed8" stroke-width="1.6"/>
+<text x="75" y="140" text-anchor="middle" font-size="14" font-weight="800" fill="#1e3a8a">датчики</text>
+</g>
+<path d="M130 135 H170" fill="none" stroke="#94a3b8" stroke-width="2" marker-end="url(#plkRtuArr)"/>
+<g class="plk-node is-on" data-info="what" style="cursor:pointer">
+<rect x="170" y="70" width="160" height="130" rx="10" fill="#fff7ed" stroke="#c2410c" stroke-width="2"/>
+<text x="250" y="120" text-anchor="middle" font-size="20" font-weight="800" fill="#9a3412">RTU</text>
+<text x="250" y="150" text-anchor="middle" font-size="13" fill="#64748b">контролируемый</text>
+<text x="250" y="170" text-anchor="middle" font-size="13" fill="#64748b">пункт (КП)</text>
+</g>
+<path d="M330 135 H380" fill="none" stroke="#94a3b8" stroke-width="2" marker-end="url(#plkRtuArr)"/>
+<g class="plk-node" data-info="pack" style="cursor:pointer">
+<rect x="380" y="55" width="120" height="60" rx="8" fill="#faf5ff" stroke="#7c3aed" stroke-width="1.6"/>
+<text x="440" y="90" text-anchor="middle" font-size="14" font-weight="800" fill="#6d28d9">пакеты →</text>
+</g>
+<g class="plk-node" data-info="back" style="cursor:pointer">
+<rect x="380" y="155" width="120" height="60" rx="8" fill="#ecfdf5" stroke="#16a34a" stroke-width="1.6"/>
+<text x="440" y="190" text-anchor="middle" font-size="14" font-weight="800" fill="#166534">← команды</text>
+</g>
+<path d="M500 85 H540" fill="none" stroke="#94a3b8" stroke-width="2" marker-end="url(#plkRtuArr)"/>
+<path d="M540 185 H500" fill="none" stroke="#94a3b8" stroke-width="2" marker-end="url(#plkRtuArr)"/>
+<rect x="540" y="95" width="80" height="80" rx="8" fill="#f8fafc" stroke="#64748b" stroke-width="1.5"/>
+<text x="580" y="140" text-anchor="middle" font-size="13" font-weight="800" fill="#334155">центр</text>
+<text x="320" y="260" text-anchor="middle" font-size="14" fill="#64748b">сильная сторона RTU — построение систем связи</text>
+</svg>
+</div>
+</div>
+<aside class="asutp-panel" id="plkRtuPanel">
+<h3>RTU</h3>
+<p><strong>RTU</strong> (remote terminal unit) — удалённое оконечное устройство; в распределённых системах — устройство телемеханики контролируемого пункта.</p>
+</aside>
+</div>
+</section>
+
+<section class="slide slide-em-ac-interactive slide-plk-comp-interactive is-picking">
+<h2>Состав программируемого логического контроллера</h2>
+<div class="slide-body asutp-interactive">
+<div class="asutp-main">
+<p class="asutp-hint">§ 6.2 · база + модули под задачу. Жмите блок</p>
+<div class="app-purpose-grid em-fast-grid em-plk-cards-6">
+<button type="button" class="app-purpose-card active" data-info="base"><strong>База</strong><span>шасси</span></button>
+<button type="button" class="app-purpose-card" data-info="psu"><strong>БП</strong><span>~220 В</span></button>
+<button type="button" class="app-purpose-card" data-info="cpu"><strong>ЦПУ</strong><span>мозг</span></button>
+<button type="button" class="app-purpose-card" data-info="io"><strong>Ввод/вывод</strong><span>датчики</span></button>
+<button type="button" class="app-purpose-card" data-info="com"><strong>Связь</strong><span>Ethernet</span></button>
+<button type="button" class="app-purpose-card" data-info="typ"><strong>Обычно</strong><span>1 ЦПУ + ВВ</span></button>
+</div>
+<div class="highlight-box highlight-box-compact"><p class="em-plk-live" id="plkCompLive">ПЛК: база (шасси), на неё ставят модули под задачу</p></div>
+<div class="asutp-diagram-wrap">
+<svg class="em-svg em-plk-svg" viewBox="0 0 640 280" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="Состав ПЛК">
+<rect width="640" height="280" fill="#fff"/>
+<g class="plk-node is-on" data-info="base" style="cursor:pointer">
+<rect x="40" y="200" width="560" height="50" rx="6" fill="#e2e8f0" stroke="#64748b" stroke-width="1.8"/>
+<text x="320" y="230" text-anchor="middle" font-size="16" font-weight="800" fill="#334155">база (шасси)</text>
+</g>
+<g class="plk-node" data-info="psu" style="cursor:pointer">
+<rect x="50" y="70" width="95" height="120" rx="6" fill="#fef9c3" stroke="#ca8a04" stroke-width="1.8"/>
+<text x="97" y="125" text-anchor="middle" font-size="16" font-weight="800" fill="#854d0e">БП</text>
+<text x="97" y="150" text-anchor="middle" font-size="12" fill="#64748b">питание</text>
+</g>
+<g class="plk-node" data-info="cpu" style="cursor:pointer">
+<rect x="155" y="70" width="95" height="120" rx="6" fill="#eff6ff" stroke="#1d4ed8" stroke-width="2"/>
+<text x="202" y="125" text-anchor="middle" font-size="16" font-weight="800" fill="#1e3a8a">ЦПУ</text>
+<text x="202" y="150" text-anchor="middle" font-size="12" fill="#64748b">процессор</text>
+</g>
+<g class="plk-node" data-info="io" style="cursor:pointer">
+<rect x="260" y="70" width="95" height="120" rx="6" fill="#ecfdf5" stroke="#16a34a" stroke-width="1.8"/>
+<text x="307" y="120" text-anchor="middle" font-size="14" font-weight="800" fill="#166534">ВВ</text>
+<text x="307" y="145" text-anchor="middle" font-size="12" fill="#64748b">ввод/</text>
+<text x="307" y="165" text-anchor="middle" font-size="12" fill="#64748b">вывод</text>
+</g>
+<g class="plk-node" data-info="io" style="cursor:pointer">
+<rect x="365" y="70" width="95" height="120" rx="6" fill="#ecfdf5" stroke="#16a34a" stroke-width="1.8"/>
+<text x="412" y="135" text-anchor="middle" font-size="14" font-weight="800" fill="#166534">ВВ</text>
+</g>
+<g class="plk-node" data-info="com" style="cursor:pointer">
+<rect x="470" y="70" width="110" height="120" rx="6" fill="#faf5ff" stroke="#7c3aed" stroke-width="1.8"/>
+<text x="525" y="120" text-anchor="middle" font-size="14" font-weight="800" fill="#6d28d9">связь</text>
+<text x="525" y="145" text-anchor="middle" font-size="12" fill="#64748b">Ethernet</text>
+<text x="525" y="165" text-anchor="middle" font-size="12" fill="#64748b">COM</text>
+</g>
+<g class="plk-node" data-info="typ" style="cursor:pointer">
+<text x="320" y="40" text-anchor="middle" font-size="14" fill="#94a3b8">набор модулей зависит от задачи</text>
+</g>
+</svg>
+</div>
+</div>
+<aside class="asutp-panel" id="plkCompPanel">
+<h3>База</h3>
+<p>Обычно ПЛК состоит из <strong>базы (шасси)</strong>, на которую устанавливают модули в зависимости от задачи.</p>
+</aside>
+</div>
+</section>
+
+<section class="slide slide-em-ac-interactive slide-plk-fig-interactive is-picking">
+<h2>Схема состава ПЛК</h2>
+<div class="slide-body asutp-interactive">
+<div class="asutp-main">
+<p class="asutp-hint">Как в учебнике: жмите узел схемы</p>
+<div class="app-purpose-grid em-fast-grid em-plk-cards-6">
+<button type="button" class="app-purpose-card active" data-info="bat"><strong>Батарея</strong><span>аккумулятор</span></button>
+<button type="button" class="app-purpose-card" data-info="psu"><strong>БП</strong><span>~220 В</span></button>
+<button type="button" class="app-purpose-card" data-info="cpu"><strong>ЦПУ</strong><span>процессор</span></button>
+<button type="button" class="app-purpose-card" data-info="ind"><strong>Индикация</strong><span>на ЦПУ</span></button>
+<button type="button" class="app-purpose-card" data-info="ports"><strong>Порты</strong><span>связи</span></button>
+<button type="button" class="app-purpose-card" data-info="slot"><strong>Слоты</strong><span>ВВ · связь</span></button>
+</div>
+<div class="highlight-box highlight-box-compact"><p class="em-plk-live" id="plkFigLive">аккумуляторная батарея — резерв при пропаже сети</p></div>
+<div class="asutp-diagram-wrap">
+<svg class="em-svg em-plk-svg em-plk-fig-svg" viewBox="0 0 720 320" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="Схема состава ПЛК">
+<rect width="720" height="320" fill="#fff"/>
+
+<!-- board / backplane -->
+<g class="plk-node" data-info="board" style="cursor:pointer">
+<rect x="130" y="55" width="520" height="200" fill="none" stroke="#111827" stroke-width="2"/>
+</g>
+
+<!-- battery -->
+<g class="plk-node is-on" data-info="bat" style="cursor:pointer">
+<rect x="55" y="95" width="55" height="120" fill="#fff" stroke="#111827" stroke-width="1.8"/>
+<line x1="110" y1="125" x2="130" y2="125" stroke="#111827" stroke-width="1.5"/>
+<line x1="110" y1="185" x2="130" y2="185" stroke="#111827" stroke-width="1.5"/>
+<text x="40" y="80" text-anchor="end" font-size="15" font-weight="700" fill="#1e3a8a">аккумуляторная</text>
+<text x="40" y="100" text-anchor="end" font-size="15" font-weight="700" fill="#1e3a8a">батарея</text>
+<line x1="45" y1="105" x2="55" y2="130" stroke="#64748b" stroke-width="1"/>
+</g>
+
+<!-- power supply -->
+<g class="plk-node" data-info="psu" style="cursor:pointer">
+<rect x="145" y="85" width="90" height="140" fill="#fff" stroke="#111827" stroke-width="1.8"/>
+<line x1="170" y1="225" x2="170" y2="255" stroke="#111827" stroke-width="1.6"/>
+<line x1="210" y1="225" x2="210" y2="255" stroke="#111827" stroke-width="1.6"/>
+<text x="190" y="278" text-anchor="middle" font-size="16" font-weight="700" fill="#854d0e">~220 В</text>
+<text x="190" y="42" text-anchor="middle" font-size="15" font-weight="700" fill="#854d0e">блок питания</text>
+<line x1="190" y1="48" x2="190" y2="85" stroke="#64748b" stroke-width="1"/>
+</g>
+
+<!-- CPU -->
+<g class="plk-node" data-info="cpu" style="cursor:pointer">
+<rect x="250" y="85" width="100" height="140" fill="#fff" stroke="#111827" stroke-width="2"/>
+<text x="300" y="42" text-anchor="middle" font-size="14" font-weight="700" fill="#1e3a8a">центральное</text>
+<text x="300" y="60" text-anchor="middle" font-size="14" font-weight="700" fill="#1e3a8a">процессорное</text>
+<text x="300" y="78" text-anchor="middle" font-size="14" font-weight="700" fill="#1e3a8a">устройство (ЦПУ)</text>
+</g>
+
+<!-- indication on CPU -->
+<g class="plk-node" data-info="ind" style="cursor:pointer">
+<rect x="265" y="100" width="70" height="28" fill="#eff6ff" stroke="#1d4ed8" stroke-width="1.5"/>
+<text x="420" y="100" font-size="15" font-weight="700" fill="#1d4ed8">индикация</text>
+<line x1="335" y1="114" x2="415" y2="100" stroke="#64748b" stroke-width="1"/>
+</g>
+
+<!-- ports on CPU -->
+<g class="plk-node" data-info="ports" style="cursor:pointer">
+<rect x="275" y="145" width="28" height="28" fill="#faf5ff" stroke="#7c3aed" stroke-width="1.5"/>
+<rect x="275" y="180" width="28" height="28" fill="#faf5ff" stroke="#7c3aed" stroke-width="1.5"/>
+<text x="420" y="175" font-size="15" font-weight="700" fill="#6d28d9">порты связи</text>
+<line x1="303" y1="174" x2="415" y2="172" stroke="#64748b" stroke-width="1"/>
+</g>
+
+<!-- I/O slots -->
+<g class="plk-node" data-info="slot" style="cursor:pointer">
+<rect x="365" y="95" width="48" height="120" fill="#fff" stroke="#111827" stroke-width="1.6"/>
+<rect x="425" y="95" width="48" height="120" fill="#fff" stroke="#111827" stroke-width="1.6"/>
+<rect x="485" y="95" width="48" height="120" fill="#fff" stroke="#111827" stroke-width="1.6"/>
+<text x="545" y="155" font-size="20" font-weight="800" fill="#334155">…</text>
+<rect x="575" y="95" width="55" height="120" fill="#fff" stroke="#111827" stroke-width="1.6"/>
+<text x="360" y="300" font-size="14" font-weight="700" fill="#166534">модули ввода/вывода или дополнительные средства связи</text>
+<line x1="450" y1="215" x2="450" y2="280" stroke="#64748b" stroke-width="1"/>
+</g>
+
+<!-- board label -->
+<g class="plk-node" data-info="board" style="cursor:pointer">
+<text x="700" y="70" text-anchor="end" font-size="14" font-weight="700" fill="#475569">плата со слотами</text>
+<text x="700" y="88" text-anchor="end" font-size="14" font-weight="700" fill="#475569">расширения</text>
+<line x1="640" y1="70" x2="650" y2="55" stroke="#64748b" stroke-width="1"/>
+</g>
+</svg>
+</div>
+</div>
+<aside class="asutp-panel" id="plkFigPanel">
+<h3>Батарея</h3>
+<p><strong>Аккумуляторная батарея</strong> — резерв питания при пропадании сети ~220 В.</p>
+</aside>
+</div>
+</section>
+
+<section class="slide slide-em-ac-interactive slide-plk-mod-interactive">
+<h2>Модули: БП, ЦПУ, ввод/вывод, связь</h2>
+<div class="slide-body asutp-interactive">
+<div class="asutp-main">
+<p class="asutp-hint">Роль каждого модуля. Жмите тему</p>
+<div class="app-purpose-grid em-fast-grid em-plk-cards">
+<button type="button" class="app-purpose-card active" data-info="psu"><strong>БП</strong><span>питание</span></button>
+<button type="button" class="app-purpose-card" data-info="cpu"><strong>ЦПУ</strong><span>после БП</span></button>
+<button type="button" class="app-purpose-card" data-info="io"><strong>Ввод/вывод</strong><span>датчики · ИМ</span></button>
+<button type="button" class="app-purpose-card" data-info="com"><strong>Спец.</strong><span>Ethernet · COM</span></button>
+</div>
+<div class="highlight-box highlight-box-compact"><p class="em-plk-live" id="plkModLive">блок питания: в базе или отдельно · обычно сеть ~220 В</p></div>
+<div class="asutp-diagram-wrap">
+<svg class="em-svg em-plk-svg" viewBox="0 0 640 280" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="Модули ПЛК">
+<g class="em-ac-view is-on" data-view="psu">
+<rect width="640" height="280" fill="#fff"/>
+<rect x="100" y="50" width="440" height="150" rx="12" fill="#fef9c3" stroke="#ca8a04" stroke-width="2"/>
+<text x="320" y="105" text-anchor="middle" font-size="22" font-weight="800" fill="#854d0e">блок питания (БП)</text>
+<text x="320" y="140" text-anchor="middle" font-size="16" fill="#475569">встроен в базу или ставится отдельно</text>
+<text x="320" y="170" text-anchor="middle" font-size="15" fill="#64748b">обычно ~220 В · иногда батарея резерва</text>
+<text x="320" y="245" text-anchor="middle" font-size="14" fill="#94a3b8">резервная батарея — работа при пропадании сети</text>
+</g>
+<g class="em-ac-view" data-view="cpu">
+<rect width="640" height="280" fill="#fff"/>
+<rect x="100" y="50" width="440" height="150" rx="12" fill="#eff6ff" stroke="#1d4ed8" stroke-width="2"/>
+<text x="320" y="110" text-anchor="middle" font-size="22" font-weight="800" fill="#1e3a8a">центральный процессор (ЦПУ)</text>
+<text x="320" y="150" text-anchor="middle" font-size="16" fill="#475569">устанавливают на базу после блока питания</text>
+<text x="320" y="180" text-anchor="middle" font-size="15" fill="#64748b">выполняет программу · команды управления</text>
+</g>
+<g class="em-ac-view" data-view="io">
+<rect width="640" height="280" fill="#fff"/>
+<rect x="100" y="50" width="440" height="150" rx="12" fill="#ecfdf5" stroke="#16a34a" stroke-width="2"/>
+<text x="320" y="105" text-anchor="middle" font-size="22" font-weight="800" fill="#166534">модули ввода / вывода</text>
+<text x="320" y="145" text-anchor="middle" font-size="16" fill="#475569">связь ПЛК с датчиками и исполнительными</text>
+<text x="320" y="175" text-anchor="middle" font-size="16" fill="#475569">механизмами</text>
+</g>
+<g class="em-ac-view" data-view="com">
+<rect width="640" height="280" fill="#fff"/>
+<rect x="100" y="50" width="440" height="150" rx="12" fill="#faf5ff" stroke="#7c3aed" stroke-width="2"/>
+<text x="320" y="105" text-anchor="middle" font-size="20" font-weight="800" fill="#6d28d9">специализированные модули</text>
+<text x="320" y="145" text-anchor="middle" font-size="16" fill="#475569">связь по Ethernet</text>
+<text x="320" y="175" text-anchor="middle" font-size="16" fill="#475569">дополнительные порты последовательного обмена</text>
+</g>
+</svg>
+</div>
+</div>
+<aside class="asutp-panel" id="plkModPanel">
+<h3>БП</h3>
+<p>Блок питания может быть встроен в базу или ставиться отдельно. Обычно питается от сети <strong>~220 В</strong>; иногда есть резервная батарея.</p>
+</aside>
+</div>
+</section>
+
+<section class="slide slide-em-ac-interactive slide-plk-exp-interactive is-picking">
+<h2>Резервирование и расширение</h2>
+<div class="slide-body asutp-interactive">
+<div class="asutp-main">
+<p class="asutp-hint">Несколько ЦПУ: горячий резерв или «рабы» для ВВ. Жмите</p>
+<div class="app-purpose-grid em-fast-grid em-plk-cards">
+<button type="button" class="app-purpose-card active" data-info="one"><strong>Обычно</strong><span>1 ЦПУ</span></button>
+<button type="button" class="app-purpose-card" data-info="hot"><strong>Горячий резерв</strong><span>несколько ЦПУ</span></button>
+<button type="button" class="app-purpose-card" data-info="slave"><strong>Рабы</strong><span>больше ВВ</span></button>
+<button type="button" class="app-purpose-card" data-info="mos"><strong>MOSCAD</strong><span>15 + 15×15</span></button>
+</div>
+<div class="highlight-box highlight-box-compact"><p class="em-plk-live" id="plkExpLive">обычно один модуль ЦПУ, остальные — ввод/вывод</p></div>
+<div class="asutp-diagram-wrap">
+<svg class="em-svg em-plk-svg" viewBox="0 0 640 280" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="Резерв и расширение">
+<g class="em-ac-view is-on" data-view="one">
+<rect width="640" height="280" fill="#fff"/>
+<rect x="120" y="80" width="120" height="100" rx="8" fill="#eff6ff" stroke="#1d4ed8" stroke-width="2"/>
+<text x="180" y="135" text-anchor="middle" font-size="18" font-weight="800" fill="#1e3a8a">ЦПУ</text>
+<rect x="270" y="80" width="100" height="100" rx="8" fill="#ecfdf5" stroke="#16a34a" stroke-width="1.6"/>
+<text x="320" y="135" text-anchor="middle" font-size="15" font-weight="800" fill="#166534">ВВ</text>
+<rect x="390" y="80" width="100" height="100" rx="8" fill="#ecfdf5" stroke="#16a34a" stroke-width="1.6"/>
+<text x="440" y="135" text-anchor="middle" font-size="15" font-weight="800" fill="#166534">ВВ</text>
+<text x="320" y="230" text-anchor="middle" font-size="15" fill="#64748b">типично: один ЦПУ + модули ввода/вывода</text>
+</g>
+<g class="em-ac-view" data-view="hot">
+<rect width="640" height="280" fill="#fff"/>
+<rect x="100" y="70" width="180" height="120" rx="10" fill="#eff6ff" stroke="#1d4ed8" stroke-width="2"/>
+<text x="190" y="125" text-anchor="middle" font-size="18" font-weight="800" fill="#1e3a8a">ЦПУ A</text>
+<text x="190" y="155" text-anchor="middle" font-size="13" fill="#64748b">активный</text>
+<rect x="360" y="70" width="180" height="120" rx="10" fill="#fef9c3" stroke="#ca8a04" stroke-width="2"/>
+<text x="450" y="125" text-anchor="middle" font-size="18" font-weight="800" fill="#854d0e">ЦПУ B</text>
+<text x="450" y="155" text-anchor="middle" font-size="13" fill="#64748b">горячий резерв</text>
+<text x="320" y="240" text-anchor="middle" font-size="15" fill="#64748b">несколько ЦПУ — для «горячего» резервирования</text>
+</g>
+<g class="em-ac-view" data-view="slave">
+<rect width="640" height="280" fill="#fff"/>
+<rect x="40" y="80" width="160" height="110" rx="10" fill="#eff6ff" stroke="#1d4ed8" stroke-width="2"/>
+<text x="120" y="125" text-anchor="middle" font-size="16" font-weight="800" fill="#1e3a8a">мастер</text>
+<text x="120" y="155" text-anchor="middle" font-size="13" fill="#64748b">основная обработка</text>
+<path d="M200 135 H250" fill="none" stroke="#94a3b8" stroke-width="2"/>
+<rect x="250" y="60" width="140" height="70" rx="8" fill="#fff7ed" stroke="#c2410c" stroke-width="1.6"/>
+<text x="320" y="100" text-anchor="middle" font-size="14" font-weight="800" fill="#9a3412">ЦПУ-раб</text>
+<rect x="250" y="145" width="140" height="70" rx="8" fill="#fff7ed" stroke="#c2410c" stroke-width="1.6"/>
+<text x="320" y="185" text-anchor="middle" font-size="14" font-weight="800" fill="#9a3412">ЦПУ-раб</text>
+<path d="M390 95 H440" fill="none" stroke="#94a3b8" stroke-width="1.6"/>
+<path d="M390 180 H440" fill="none" stroke="#94a3b8" stroke-width="1.6"/>
+<rect x="440" y="60" width="160" height="70" rx="8" fill="#ecfdf5" stroke="#16a34a" stroke-width="1.5"/>
+<text x="520" y="100" text-anchor="middle" font-size="13" font-weight="700" fill="#166534">ВВ · ВВ · …</text>
+<rect x="440" y="145" width="160" height="70" rx="8" fill="#ecfdf5" stroke="#16a34a" stroke-width="1.5"/>
+<text x="520" y="185" text-anchor="middle" font-size="13" font-weight="700" fill="#166534">ВВ · ВВ · …</text>
+<text x="320" y="255" text-anchor="middle" font-size="13" fill="#64748b">рабы обслуживают модули ввода/вывода</text>
+</g>
+<g class="em-ac-view" data-view="mos">
+<rect width="640" height="280" fill="#fff"/>
+<text x="320" y="40" text-anchor="middle" font-size="17" font-weight="800" fill="#1e3a8a">пример: контроллеры MOSCAD</text>
+<rect x="80" y="70" width="200" height="120" rx="10" fill="#eff6ff" stroke="#1d4ed8" stroke-width="2"/>
+<text x="180" y="115" text-anchor="middle" font-size="16" font-weight="800" fill="#1e3a8a">1 ЦПУ</text>
+<text x="180" y="145" text-anchor="middle" font-size="15" fill="#475569">до 15 модулей ВВ</text>
+<rect x="360" y="70" width="200" height="120" rx="10" fill="#fff7ed" stroke="#c2410c" stroke-width="2"/>
+<text x="460" y="110" text-anchor="middle" font-size="15" font-weight="800" fill="#9a3412">+ до 15 ЦПУ-рабов</text>
+<text x="460" y="140" text-anchor="middle" font-size="14" fill="#475569">каждый ещё</text>
+<text x="460" y="165" text-anchor="middle" font-size="14" fill="#475569">по 15 модулей ВВ</text>
+<text x="320" y="240" text-anchor="middle" font-size="14" fill="#64748b">мастер ведёт основную обработку · рабы — обслуживание ВВ</text>
+</g>
+</svg>
+</div>
+</div>
+<aside class="asutp-panel" id="plkExpPanel">
+<h3>Обычно</h3>
+<p>Обычно используют <strong>один</strong> модуль ЦПУ, а остальные слоты заполняют модулями ввода/вывода.</p>
+</aside>
+</div>
+</section>
+
+<section class="slide slide-em-ac-interactive slide-plk-cpu-interactive is-picking">
+<h2>Модуль центрального процессора</h2>
+<div class="slide-body asutp-interactive">
+<div class="asutp-main">
+<p class="asutp-hint">§ 6.2.1 · ЦПУ похож на ПК, но со своей ОС реального времени. Жмите</p>
+<div class="app-purpose-grid em-fast-grid em-plk-cards">
+<button type="button" class="app-purpose-card active" data-info="like"><strong>Как ПК</strong><span>специальный</span></button>
+<button type="button" class="app-purpose-card" data-info="os"><strong>ОС РВ</strong><span>реальное время</span></button>
+<button type="button" class="app-purpose-card" data-info="job"><strong>Задача</strong><span>сбор · обработка</span></button>
+<button type="button" class="app-purpose-card" data-info="mb"><strong>Плата</strong><span>материнская</span></button>
+</div>
+<div class="highlight-box highlight-box-compact"><p class="em-plk-live" id="plkCpuLive">модуль ЦПУ очень похож на персональный компьютер</p></div>
+<div class="asutp-diagram-wrap">
+<svg class="em-svg em-plk-svg" viewBox="0 0 640 280" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="Модуль ЦПУ">
+<rect width="640" height="280" fill="#fff"/>
+<g class="plk-node is-on" data-info="like" style="cursor:pointer">
+<rect x="180" y="40" width="280" height="70" rx="10" fill="#eff6ff" stroke="#1d4ed8" stroke-width="2"/>
+<text x="320" y="82" text-anchor="middle" font-size="20" font-weight="800" fill="#1e3a8a">модуль ЦПУ ≈ спец. компьютер</text>
+</g>
+<g class="plk-node" data-info="os" style="cursor:pointer">
+<rect x="40" y="140" width="170" height="90" rx="10" fill="#ecfdf5" stroke="#16a34a" stroke-width="1.8"/>
+<text x="125" y="180" text-anchor="middle" font-size="16" font-weight="800" fill="#166534">своя ОС</text>
+<text x="125" y="205" text-anchor="middle" font-size="14" fill="#64748b">реального времени</text>
+</g>
+<g class="plk-node" data-info="job" style="cursor:pointer">
+<rect x="235" y="140" width="170" height="90" rx="10" fill="#fff7ed" stroke="#c2410c" stroke-width="1.8"/>
+<text x="320" y="180" text-anchor="middle" font-size="15" font-weight="800" fill="#9a3412">сбор и обработка</text>
+<text x="320" y="205" text-anchor="middle" font-size="14" fill="#64748b">данных в РВ</text>
+</g>
+<g class="plk-node" data-info="mb" style="cursor:pointer">
+<rect x="430" y="140" width="170" height="90" rx="10" fill="#faf5ff" stroke="#7c3aed" stroke-width="1.8"/>
+<text x="515" y="180" text-anchor="middle" font-size="16" font-weight="800" fill="#6d28d9">материнская</text>
+<text x="515" y="205" text-anchor="middle" font-size="14" fill="#64748b">плата внутри</text>
+</g>
+</svg>
+</div>
+</div>
+<aside class="asutp-panel" id="plkCpuPanel">
+<h3>Как ПК</h3>
+<p>Модуль ЦПУ очень похож на персональный компьютер — по сути, <strong>специализированный компьютер</strong>.</p>
+</aside>
+</div>
+</section>
+
+<section class="slide slide-em-ac-interactive slide-plk-mb-interactive is-picking">
+<h2>Состав платы ЦПУ</h2>
+<div class="slide-body asutp-interactive">
+<div class="asutp-main">
+<p class="asutp-hint">На материнской плате: процессор, память, часы, порты, шина. Жмите</p>
+<div class="app-purpose-grid em-fast-grid em-plk-cards-6">
+<button type="button" class="app-purpose-card active" data-info="mpu"><strong>МП</strong><span>процессор</span></button>
+<button type="button" class="app-purpose-card" data-info="ram"><strong>ОЗУ</strong><span>оперативн.</span></button>
+<button type="button" class="app-purpose-card" data-info="rom"><strong>ПЗУ</strong><span>постоянн.</span></button>
+<button type="button" class="app-purpose-card" data-info="clk"><strong>Часы</strong><span>реального времени</span></button>
+<button type="button" class="app-purpose-card" data-info="bus"><strong>Шина</strong><span>к модулям</span></button>
+<button type="button" class="app-purpose-card" data-info="extra"><strong>Опции</strong><span>батарея · слоты</span></button>
+</div>
+<div class="highlight-box highlight-box-compact"><p class="em-plk-live" id="plkMbLive">микропроцессор — «мозг» модуля ЦПУ</p></div>
+<div class="asutp-diagram-wrap">
+<svg class="em-svg em-plk-svg" viewBox="0 0 640 280" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="Материнская плата ЦПУ">
+<rect width="640" height="280" fill="#fff"/>
+<rect x="40" y="30" width="560" height="220" rx="8" fill="#f8fafc" stroke="#94a3b8" stroke-width="1.6"/>
+<text x="320" y="55" text-anchor="middle" font-size="14" font-weight="700" fill="#64748b">материнская плата модуля ЦПУ</text>
+<g class="plk-node is-on" data-info="mpu" style="cursor:pointer">
+<rect x="70" y="80" width="120" height="70" rx="8" fill="#eff6ff" stroke="#1d4ed8" stroke-width="2"/>
+<text x="130" y="122" text-anchor="middle" font-size="16" font-weight="800" fill="#1e3a8a">МП</text>
+</g>
+<g class="plk-node" data-info="ram" style="cursor:pointer">
+<rect x="210" y="80" width="100" height="70" rx="8" fill="#ecfdf5" stroke="#16a34a" stroke-width="1.8"/>
+<text x="260" y="122" text-anchor="middle" font-size="16" font-weight="800" fill="#166534">ОЗУ</text>
+</g>
+<g class="plk-node" data-info="rom" style="cursor:pointer">
+<rect x="330" y="80" width="100" height="70" rx="8" fill="#fef9c3" stroke="#ca8a04" stroke-width="1.8"/>
+<text x="380" y="122" text-anchor="middle" font-size="16" font-weight="800" fill="#854d0e">ПЗУ</text>
+</g>
+<g class="plk-node" data-info="clk" style="cursor:pointer">
+<rect x="450" y="80" width="120" height="70" rx="8" fill="#fff7ed" stroke="#c2410c" stroke-width="1.8"/>
+<text x="510" y="112" text-anchor="middle" font-size="14" font-weight="800" fill="#9a3412">часы</text>
+<text x="510" y="135" text-anchor="middle" font-size="13" fill="#64748b">реального времени</text>
+</g>
+<g class="plk-node" data-info="bus" style="cursor:pointer">
+<rect x="70" y="170" width="250" height="55" rx="8" fill="#faf5ff" stroke="#7c3aed" stroke-width="1.8"/>
+<text x="195" y="205" text-anchor="middle" font-size="15" font-weight="800" fill="#6d28d9">контроллер шины данных → модули ПЛК</text>
+</g>
+<g class="plk-node" data-info="extra" style="cursor:pointer">
+<rect x="340" y="170" width="230" height="55" rx="8" fill="#e2e8f0" stroke="#64748b" stroke-width="1.6"/>
+<text x="455" y="205" text-anchor="middle" font-size="14" font-weight="800" fill="#334155">батарея · слоты расширения</text>
+</g>
+</svg>
+</div>
+</div>
+<aside class="asutp-panel" id="plkMbPanel">
+<h3>МП</h3>
+<p>На плате — <strong>микропроцессор</strong>, ОЗУ, ПЗУ, часы реального времени, порты связи и контроллер шины данных к модулям ПЛК.</p>
+</aside>
+</div>
+</section>
+
+<section class="slide slide-em-ac-interactive slide-plk-mpu-interactive">
+<h2>Микропроцессор и взгляд программиста</h2>
+<div class="slide-body asutp-interactive">
+<div class="asutp-main">
+<p class="asutp-hint">Архитектуры, приоритеты платформы и что важно программисту. Жмите</p>
+<div class="app-purpose-grid em-fast-grid em-plk-cards">
+<button type="button" class="app-purpose-card active" data-info="arch"><strong>Архитектуры</strong><span>ARM · x86…</span></button>
+<button type="button" class="app-purpose-card" data-info="perf"><strong>Мощность</strong><span>~486</span></button>
+<button type="button" class="app-purpose-card" data-info="prio"><strong>Приоритет</strong><span>надёжность</span></button>
+<button type="button" class="app-purpose-card" data-info="prog"><strong>Программист</strong><span>таймеры · ОЗУ</span></button>
+</div>
+<div class="highlight-box highlight-box-compact"><p class="em-plk-live" id="plkMpuLive">архитектуры: ARM, MIPS, PowerPC, x86</p></div>
+<div class="asutp-diagram-wrap">
+<svg class="em-svg em-plk-svg" viewBox="0 0 640 280" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="Микропроцессор">
+<g class="em-ac-view is-on" data-view="arch">
+<rect width="640" height="280" fill="#fff"/>
+<text x="320" y="45" text-anchor="middle" font-size="18" font-weight="800" fill="#1e3a8a">широкий спектр архитектур</text>
+<rect x="40" y="80" width="130" height="80" rx="10" fill="#eff6ff" stroke="#1d4ed8" stroke-width="1.8"/>
+<text x="105" y="128" text-anchor="middle" font-size="18" font-weight="800" fill="#1e3a8a">ARM</text>
+<rect x="185" y="80" width="130" height="80" rx="10" fill="#ecfdf5" stroke="#16a34a" stroke-width="1.8"/>
+<text x="250" y="128" text-anchor="middle" font-size="18" font-weight="800" fill="#166534">MIPS</text>
+<rect x="330" y="80" width="130" height="80" rx="10" fill="#fef9c3" stroke="#ca8a04" stroke-width="1.8"/>
+<text x="395" y="128" text-anchor="middle" font-size="16" font-weight="800" fill="#854d0e">PowerPC</text>
+<rect x="475" y="80" width="130" height="80" rx="10" fill="#fff7ed" stroke="#c2410c" stroke-width="1.8"/>
+<text x="540" y="128" text-anchor="middle" font-size="18" font-weight="800" fill="#9a3412">x86</text>
+<text x="320" y="220" text-anchor="middle" font-size="15" fill="#64748b">в т. ч. семейство обычных ПК</text>
+</g>
+<g class="em-ac-view" data-view="perf">
+<rect width="640" height="280" fill="#fff"/>
+<rect x="100" y="70" width="440" height="130" rx="12" fill="#eff6ff" stroke="#1d4ed8" stroke-width="2"/>
+<text x="320" y="125" text-anchor="middle" font-size="20" font-weight="800" fill="#1e3a8a">вычислительная мощность — невысокая</text>
+<text x="320" y="160" text-anchor="middle" font-size="16" fill="#475569">даже «мощные» ≈ уровень Intel 486</text>
+</g>
+<g class="em-ac-view" data-view="prio">
+<rect width="640" height="280" fill="#fff"/>
+<rect x="70" y="60" width="240" height="130" rx="12" fill="#ecfdf5" stroke="#16a34a" stroke-width="2"/>
+<text x="190" y="120" text-anchor="middle" font-size="18" font-weight="800" fill="#166534">низкое</text>
+<text x="190" y="150" text-anchor="middle" font-size="18" font-weight="800" fill="#166534">энергопотребление</text>
+<rect x="330" y="60" width="240" height="130" rx="12" fill="#fff7ed" stroke="#c2410c" stroke-width="2"/>
+<text x="450" y="120" text-anchor="middle" font-size="18" font-weight="800" fill="#9a3412">надёжность</text>
+<text x="450" y="150" text-anchor="middle" font-size="18" font-weight="800" fill="#9a3412">платформы</text>
+<text x="320" y="240" text-anchor="middle" font-size="15" fill="#64748b">круг задач ПЛК узкий — суперскорость не нужна</text>
+</g>
+<g class="em-ac-view" data-view="prog">
+<rect width="640" height="280" fill="#fff"/>
+<text x="320" y="45" text-anchor="middle" font-size="16" font-weight="800" fill="#1e3a8a">программисту чаще не важны архитектура и ОС</text>
+<rect x="60" y="80" width="250" height="120" rx="12" fill="#faf5ff" stroke="#7c3aed" stroke-width="2"/>
+<text x="185" y="130" text-anchor="middle" font-size="17" font-weight="800" fill="#6d28d9">таймеры / счётчики</text>
+<text x="185" y="160" text-anchor="middle" font-size="14" fill="#64748b">сколько можно организовать</text>
+<rect x="330" y="80" width="250" height="120" rx="12" fill="#ecfdf5" stroke="#16a34a" stroke-width="2"/>
+<text x="455" y="130" text-anchor="middle" font-size="17" font-weight="800" fill="#166534">ячейки ОЗУ</text>
+<text x="455" y="160" text-anchor="middle" font-size="14" fill="#64748b">для хранения данных</text>
+<text x="320" y="250" text-anchor="middle" font-size="14" fill="#64748b">производитель даёт утилиты и языки программирования</text>
+</g>
+</svg>
+</div>
+</div>
+<aside class="asutp-panel" id="plkMpuPanel">
+<h3>Архитектуры</h3>
+<p>В ПЛК применяют <strong>ARM, MIPS, PowerPC</strong> и даже <strong>x86</strong> (семейство обычных ПК).</p>
+</aside>
+</div>
+</section>
+
+<section class="slide slide-em-ac-interactive slide-plk-ram-interactive is-picking">
+<h2>Оперативное запоминающее устройство</h2>
+<div class="slide-body asutp-interactive">
+<div class="asutp-main">
+<p class="asutp-hint">ОЗУ ПЛК · чаще всего SRAM на триггерах. Жмите</p>
+<div class="app-purpose-grid em-fast-grid em-plk-cards">
+<button type="button" class="app-purpose-card active" data-info="role"><strong>Зачем</strong><span>данные · ОС</span></button>
+<button type="button" class="app-purpose-card" data-info="sram"><strong>SRAM</strong><span>статика</span></button>
+<button type="button" class="app-purpose-card" data-info="bit"><strong>Триггер</strong><span>1 бит</span></button>
+<button type="button" class="app-purpose-card" data-info="pro"><strong>Плюсы</strong><span>скорость · ток</span></button>
+<button type="button" class="app-purpose-card" data-info="bat"><strong>Батарея</strong><span>сохранение</span></button>
+<button type="button" class="app-purpose-card" data-info="con"><strong>Минус</strong><span>цена</span></button>
+</div>
+<div class="highlight-box highlight-box-compact"><p class="em-plk-live" id="plkRamLive">ОЗУ: данные вычислений, работа ОС ПЛК, оперативная информация</p></div>
+<div class="asutp-diagram-wrap">
+<svg class="em-svg em-plk-svg" viewBox="0 0 640 280" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="ОЗУ ПЛК">
+<rect width="640" height="280" fill="#fff"/>
+<g class="plk-node is-on" data-info="role" style="cursor:pointer">
+<rect x="40" y="40" width="180" height="90" rx="10" fill="#eff6ff" stroke="#1d4ed8" stroke-width="1.8"/>
+<text x="130" y="80" text-anchor="middle" font-size="16" font-weight="800" fill="#1e3a8a">данные · ОС</text>
+<text x="130" y="105" text-anchor="middle" font-size="13" fill="#64748b">оперативная инф.</text>
+</g>
+<g class="plk-node" data-info="sram" style="cursor:pointer">
+<rect x="240" y="40" width="160" height="90" rx="10" fill="#ecfdf5" stroke="#16a34a" stroke-width="2"/>
+<text x="320" y="80" text-anchor="middle" font-size="18" font-weight="800" fill="#166534">SRAM</text>
+<text x="320" y="105" text-anchor="middle" font-size="13" fill="#64748b">Static RAM</text>
+</g>
+<g class="plk-node" data-info="bit" style="cursor:pointer">
+<rect x="420" y="40" width="180" height="90" rx="10" fill="#fef9c3" stroke="#ca8a04" stroke-width="1.8"/>
+<text x="510" y="80" text-anchor="middle" font-size="16" font-weight="800" fill="#854d0e">триггер → 1 бит</text>
+<text x="510" y="105" text-anchor="middle" font-size="13" fill="#64748b">два устойчивых состояния</text>
+</g>
+<g class="plk-node" data-info="pro" style="cursor:pointer">
+<rect x="40" y="160" width="180" height="80" rx="10" fill="#ecfdf5" stroke="#16a34a" stroke-width="1.6"/>
+<text x="130" y="195" text-anchor="middle" font-size="14" font-weight="800" fill="#166534">быстро · низкий ток</text>
+</g>
+<g class="plk-node" data-info="bat" style="cursor:pointer">
+<rect x="240" y="160" width="160" height="80" rx="10" fill="#fff7ed" stroke="#c2410c" stroke-width="1.6"/>
+<text x="320" y="195" text-anchor="middle" font-size="14" font-weight="800" fill="#9a3412">батарея держит</text>
+<text x="320" y="215" text-anchor="middle" font-size="13" fill="#64748b">состояние ячеек</text>
+</g>
+<g class="plk-node" data-info="con" style="cursor:pointer">
+<rect x="420" y="160" width="180" height="80" rx="10" fill="#faf5ff" stroke="#7c3aed" stroke-width="1.6"/>
+<text x="510" y="205" text-anchor="middle" font-size="15" font-weight="800" fill="#6d28d9">минус: дороже</text>
+</g>
+</svg>
+</div>
+</div>
+<aside class="asutp-panel" id="plkRamPanel">
+<h3>Зачем</h3>
+<p>Как ОЗУ любой ЭВМ: хранение данных для вычислений, работа <strong>ОС ПЛК</strong> и прочая оперативная информация.</p>
+</aside>
+</div>
+</section>
+
+<section class="slide slide-em-ac-interactive slide-plk-ram2-interactive">
+<h2>Объём ОЗУ и доступ программисту</h2>
+<div class="slide-body asutp-interactive">
+<div class="asutp-main">
+<p class="asutp-hint">Много мегабайт не нужно · не вся память доступна. Жмите</p>
+<div class="app-purpose-grid em-fast-grid em-plk-cards">
+<button type="button" class="app-purpose-card active" data-info="size"><strong>Объёмы</strong><span>кБ…десятки МБ</span></button>
+<button type="button" class="app-purpose-card" data-info="why"><strong>Почему мало</strong><span>узкий круг задач</span></button>
+<button type="button" class="app-purpose-card" data-info="split"><strong>Деление</strong><span>ОС + программа</span></button>
+<button type="button" class="app-purpose-card" data-info="svc"><strong>Служебное</strong><span>таймеры · протоколы</span></button>
+</div>
+<div class="highlight-box highlight-box-compact"><p class="em-plk-live" id="plkRam2Live">современные ПЛК: ОЗУ — единицы…десятки мегабайт</p></div>
+<div class="asutp-diagram-wrap">
+<svg class="em-svg em-plk-svg" viewBox="0 0 640 280" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="Объём ОЗУ">
+<g class="em-ac-view is-on" data-view="size">
+<rect width="640" height="280" fill="#fff"/>
+<rect x="60" y="60" width="240" height="130" rx="12" fill="#eff6ff" stroke="#1d4ed8" stroke-width="2"/>
+<text x="180" y="115" text-anchor="middle" font-size="18" font-weight="800" fill="#1e3a8a">простые ПЛК</text>
+<text x="180" y="150" text-anchor="middle" font-size="16" fill="#475569">несколько килобайт</text>
+<rect x="340" y="60" width="240" height="130" rx="12" fill="#ecfdf5" stroke="#16a34a" stroke-width="2"/>
+<text x="460" y="115" text-anchor="middle" font-size="18" font-weight="800" fill="#166534">современные</text>
+<text x="460" y="150" text-anchor="middle" font-size="16" fill="#475569">до десятков МБ</text>
+<text x="320" y="240" text-anchor="middle" font-size="15" fill="#64748b">при малых объёмах цена ОЗУ не критична</text>
+</g>
+<g class="em-ac-view" data-view="why">
+<rect width="640" height="280" fill="#fff"/>
+<rect x="100" y="70" width="440" height="130" rx="12" fill="#fff7ed" stroke="#c2410c" stroke-width="2"/>
+<text x="320" y="125" text-anchor="middle" font-size="20" font-weight="800" fill="#9a3412">круг задач ПЛК узкий</text>
+<text x="320" y="160" text-anchor="middle" font-size="16" fill="#475569">большие объёмы памяти не требуются</text>
+</g>
+<g class="em-ac-view" data-view="split">
+<rect width="640" height="280" fill="#fff"/>
+<text x="320" y="40" text-anchor="middle" font-size="16" font-weight="800" fill="#1e3a8a">ОЗУ делится между ОС и программой пользователя</text>
+<rect x="80" y="70" width="220" height="120" rx="10" fill="#faf5ff" stroke="#7c3aed" stroke-width="2"/>
+<text x="190" y="130" text-anchor="middle" font-size="18" font-weight="800" fill="#6d28d9">ОС ПЛК</text>
+<rect x="340" y="70" width="220" height="120" rx="10" fill="#eff6ff" stroke="#1d4ed8" stroke-width="2"/>
+<text x="450" y="120" text-anchor="middle" font-size="16" font-weight="800" fill="#1e3a8a">программа</text>
+<text x="450" y="145" text-anchor="middle" font-size="16" font-weight="800" fill="#1e3a8a">пользователя</text>
+<text x="320" y="240" text-anchor="middle" font-size="15" fill="#64748b">не вся память доступна программисту</text>
+</g>
+<g class="em-ac-view" data-view="svc">
+<rect width="640" height="280" fill="#fff"/>
+<text x="320" y="40" text-anchor="middle" font-size="16" font-weight="800" fill="#1e3a8a">часть «доступной» памяти — служебная</text>
+<rect x="50" y="70" width="170" height="100" rx="10" fill="#ecfdf5" stroke="#16a34a" stroke-width="1.8"/>
+<text x="135" y="115" text-anchor="middle" font-size="14" font-weight="800" fill="#166534">таймеры</text>
+<text x="135" y="140" text-anchor="middle" font-size="14" font-weight="800" fill="#166534">счётчики</text>
+<rect x="235" y="70" width="170" height="100" rx="10" fill="#fef9c3" stroke="#ca8a04" stroke-width="1.8"/>
+<text x="320" y="115" text-anchor="middle" font-size="14" font-weight="800" fill="#854d0e">протоколы</text>
+<text x="320" y="140" text-anchor="middle" font-size="14" font-weight="800" fill="#854d0e">связи</text>
+<rect x="420" y="70" width="170" height="100" rx="10" fill="#fff7ed" stroke="#c2410c" stroke-width="1.8"/>
+<text x="505" y="115" text-anchor="middle" font-size="14" font-weight="800" fill="#9a3412">переменные</text>
+<text x="505" y="140" text-anchor="middle" font-size="14" font-weight="800" fill="#9a3412">функций ОС</text>
+<text x="320" y="230" text-anchor="middle" font-size="15" fill="#64748b">объём под данные пользователя может быть в разы меньше «всего ОЗУ»</text>
+</g>
+</svg>
+</div>
+</div>
+<aside class="asutp-panel" id="plkRam2Panel">
+<h3>Объёмы</h3>
+<p>В современных контроллерах ОЗУ — до <strong>нескольких десятков мегабайт</strong>; в простейших — несколько <strong>килобайт</strong>.</p>
+</aside>
+</div>
+</section>
+
+<section class="slide slide-title"><span class="tag">Конец лекции 12</span>
+<h1>Продолжение следует</h1>
+<p>Тема 6: ПЛК, состав, модуль ЦПУ и оперативная память (SRAM).</p>
+<p><a href="lecture-11.html" class="link-home">← Лекция 11. Аппаратно-программные средства</a></p>
+<p><a href="../index.html" class="link-home">← На главную</a></p></section>
+</div>
+
+<div class="controls">
+<div class="controls-left">
+<a href="../index.html" class="course-title-bar course-title-link">Средства автоматизации и управления</a>
+</div>
+<div class="controls-left">
+<a href="../index.html" class="btn-nav btn-home" title="На главную">⌂</a>
+<button class="btn-nav" id="prevBtn">← Назад</button>
+<button class="btn-nav" id="nextBtn">Вперёд →</button>
+</div>
+<div class="progress-wrap"><div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div></div>
+<span class="slide-counter" id="slideCounter">1 / 9</span>
+<div class="controls-right">
+<button class="btn-nav" id="overviewBtn">Обзор</button>
+<button class="btn-nav" id="fullscreenBtn">⛶</button>
+</div>
+</div>
+<script src="../js/presentation.js"></script>
+</body></html>

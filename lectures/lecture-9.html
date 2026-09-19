@@ -28,7 +28,11 @@
 <li>Схемы на ОУ</li>
 <li>Цифровая электроника</li>
 <li>Электронные ключи</li>
+<li>Оптрон</li>
 <li>Логические элементы</li>
+<li>Компаратор и ШИМ</li>
+<li>Микропроцессорные регуляторы</li>
+<li>ЭВМ · ПЛК · ПК</li>
 </ol></div></section>
 
 <section class="slide slide-em-ac-interactive slide-upe-bridge-interactive">
@@ -1738,6 +1742,85 @@
 </div>
 </section>
 
+<section class="slide slide-em-ac-interactive slide-upe-opto-interactive">
+<h2>Оптрон (оптопара)</h2>
+<div class="slide-body asutp-interactive">
+<div class="asutp-main">
+<p class="asutp-hint">Свет вместо провода. Жмите узел схемы</p>
+<div class="app-purpose-grid em-fast-grid em-upe-opto-cards">
+<button type="button" class="app-purpose-card active" data-info="what"><strong>Что это</strong><span>ОП</span></button>
+<button type="button" class="app-purpose-card" data-info="led"><strong>Светодиод</strong><span>Uд</span></button>
+<button type="button" class="app-purpose-card" data-info="pt"><strong>Фото VT</strong><span>приёмник</span></button>
+<button type="button" class="app-purpose-card" data-info="how"><strong>Работа</strong><span>свет → ток</span></button>
+<button type="button" class="app-purpose-card" data-info="uy"><strong>Uу</strong><span>выход</span></button>
+<button type="button" class="app-purpose-card" data-info="iso"><strong>Развязка</strong><span>гальван.</span></button>
+</div>
+<div class="highlight-box highlight-box-compact"><p class="em-upe-opto-live" id="upeOptoLive">оптрон = светодиод + фототранзистор в одном корпусе</p></div>
+<div class="asutp-diagram-wrap">
+<svg class="em-svg em-upe-opto-svg" viewBox="0 0 640 300" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="Устройство оптрона">
+<!-- корпус ОП -->
+<rect x="140" y="40" width="300" height="200" rx="4" fill="#f8fafc" stroke="#16a34a" stroke-width="1.8" stroke-dasharray="7 4"/>
+<text x="158" y="62" font-size="14" font-weight="800" fill="#166534">ОП</text>
+
+<!-- светодиод -->
+<g class="em-ac-hit upe-opto-node" data-info="led" style="cursor:pointer">
+<text x="50" y="118" font-size="15" font-weight="800" fill="#1d4ed8">Uд</text>
+<line x1="70" y1="130" x2="180" y2="130" stroke="#1d4ed8" stroke-width="2.2"/>
+<path d="M180 110 L220 130 L180 150 Z" fill="#fef9c3" stroke="#ca8a04" stroke-width="1.8"/>
+<line x1="220" y1="110" x2="220" y2="150" stroke="#ca8a04" stroke-width="2.2"/>
+<path d="M235 118 L270 105" stroke="#f59e0b" stroke-width="2"/>
+<path d="M235 142 L270 155" stroke="#f59e0b" stroke-width="2"/>
+<text x="248" y="100" font-size="11" fill="#b45309">свет</text>
+<line x1="200" y1="150" x2="200" y2="210" stroke="#64748b" stroke-width="1.8"/>
+<line x1="188" y1="210" x2="212" y2="210" stroke="#64748b" stroke-width="1.8"/>
+<line x1="192" y1="218" x2="208" y2="218" stroke="#64748b" stroke-width="1.4"/>
+</g>
+
+<!-- фототранзистор -->
+<g class="em-ac-hit upe-opto-node" data-info="pt" style="cursor:pointer">
+<circle cx="330" cy="130" r="38" fill="#fff" stroke="#111827" stroke-width="2"/>
+<line x1="312" y1="105" x2="312" y2="155" stroke="#111827" stroke-width="3"/>
+<line x1="312" y1="112" x2="345" y2="90" stroke="#111827" stroke-width="2"/>
+<line x1="312" y1="148" x2="345" y2="170" stroke="#111827" stroke-width="2"/>
+<polygon points="336,162 345,170 332,168" fill="#111827"/>
+<text x="370" y="100" font-size="12" font-weight="700" fill="#334155">фото VT</text>
+</g>
+
+<!-- Rк -->
+<g class="em-ac-hit upe-opto-node" data-info="uy" style="cursor:pointer">
+<line x1="345" y1="90" x2="345" y2="55" stroke="#111827" stroke-width="1.8"/>
+<line x1="345" y1="55" x2="480" y2="55" stroke="#111827" stroke-width="1.8"/>
+<rect x="400" y="40" width="50" height="28" rx="3" fill="#faf5ff" stroke="#7c3aed" stroke-width="1.5"/>
+<text x="425" y="59" text-anchor="middle" font-size="13" font-weight="800" fill="#6d28d9">Rк</text>
+<line x1="480" y1="55" x2="520" y2="55" stroke="#111827" stroke-width="1.8"/>
+</g>
+
+<!-- Rб + E + Uу -->
+<g class="em-ac-hit upe-opto-node" data-info="uy" style="cursor:pointer">
+<line x1="345" y1="170" x2="345" y2="200" stroke="#111827" stroke-width="1.8"/>
+<rect x="320" y="200" width="50" height="28" rx="3" fill="#eff6ff" stroke="#1d4ed8" stroke-width="1.5"/>
+<text x="345" y="219" text-anchor="middle" font-size="13" font-weight="800" fill="#1e3a8a">Rб</text>
+<line x1="345" y1="228" x2="345" y2="255" stroke="#111827" stroke-width="1.8"/>
+<circle cx="420" cy="255" r="18" fill="#fff" stroke="#c2410c" stroke-width="1.8"/>
+<text x="420" y="260" text-anchor="middle" font-size="14" font-weight="800" fill="#c2410c">E</text>
+<line x1="345" y1="255" x2="402" y2="255" stroke="#111827" stroke-width="1.6"/>
+<line x1="438" y1="255" x2="520" y2="255" stroke="#111827" stroke-width="1.6"/>
+<line x1="520" y1="55" x2="520" y2="255" stroke="#16a34a" stroke-width="2.2"/>
+<text x="555" y="160" font-size="18" font-weight="800" fill="#166534">Uу</text>
+</g>
+
+<!-- развязка подпись -->
+<text x="290" y="285" text-anchor="middle" font-size="12" fill="#64748b">вход (Uд) и выход (Uу) связаны только светом</text>
+</svg>
+</div>
+</div>
+<aside class="asutp-panel" id="upeOptoPanel">
+<h3>Что это</h3>
+<p><strong>Оптрон (оптопара)</strong> — в одном корпусе светодиод и фототранзистор. Сигнал передаётся светом, без электрической связи входа и выхода.</p>
+</aside>
+</div>
+</section>
+
 <section class="slide slide-em-ac-interactive slide-upe-logic-interactive">
 <h2>Логические элементы</h2>
 <div class="slide-body asutp-interactive">
@@ -1805,8 +1888,6 @@
 <text x="560" y="135" text-anchor="middle" font-size="11" fill="#475569">ключ → НЕ</text>
 <text x="560" y="165" text-anchor="middle" font-size="11" fill="#475569">серия К155</text>
 <text x="560" y="185" text-anchor="middle" font-size="11" fill="#475569">(ТТЛ)</text>
-<text x="560" y="215" text-anchor="middle" font-size="11" fill="#94a3b8">таблицы →</text>
-<text x="560" y="235" text-anchor="middle" font-size="11" fill="#94a3b8">«Табл.»</text>
 </g>
 <g class="em-ac-view" data-view="not">
 <rect width="640" height="300" fill="#fff"/>
@@ -1878,9 +1959,285 @@
 </div>
 </section>
 
+<section class="slide slide-em-ac-interactive slide-upe-pwm-interactive is-picking">
+<h2>Компаратор и управление ШИМ</h2>
+<div class="slide-body asutp-interactive">
+<div class="asutp-main">
+<p class="asutp-hint">У компаратора жмите «Сравнить» или сам CMP — выход 1 ↔ 0</p>
+<div class="app-purpose-grid em-fast-grid em-upe-pwm-cards">
+<button type="button" class="app-purpose-card active" data-info="cmp"><strong>Компаратор</strong><span>1 / 0</span></button>
+<button type="button" class="app-purpose-card" data-info="oa"><strong>Как ОУ</strong><span>без ОС</span></button>
+<button type="button" class="app-purpose-card" data-info="uny"><strong>Uну</strong><span>задание</span></button>
+<button type="button" class="app-purpose-card" data-info="ur"><strong>Ur</strong><span>опорный</span></button>
+<button type="button" class="app-purpose-card" data-info="sch"><strong>Схема</strong><span>ШИМ</span></button>
+<button type="button" class="app-purpose-card" data-info="uy"><strong>Uу1…4</strong><span>на базы</span></button>
+</div>
+<div class="highlight-box highlight-box-compact"><p class="em-upe-pwm-live" id="upePwmLive">компаратор: + больше − → выход 1 · нажмите «Сравнить»</p></div>
+<div class="asutp-diagram-wrap">
+<svg class="em-svg em-upe-pwm-svg" viewBox="0 0 640 300" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="Компаратор и схема управления ШИМ">
+<rect width="640" height="300" fill="#fff"/>
+
+<!-- Live comparator (left): click CMP or button to flip 1/0 -->
+<g id="upePwmCmpHit" class="upe-pwm-node upe-pwm-cmp is-on" data-info="cmp" style="cursor:pointer">
+<text x="120" y="24" text-anchor="middle" font-size="12" font-weight="800" fill="#1e3a8a">компаратор</text>
+<text id="upePwmPlusLab" x="28" y="72" font-size="14" font-weight="800" fill="#1d4ed8">+</text>
+<line id="upePwmPlusLine" x1="42" y1="74" x2="90" y2="74" stroke="#1d4ed8" stroke-width="3"/>
+<text id="upePwmMinusLab" x="28" y="122" font-size="14" font-weight="700" fill="#94a3b8">−</text>
+<line id="upePwmMinusLine" x1="42" y1="124" x2="90" y2="124" stroke="#94a3b8" stroke-width="1.6"/>
+<polygon points="90,50 90,148 168,99" fill="#eff6ff" stroke="#1e40af" stroke-width="2.2"/>
+<text x="116" y="104" text-anchor="middle" font-size="12" font-weight="800" fill="#1e3a8a">CMP</text>
+<line x1="168" y1="99" x2="198" y2="99" stroke="#111827" stroke-width="2"/>
+<!-- branch 1 -->
+<path id="upePwmPath1" d="M198 99 H210 V72 H228" fill="none" stroke="#16a34a" stroke-width="2.4"/>
+<rect id="upePwmOut1Box" x="228" y="54" width="40" height="36" rx="6" fill="#ecfdf5" stroke="#16a34a" stroke-width="2"/>
+<text id="upePwmOut1" x="248" y="78" text-anchor="middle" font-size="18" font-weight="800" fill="#166534">1</text>
+<!-- branch 0 -->
+<path id="upePwmPath0" d="M198 99 H210 V126 H228" fill="none" stroke="#cbd5e1" stroke-width="1.5"/>
+<rect id="upePwmOut0Box" x="228" y="108" width="40" height="36" rx="6" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.5"/>
+<text id="upePwmOut0" x="248" y="132" text-anchor="middle" font-size="18" font-weight="800" fill="#94a3b8">0</text>
+</g>
+<g id="upePwmFlipHit" class="upe-pwm-flip" style="cursor:pointer">
+<rect x="36" y="168" width="220" height="40" rx="8" fill="#1d4ed8" stroke="#1e40af" stroke-width="1.5"/>
+<text id="upePwmFlipLab" x="146" y="193" text-anchor="middle" font-size="13" font-weight="800" fill="#fff">Сравнить: + &gt; − → 1</text>
+</g>
+<text x="146" y="228" text-anchor="middle" font-size="11" fill="#64748b">нажмите — сменить знак разности</text>
+
+<!-- Functional PWM scheme (right) -->
+<g class="upe-pwm-node" data-info="uny" style="cursor:pointer">
+<text x="300" y="48" font-size="13" font-weight="800" fill="#1d4ed8">Uну</text>
+<path d="M300 58 Q330 58 350 75 Q370 92 390 95" fill="none" stroke="#1d4ed8" stroke-width="1.8"/>
+<line x1="340" y1="70" x2="400" y2="100" stroke="#1d4ed8" stroke-width="2"/>
+</g>
+<g class="upe-pwm-node" data-info="ur" style="cursor:pointer">
+<text x="300" y="175" font-size="13" font-weight="800" fill="#16a34a">Ur</text>
+<path d="M300 185 V170 H325 V200 H350 V170 H375" fill="none" stroke="#16a34a" stroke-width="1.6"/>
+<line x1="355" y1="185" x2="400" y2="150" stroke="#16a34a" stroke-width="2"/>
+</g>
+<g class="upe-pwm-node" data-info="sch" style="cursor:pointer">
+<rect x="400" y="85" width="130" height="80" rx="8" fill="#eff6ff" stroke="#1e40af" stroke-width="2"/>
+<text x="465" y="118" text-anchor="middle" font-size="12" font-weight="800" fill="#1e3a8a">Схема</text>
+<text x="465" y="140" text-anchor="middle" font-size="12" font-weight="800" fill="#1e3a8a">управления</text>
+<text x="465" y="158" text-anchor="middle" font-size="12" font-weight="800" fill="#1e3a8a">ШИМ</text>
+</g>
+<g class="upe-pwm-node" data-info="uy" style="cursor:pointer">
+<line x1="530" y1="100" x2="575" y2="70" stroke="#111827" stroke-width="1.6"/><text x="580" y="72" font-size="12" font-weight="700">Uу4</text>
+<line x1="530" y1="115" x2="575" y2="110" stroke="#111827" stroke-width="1.6"/><text x="580" y="114" font-size="12" font-weight="700">Uу3</text>
+<line x1="530" y1="135" x2="575" y2="150" stroke="#111827" stroke-width="1.6"/><text x="580" y="154" font-size="12" font-weight="700">Uу2</text>
+<line x1="530" y1="150" x2="575" y2="190" stroke="#111827" stroke-width="1.6"/><text x="580" y="194" font-size="12" font-weight="700">Uу1</text>
+</g>
+<g class="upe-pwm-node" data-info="oa" style="cursor:pointer">
+<rect x="280" y="230" width="300" height="50" rx="8" fill="#f8fafc" stroke="#94a3b8" stroke-width="1.4"/>
+<text x="430" y="260" text-anchor="middle" font-size="12" fill="#475569">компаратор ≈ ОУ без отрицательной ОС</text>
+</g>
+</svg>
+</div>
+</div>
+<aside class="asutp-panel" id="upePwmPanel">
+<h3>Компаратор</h3>
+<p>Переходит из «1» в «0» (и обратно) в зависимости от соотношения сигналов на инвертирующем и неинвертирующем входах.</p>
+</aside>
+</div>
+</section>
+
+<section class="slide slide-em-ac-interactive slide-upe-mp-interactive is-picking">
+<h2>Микропроцессорные регуляторы</h2>
+<div class="slide-body asutp-interactive">
+<div class="asutp-main">
+<p class="asutp-hint">Цифра → программируемый контроллер. Жмите блок</p>
+<div class="app-purpose-grid em-fast-grid em-upe-mp-cards">
+<button type="button" class="app-purpose-card active" data-info="why"><strong>Почему</strong><span>цифра · ЭВМ</span></button>
+<button type="button" class="app-purpose-card" data-info="one"><strong>Контроллер</strong><span>одно устройство</span></button>
+<button type="button" class="app-purpose-card" data-info="sens"><strong>Датчики</strong><span>+ уставка</span></button>
+<button type="button" class="app-purpose-card" data-info="law"><strong>Закон</strong><span>воздействие</span></button>
+<button type="button" class="app-purpose-card" data-info="net"><strong>Сеть</strong><span>другим ПК</span></button>
+<button type="button" class="app-purpose-card" data-info="kinds"><strong>Типы</strong><span>ЭВМ · ПК · ПЛК</span></button>
+</div>
+<div class="highlight-box highlight-box-compact"><p class="em-upe-mp-live" id="upeMpLive">цифровая электроника + ЭВМ реального времени → микропроцессорные средства в САУ</p></div>
+<div class="asutp-diagram-wrap">
+<svg class="em-svg em-upe-mp-svg" viewBox="0 0 640 300" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="Программируемый контроллер в САУ">
+<defs>
+<marker id="upeMpArr" markerWidth="7" markerHeight="6" refX="6" refY="3" orient="auto"><path d="M0 0 L7 3 L0 6 Z" fill="#64748b"/></marker>
+</defs>
+<rect width="640" height="300" fill="#fff"/>
+
+<g class="upe-mp-node" data-info="sens" style="cursor:pointer">
+<rect x="24" y="100" width="110" height="70" rx="8" fill="#eff6ff" stroke="#1d4ed8" stroke-width="1.8"/>
+<text x="79" y="130" text-anchor="middle" font-size="14" font-weight="800" fill="#1e3a8a">датчики</text>
+<text x="79" y="152" text-anchor="middle" font-size="11" fill="#64748b">вход</text>
+</g>
+<path d="M134 135 H168" fill="none" stroke="#94a3b8" stroke-width="2" marker-end="url(#upeMpArr)"/>
+
+<g class="upe-mp-node is-on" data-info="one" style="cursor:pointer">
+<rect x="170" y="70" width="200" height="130" rx="10" fill="#ecfdf5" stroke="#16a34a" stroke-width="2.2"/>
+<text x="270" y="100" text-anchor="middle" font-size="13" font-weight="800" fill="#166534">программируемый</text>
+<text x="270" y="122" text-anchor="middle" font-size="15" font-weight="800" fill="#166534">контроллер</text>
+<text x="270" y="148" text-anchor="middle" font-size="11" fill="#475569">сравнение + воздействие</text>
+<text x="270" y="172" text-anchor="middle" font-size="11" fill="#64748b">модульная структура</text>
+</g>
+
+<g class="upe-mp-node" data-info="sens" style="cursor:pointer">
+<rect x="200" y="18" width="140" height="40" rx="8" fill="#fef9c3" stroke="#ca8a04" stroke-width="1.6"/>
+<text x="270" y="44" text-anchor="middle" font-size="13" font-weight="800" fill="#854d0e">уставка</text>
+</g>
+<path d="M270 58 V70" fill="none" stroke="#ca8a04" stroke-width="1.8" marker-end="url(#upeMpArr)"/>
+
+<path d="M370 135 H404" fill="none" stroke="#94a3b8" stroke-width="2" marker-end="url(#upeMpArr)"/>
+<g class="upe-mp-node" data-info="law" style="cursor:pointer">
+<rect x="406" y="100" width="110" height="70" rx="8" fill="#fff7ed" stroke="#c2410c" stroke-width="1.8"/>
+<text x="461" y="130" text-anchor="middle" font-size="13" font-weight="800" fill="#9a3412">объект</text>
+<text x="461" y="152" text-anchor="middle" font-size="11" fill="#64748b">управление</text>
+</g>
+
+<g class="upe-mp-node" data-info="net" style="cursor:pointer">
+<path d="M270 200 V220" fill="none" stroke="#7c3aed" stroke-width="1.8" marker-end="url(#upeMpArr)"/>
+<rect x="190" y="220" width="160" height="44" rx="8" fill="#faf5ff" stroke="#7c3aed" stroke-width="1.6"/>
+<text x="270" y="247" text-anchor="middle" font-size="12" font-weight="800" fill="#6d28d9">другие контроллеры</text>
+</g>
+
+<g class="upe-mp-node" data-info="kinds" style="cursor:pointer">
+<rect x="540" y="40" width="84" height="50" rx="8" fill="#f8fafc" stroke="#64748b" stroke-width="1.5"/>
+<text x="582" y="62" text-anchor="middle" font-size="12" font-weight="800" fill="#334155">ЭВМ</text>
+<text x="582" y="78" text-anchor="middle" font-size="10" fill="#94a3b8">пром.</text>
+<rect x="540" y="105" width="84" height="50" rx="8" fill="#f8fafc" stroke="#64748b" stroke-width="1.5"/>
+<text x="582" y="127" text-anchor="middle" font-size="12" font-weight="800" fill="#334155">ПК</text>
+<text x="582" y="143" text-anchor="middle" font-size="10" fill="#94a3b8">пром.</text>
+<rect x="540" y="170" width="84" height="50" rx="8" fill="#f8fafc" stroke="#64748b" stroke-width="1.5"/>
+<text x="582" y="192" text-anchor="middle" font-size="12" font-weight="800" fill="#334155">ПЛК</text>
+<text x="582" y="208" text-anchor="middle" font-size="10" fill="#94a3b8">логич.</text>
+</g>
+
+<g class="upe-mp-node" data-info="why" style="cursor:pointer">
+<text x="270" y="290" text-anchor="middle" font-size="11" fill="#94a3b8">реальное время · передача данных · сбор / анализ / управление</text>
+</g>
+</svg>
+</div>
+</div>
+<aside class="asutp-panel" id="upeMpPanel">
+<h3>Почему</h3>
+<p>Цифровая электроника, ЭВМ реального времени и надёжная передача данных — основа микропроцессорных средств в САУ.</p>
+</aside>
+</div>
+</section>
+
+<section class="slide slide-em-ac-interactive slide-upe-dev-interactive">
+<h2>ЭВМ, ПЛК и промышленные контроллеры</h2>
+<div class="slide-body asutp-interactive">
+<div class="asutp-main">
+<p class="asutp-hint">Три типа устройств · модули · виды ПК. Жмите тему</p>
+<div class="app-purpose-grid em-fast-grid em-upe-dev-cards">
+<button type="button" class="app-purpose-card active" data-info="evm"><strong>ЭВМ</strong><span>пром. ПК</span></button>
+<button type="button" class="app-purpose-card" data-info="plc"><strong>ПЛК</strong><span>логика</span></button>
+<button type="button" class="app-purpose-card" data-info="mod"><strong>Модули</strong><span>ПЛК / ПК</span></button>
+<button type="button" class="app-purpose-card" data-info="pk"><strong>ПК</strong><span>локально</span></button>
+<button type="button" class="app-purpose-card" data-info="kind"><strong>Виды ПК</strong><span>3 класса</span></button>
+<button type="button" class="app-purpose-card" data-info="uso"><strong>УСО</strong><span>с объектом</span></button>
+</div>
+<div class="highlight-box highlight-box-compact"><p class="em-upe-dev-live" id="upeDevLive">промышленные компьютеры внутри подобны обычным IBM-совместимым</p></div>
+<div class="asutp-diagram-wrap">
+<svg class="em-svg em-upe-dev-svg" viewBox="0 0 640 300" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="ЭВМ, ПЛК и промышленные контроллеры">
+
+<g class="em-ac-view is-on" data-view="evm">
+<rect width="640" height="300" fill="#fff"/>
+<rect x="100" y="55" width="440" height="160" rx="12" fill="#eff6ff" stroke="#1d4ed8" stroke-width="2"/>
+<text x="320" y="115" text-anchor="middle" font-size="24" font-weight="800" fill="#1e3a8a">промышленный компьютер</text>
+<text x="320" y="150" text-anchor="middle" font-size="18" fill="#475569">внутренняя архитектура ≈ IBM-совместимый ПК</text>
+<text x="320" y="182" text-anchor="middle" font-size="17" fill="#64748b">тот же принцип · усиленный корпус и интерфейсы</text>
+<text x="320" y="255" text-anchor="middle" font-size="16" fill="#94a3b8">ЭВМ · один из трёх типов микропроцессорных устройств</text>
+</g>
+
+<g class="em-ac-view" data-view="plc">
+<rect width="640" height="300" fill="#fff"/>
+<rect x="80" y="50" width="480" height="140" rx="12" fill="#ecfdf5" stroke="#16a34a" stroke-width="2"/>
+<text x="320" y="100" text-anchor="middle" font-size="26" font-weight="800" fill="#166534">ПЛК</text>
+<text x="320" y="135" text-anchor="middle" font-size="18" fill="#475569">программируемый логический контроллер</text>
+<text x="320" y="168" text-anchor="middle" font-size="16" fill="#64748b">микропроцессорная система · логические алгоритмы управления</text>
+<text x="320" y="240" text-anchor="middle" font-size="17" fill="#334155">модульная структура: процессор · ввод/вывод · связь</text>
+</g>
+
+<g class="em-ac-view" data-view="mod">
+<rect width="640" height="300" fill="#fff"/>
+<text x="320" y="34" text-anchor="middle" font-size="18" font-weight="800" fill="#1e3a8a">модули ПЛК (и промышленных контроллеров)</text>
+<rect x="30" y="55" width="180" height="160" rx="10" fill="#eff6ff" stroke="#1d4ed8" stroke-width="1.8"/>
+<text x="120" y="115" text-anchor="middle" font-size="19" font-weight="800" fill="#1e3a8a">процессорный</text>
+<text x="120" y="150" text-anchor="middle" font-size="16" fill="#64748b">вычисления</text>
+<text x="120" y="175" text-anchor="middle" font-size="16" fill="#64748b">алгоритм</text>
+<rect x="230" y="55" width="180" height="160" rx="10" fill="#ecfdf5" stroke="#16a34a" stroke-width="1.8"/>
+<text x="320" y="115" text-anchor="middle" font-size="19" font-weight="800" fill="#166534">ввода-вывода</text>
+<text x="320" y="150" text-anchor="middle" font-size="16" fill="#64748b">сигналы с объекта</text>
+<text x="320" y="175" text-anchor="middle" font-size="16" fill="#64748b">и на объект</text>
+<rect x="430" y="55" width="180" height="160" rx="10" fill="#faf5ff" stroke="#7c3aed" stroke-width="1.8"/>
+<text x="520" y="115" text-anchor="middle" font-size="19" font-weight="800" fill="#6d28d9">связи</text>
+<text x="520" y="150" text-anchor="middle" font-size="16" fill="#64748b">обмен данными</text>
+<text x="520" y="175" text-anchor="middle" font-size="16" fill="#64748b">с другими узлами</text>
+<text x="320" y="265" text-anchor="middle" font-size="16" fill="#94a3b8">набор модулей собирают под задачу</text>
+</g>
+
+<g class="em-ac-view" data-view="pk">
+<rect width="640" height="300" fill="#fff"/>
+<rect x="80" y="50" width="480" height="140" rx="12" fill="#fff7ed" stroke="#c2410c" stroke-width="2"/>
+<text x="320" y="100" text-anchor="middle" font-size="22" font-weight="800" fill="#9a3412">промышленный контроллер (ПК)</text>
+<text x="320" y="135" text-anchor="middle" font-size="18" fill="#475569">микропроцессорная система</text>
+<text x="320" y="168" text-anchor="middle" font-size="16" fill="#64748b">ориентирован на локальное управление объектом</text>
+<text x="320" y="240" text-anchor="middle" font-size="17" fill="#334155">тоже модульная структура — как у ПЛК</text>
+</g>
+
+<g class="em-ac-view" data-view="kind">
+<rect width="640" height="300" fill="#fff"/>
+<text x="320" y="30" text-anchor="middle" font-size="18" font-weight="800" fill="#1e3a8a">промышленные контроллеры — три класса</text>
+<rect x="20" y="48" width="195" height="180" rx="10" fill="#eff6ff" stroke="#1d4ed8" stroke-width="1.8"/>
+<text x="117" y="95" text-anchor="middle" font-size="17" font-weight="800" fill="#1e3a8a">общего</text>
+<text x="117" y="118" text-anchor="middle" font-size="17" font-weight="800" fill="#1e3a8a">назначения</text>
+<text x="117" y="160" text-anchor="middle" font-size="15" fill="#475569">универсальные</text>
+<text x="117" y="182" text-anchor="middle" font-size="15" fill="#475569">средства</text>
+<text x="117" y="204" text-anchor="middle" font-size="15" fill="#475569">автоматизации</text>
+<rect x="223" y="48" width="195" height="180" rx="10" fill="#ecfdf5" stroke="#16a34a" stroke-width="1.8"/>
+<text x="320" y="95" text-anchor="middle" font-size="17" font-weight="800" fill="#166534">проблемно-</text>
+<text x="320" y="118" text-anchor="middle" font-size="17" font-weight="800" fill="#166534">ориентированные</text>
+<text x="320" y="160" text-anchor="middle" font-size="15" fill="#475569">под конкретный</text>
+<text x="320" y="182" text-anchor="middle" font-size="15" fill="#475569">выходной параметр</text>
+<text x="320" y="204" text-anchor="middle" font-size="15" fill="#475569">частота · угол · T°</text>
+<rect x="425" y="48" width="195" height="180" rx="10" fill="#fef9c3" stroke="#ca8a04" stroke-width="1.8"/>
+<text x="522" y="95" text-anchor="middle" font-size="17" font-weight="800" fill="#854d0e">встраиваемые</text>
+<text x="522" y="118" text-anchor="middle" font-size="17" font-weight="800" fill="#854d0e">системы</text>
+<text x="522" y="160" text-anchor="middle" font-size="15" fill="#475569">часть объекта</text>
+<text x="522" y="182" text-anchor="middle" font-size="15" fill="#475569">пример: блок</text>
+<text x="522" y="204" text-anchor="middle" font-size="15" fill="#475569">управления ЧПУ</text>
+<text x="320" y="275" text-anchor="middle" font-size="15" fill="#94a3b8">первые два класса — обычно в отдельном закрытом корпусе</text>
+</g>
+
+<g class="em-ac-view" data-view="uso">
+<rect width="640" height="300" fill="#fff"/>
+<text x="320" y="34" text-anchor="middle" font-size="18" font-weight="800" fill="#1e3a8a">УСО — устройства сопряжения с объектом</text>
+<path d="M70 115 H190" fill="none" stroke="#94a3b8" stroke-width="2.2"/>
+<rect x="190" y="70" width="150" height="90" rx="8" fill="#eff6ff" stroke="#1d4ed8" stroke-width="1.8"/>
+<text x="265" y="110" text-anchor="middle" font-size="18" font-weight="800" fill="#1e3a8a">контроллер</text>
+<text x="265" y="138" text-anchor="middle" font-size="14" fill="#64748b">внутренний сигнал</text>
+<path d="M340 115 H395" fill="none" stroke="#94a3b8" stroke-width="2.2"/>
+<rect x="395" y="70" width="110" height="90" rx="8" fill="#faf5ff" stroke="#7c3aed" stroke-width="2"/>
+<text x="450" y="110" text-anchor="middle" font-size="20" font-weight="800" fill="#6d28d9">УСО</text>
+<text x="450" y="138" text-anchor="middle" font-size="14" fill="#64748b">преобразование</text>
+<path d="M505 115 H555" fill="none" stroke="#94a3b8" stroke-width="2.2"/>
+<rect x="555" y="80" width="70" height="70" rx="8" fill="#fff7ed" stroke="#c2410c" stroke-width="1.6"/>
+<text x="590" y="122" text-anchor="middle" font-size="15" font-weight="800" fill="#9a3412">объект</text>
+<text x="30" y="120" font-size="15" fill="#64748b">вход</text>
+<text x="320" y="210" text-anchor="middle" font-size="17" fill="#334155">УСО превращает внутренний сигнал в воздействие на объект</text>
+<text x="320" y="245" text-anchor="middle" font-size="15" fill="#64748b">примеры: частота генератора · угол объекта · температура печи</text>
+<text x="320" y="278" text-anchor="middle" font-size="15" fill="#94a3b8">есть в контроллерах общего назначения и проблемно-ориентированных</text>
+</g>
+</svg>
+</div>
+</div>
+<aside class="asutp-panel" id="upeDevPanel">
+<h3>ЭВМ</h3>
+<p>Промышленные компьютеры по внутренней архитектуре подобны обычным IBM-совместимым компьютерам.</p>
+</aside>
+</div>
+</section>
+
 <section class="slide slide-title"><span class="tag">Конец лекции 9</span>
 <h1>Продолжение следует</h1>
-<p>Лекция 9 завершена: от УПЭ и ОУ — к цифре, ключам и логике.</p>
+<p>Лекция 9 завершена: от УПЭ и ОУ — к цифре, ШИМ, контроллерам и ПЛК.</p>
+<p><a href="lecture-11.html" class="link-home">Лекция 11. Аппаратно-программные средства →</a></p>
 <p><a href="lecture-10.html" class="link-home">Лекция 10. Автоматические выключатели →</a></p>
 <p><a href="../index.html" class="link-home">← На главную</a></p></section>
 </div>

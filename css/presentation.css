@@ -9194,6 +9194,65 @@ body.overview-mode .slide-diagram { display: none; }
   padding: 0.35em 0.65em;
 }
 
+.slide-upe-opto-interactive .em-upe-opto-cards.app-purpose-grid {
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  flex-shrink: 0;
+  gap: 0.28em;
+}
+.slide-upe-opto-interactive .slide-body.asutp-interactive {
+  gap: 0.4em;
+}
+.slide-upe-opto-interactive .asutp-main {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3em;
+  min-height: 0;
+}
+.slide-upe-opto-interactive .asutp-diagram-wrap {
+  flex: 1.3 1 0;
+  min-height: 0;
+}
+.slide-upe-opto-interactive .app-purpose-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.15em;
+  padding: 0.3em 0.3em;
+}
+.slide-upe-opto-interactive .asutp-panel {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  font-size: 0.95em;
+}
+.slide-upe-opto-interactive .em-upe-opto-svg {
+  width: 100%;
+  height: 100%;
+  max-height: none;
+}
+.slide-upe-opto-interactive .upe-opto-node {
+  opacity: 1;
+  transition: opacity 0.15s;
+}
+.slide-upe-opto-interactive.is-picking .upe-opto-node {
+  opacity: 0.38;
+}
+.slide-upe-opto-interactive.is-picking .upe-opto-node.is-on {
+  opacity: 1;
+}
+.slide-upe-opto-interactive .em-upe-opto-live {
+  margin: 0;
+  font-weight: 700;
+  color: #1e293b;
+  font-size: 0.9em;
+}
+.slide-upe-opto-interactive .highlight-box-compact {
+  flex-shrink: 0;
+  margin: 0;
+  padding: 0.35em 0.65em;
+}
+
 .slide-upe-logic-interactive .em-upe-logic-cards.app-purpose-grid {
   grid-template-columns: repeat(6, minmax(0, 1fr));
   flex-shrink: 0;
@@ -9247,6 +9306,792 @@ body.overview-mode .slide-diagram { display: none; }
   flex-shrink: 0;
   margin: 0;
   padding: 0.35em 0.65em;
+}
+
+.slide-upe-pwm-interactive .em-upe-pwm-cards.app-purpose-grid {
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  flex-shrink: 0;
+  gap: 0.28em;
+}
+.slide-upe-pwm-interactive .slide-body.asutp-interactive {
+  gap: 0.4em;
+}
+.slide-upe-pwm-interactive .asutp-main {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3em;
+  min-height: 0;
+}
+.slide-upe-pwm-interactive .asutp-diagram-wrap {
+  flex: 1.3 1 0;
+  min-height: 0;
+}
+.slide-upe-pwm-interactive .app-purpose-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.15em;
+  padding: 0.3em 0.3em;
+}
+.slide-upe-pwm-interactive .asutp-panel {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  font-size: 0.95em;
+}
+.slide-upe-pwm-interactive .em-upe-pwm-svg {
+  width: 100%;
+  height: 100%;
+  max-height: none;
+}
+.slide-upe-pwm-interactive .upe-pwm-node {
+  opacity: 1;
+  transition: opacity 0.15s;
+}
+.slide-upe-pwm-interactive.is-picking .upe-pwm-node {
+  opacity: 0.4;
+}
+.slide-upe-pwm-interactive.is-picking .upe-pwm-node.is-on {
+  opacity: 1;
+}
+.slide-upe-pwm-interactive #upePwmFlipHit:hover rect {
+  filter: brightness(1.08);
+}
+.slide-upe-pwm-interactive #upePwmCmpHit:hover polygon {
+  fill: #dbeafe;
+}
+.slide-upe-pwm-interactive .upe-pwm-cmp.is-on {
+  opacity: 1;
+}
+.slide-upe-pwm-interactive .em-upe-pwm-live {
+  margin: 0;
+  font-weight: 700;
+  color: #1e293b;
+  font-size: 0.9em;
+}
+.slide-upe-pwm-interactive .highlight-box-compact {
+  flex-shrink: 0;
+  margin: 0;
+  padding: 0.35em 0.65em;
+}
+
+.slide-upe-mp-interactive .em-upe-mp-cards.app-purpose-grid {
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  flex-shrink: 0;
+  gap: 0.28em;
+}
+.slide-upe-mp-interactive .slide-body.asutp-interactive {
+  gap: 0.4em;
+}
+.slide-upe-mp-interactive .asutp-main {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3em;
+  min-height: 0;
+}
+.slide-upe-mp-interactive .asutp-diagram-wrap {
+  flex: 1.3 1 0;
+  min-height: 0;
+}
+.slide-upe-mp-interactive .app-purpose-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.15em;
+  padding: 0.3em 0.3em;
+}
+.slide-upe-mp-interactive .asutp-panel {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  font-size: 0.95em;
+}
+.slide-upe-mp-interactive .em-upe-mp-svg {
+  width: 100%;
+  height: 100%;
+  max-height: none;
+}
+.slide-upe-mp-interactive .upe-mp-node {
+  opacity: 1;
+  transition: opacity 0.15s;
+}
+.slide-upe-mp-interactive.is-picking .upe-mp-node {
+  opacity: 0.4;
+}
+.slide-upe-mp-interactive.is-picking .upe-mp-node.is-on {
+  opacity: 1;
+}
+.slide-upe-mp-interactive .em-upe-mp-live {
+  margin: 0;
+  font-weight: 700;
+  color: #1e293b;
+  font-size: 0.9em;
+}
+.slide-upe-mp-interactive .highlight-box-compact {
+  flex-shrink: 0;
+  margin: 0;
+  padding: 0.35em 0.65em;
+}
+
+.slide-upe-dev-interactive .em-upe-dev-cards.app-purpose-grid {
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  flex-shrink: 0;
+  gap: 0.28em;
+}
+.slide-upe-dev-interactive .slide-body.asutp-interactive {
+  gap: 0.4em;
+}
+.slide-upe-dev-interactive .asutp-main {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3em;
+  min-height: 0;
+}
+.slide-upe-dev-interactive .asutp-diagram-wrap {
+  flex: 1.3 1 0;
+  min-height: 0;
+}
+.slide-upe-dev-interactive .app-purpose-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.15em;
+  padding: 0.35em 0.3em;
+  font-size: 1.05em;
+}
+.slide-upe-dev-interactive .app-purpose-card strong {
+  font-size: 1.05em;
+}
+.slide-upe-dev-interactive .app-purpose-card span {
+  font-size: 0.95em;
+}
+.slide-upe-dev-interactive .asutp-hint {
+  font-size: 1.05em;
+}
+.slide-upe-dev-interactive .asutp-panel {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  font-size: 1.15em;
+}
+.slide-upe-dev-interactive .asutp-panel h3 {
+  font-size: 1.25em;
+}
+.slide-upe-dev-interactive .asutp-panel p {
+  font-size: 1.05em;
+  line-height: 1.45;
+}
+.slide-upe-dev-interactive .em-upe-dev-svg {
+  width: 100%;
+  height: 100%;
+  max-height: none;
+}
+.slide-upe-dev-interactive .em-ac-view {
+  display: none;
+}
+.slide-upe-dev-interactive .em-ac-view.is-on {
+  display: block;
+}
+.slide-upe-dev-interactive .em-upe-dev-live {
+  margin: 0;
+  font-weight: 700;
+  color: #1e293b;
+  font-size: 1.1em;
+}
+.slide-upe-dev-interactive .highlight-box-compact {
+  flex-shrink: 0;
+  margin: 0;
+  padding: 0.35em 0.65em;
+}
+
+/* Lecture 11 — аппаратно-программные средства */
+.slide-aps-why-interactive .em-aps-cards.app-purpose-grid,
+.slide-aps-ctrl-interactive .em-aps-cards.app-purpose-grid,
+.slide-aps-uni-interactive .em-aps-cards.app-purpose-grid,
+.slide-aps-trend-interactive .em-aps-cards.app-purpose-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  flex-shrink: 0;
+  gap: 0.3em;
+}
+.slide-aps-kinds-interactive .em-aps-cards-2.app-purpose-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  flex-shrink: 0;
+  gap: 0.4em;
+}
+.slide-aps-pick-interactive .em-aps-cards-3.app-purpose-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  flex-shrink: 0;
+  gap: 0.35em;
+}
+.slide-aps-why-interactive .slide-body.asutp-interactive,
+.slide-aps-ctrl-interactive .slide-body.asutp-interactive,
+.slide-aps-kinds-interactive .slide-body.asutp-interactive,
+.slide-aps-uni-interactive .slide-body.asutp-interactive,
+.slide-aps-pick-interactive .slide-body.asutp-interactive,
+.slide-aps-trend-interactive .slide-body.asutp-interactive {
+  gap: 0.4em;
+}
+.slide-aps-why-interactive .asutp-main,
+.slide-aps-ctrl-interactive .asutp-main,
+.slide-aps-kinds-interactive .asutp-main,
+.slide-aps-uni-interactive .asutp-main,
+.slide-aps-pick-interactive .asutp-main,
+.slide-aps-trend-interactive .asutp-main {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3em;
+  min-height: 0;
+}
+.slide-aps-why-interactive .asutp-diagram-wrap,
+.slide-aps-ctrl-interactive .asutp-diagram-wrap,
+.slide-aps-kinds-interactive .asutp-diagram-wrap,
+.slide-aps-uni-interactive .asutp-diagram-wrap,
+.slide-aps-pick-interactive .asutp-diagram-wrap,
+.slide-aps-trend-interactive .asutp-diagram-wrap {
+  flex: 1.3 1 0;
+  min-height: 0;
+}
+.slide-aps-why-interactive .app-purpose-card,
+.slide-aps-ctrl-interactive .app-purpose-card,
+.slide-aps-kinds-interactive .app-purpose-card,
+.slide-aps-uni-interactive .app-purpose-card,
+.slide-aps-pick-interactive .app-purpose-card,
+.slide-aps-trend-interactive .app-purpose-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.15em;
+  padding: 0.35em 0.35em;
+  font-size: 1.05em;
+}
+.slide-aps-why-interactive .asutp-panel,
+.slide-aps-ctrl-interactive .asutp-panel,
+.slide-aps-kinds-interactive .asutp-panel,
+.slide-aps-uni-interactive .asutp-panel,
+.slide-aps-pick-interactive .asutp-panel,
+.slide-aps-trend-interactive .asutp-panel {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  font-size: 1.12em;
+}
+.slide-aps-why-interactive .em-aps-svg,
+.slide-aps-ctrl-interactive .em-aps-svg,
+.slide-aps-kinds-interactive .em-aps-svg,
+.slide-aps-uni-interactive .em-aps-svg,
+.slide-aps-pick-interactive .em-aps-svg,
+.slide-aps-trend-interactive .em-aps-svg {
+  width: 100%;
+  height: 100%;
+  max-height: none;
+}
+.slide-aps-kinds-interactive .em-ac-view,
+.slide-aps-pick-interactive .em-ac-view {
+  display: none;
+}
+.slide-aps-kinds-interactive .em-ac-view.is-on,
+.slide-aps-pick-interactive .em-ac-view.is-on {
+  display: block;
+}
+.slide-aps-why-interactive .aps-node,
+.slide-aps-ctrl-interactive .aps-node,
+.slide-aps-uni-interactive .aps-node,
+.slide-aps-trend-interactive .aps-node {
+  opacity: 1;
+  transition: opacity 0.15s;
+}
+.slide-aps-why-interactive.is-picking .aps-node,
+.slide-aps-ctrl-interactive.is-picking .aps-node,
+.slide-aps-uni-interactive.is-picking .aps-node,
+.slide-aps-trend-interactive.is-picking .aps-node {
+  opacity: 0.4;
+}
+.slide-aps-why-interactive.is-picking .aps-node.is-on,
+.slide-aps-ctrl-interactive.is-picking .aps-node.is-on,
+.slide-aps-uni-interactive.is-picking .aps-node.is-on,
+.slide-aps-trend-interactive.is-picking .aps-node.is-on {
+  opacity: 1;
+}
+.slide-aps-why-interactive .em-aps-live,
+.slide-aps-ctrl-interactive .em-aps-live,
+.slide-aps-kinds-interactive .em-aps-live,
+.slide-aps-uni-interactive .em-aps-live,
+.slide-aps-pick-interactive .em-aps-live,
+.slide-aps-trend-interactive .em-aps-live {
+  margin: 0;
+  font-weight: 700;
+  color: #1e293b;
+  font-size: 1.05em;
+}
+.slide-aps-why-interactive .highlight-box-compact,
+.slide-aps-ctrl-interactive .highlight-box-compact,
+.slide-aps-kinds-interactive .highlight-box-compact,
+.slide-aps-uni-interactive .highlight-box-compact,
+.slide-aps-pick-interactive .highlight-box-compact,
+.slide-aps-trend-interactive .highlight-box-compact {
+  flex-shrink: 0;
+  margin: 0;
+  padding: 0.4em 0.7em;
+}
+
+/* Lecture 12 — ПЛК */
+.slide-plk-def-interactive .em-plk-cards.app-purpose-grid,
+.slide-plk-hist-interactive .em-plk-cards.app-purpose-grid,
+.slide-plk-rtu-interactive .em-plk-cards.app-purpose-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  flex-shrink: 0;
+  gap: 0.3em;
+}
+.slide-plk-fn-interactive .em-plk-cards-5.app-purpose-grid {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  flex-shrink: 0;
+  gap: 0.28em;
+}
+.slide-plk-use-interactive .em-plk-cards-2.app-purpose-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  flex-shrink: 0;
+  gap: 0.4em;
+}
+.slide-plk-plc-interactive .em-plk-cards-3.app-purpose-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  flex-shrink: 0;
+  gap: 0.35em;
+}
+.slide-plk-def-interactive .slide-body.asutp-interactive,
+.slide-plk-fn-interactive .slide-body.asutp-interactive,
+.slide-plk-use-interactive .slide-body.asutp-interactive,
+.slide-plk-hist-interactive .slide-body.asutp-interactive,
+.slide-plk-plc-interactive .slide-body.asutp-interactive,
+.slide-plk-rtu-interactive .slide-body.asutp-interactive {
+  gap: 0.4em;
+}
+.slide-plk-def-interactive .asutp-main,
+.slide-plk-fn-interactive .asutp-main,
+.slide-plk-use-interactive .asutp-main,
+.slide-plk-hist-interactive .asutp-main,
+.slide-plk-plc-interactive .asutp-main,
+.slide-plk-rtu-interactive .asutp-main {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3em;
+  min-height: 0;
+}
+.slide-plk-def-interactive .asutp-diagram-wrap,
+.slide-plk-fn-interactive .asutp-diagram-wrap,
+.slide-plk-use-interactive .asutp-diagram-wrap,
+.slide-plk-hist-interactive .asutp-diagram-wrap,
+.slide-plk-plc-interactive .asutp-diagram-wrap,
+.slide-plk-rtu-interactive .asutp-diagram-wrap {
+  flex: 1.3 1 0;
+  min-height: 0;
+}
+.slide-plk-def-interactive .app-purpose-card,
+.slide-plk-fn-interactive .app-purpose-card,
+.slide-plk-use-interactive .app-purpose-card,
+.slide-plk-hist-interactive .app-purpose-card,
+.slide-plk-plc-interactive .app-purpose-card,
+.slide-plk-rtu-interactive .app-purpose-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.15em;
+  padding: 0.35em 0.3em;
+  font-size: 1.05em;
+}
+.slide-plk-def-interactive .asutp-panel,
+.slide-plk-fn-interactive .asutp-panel,
+.slide-plk-use-interactive .asutp-panel,
+.slide-plk-hist-interactive .asutp-panel,
+.slide-plk-plc-interactive .asutp-panel,
+.slide-plk-rtu-interactive .asutp-panel {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  font-size: 1.12em;
+}
+.slide-plk-def-interactive .em-plk-svg,
+.slide-plk-fn-interactive .em-plk-svg,
+.slide-plk-use-interactive .em-plk-svg,
+.slide-plk-hist-interactive .em-plk-svg,
+.slide-plk-plc-interactive .em-plk-svg,
+.slide-plk-rtu-interactive .em-plk-svg {
+  width: 100%;
+  height: 100%;
+  max-height: none;
+}
+.slide-plk-use-interactive .em-ac-view {
+  display: none;
+}
+.slide-plk-use-interactive .em-ac-view.is-on {
+  display: block;
+}
+.slide-plk-def-interactive .plk-node,
+.slide-plk-fn-interactive .plk-node,
+.slide-plk-hist-interactive .plk-node,
+.slide-plk-plc-interactive .plk-node,
+.slide-plk-rtu-interactive .plk-node {
+  opacity: 1;
+  transition: opacity 0.15s;
+}
+.slide-plk-def-interactive.is-picking .plk-node,
+.slide-plk-fn-interactive.is-picking .plk-node,
+.slide-plk-hist-interactive.is-picking .plk-node,
+.slide-plk-plc-interactive.is-picking .plk-node,
+.slide-plk-rtu-interactive.is-picking .plk-node {
+  opacity: 0.4;
+}
+.slide-plk-def-interactive.is-picking .plk-node.is-on,
+.slide-plk-fn-interactive.is-picking .plk-node.is-on,
+.slide-plk-hist-interactive.is-picking .plk-node.is-on,
+.slide-plk-plc-interactive.is-picking .plk-node.is-on,
+.slide-plk-rtu-interactive.is-picking .plk-node.is-on {
+  opacity: 1;
+}
+.slide-plk-def-interactive .em-plk-live,
+.slide-plk-fn-interactive .em-plk-live,
+.slide-plk-use-interactive .em-plk-live,
+.slide-plk-hist-interactive .em-plk-live,
+.slide-plk-plc-interactive .em-plk-live,
+.slide-plk-rtu-interactive .em-plk-live {
+  margin: 0;
+  font-weight: 700;
+  color: #1e293b;
+  font-size: 1.05em;
+}
+.slide-plk-def-interactive .highlight-box-compact,
+.slide-plk-fn-interactive .highlight-box-compact,
+.slide-plk-use-interactive .highlight-box-compact,
+.slide-plk-hist-interactive .highlight-box-compact,
+.slide-plk-plc-interactive .highlight-box-compact,
+.slide-plk-rtu-interactive .highlight-box-compact {
+  flex-shrink: 0;
+  margin: 0;
+  padding: 0.4em 0.7em;
+}
+
+.slide-plk-comp-interactive .em-plk-cards-6.app-purpose-grid {
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  flex-shrink: 0;
+  gap: 0.25em;
+}
+.slide-plk-comp-interactive .slide-body.asutp-interactive,
+.slide-plk-mod-interactive .slide-body.asutp-interactive,
+.slide-plk-exp-interactive .slide-body.asutp-interactive {
+  gap: 0.4em;
+}
+.slide-plk-comp-interactive .asutp-main,
+.slide-plk-mod-interactive .asutp-main,
+.slide-plk-exp-interactive .asutp-main {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3em;
+  min-height: 0;
+}
+.slide-plk-comp-interactive .asutp-diagram-wrap,
+.slide-plk-mod-interactive .asutp-diagram-wrap,
+.slide-plk-exp-interactive .asutp-diagram-wrap {
+  flex: 1.3 1 0;
+  min-height: 0;
+}
+.slide-plk-comp-interactive .app-purpose-card,
+.slide-plk-mod-interactive .app-purpose-card,
+.slide-plk-exp-interactive .app-purpose-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.12em;
+  padding: 0.3em 0.25em;
+  font-size: 1.02em;
+}
+.slide-plk-mod-interactive .em-plk-cards.app-purpose-grid,
+.slide-plk-exp-interactive .em-plk-cards.app-purpose-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  flex-shrink: 0;
+  gap: 0.3em;
+}
+.slide-plk-comp-interactive .asutp-panel,
+.slide-plk-mod-interactive .asutp-panel,
+.slide-plk-exp-interactive .asutp-panel {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  font-size: 1.12em;
+}
+.slide-plk-comp-interactive .em-plk-svg,
+.slide-plk-mod-interactive .em-plk-svg,
+.slide-plk-exp-interactive .em-plk-svg {
+  width: 100%;
+  height: 100%;
+  max-height: none;
+}
+.slide-plk-mod-interactive .em-ac-view,
+.slide-plk-exp-interactive .em-ac-view {
+  display: none;
+}
+.slide-plk-mod-interactive .em-ac-view.is-on,
+.slide-plk-exp-interactive .em-ac-view.is-on {
+  display: block;
+}
+.slide-plk-comp-interactive .plk-node {
+  opacity: 1;
+  transition: opacity 0.15s;
+}
+.slide-plk-comp-interactive.is-picking .plk-node {
+  opacity: 0.4;
+}
+.slide-plk-comp-interactive.is-picking .plk-node.is-on {
+  opacity: 1;
+}
+.slide-plk-comp-interactive .em-plk-live,
+.slide-plk-mod-interactive .em-plk-live,
+.slide-plk-exp-interactive .em-plk-live {
+  margin: 0;
+  font-weight: 700;
+  color: #1e293b;
+  font-size: 1.05em;
+}
+.slide-plk-comp-interactive .highlight-box-compact,
+.slide-plk-mod-interactive .highlight-box-compact,
+.slide-plk-exp-interactive .highlight-box-compact {
+  flex-shrink: 0;
+  margin: 0;
+  padding: 0.4em 0.7em;
+}
+
+.slide-plk-fig-interactive .em-plk-cards-6.app-purpose-grid {
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  flex-shrink: 0;
+  gap: 0.25em;
+}
+.slide-plk-fig-interactive .slide-body.asutp-interactive {
+  gap: 0.35em;
+}
+.slide-plk-fig-interactive .asutp-main {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25em;
+  min-height: 0;
+}
+.slide-plk-fig-interactive .asutp-diagram-wrap {
+  flex: 1.4 1 0;
+  min-height: 0;
+}
+.slide-plk-fig-interactive .app-purpose-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.1em;
+  padding: 0.28em 0.2em;
+  font-size: 1.02em;
+}
+.slide-plk-fig-interactive .asutp-panel {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  font-size: 1.15em;
+}
+.slide-plk-fig-interactive .em-plk-fig-svg {
+  width: 100%;
+  height: 100%;
+  max-height: none;
+}
+.slide-plk-fig-interactive .plk-node {
+  opacity: 1;
+  transition: opacity 0.15s;
+}
+.slide-plk-fig-interactive.is-picking .plk-node {
+  opacity: 0.35;
+}
+.slide-plk-fig-interactive.is-picking .plk-node.is-on {
+  opacity: 1;
+}
+.slide-plk-fig-interactive .em-plk-live {
+  margin: 0;
+  font-weight: 700;
+  color: #1e293b;
+  font-size: 1.08em;
+}
+.slide-plk-fig-interactive .highlight-box-compact {
+  flex-shrink: 0;
+  margin: 0;
+  padding: 0.4em 0.7em;
+}
+
+.slide-plk-cpu-interactive .em-plk-cards.app-purpose-grid,
+.slide-plk-mpu-interactive .em-plk-cards.app-purpose-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  flex-shrink: 0;
+  gap: 0.3em;
+}
+.slide-plk-mb-interactive .em-plk-cards-6.app-purpose-grid {
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  flex-shrink: 0;
+  gap: 0.25em;
+}
+.slide-plk-cpu-interactive .slide-body.asutp-interactive,
+.slide-plk-mb-interactive .slide-body.asutp-interactive,
+.slide-plk-mpu-interactive .slide-body.asutp-interactive {
+  gap: 0.4em;
+}
+.slide-plk-cpu-interactive .asutp-main,
+.slide-plk-mb-interactive .asutp-main,
+.slide-plk-mpu-interactive .asutp-main {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3em;
+  min-height: 0;
+}
+.slide-plk-cpu-interactive .asutp-diagram-wrap,
+.slide-plk-mb-interactive .asutp-diagram-wrap,
+.slide-plk-mpu-interactive .asutp-diagram-wrap {
+  flex: 1.3 1 0;
+  min-height: 0;
+}
+.slide-plk-cpu-interactive .app-purpose-card,
+.slide-plk-mb-interactive .app-purpose-card,
+.slide-plk-mpu-interactive .app-purpose-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.12em;
+  padding: 0.3em 0.25em;
+  font-size: 1.02em;
+}
+.slide-plk-cpu-interactive .asutp-panel,
+.slide-plk-mb-interactive .asutp-panel,
+.slide-plk-mpu-interactive .asutp-panel {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  font-size: 1.12em;
+}
+.slide-plk-cpu-interactive .em-plk-svg,
+.slide-plk-mb-interactive .em-plk-svg,
+.slide-plk-mpu-interactive .em-plk-svg {
+  width: 100%;
+  height: 100%;
+  max-height: none;
+}
+.slide-plk-mpu-interactive .em-ac-view {
+  display: none;
+}
+.slide-plk-mpu-interactive .em-ac-view.is-on {
+  display: block;
+}
+.slide-plk-cpu-interactive .plk-node,
+.slide-plk-mb-interactive .plk-node {
+  opacity: 1;
+  transition: opacity 0.15s;
+}
+.slide-plk-cpu-interactive.is-picking .plk-node,
+.slide-plk-mb-interactive.is-picking .plk-node {
+  opacity: 0.4;
+}
+.slide-plk-cpu-interactive.is-picking .plk-node.is-on,
+.slide-plk-mb-interactive.is-picking .plk-node.is-on {
+  opacity: 1;
+}
+.slide-plk-cpu-interactive .em-plk-live,
+.slide-plk-mb-interactive .em-plk-live,
+.slide-plk-mpu-interactive .em-plk-live {
+  margin: 0;
+  font-weight: 700;
+  color: #1e293b;
+  font-size: 1.05em;
+}
+.slide-plk-cpu-interactive .highlight-box-compact,
+.slide-plk-mb-interactive .highlight-box-compact,
+.slide-plk-mpu-interactive .highlight-box-compact {
+  flex-shrink: 0;
+  margin: 0;
+  padding: 0.4em 0.7em;
+}
+
+.slide-plk-ram-interactive .em-plk-cards.app-purpose-grid {
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  flex-shrink: 0;
+  gap: 0.25em;
+}
+.slide-plk-ram2-interactive .em-plk-cards.app-purpose-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  flex-shrink: 0;
+  gap: 0.3em;
+}
+.slide-plk-ram-interactive .slide-body.asutp-interactive,
+.slide-plk-ram2-interactive .slide-body.asutp-interactive {
+  gap: 0.4em;
+}
+.slide-plk-ram-interactive .asutp-main,
+.slide-plk-ram2-interactive .asutp-main {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3em;
+  min-height: 0;
+}
+.slide-plk-ram-interactive .asutp-diagram-wrap,
+.slide-plk-ram2-interactive .asutp-diagram-wrap {
+  flex: 1.3 1 0;
+  min-height: 0;
+}
+.slide-plk-ram-interactive .app-purpose-card,
+.slide-plk-ram2-interactive .app-purpose-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.12em;
+  padding: 0.28em 0.2em;
+  font-size: 1.02em;
+}
+.slide-plk-ram-interactive .asutp-panel,
+.slide-plk-ram2-interactive .asutp-panel {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  font-size: 1.12em;
+}
+.slide-plk-ram-interactive .em-plk-svg,
+.slide-plk-ram2-interactive .em-plk-svg {
+  width: 100%;
+  height: 100%;
+  max-height: none;
+}
+.slide-plk-ram2-interactive .em-ac-view {
+  display: none;
+}
+.slide-plk-ram2-interactive .em-ac-view.is-on {
+  display: block;
+}
+.slide-plk-ram-interactive .plk-node {
+  opacity: 1;
+  transition: opacity 0.15s;
+}
+.slide-plk-ram-interactive.is-picking .plk-node {
+  opacity: 0.4;
+}
+.slide-plk-ram-interactive.is-picking .plk-node.is-on {
+  opacity: 1;
+}
+.slide-plk-ram-interactive .em-plk-live,
+.slide-plk-ram2-interactive .em-plk-live {
+  margin: 0;
+  font-weight: 700;
+  color: #1e293b;
+  font-size: 1.05em;
+}
+.slide-plk-ram-interactive .highlight-box-compact,
+.slide-plk-ram2-interactive .highlight-box-compact {
+  flex-shrink: 0;
+  margin: 0;
+  padding: 0.4em 0.7em;
 }
 
 .slide-upe-fullwave-interactive .em-upe-fw-live {

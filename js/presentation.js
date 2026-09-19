@@ -14256,6 +14256,63 @@
       showEk('why');
     }
 
+    const optoSlide = document.querySelector('.slide-upe-opto-interactive');
+    if (optoSlide) {
+      const panel = document.getElementById('upeOptoPanel');
+      const live = document.getElementById('upeOptoLive');
+      const info = {
+        what: {
+          title: 'Что это',
+          html: '<p><strong>Оптрон (оптопара)</strong> — в одном корпусе светодиод и фототранзистор.</p><p>Сигнал передаётся <strong>светом</strong>, без электрической связи входа и выхода.</p>',
+          live: 'оптрон = светодиод + фототранзистор в одном корпусе'
+        },
+        led: {
+          title: 'Светодиод',
+          html: '<p>Входная часть: напряжение <strong>Uд</strong> задаёт ток через светодиод.</p><p>Светодиод излучает поток света в сторону фототранзистора.</p>',
+          live: 'Uд → ток через светодиод → свет'
+        },
+        pt: {
+          title: 'Фото VT',
+          html: '<p>Приёмник — <strong>фототранзистор</strong>: свет попадает на базу и открывает прибор.</p><p>В цепях коллектора и эмиттера — Rк, Rб и источник E.</p>',
+          live: 'свет на базу → фототранзистор открыт'
+        },
+        how: {
+          title: 'Работа',
+          html: '<p>1) ток через светодиод → свет;</p><p>2) свет открывает фототранзистор;</p><p>3) в выходной цепи появляется ток / напряжение <strong>Uу</strong>.</p>',
+          live: 'ток → свет → открытие фото VT → Uу'
+        },
+        uy: {
+          title: 'Uу',
+          html: '<p><strong>Uу</strong> — управляющее напряжение на выходе оптрона (с учётом Rк, Rб и E).</p><p>Его подают, например, на базу силового транзистора.</p>',
+          live: 'Uу — выход для управления силовым каскадом'
+        },
+        iso: {
+          title: 'Развязка',
+          html: '<p>Вход (Uд) и выход (Uу) <strong>гальванически развязаны</strong>: общей электрической цепи нет, только оптический канал.</p><p>Это повышает надёжность и защищает цепи управления.</p>',
+          live: 'гальваническая развязка: свет вместо провода'
+        }
+      };
+      const showOpto = (key) => {
+        const data = info[key] || info.what;
+        if (panel) panel.innerHTML = `<h3>${data.title}</h3>${data.html}`;
+        if (live) live.textContent = data.live;
+        optoSlide.querySelectorAll('.app-purpose-card').forEach((b) => {
+          b.classList.toggle('active', b.dataset.info === key);
+        });
+        optoSlide.querySelectorAll('.upe-opto-node').forEach((n) => {
+          n.classList.toggle('is-on', n.dataset.info === key || key === 'what' || key === 'how' || key === 'iso');
+        });
+      };
+      optoSlide.classList.add('is-picking');
+      optoSlide.addEventListener('click', (e) => {
+        const hit = e.target.closest('.em-ac-hit, .app-purpose-card');
+        if (!hit?.dataset.info) return;
+        e.stopPropagation();
+        showOpto(hit.dataset.info);
+      });
+      showOpto('what');
+    }
+
     const logicSlide = document.querySelector('.slide-upe-logic-interactive');
     if (logicSlide) {
       const panel = document.getElementById('upeLogicPanel');
@@ -14311,6 +14368,841 @@
       });
       showLogic('why');
     }
+
+    const pwmSlide = document.querySelector('.slide-upe-pwm-interactive');
+    if (pwmSlide) {
+      const panel = document.getElementById('upePwmPanel');
+      const live = document.getElementById('upePwmLive');
+      const flipLab = document.getElementById('upePwmFlipLab');
+      const flipHit = document.getElementById('upePwmFlipHit');
+      const els = {
+        plusLab: document.getElementById('upePwmPlusLab'),
+        plusLine: document.getElementById('upePwmPlusLine'),
+        minusLab: document.getElementById('upePwmMinusLab'),
+        minusLine: document.getElementById('upePwmMinusLine'),
+        path1: document.getElementById('upePwmPath1'),
+        path0: document.getElementById('upePwmPath0'),
+        out1Box: document.getElementById('upePwmOut1Box'),
+        out0Box: document.getElementById('upePwmOut0Box'),
+        out1: document.getElementById('upePwmOut1'),
+        out0: document.getElementById('upePwmOut0')
+      };
+      let plusGreater = true;
+      const info = {
+        cmp: {
+          title: 'Компаратор',
+          html: '<p>Переходит из <strong>«1»</strong> в <strong>«0»</strong> (и обратно) по соотношению сигналов на входах «+» и «−».</p><p>Жмите <strong>«Сравнить»</strong> или сам треугольник CMP.</p>',
+          live: null
+        },
+        oa: {
+          title: 'Как ОУ',
+          html: '<p>Компаратор — это, по сути, <strong>ОУ без отрицательной обратной связи</strong>.</p><p>Часто достаточно однополярного питания. Состояние выхода зависит от знака разности входных сигналов.</p>',
+          live: 'ОУ без ОС · выход по знаку разности входов'
+        },
+        uny: {
+          title: 'Uну',
+          html: '<p><strong>Uну</strong> — управляющее (задающее) напряжение на схему управления ШИМ.</p>',
+          live: 'Uну — задание на схему ШИМ'
+        },
+        ur: {
+          title: 'Ur',
+          html: '<p><strong>Ur</strong> — опорный периодический сигнал (меандр / пила), с которым сравнивают задание.</p>',
+          live: 'Ur — опорный периодический сигнал'
+        },
+        sch: {
+          title: 'Схема ШИМ',
+          html: '<p>Схема управления ШИМ принимает <strong>Uну</strong> и <strong>Ur</strong> и формирует четыре управляющих напряжения для силового блока.</p>',
+          live: 'Uну + Ur → схема ШИМ → Uу1…Uу4'
+        },
+        uy: {
+          title: 'Uу1…4',
+          html: '<p>Выходы <strong>Uу1…Uу4</strong> подаются в базовые цепи силовых транзисторов блока ШИМ.</p>',
+          live: 'Uу1…4 — на базы силовых транзисторов'
+        }
+      };
+      const cmpLiveText = () => (
+        plusGreater
+          ? 'компаратор: + больше − → выход 1 · нажмите «Сравнить»'
+          : 'компаратор: + меньше − → выход 0 · нажмите «Сравнить»'
+      );
+      const paintBranch = (active, path, box, lab) => {
+        if (path) {
+          path.setAttribute('stroke', active ? (lab === '1' ? '#16a34a' : '#dc2626') : '#cbd5e1');
+          path.setAttribute('stroke-width', active ? '2.4' : '1.5');
+        }
+        if (box) {
+          box.setAttribute('fill', active ? (lab === '1' ? '#ecfdf5' : '#fef2f2') : '#f8fafc');
+          box.setAttribute('stroke', active ? (lab === '1' ? '#16a34a' : '#dc2626') : '#cbd5e1');
+          box.setAttribute('stroke-width', active ? '2' : '1.5');
+        }
+        if (lab && document.getElementById(lab === '1' ? 'upePwmOut1' : 'upePwmOut0')) {
+          const t = lab === '1' ? els.out1 : els.out0;
+          if (t) t.setAttribute('fill', active ? (lab === '1' ? '#166534' : '#b91c1c') : '#94a3b8');
+        }
+      };
+      const setCmpOut = () => {
+        paintBranch(plusGreater, els.path1, els.out1Box, '1');
+        paintBranch(!plusGreater, els.path0, els.out0Box, '0');
+        if (els.plusLab) {
+          els.plusLab.setAttribute('fill', plusGreater ? '#1d4ed8' : '#94a3b8');
+          els.plusLab.setAttribute('font-weight', plusGreater ? '800' : '700');
+        }
+        if (els.plusLine) {
+          els.plusLine.setAttribute('stroke', plusGreater ? '#1d4ed8' : '#94a3b8');
+          els.plusLine.setAttribute('stroke-width', plusGreater ? '3' : '1.6');
+        }
+        if (els.minusLab) {
+          els.minusLab.setAttribute('fill', plusGreater ? '#94a3b8' : '#c2410c');
+          els.minusLab.setAttribute('font-weight', plusGreater ? '700' : '800');
+        }
+        if (els.minusLine) {
+          els.minusLine.setAttribute('stroke', plusGreater ? '#94a3b8' : '#c2410c');
+          els.minusLine.setAttribute('stroke-width', plusGreater ? '1.6' : '3');
+        }
+        if (flipLab) {
+          flipLab.textContent = plusGreater ? 'Сравнить: + > − → 1' : 'Сравнить: + < − → 0';
+        }
+        if (flipHit) {
+          const rect = flipHit.querySelector('rect');
+          if (rect) rect.setAttribute('fill', plusGreater ? '#1d4ed8' : '#b91c1c');
+        }
+        if (live) live.textContent = cmpLiveText();
+        if (panel) {
+          panel.innerHTML = `<h3>Компаратор → ${plusGreater ? '1' : '0'}</h3>
+<p>Сейчас: <strong>${plusGreater ? '+ больше −' : '+ меньше −'}</strong> → логический <strong>«${plusGreater ? '1' : '0'}»</strong>.</p>
+<p>Жмите кнопку или CMP ещё раз — знак разности сменится.</p>`;
+        }
+      };
+      const showPwm = (key) => {
+        const data = info[key] || info.cmp;
+        if (key === 'cmp') {
+          setCmpOut();
+        } else {
+          if (panel) panel.innerHTML = `<h3>${data.title}</h3>${data.html}`;
+          if (live && data.live) live.textContent = data.live;
+        }
+        pwmSlide.querySelectorAll('.app-purpose-card').forEach((b) => {
+          b.classList.toggle('active', b.dataset.info === key);
+        });
+        pwmSlide.querySelectorAll('.upe-pwm-node').forEach((n) => {
+          n.classList.toggle('is-on', n.dataset.info === key);
+        });
+      };
+      const flipCmp = () => {
+        plusGreater = !plusGreater;
+        showPwm('cmp');
+      };
+      const onFlipClick = (e) => {
+        e.stopPropagation();
+        e.preventDefault();
+        flipCmp();
+      };
+      flipHit?.addEventListener('click', onFlipClick);
+      document.getElementById('upePwmCmpHit')?.addEventListener('click', (e) => {
+        e.stopPropagation();
+        e.preventDefault();
+        const onCmp = pwmSlide.querySelector('.app-purpose-card.active')?.dataset.info === 'cmp';
+        if (onCmp) flipCmp();
+        else showPwm('cmp');
+      });
+      pwmSlide.addEventListener('click', (e) => {
+        if (e.target.closest('#upePwmFlipHit, #upePwmCmpHit, .upe-pwm-flip')) return;
+        const hit = e.target.closest('.upe-pwm-node, .app-purpose-card');
+        if (!hit?.dataset.info) return;
+        e.stopPropagation();
+        showPwm(hit.dataset.info);
+      });
+      showPwm('cmp');
+    }
+
+    const mpSlide = document.querySelector('.slide-upe-mp-interactive');
+    if (mpSlide) {
+      const panel = document.getElementById('upeMpPanel');
+      const live = document.getElementById('upeMpLive');
+      const info = {
+        why: {
+          title: 'Почему',
+          html: '<p>Цифровая электроника, <strong>ЭВМ реального времени</strong> и надёжная передача данных — основа микропроцессорных средств в САУ.</p><p>Сбор, анализ, передача данных и выработка управляющих сигналов — без этого современное производство уже не представить.</p>',
+          live: 'цифровая электроника + ЭВМ реального времени → микропроцессорные средства в САУ'
+        },
+        one: {
+          title: 'Контроллер',
+          html: '<p>В новых СА и САУ сравнение входов/выходов и выработку воздействия делает <strong>одно устройство</strong> — программируемый контроллер.</p><p>Структура <strong>модульная</strong>.</p>',
+          live: 'программируемый контроллер: сравнение + управляющее воздействие'
+        },
+        sens: {
+          title: 'Датчики + уставка',
+          html: '<p>Обрабатывает информацию с <strong>датчиков</strong> и сравнивает её с <strong>уставкой</strong>.</p><p>Уставка — от внешнего устройства или запрограммирована в самом контроллере.</p>',
+          live: 'датчики → сравнение с уставкой (внешней или встроенной)'
+        },
+        law: {
+          title: 'Закон регулирования',
+          html: '<p>По запрограммированным <strong>законам регулирования</strong> вырабатывает управляющее воздействие на объект управления.</p>',
+          live: 'закон регулирования → воздействие на объект'
+        },
+        net: {
+          title: 'Сеть',
+          html: '<p>Может <strong>передавать данные</strong> другим контроллерам — обмен в распределённой системе.</p>',
+          live: 'передача данных другим контроллерам'
+        },
+        kinds: {
+          title: 'Три типа',
+          html: '<p>В задачах управления и автоматизации:</p><p>1) промышленные компьютеры (<strong>ЭВМ</strong>);</p><p>2) промышленные контроллеры (<strong>ПК</strong>);</p><p>3) программируемые логические контроллеры (<strong>ПЛК</strong>).</p>',
+          live: 'три типа: ЭВМ · ПК · ПЛК'
+        }
+      };
+      const showMp = (key) => {
+        const data = info[key] || info.why;
+        if (panel) panel.innerHTML = `<h3>${data.title}</h3>${data.html}`;
+        if (live) live.textContent = data.live;
+        mpSlide.querySelectorAll('.app-purpose-card').forEach((b) => {
+          b.classList.toggle('active', b.dataset.info === key);
+        });
+        mpSlide.querySelectorAll('.upe-mp-node').forEach((n) => {
+          n.classList.toggle('is-on', n.dataset.info === key);
+        });
+      };
+      mpSlide.addEventListener('click', (e) => {
+        const hit = e.target.closest('.upe-mp-node, .app-purpose-card');
+        if (!hit?.dataset.info) return;
+        e.stopPropagation();
+        showMp(hit.dataset.info);
+      });
+      showMp('why');
+    }
+
+    const devSlide = document.querySelector('.slide-upe-dev-interactive');
+    if (devSlide) {
+      const panel = document.getElementById('upeDevPanel');
+      const live = document.getElementById('upeDevLive');
+      const info = {
+        evm: {
+          title: 'ЭВМ',
+          html: '<p><strong>Промышленные компьютеры</strong> по внутренней архитектуре подобны обычным IBM-совместимым компьютерам.</p>',
+          live: 'промышленные компьютеры внутри подобны обычным IBM-совместимым'
+        },
+        plc: {
+          title: 'ПЛК',
+          html: '<p><strong>Программируемые логические контроллеры</strong> — микропроцессорные системы для реализации логических алгоритмов управления.</p><p>Обладают <strong>модульной структурой</strong>.</p>',
+          live: 'ПЛК — логические алгоритмы · модульная структура'
+        },
+        mod: {
+          title: 'Модули',
+          html: '<p>В составе ПЛК (и ПК):</p><p>• <strong>процессорный</strong> модуль;</p><p>• модуль <strong>ввода-вывода</strong>;</p><p>• модуль <strong>связи</strong>.</p>',
+          live: 'модули: процессор · ввод/вывод · связь'
+        },
+        pk: {
+          title: 'ПК',
+          html: '<p><strong>Промышленные контроллеры</strong> — микропроцессорные системы, ориентированные на <strong>локальное</strong> управление объектом.</p><p>Также модульные.</p>',
+          live: 'ПК — локальное управление объектом · модульная структура'
+        },
+        kind: {
+          title: 'Виды ПК',
+          html: '<p>1) <strong>общего назначения</strong> — универсальные средства автоматизации;</p><p>2) <strong>проблемно-ориентированные</strong> — под конкретный параметр;</p><p>3) <strong>встраиваемые</strong> — часть объекта (например, блок ЧПУ).</p><p>Первые два — обычно в отдельном закрытом корпусе.</p>',
+          live: 'ПК: общего назначения · проблемно-ориентированные · встраиваемые'
+        },
+        uso: {
+          title: 'УСО',
+          html: '<p><strong>Устройства сопряжения с объектом</strong> преобразуют внутренний сигнал контроллера в воздействие на объект.</p><p>Примеры задач: частота синхронного генератора, угол объекта, температура в печи.</p>',
+          live: 'УСО: внутренний сигнал → воздействие на объект'
+        }
+      };
+      const showDev = (key) => {
+        const data = info[key] || info.evm;
+        if (panel) panel.innerHTML = `<h3>${data.title}</h3>${data.html}`;
+        if (live) live.textContent = data.live;
+        devSlide.querySelectorAll('.app-purpose-card').forEach((b) => {
+          b.classList.toggle('active', b.dataset.info === key);
+        });
+        devSlide.querySelectorAll('.em-ac-view').forEach((g) => {
+          g.classList.toggle('is-on', g.getAttribute('data-view') === key);
+        });
+      };
+      devSlide.addEventListener('click', (e) => {
+        const btn = e.target.closest('.app-purpose-card');
+        if (!btn?.dataset.info) return;
+        e.stopPropagation();
+        showDev(btn.dataset.info);
+      });
+      showDev('evm');
+    }
+  })();
+
+  /* ===== Lecture 11: аппаратно-программные средства (тема 5) ===== */
+  (() => {
+    const bindAps = (slideSel, panelId, liveId, info, defaultKey, nodeSel) => {
+      const slide = document.querySelector(slideSel);
+      if (!slide) return;
+      const panel = document.getElementById(panelId);
+      const live = liveId ? document.getElementById(liveId) : null;
+      const show = (key) => {
+        const data = info[key] || info[defaultKey];
+        if (!data) return;
+        if (panel) panel.innerHTML = `<h3>${data.title}</h3>${data.html}`;
+        if (live && data.live) live.textContent = data.live;
+        slide.querySelectorAll('.app-purpose-card').forEach((b) => {
+          b.classList.toggle('active', b.dataset.info === key);
+        });
+        if (nodeSel) {
+          slide.querySelectorAll(nodeSel).forEach((n) => {
+            n.classList.toggle('is-on', n.dataset.info === key);
+          });
+        }
+        const views = slide.querySelectorAll('.em-ac-view');
+        if (views.length) {
+          views.forEach((g) => {
+            g.classList.toggle('is-on', g.getAttribute('data-view') === key);
+          });
+        }
+      };
+      slide.addEventListener('click', (e) => {
+        const el = e.target.closest('.aps-node, .app-purpose-card');
+        if (!el?.dataset.info) return;
+        e.stopPropagation();
+        show(el.dataset.info);
+      });
+      show(defaultKey);
+    };
+
+    bindAps('.slide-aps-why-interactive', 'apsWhyPanel', 'apsWhyLive', {
+      theme: {
+        title: 'Тема 5',
+        html: '<p><strong>Аппаратно-программные средства</strong> автоматизации: ЭВМ, внешние устройства и программные семейства для АСУ.</p>',
+        live: 'аппаратно-программные средства — основа управления в АСУ'
+      },
+      hard: {
+        title: 'Аппаратура',
+        html: '<p>ЭВМ, интерфейсы и <strong>внешние устройства</strong> (ВУ) — измерительная и управляющая аппаратура.</p>',
+        live: 'аппаратура: ЭВМ · ВУ · интерфейсы'
+      },
+      soft: {
+        title: 'Программы',
+        html: '<p>Современные ЭВМ образуют <strong>программно совместимые семейства</strong> — проще переносить ПО.</p>',
+        live: 'программы: совместимые семейства ЭВМ'
+      },
+      asu: {
+        title: 'В АСУ',
+        html: '<p>ЭВМ управляют компонентами <strong>автоматизированной системы управления</strong>.</p>',
+        live: 'ЭВМ управляет компонентами АСУ'
+      }
+    }, 'theme', '.aps-node');
+
+    bindAps('.slide-aps-ctrl-interactive', 'apsCtrlPanel', 'apsCtrlLive', {
+      evm: {
+        title: 'ЭВМ',
+        html: '<p>Основное средство управления в автоматизированных системах — <strong>электронно-вычислительная машина</strong>.</p>',
+        live: 'основное средство управления в автоматизированных системах — ЭВМ'
+      },
+      obj: {
+        title: 'Объект',
+        html: '<p>ЭВМ применяют для управления компонентами <strong>АСУ</strong> — автоматизированной системы управления объектом.</p>',
+        live: 'ЭВМ в АСУ управляет компонентами объекта автоматизации'
+      },
+      vu: {
+        title: 'ВУ',
+        html: '<p><strong>Внешние устройства</strong>: измерительная аппаратура (датчики, АЦП) и каналы ввода данных в ЭВМ.</p>',
+        live: 'ВУ — измерительная и управляющая аппаратура АСУ'
+      },
+      act: {
+        title: 'Управление',
+        html: '<p>По результатам обработки ЭВМ вырабатывает <strong>управляющее воздействие</strong> на объект через исполнительные ВУ.</p>',
+        live: 'ЭВМ → управляющее воздействие на объект'
+      }
+    }, 'evm', '.aps-node');
+
+    bindAps('.slide-aps-kinds-interactive', 'apsKindsPanel', 'apsKindsLive', {
+      uni: {
+        title: 'Универсальные',
+        html: '<p>Все ЭВМ в АСУ делят на <strong>универсальные</strong> и специализированные. В теме 5 — применение универсальных ЭВМ.</p>',
+        live: 'в АСУ: универсальные и специализированные ЭВМ · здесь — универсальные'
+      },
+      spec: {
+        title: 'Специализированные',
+        html: '<p><strong>Специализированные</strong> ЭВМ заточены под конкретные задачи управления. В этой теме — не основной предмет разбора.</p>',
+        live: 'специализированные ЭВМ — под конкретную задачу управления'
+      }
+    }, 'uni', null);
+
+    bindAps('.slide-aps-uni-interactive', 'apsUniPanel', 'apsUniLive', {
+      not: {
+        title: 'Не целевые',
+        html: '<p>Универсальные ЭВМ <strong>не предназначены специально</strong> для построения автоматизированных систем.</p>',
+        live: 'универсальные ЭВМ не предназначены специально для построения АСУ'
+      },
+      fit: {
+        title: 'Пригодны',
+        html: '<p>Они в <strong>разной степени</strong> пригодны для целей АСУ — зависит от архитектуры и интерфейсов.</p>',
+        live: 'пригодны для АСУ в разной степени'
+      },
+      ok: {
+        title: 'Нет барьера',
+        html: '<p>Не существует <strong>непреодолимых технических трудностей</strong> для использования любой ЭВМ в составе АСУ.</p>',
+        live: 'нет непреодолимых трудностей стыковки ЭВМ с АСУ'
+      },
+      any: {
+        title: 'Любая ЭВМ',
+        html: '<p>В принципе <strong>любую</strong> универсальную ЭВМ можно включить в автоматизированную систему.</p>',
+        live: 'любую ЭВМ в принципе можно включить в АСУ'
+      }
+    }, 'not', '.aps-node');
+
+    bindAps('.slide-aps-pick-interactive', 'apsPickPanel', 'apsPickLive', {
+      vu: {
+        title: '1 · ВУ',
+        html: '<p>Гибкость взаимодействия с <strong>нестандартными внешними устройствами</strong> — измерительной и управляющей аппаратурой АСУ.</p>',
+        live: 'гибкость взаимодействия с нестандартными внешними устройствами (ВУ)'
+      },
+      speed: {
+        title: '2 · Мощность',
+        html: '<p>Соответствие <strong>вычислительной мощности</strong> ЭВМ и требуемой <strong>скорости обработки</strong> информации в ходе эксперимента.</p>',
+        live: 'мощность ЭВМ ↔ скорость обработки в ходе эксперимента'
+      },
+      mem: {
+        title: '3 · Память',
+        html: '<p>Необходимый объём <strong>запоминающих устройств</strong> для накопления данных и оперативной обработки.</p>',
+        live: 'объём ЗУ: накопление данных + оперативная обработка'
+      }
+    }, 'vu', null);
+
+    bindAps('.slide-aps-trend-interactive', 'apsTrendPanel', 'apsTrendLive', {
+      arch: {
+        title: 'Архитектура',
+        html: '<p>Архитектура современных ЭВМ допускает сравнительно простое взаимодействие с <strong>большим количеством ВУ</strong>, в том числе нестандартных.</p>',
+        live: 'современные ЭВМ сравнительно просто стыкуются с большим числом ВУ'
+      },
+      fast: {
+        title: 'Быстродействие',
+        html: '<p>Основные тенденции: <strong>увеличение быстродействия</strong> — всё лучше закрывает критерий мощности/скорости.</p>',
+        live: 'тенденция: рост быстродействия ЭВМ'
+      },
+      ram: {
+        title: 'ОЗУ',
+        html: '<p><strong>Расширение объёмов ОЗУ</strong> удовлетворяет критерию объёма запоминающих устройств.</p>',
+        live: 'тенденция: расширение объёмов оперативной памяти (ОЗУ)'
+      },
+      fam: {
+        title: 'Семейства',
+        html: '<p>Характерная особенность: ЭВМ образуют <strong>программно совместимые семейства</strong>.</p>',
+        live: 'современные ЭВМ — программно совместимые семейства'
+      }
+    }, 'arch', '.aps-node');
+  })();
+
+  /* ===== Lecture 12: ПЛК (тема 6) ===== */
+  (() => {
+    const bindPlk = (slideSel, panelId, liveId, info, defaultKey, useNodes) => {
+      const slide = document.querySelector(slideSel);
+      if (!slide) return;
+      const panel = document.getElementById(panelId);
+      const live = liveId ? document.getElementById(liveId) : null;
+      const show = (key) => {
+        const data = info[key] || info[defaultKey];
+        if (!data) return;
+        if (panel) panel.innerHTML = `<h3>${data.title}</h3>${data.html}`;
+        if (live && data.live) live.textContent = data.live;
+        slide.querySelectorAll('.app-purpose-card').forEach((b) => {
+          b.classList.toggle('active', b.dataset.info === key);
+        });
+        if (useNodes) {
+          slide.querySelectorAll('.plk-node').forEach((n) => {
+            n.classList.toggle('is-on', n.dataset.info === key);
+          });
+        }
+        const views = slide.querySelectorAll('.em-ac-view');
+        if (views.length) {
+          views.forEach((g) => {
+            g.classList.toggle('is-on', g.getAttribute('data-view') === key);
+          });
+        }
+      };
+      slide.addEventListener('click', (e) => {
+        const el = e.target.closest('.plk-node, .app-purpose-card');
+        if (!el?.dataset.info) return;
+        e.stopPropagation();
+        show(el.dataset.info);
+      });
+      show(defaultKey);
+    };
+
+    bindPlk('.slide-plk-def-interactive', 'plkDefPanel', 'plkDefLive', {
+      name: {
+        title: 'ПЛК',
+        html: '<p>Программируемый логический контроллер (ПЛК), международное название <strong>PLC</strong> — programmable logic controller.</p>',
+        live: 'ПЛК (PLC) — программируемый логический контроллер'
+      },
+      mp: {
+        title: 'Микропроцессор',
+        html: '<p>ПЛК — <strong>микропроцессорное устройство</strong> для работы с информацией объекта и выработки команд.</p>',
+        live: 'ПЛК — микропроцессорное устройство'
+      },
+      obj: {
+        title: 'Объект',
+        html: '<p>С объекта управления поступает информация: её нужно собрать, преобразовать, обработать и хранить.</p>',
+        live: 'информация поступает с объекта управления'
+      },
+      cmd: {
+        title: 'Команды',
+        html: '<p>По результатам обработки ПЛК вырабатывает <strong>команды управления</strong> на объект.</p>',
+        live: 'ПЛК вырабатывает команды управления'
+      }
+    }, 'name', true);
+
+    bindPlk('.slide-plk-fn-interactive', 'plkFnPanel', 'plkFnLive', {
+      in: {
+        title: 'Сбор',
+        html: '<p>ПЛК предназначен для <strong>сбора</strong> информации с объекта управления.</p>',
+        live: 'сбор информации с объекта управления'
+      },
+      conv: {
+        title: 'Преобразование',
+        html: '<p><strong>Преобразование</strong> сигналов (в т. ч. в цифровой вид) для дальнейшей обработки.</p>',
+        live: 'преобразование информации с объекта'
+      },
+      proc: {
+        title: 'Обработка',
+        html: '<p><strong>Обработка</strong> по заложенной логике / программе управления.</p>',
+        live: 'обработка информации по программе ПЛК'
+      },
+      mem: {
+        title: 'Хранение',
+        html: '<p><strong>Хранение</strong> данных и состояний в памяти контроллера.</p>',
+        live: 'хранение информации в памяти ПЛК'
+      },
+      out: {
+        title: 'Команды',
+        html: '<p>Выработка <strong>команд управления</strong> на исполнительные устройства объекта.</p>',
+        live: 'выработка команд управления'
+      }
+    }, 'in', true);
+
+    bindPlk('.slide-plk-use-interactive', 'plkUsePanel', 'plkUseLive', {
+      loc: {
+        title: 'Локальные',
+        html: '<p>ПЛК широко используют в <strong>локальных</strong> системах автоматики: станки, конвейеры и т. п.</p>',
+        live: 'локальные системы автоматики: станки, конвейеры и т. п.'
+      },
+      dist: {
+        title: 'Распределённые',
+        html: '<p>Также в <strong>распределённых</strong> системах управления — для сбора и обработки информации.</p>',
+        live: 'распределённые системы: сбор и обработка информации'
+      }
+    }, 'loc', false);
+
+    bindPlk('.slide-plk-hist-interactive', 'plkHistPanel', 'plkHistLive', {
+      split: {
+        title: 'Разделение',
+        html: '<p>На начальном этапе развития микропроцессорных контроллеров было чёткое разделение на <strong>PLC</strong> и <strong>RTU</strong>.</p>',
+        live: 'на начальном этапе было чёткое разделение на PLC и RTU'
+      },
+      plc: {
+        title: 'PLC',
+        html: '<p><strong>PLC</strong> — для локального управления, с широкими вычислительными возможностями выработки команд.</p>',
+        live: 'PLC: локальное управление · широкие вычисления'
+      },
+      rtu: {
+        title: 'RTU',
+        html: '<p><strong>RTU</strong> (remote terminal unit) — удалённое оконечное устройство; в распределённых системах — телемеханика контролируемого пункта.</p>',
+        live: 'RTU: удалённое оконечное · телемеханика КП'
+      },
+      now: {
+        title: 'Сейчас',
+        html: '<p>Сегодня границы размыты: современные ПЛК часто закрывают и локальные, и сетевые задачи.</p>',
+        live: 'сегодня ПЛК часто закрывают и локальные, и сетевые задачи'
+      }
+    }, 'split', true);
+
+    bindPlk('.slide-plk-plc-interactive', 'plkPlcPanel', 'plkPlcLive', {
+      local: {
+        title: 'Локально',
+        html: '<p>Programmable logic controller предназначался для <strong>локального управления</strong>.</p>',
+        live: 'PLC предназначался для локального управления'
+      },
+      cpu: {
+        title: 'Вычисления',
+        html: '<p>Имел <strong>широкие вычислительные возможности</strong> для выработки команд управления.</p>',
+        live: 'PLC: широкие вычислительные возможности'
+      },
+      cmd: {
+        title: 'Команды',
+        html: '<p>Главный результат работы — <strong>команды управления</strong> объектом на месте.</p>',
+        live: 'PLC вырабатывает команды управления объектом'
+      }
+    }, 'local', true);
+
+    bindPlk('.slide-plk-rtu-interactive', 'plkRtuPanel', 'plkRtuLive', {
+      what: {
+        title: 'RTU',
+        html: '<p><strong>RTU</strong> — remote terminal unit («удалённое оконечное устройство»); в распределённых системах — устройство телемеханики контролируемого пункта.</p>',
+        live: 'RTU — remote terminal unit · удалённое оконечное устройство'
+      },
+      sense: {
+        title: 'Датчики',
+        html: '<p>RTU собирали информацию с <strong>датчиков</strong> на контролируемом пункте.</p>',
+        live: 'RTU: сбор информации с датчиков'
+      },
+      pack: {
+        title: 'Пакеты',
+        html: '<p>Преобразование данных в <strong>пакеты цифровых каналов связи</strong> к центру.</p>',
+        live: 'данные → пакеты цифровых каналов связи'
+      },
+      back: {
+        title: 'Обратно',
+        html: '<p>Обратное преобразование <strong>управляющих команд из центра</strong> для местного исполнения. Сильная сторона — системы связи.</p>',
+        live: 'команды из центра → местное исполнение · сильная сторона: связь'
+      }
+    }, 'what', true);
+
+    bindPlk('.slide-plk-comp-interactive', 'plkCompPanel', 'plkCompLive', {
+      base: {
+        title: 'База',
+        html: '<p>Обычно ПЛК состоит из <strong>базы (шасси)</strong>, на которую устанавливают модули в зависимости от задачи.</p>',
+        live: 'ПЛК: база (шасси), на неё ставят модули под задачу'
+      },
+      psu: {
+        title: 'БП',
+        html: '<p><strong>Блок питания</strong> — встроен в базу или ставится отдельно. Обычно сеть ~220 В; иногда резервная батарея при пропадании питания.</p>',
+        live: 'БП: в базе или отдельно · ~220 В · иногда батарея'
+      },
+      cpu: {
+        title: 'ЦПУ',
+        html: '<p>Модуль <strong>центрального процессора</strong> ставят на базу (обычно после БП) — выполняет программу и выдаёт команды.</p>',
+        live: 'ЦПУ — центральный процессор на базе'
+      },
+      io: {
+        title: 'Ввод/вывод',
+        html: '<p>Модули <strong>ввода/вывода</strong> связывают ПЛК с датчиками и исполнительными механизмами.</p>',
+        live: 'модули ВВ: датчики и исполнительные механизмы'
+      },
+      com: {
+        title: 'Связь',
+        html: '<p>Специализированные модули: <strong>Ethernet</strong>, дополнительные порты последовательного обмена.</p>',
+        live: 'спецмодули: Ethernet · последовательные порты'
+      },
+      typ: {
+        title: 'Обычно',
+        html: '<p>Чаще всего — <strong>один ЦПУ</strong>, остальные слоты заполняют модулями ввода/вывода.</p>',
+        live: 'обычно один ЦПУ, остальные — модули ввода/вывода'
+      }
+    }, 'base', true);
+
+    bindPlk('.slide-plk-fig-interactive', 'plkFigPanel', 'plkFigLive', {
+      bat: {
+        title: 'Батарея',
+        html: '<p><strong>Аккумуляторная батарея</strong> — резерв питания при пропадании сети ~220 В.</p>',
+        live: 'аккумуляторная батарея — резерв при пропаже сети'
+      },
+      psu: {
+        title: 'Блок питания',
+        html: '<p><strong>Блок питания</strong> питает модули от сети <strong>~220 В</strong>. Может быть встроен в базу или ставиться отдельно.</p>',
+        live: 'блок питания · вход ~220 В'
+      },
+      cpu: {
+        title: 'ЦПУ',
+        html: '<p><strong>Центральное процессорное устройство</strong> — выполняет программу и вырабатывает команды управления.</p>',
+        live: 'ЦПУ — центральное процессорное устройство'
+      },
+      ind: {
+        title: 'Индикация',
+        html: '<p>На ЦПУ — блок <strong>индикации</strong> (состояние, режимы, диагностика).</p>',
+        live: 'индикация на модуле ЦПУ'
+      },
+      ports: {
+        title: 'Порты связи',
+        html: '<p>На ЦПУ — <strong>порты связи</strong> для обмена с другими устройствами и сетями.</p>',
+        live: 'порты связи на модуле ЦПУ'
+      },
+      slot: {
+        title: 'Слоты',
+        html: '<p>В слоты расширения ставят <strong>модули ввода/вывода</strong> или дополнительные средства связи (число модулей — по задаче).</p>',
+        live: 'слоты: модули ВВ или дополнительные средства связи'
+      },
+      board: {
+        title: 'Плата',
+        html: '<p><strong>Плата со слотами расширения</strong> — общая база (шасси), на которую устанавливают все модули.</p>',
+        live: 'плата со слотами расширения — база для модулей'
+      }
+    }, 'bat', true);
+
+    bindPlk('.slide-plk-mod-interactive', 'plkModPanel', 'plkModLive', {
+      psu: {
+        title: 'БП',
+        html: '<p>Блок питания может быть встроен в базу или ставиться отдельно. Обычно питается от сети <strong>~220 В</strong>; иногда есть резервная батарея.</p>',
+        live: 'блок питания: в базе или отдельно · обычно сеть ~220 В'
+      },
+      cpu: {
+        title: 'ЦПУ',
+        html: '<p>Модуль <strong>центрального процессора</strong> устанавливают на базу после блока питания.</p>',
+        live: 'ЦПУ ставят на базу после блока питания'
+      },
+      io: {
+        title: 'Ввод/вывод',
+        html: '<p>Модули ввода/вывода — для связи с <strong>датчиками</strong> и <strong>исполнительными механизмами</strong>.</p>',
+        live: 'ВВ: связь с датчиками и исполнительными механизмами'
+      },
+      com: {
+        title: 'Спец.',
+        html: '<p>Специализированные модули: связь по <strong>Ethernet</strong>, дополнительные порты последовательного обмена.</p>',
+        live: 'спецмодули: Ethernet и последовательный обмен'
+      }
+    }, 'psu', false);
+
+    bindPlk('.slide-plk-exp-interactive', 'plkExpPanel', 'plkExpLive', {
+      one: {
+        title: 'Обычно',
+        html: '<p>Обычно используют <strong>один</strong> модуль ЦПУ, а остальные слоты — модули ввода/вывода.</p>',
+        live: 'обычно один модуль ЦПУ, остальные — ввод/вывод'
+      },
+      hot: {
+        title: 'Горячий резерв',
+        html: '<p>В некоторых ПЛК можно поставить <strong>несколько ЦПУ</strong> для «горячего» резервирования.</p>',
+        live: 'несколько ЦПУ — для горячего резервирования'
+      },
+      slave: {
+        title: 'Рабы',
+        html: '<p>Чтобы увеличить число модулей ВВ, добавляют ЦПУ-<strong>рабы</strong>: мастер делает основную обработку, рабы обслуживают ввод/вывод.</p>',
+        live: 'ЦПУ-рабы обслуживают модули ввода/вывода'
+      },
+      mos: {
+        title: 'MOSCAD',
+        html: '<p>Пример <strong>MOSCAD</strong>: на один ЦПУ — до 15 модулей; можно добавить до 15 ЦПУ-рабов, каждый ещё с 15 модулями ВВ.</p>',
+        live: 'MOSCAD: 15 модулей на ЦПУ · до 15 ЦПУ-рабов × 15 ВВ'
+      }
+    }, 'one', false);
+
+    bindPlk('.slide-plk-cpu-interactive', 'plkCpuPanel', 'plkCpuLive', {
+      like: {
+        title: 'Как ПК',
+        html: '<p>Модуль ЦПУ очень похож на персональный компьютер — по сути, <strong>специализированный компьютер</strong>.</p>',
+        live: 'модуль ЦПУ очень похож на персональный компьютер'
+      },
+      os: {
+        title: 'ОС РВ',
+        html: '<p>У него своя <strong>операционная система реального времени</strong> (ОС РВ) для сбора и обработки данных «вовремя».</p>',
+        live: 'своя ОС реального времени для сбора и обработки данных'
+      },
+      job: {
+        title: 'Задача',
+        html: '<p>Назначение — <strong>сбор и обработка данных в реальном времени</strong>.</p>',
+        live: 'сбор и обработка данных в реальном времени'
+      },
+      mb: {
+        title: 'Плата',
+        html: '<p>В основе — <strong>материнская плата</strong> с процессором, памятью, часами, портами и шиной к модулям.</p>',
+        live: 'внутри — материнская плата со всеми узлами ЦПУ'
+      }
+    }, 'like', true);
+
+    bindPlk('.slide-plk-mb-interactive', 'plkMbPanel', 'plkMbLive', {
+      mpu: {
+        title: 'МП',
+        html: '<p>На плате — <strong>микропроцессор</strong>: выполняет программу управления.</p>',
+        live: 'микропроцессор — «мозг» модуля ЦПУ'
+      },
+      ram: {
+        title: 'ОЗУ',
+        html: '<p><strong>Оперативное запоминающее устройство</strong> — для текущих данных и переменных.</p>',
+        live: 'ОЗУ — оперативная память модуля ЦПУ'
+      },
+      rom: {
+        title: 'ПЗУ',
+        html: '<p><strong>Постоянное запоминающее устройство</strong> — хранение программы / прошивки.</p>',
+        live: 'ПЗУ — постоянная память (программа / прошивка)'
+      },
+      clk: {
+        title: 'Часы',
+        html: '<p><strong>Часы реального времени</strong> и порты связи с другими контроллерами и периферией.</p>',
+        live: 'часы реального времени + порты связи'
+      },
+      bus: {
+        title: 'Шина',
+        html: '<p><strong>Контроллер шины данных</strong> — для подключения дополнительных модулей ПЛК.</p>',
+        live: 'контроллер шины данных → дополнительные модули ПЛК'
+      },
+      extra: {
+        title: 'Опции',
+        html: '<p>Иногда: <strong>батарея</strong> для часов и памяти при отключении питания; слоты под порты, сопроцессор, доп. ОЗУ.</p>',
+        live: 'опции: батарея резерва · слоты расширения'
+      }
+    }, 'mpu', true);
+
+    bindPlk('.slide-plk-mpu-interactive', 'plkMpuPanel', 'plkMpuLive', {
+      arch: {
+        title: 'Архитектуры',
+        html: '<p>Применяют <strong>ARM, MIPS, PowerPC</strong> и даже <strong>x86</strong> (семейство обычных ПК).</p>',
+        live: 'архитектуры: ARM, MIPS, PowerPC, x86'
+      },
+      perf: {
+        title: 'Мощность',
+        html: '<p>Вычислительная мощность обычно <strong>невысокая</strong>: даже мощные контроллеры — порядка серии <strong>Intel 486</strong>.</p>',
+        live: 'мощность невысокая · ориентир — уровень Intel 486'
+      },
+      prio: {
+        title: 'Приоритет',
+        html: '<p>Важнее <strong>низкое энергопотребление</strong> и <strong>надёжность</strong> платформы: круг задач ПЛК узок, суперскорость не нужна.</p>',
+        live: 'приоритет: энергопотребление и надёжность, не «гонка ГГц»'
+      },
+      prog: {
+        title: 'Программист',
+        html: '<p>Архитектуру и ОС часто знать не нужно — есть утилиты и языки производителя. Важны <strong>таймеры/счётчики</strong> и <strong>ячейки ОЗУ</strong> под данные.</p>',
+        live: 'программисту важны таймеры/счётчики и ячейки ОЗУ'
+      }
+    }, 'arch', false);
+
+    bindPlk('.slide-plk-ram-interactive', 'plkRamPanel', 'plkRamLive', {
+      role: {
+        title: 'Зачем',
+        html: '<p>Как ОЗУ любой ЭВМ: хранение данных для вычислений, работа <strong>ОС ПЛК</strong> и прочая оперативная информация.</p>',
+        live: 'ОЗУ: данные вычислений, работа ОС ПЛК, оперативная информация'
+      },
+      sram: {
+        title: 'SRAM',
+        html: '<p>Чаще всего в ПЛК — <strong>статическая память SRAM</strong> (Static Random Access Memory).</p>',
+        live: 'в ПЛК чаще всего — статическая память SRAM'
+      },
+      bit: {
+        title: 'Триггер',
+        html: '<p>Ячейки на <strong>триггерах</strong>: два устойчивых состояния, переключение по управляющему сигналу — в ячейке хранится <strong>один бит</strong>.</p>',
+        live: 'ячейка на триггерах → два состояния → 1 бит'
+      },
+      pro: {
+        title: 'Плюсы',
+        html: '<p>Высокое <strong>быстродействие</strong> и низкое <strong>энергопотребление</strong>.</p>',
+        live: 'SRAM: высокое быстродействие · низкий ток'
+      },
+      bat: {
+        title: 'Батарея',
+        html: '<p>Состояние ячеек можно держать питанием при очень малом токе — сохранение с помощью <strong>резервной батареи</strong>.</p>',
+        live: 'резервная батарея сохраняет состояние SRAM'
+      },
+      con: {
+        title: 'Минус',
+        html: '<p>Основной минус — довольно <strong>высокая стоимость</strong> такой памяти.</p>',
+        live: 'минус SRAM — относительно высокая стоимость'
+      }
+    }, 'role', true);
+
+    bindPlk('.slide-plk-ram2-interactive', 'plkRam2Panel', 'plkRam2Live', {
+      size: {
+        title: 'Объёмы',
+        html: '<p>Современные ПЛК — до <strong>нескольких десятков мегабайт</strong>; простейшие — несколько <strong>килобайт</strong>.</p>',
+        live: 'современные ПЛК: ОЗУ — единицы…десятки мегабайт'
+      },
+      why: {
+        title: 'Почему мало',
+        html: '<p>Круг задач ПЛК <strong>узкий</strong> — большие объёмы не нужны. При малых объёмах цена ОЗУ почти не критична.</p>',
+        live: 'узкий круг задач → большие объёмы ОЗУ не нужны'
+      },
+      split: {
+        title: 'Деление',
+        html: '<p>ОЗУ делят между <strong>ОС ПЛК</strong> и <strong>программой пользователя</strong> — не вся память доступна программисту.</p>',
+        live: 'ОЗУ: ОС ПЛК + программа пользователя'
+      },
+      svc: {
+        title: 'Служебное',
+        html: '<p>Часть доступной памяти — служебная: таймеры/счётчики, параметры протоколов, переменные ОС. Под данные пользователя может остаться <strong>в разы меньше</strong>.</p>',
+        live: 'служебная память «съедает» часть ОЗУ программиста'
+      }
+    }, 'size', false);
   })();
 
 
