@@ -14628,7 +14628,222 @@
     }
   })();
 
-  /* ===== Lecture 11: аппаратно-программные средства (тема 5) ===== */
+/* ===== Lecture 11: АЦП и ЦАП ===== */
+  (() => {
+    const bindAdc = (slideSel, panelId, liveId, info, defaultKey) => {
+      const slide = document.querySelector(slideSel);
+      if (!slide) return;
+      const panel = document.getElementById(panelId);
+      const live = liveId ? document.getElementById(liveId) : null;
+      const show = (key) => {
+        const data = info[key] || info[defaultKey];
+        if (!data) return;
+        if (panel) panel.innerHTML = `<h3>${data.title}</h3>${data.html}`;
+        if (live && data.live) live.textContent = data.live;
+        slide.querySelectorAll('.app-purpose-card').forEach((b) => {
+          b.classList.toggle('active', b.dataset.info === key);
+        });
+        slide.querySelectorAll('.adc-node').forEach((n) => {
+          n.classList.toggle('is-on', n.dataset.info === key);
+        });
+      };
+      slide.querySelectorAll('.app-purpose-card').forEach((b) => {
+        b.addEventListener('click', () => show(b.dataset.info));
+      });
+      slide.querySelectorAll('.adc-node').forEach((n) => {
+        n.addEventListener('click', () => show(n.dataset.info));
+      });
+      show(defaultKey);
+    };
+
+    bindAdc('.slide-adc-why-interactive', 'adcWhyPanel', 'adcWhyLive', {
+      chain: { title: 'Цепочка', html: '<p>Датчик даёт <strong>аналог</strong>, ЦП работает с <strong>кодами</strong>, ИМ снова нужен аналог — поэтому АЦП и ЦАП <strong>обязательны</strong> в современных АСУ.</p>', live: 'датчик → АЦП → ЦП → ЦАП → ИМ' },
+      adc: { title: 'АЦП', html: '<p><strong>Аналого-цифровой</strong> преобразователь: непрерывный U/I → двоичный код. На схеме — граница «аналог → цифра».</p>', live: 'аналог → код · оцифровка' },
+      cpu: { title: 'ЦП', html: '<p>ПЛК или ЭВМ обрабатывает уже <strong>цифру</strong>: регулятор, логика, уставки — без АЦП к объекту не подключиться.</p>', live: 'ПЛК / ЭВМ · работа с кодами' },
+      dac: { title: 'ЦАП', html: '<p><strong>Цифро-аналоговый</strong> преобразователь: код → U/I для исполнительного механизма. Граница «цифра → аналог».</p>', live: 'код → аналог · на ИМ' }
+    }, 'chain');
+
+    bindAdc('.slide-adc-dac-idea-interactive', 'adcDacIdeaPanel', 'adcDacIdeaLive', {
+      in: { title: 'Вход', html: '<p>На вход — параллельный <strong>двоичный код</strong>. Клик по D3…D0 в демо меняет код и Uвых.</p>', live: 'вход · клик по битам' },
+      out: { title: 'Выход', html: '<p>Аналоговое <strong>напряжение или ток</strong>, пропорциональное коду: Uвых = Uоп · код / 2<sup>N</sup>.</p>', live: 'Uвых = Uоп · код / 2ᴺ' },
+      ref: { title: 'Опора', html: '<p><strong>Uоп</strong> задаёт полный масштаб шкалы. Без стабильной опоры нет точности преобразования.</p>', live: 'Uоп = полный масштаб' },
+      bits: { title: 'Разряды', html: '<p>Разрядность <strong>N</strong>: уровней 2<sup>N</sup>, шагов 2<sup>N</sup>−1. В демо N=4 → код 0…15.</p>', live: 'N=4 · код 0…15' }
+    }, 'in');
+
+    (() => {
+      const slide = document.querySelector('.slide-adc-dac-idea-interactive');
+      if (!slide) return;
+      const N = 4;
+      const Uref = 16;
+      let bits = [1, 0, 1, 0];
+      const codeOf = () => bits.reduce((a, b, i) => a + (b << (N - 1 - i)), 0);
+      const paint = () => {
+        const code = codeOf();
+        const u = (Uref * code) / (1 << N);
+        bits.forEach((v, i) => {
+          const g = document.getElementById('dacIdeaBit' + (N - 1 - i));
+          if (!g) return;
+          const rect = g.querySelector('rect');
+          const text = g.querySelector('text');
+          const on = !!v;
+          if (rect) {
+            rect.setAttribute('fill', on ? '#dbeafe' : '#eff6ff');
+            rect.setAttribute('stroke', on ? '#1d4ed8' : '#94a3b8');
+          }
+          if (text) {
+            text.textContent = 'D' + (N - 1 - i) + '=' + v;
+            text.setAttribute('fill', on ? '#1e3a8a' : '#64748b');
+          }
+        });
+        const lab = document.getElementById('dacIdeaCodeLabel');
+        if (lab) lab.textContent = 'код ' + bits.join('') + '₂ = ' + code;
+        const uEl = document.getElementById('dacIdeaUout');
+        if (uEl) uEl.textContent = String(u);
+        const bar = document.getElementById('dacIdeaBar');
+        if (bar) {
+          const hMax = 176;
+          const h = Math.max(2, (u / Uref) * hMax);
+          bar.setAttribute('height', String(h));
+          bar.setAttribute('y', String(72 + (hMax - h)));
+        }
+        const live = document.getElementById('adcDacIdeaLive');
+        if (live) live.textContent = 'код ' + code + ' → Uвых = ' + u + ' (Uоп=' + Uref + ')';
+      };
+      slide.querySelectorAll('.dac-idea-bit').forEach((g) => {
+        g.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const bi = Number(g.dataset.bit);
+          const idx = N - 1 - bi;
+          bits[idx] = bits[idx] ? 0 : 1;
+          paint();
+        });
+      });
+      paint();
+    })();
+
+
+    bindAdc('.slide-adc-dac-weight-interactive', 'adcDacWeightPanel', 'adcDacWeightLive', {
+      oa: { title: 'ОУ', html: '<p>Инвертирующий ОУ суммирует токи весовых ветвей. <var>U</var><sub>вых</sub> = −<var>U</var><sub>оп</sub>·(<var>R</var><sub>ос</sub>/<var>R</var>)·Σ (<var>D</var><sub>i</sub>/2<sup>i</sup>). <strong>Rос</strong> — резистор в цепи обратной связи.</p>', live: 'ОУ · сумматор · Rос / R' },
+      w: { title: 'Веса', html: '<p>Резисторы <strong>R, 2R, 4R…</strong>: ток ветви тем больше, чем меньше R. Старший разряд (меньший R) даёт больший вклад в Uвых.</p>', live: 'R · 2R · 4R — веса 4 : 2 : 1' },
+      sw: { title: 'Ключи', html: '<p>При <var>D</var><sub>i</sub>=1 ключ подаёт Uоп в ветвь; при 0 — ветвь на «земле» / отключена, тока нет.</p>', live: 'Di=1 → ток · Di=0 → тишина' },
+      lim: { title: 'Минус', html: '<p>Нужен точный разброс сопротивлений до 2<sup>N−1</sup> раз. При больших N это трудно → схема <strong>R–2R</strong> с одинаковыми номиналами.</p>', live: 'трудно R : 2ⁿR → дальше R–2R' }
+    }, 'oa');
+
+    bindAdc('.slide-adc-dac-r2r-interactive', 'adcDacR2rPanel', 'adcDacR2rLive', {
+      lad: { title: 'Лестница', html: '<p>Матрица из резисторов только двух номиналов <strong>R</strong> и <strong>2R</strong> — технологически проще.</p>', live: 'лестница R–2R' },
+      cur: { title: 'Ток', html: '<p>Суммарный ток обратной связи пропорционален коду.</p>', live: 'Iос ~ код' },
+      out: { title: 'Выход', html: '<p><var>U</var><sub>вых</sub> = −<var>I</var><sub>ос</sub>·<var>R</var><sub>ос</sub>. Абсолютное значение R сокращается — важны <strong>отношения</strong>.</p>', live: 'Uвых = −Iос · Rос' },
+      plus: { title: 'Плюс', html: '<p>Чем выше <strong>идентичность</strong> звеньев, тем точнее преобразование.</p>', live: 'идентичность звеньев' }
+    }, 'lad');
+
+    bindAdc('.slide-adc-dac-param-interactive', 'adcDacParamPanel', 'adcDacParamLive', {
+      n: { title: 'Разрядность', html: '<p><strong>N</strong> — число двоичных разрядов. Диапазон U<sub>min</sub>…U<sub>max</sub>. Абсолютная погрешность — отклонение в конечной точке шкалы.</p>', live: 'N разрядов · конец шкалы' },
+      step: { title: 'Шаг', html: '<p>Шаг квантования ΔU = U<sub>max</sub>/(2<sup>N</sup>−1). Относительная разрешающая способность 1/(2<sup>N</sup>−1).</p>', live: 'ΔU = Umax / (2ᴺ−1)' },
+      nl: { title: 'Нелинейность', html: '<p><strong>Интегральная</strong> — макс. отклонение от идеальной прямой. <strong>Дифференциальная</strong> — макс. разность двух соседних шагов.</p>', live: 'интегральная · дифференциальная' },
+      dyn: { title: 'Динамика', html: '<p><var>t</var><sub>уст</sub> — от смены кода min→max до заданной точности на выходе. <var>f</var><sub>пр</sub> — макс. частота смены кода.</p>', live: 'tуст · fпр' }
+    }, 'n');
+
+    bindAdc('.slide-adc-idea-interactive', 'adcIdeaPanel', 'adcIdeaLive', {
+      in: { title: 'Вход', html: '<p>На вход — аналоговый сигнал (напряжение/ток в диапазоне модуля).</p>', live: 'вход · U / I' },
+      out: { title: 'Выход', html: '<p>На выходе — цифровой код для ЦП / шины ПЛК.</p>', live: 'выход · код' },
+      mir: { title: 'Зеркало', html: '<p>АЦП — <strong>обратная</strong> роль ЦАП: непрерывное → дискретное по уровню и времени.</p>', live: 'АЦП = обратный ЦАП' },
+      steps: { title: 'Этапы', html: '<p>1) выборка по времени · 2) квантование по уровню · 3) кодирование в двоичный код.</p>', live: 'выборка → квантование → код' }
+    }, 'in');
+
+
+    bindAdc('.slide-adc-types-interactive', 'adcTypesPanel', 'adcTypesLive', {
+      par: { title: 'Параллельные', html: '<p><strong>Параллельные</strong> (flash) — сравнение сразу со всеми уровнями. Максимально быстрые; дорого по числу компараторов.</p>', live: 'параллельные · flash · очень быстро' },
+      ser: { title: 'Последовательные', html: '<p>Три ветки: <strong>счёт</strong> (и следящие), <strong>последовательное приближение (SAR)</strong>, <strong>интегрирующие</strong> (в т.ч. сигма-дельта).</p>', live: 'последовательные · счёт · SAR · интегрирующие' },
+      sar: { title: 'SAR', html: '<p><strong>Последовательного приближения</strong> — бит за битом за N тактов. Компромисс скорость / сложность; разберём отдельно.</p>', live: 'SAR · N сравнений' },
+      sig: { title: 'ΣΔ', html: '<p><strong>Сигма-дельта</strong> — ветвь интегрирующих АЦП. Высокая точность при умеренной скорости; часто в измерительных каналах.</p>', live: 'сигма-дельта · интегрирующие' },
+      cnt: { title: 'Счёт', html: '<p><strong>Последовательного счёта</strong> — наращивают код, пока Uцап не догонит Uвх. Просто, но медленно (до 2ᴺ тактов).</p>', live: 'счёт · до 2ᴺ тактов' },
+      trk: { title: 'Следящие', html: '<p><strong>Следящие</strong> — развитие счётного АЦП: код следит за медленным изменением входа вверх/вниз.</p>', live: 'следящие · вокруг счётного' },
+      int: { title: 'Интегрирующие', html: '<p><strong>Интегрирующие</strong> накапливают вход за интервал — хорошо подавляют шум. К ним относят и сигма-дельта.</p>', live: 'интегрирующие · накопление' },
+      hyb: { title: 'Посл.-парал.', html: '<p><strong>Последовательно-параллельные</strong> — гибрид: часть разрядов параллельно, часть последовательно.</p>', live: 'посл.-параллельные · гибрид' }
+    }, 'par');
+
+    bindAdc('.slide-adc-flash-interactive', 'adcFlashPanel', 'adcFlashLive', {
+      cmp: { title: 'Компараторы', html: '<p>ОУ в режиме <strong>компараторов</strong> сравнивают Uвх с индивидуальной опорой.</p>', live: 'компараторы на ОУ' },
+      ref: { title: 'Опора', html: '<p>Опоры задаёт <strong>резистивная матрица</strong> от Uоп: U<sub>n</sub> = Uоп·n/N.</p>', live: 'делитель опор' },
+      code: { title: 'Код', html: '<p>На выходе — код Джонсона (термометровый), далее обычно в двоичный.</p>', live: 'код Джонсона' },
+      trade: { title: 'Оценка', html: '<p>Один такт сравнения — очень быстро; для N бит нужно порядка <strong>2<sup>N</sup>−1</strong> компараторов.</p>', live: 'быстро · дорого по железу' }
+    }, 'cmp');
+
+    bindAdc('.slide-adc-count-interactive', 'adcCountPanel', 'adcCountLive', {
+      cnt: { title: 'Счётчик', html: '<p>Тактовые импульсы наращивают параллельный двоичный код.</p>', live: 'счётчик +1' },
+      dac: { title: 'ЦАП', html: '<p>Код превращается в напряжение Uцап.</p>', live: 'код → Uцап' },
+      cmp: { title: 'Компаратор', html: '<p>Пока Uцап &lt; Uвх — счёт идёт; при равенстве — сигнал <strong>Стоп</strong>.</p>', live: 'Стоп при равенстве' },
+      time: { title: 'Время', html: '<p>Макс. время t = 2<sup>N</sup>·t<sub>такт</sub> — <strong>низкое быстродействие</strong> при большой разрядности.</p>', live: 't = 2ᴺ · tтакт' }
+    }, 'cnt');
+
+    bindAdc('.slide-adc-sar-interactive', 'adcSarPanel', 'adcSarLive', {
+      msb: { title: 'Старт', html: '<p>Старший разряд ЦАП ставят в <strong>1</strong>, остальные в 0.</p>', live: 'MSB = 1 · начинаем' },
+      cmp: { title: 'Сравнение', html: '<p>Если Uвх &gt; Uцап — единица подтверждается; иначе сбрасывается.</p>', live: 'Uвх ≟ Uцап' },
+      dec: { title: 'Решение', html: '<p>При Uвх &lt; Uцап последнюю единицу сбрасывают в 0 и переходят к следующему разряду.</p>', live: 'оставить 1 или сбросить в 0' },
+      done: { title: 'Итог', html: '<p>После <strong>N</strong> сравнений — N-разрядный код. Время t = N·t<sub>такт</sub> (быстрее счётчика).</p>', live: 't = N · tтакт' }
+    }, 'msb');
+
+    bindAdc('.slide-adc-param-interactive', 'adcParamPanel', 'adcParamLive', {
+      st: { title: 'Статика', html: '<p>Статика <strong>аналогична ЦАП</strong>: разрядность, диапазон, погрешность, нелинейность.</p>', live: 'статика ≈ как у ЦАП' },
+      fs: { title: 'fд', html: '<p>Макс. частота преобразования ≈ частота <strong>дискретизации</strong> входного сигнала.</p>', live: 'частота дискретизации' },
+      ap: { title: 'Апертура', html: '<p><strong>Апертурное время</strong> — неопределённость «к какому моменту относится выборка». Апертурная неопределённость — случайный разброс этого интервала.</p>', live: 'апертура · неопределённость' },
+      enc: { title: 'Кодирование', html: '<p><strong>Время кодирования</strong> — от импульса запуска до появления устойчивого выходного кода.</p>', live: 'время до появления кода' }
+    }, 'st');
+
+    bindAdc('.slide-adc-plc-interactive', 'adcPlcPanel', 'adcPlcLive', {
+      ai: { title: 'AI', html: '<p>Аналоговый <strong>вход</strong> модуля содержит АЦП. Подробнее — <a href="lecture-13.html">лекция 13</a>.</p>', live: 'AI = вход · АЦП' },
+      ao: { title: 'AO', html: '<p>Аналоговый <strong>выход</strong> содержит ЦАП.</p>', live: 'AO = выход · ЦАП' },
+      res: { title: 'Разрядность', html: '<p>В ПЛК типично <strong>12 / 14 / 16</strong> бит; от N зависят ΔU и шум квантования.</p>', live: '12 / 14 / 16 бит' },
+      ch: { title: 'Канал', html: '<p>Один канал = одна <strong>точка</strong> ВВ; в программе — число (код).</p>', live: 'точка канала ВВ' }
+    }, 'ai');
+
+    /* SAR demo: target code 1010 (10/16) */
+    const sarSlide = document.querySelector('.slide-adc-sar-interactive');
+    if (sarSlide) {
+      const N = 4;
+      const target = 0b1010;
+      let step = 0;
+      let bits = [1, 0, 0, 0];
+      const bitsEl = document.getElementById('adcSarBits');
+      const statusEl = document.getElementById('adcSarStatus');
+      const live = document.getElementById('adcSarLive');
+      const codeOf = (arr) => arr.reduce((a, b, i) => a + (b << (N - 1 - i)), 0);
+      const render = () => {
+        if (bitsEl) bitsEl.textContent = bits.join(' ');
+        const done = step >= N;
+        if (statusEl) {
+          statusEl.textContent = done
+            ? `готово · код ${bits.join('')} · t = N·tтакт`
+            : `шаг ${step + 1} · пробуем бит ${N - step}`;
+        }
+        if (live) {
+          live.textContent = done
+            ? `готово · ${bits.join('')} · быстрее счёта`
+            : `SAR · шаг ${step + 1}/${N}`;
+        }
+      };
+      const reset = () => { step = 0; bits = [1, 0, 0, 0]; render(); };
+      const doStep = () => {
+        if (step >= N) return;
+        const trial = bits.slice();
+        trial[step] = 1;
+        if (codeOf(trial) > target) bits[step] = 0;
+        else bits[step] = 1;
+        step += 1;
+        if (step < N) bits[step] = 1;
+        render();
+      };
+      const btnR = document.getElementById('adcSarReset');
+      const btnS = document.getElementById('adcSarStep');
+      if (btnR) btnR.addEventListener('click', reset);
+      if (btnS) btnS.addEventListener('click', doStep);
+      reset();
+    }
+  })();
+
+``
+
+  /* ===== Lecture 12: аппаратно-программные средства (тема 5) ===== */
   (() => {
     const bindAps = (slideSel, panelId, liveId, info, defaultKey, nodeSel) => {
       const slide = document.querySelector(slideSel);
@@ -14788,7 +15003,7 @@
     }, 'arch', '.aps-node');
   })();
 
-  /* ===== Lecture 12: ПЛК (тема 6) ===== */
+  /* ===== Lecture 13: ПЛК (тема 6) ===== */
   (() => {
     const bindPlk = (slideSel, panelId, liveId, info, defaultKey, useNodes) => {
       const slide = document.querySelector(slideSel);
@@ -15368,7 +15583,7 @@
         html: '<p><strong>Аналоговый выход</strong> — непрерывное управляющее воздействие на объект.</p>',
         live: 'AO: аналоговый выход · непрерывное управление'
       }
-    }, 'pt', false);
+    }, 'pt', true);
 
     bindPlk('.slide-plk-di-interactive', 'plkDiPanel', 'plkDiLive', {
       dry: {
@@ -15554,28 +15769,82 @@
       }
     }, 't1', false);
 
-    bindPlk('.slide-plk-rs232-interactive', 'plkRs232Panel', 'plkRs232Live', {
-      ptp: {
-        title: 'Точка–точка',
-        html: '<p>RS-232 рассчитан на соединение <strong>двух</strong> абонентов — «точка — точка» (point-to-point).</p>',
-        live: 'RS-232: соединение «точка — точка» (point-to-point) двух абонентов'
+    bindPlk('.slide-plk-iface-def-interactive', 'plkIfaceDefPanel', 'plkIfaceDefLive', {
+      def: {
+        title: 'Определение',
+        html: '<p><strong>Интерфейс</strong> — согласованный набор правил и средств, по которым устройства обмениваются данными и сигналами.</p>',
+        live: 'интерфейс — согласованный набор правил и средств обмена данными и сигналами'
       },
-      nine: {
-        title: '9 проводов',
-        html: '<p>Стандарт рассчитан на <strong>девятипроводную</strong> линию; широко применялся для модемов к ПК.</p>',
-        live: 'стандарт: девятипроводная линия (модемы ↔ ПК)'
+      who: {
+        title: 'Участники',
+        html: '<p>Связывает <strong>два</strong> (или более) участника: ПЛК ↔ ПК, ПЛК ↔ панель, ПЛК ↔ модем и т. п.</p>',
+        live: 'участники обмена: устройство A ↔ устройство B'
       },
-      plc: {
-        title: 'В ПЛК',
-        html: '<p>В ПЛК часто используют <strong>не все</strong> сигнальные провода, а только часть.</p>',
-        live: 'в ПЛК часто используют не все линии RS-232'
+      what: {
+        title: 'Физика',
+        html: '<p>Задаёт <strong>электрические уровни</strong>, назначение линий (TD, RD, GND…), разъём и кабель — физический уровень связи.</p>',
+        live: 'физика: уровни сигналов · линии · разъём · кабель'
       },
-      min3: {
-        title: 'Минимум',
-        html: '<p>Часто достаточно <strong>трёхпроводного</strong> соединения: TD, RD и GND (ПЛК↔ПЛК или ПЛК↔ПК).</p>',
-        live: 'минимум: TD · RD · GND (трёхпроводное соединение)'
+      not: {
+        title: 'Протокол',
+        html: '<p>Прикладной <strong>протокол</strong> (Modbus и др.) работает <strong>поверх</strong> интерфейса — это не одно и то же.</p>',
+        live: 'протокол (Modbus…) работает поверх интерфейса'
       }
-    }, 'ptp', true);
+    }, 'def', true);
+
+    bindPlk('.slide-plk-iface-xfer-interactive', 'plkIfaceXferPanel', 'plkIfaceXferLive', {
+      par: {
+        title: 'Параллельные',
+        html: '<p>Биты слова (байта) передаются <strong>одновременно</strong> по нескольким линиям. Высокая скорость на короткой дистанции, много проводов.</p>',
+        live: 'биты слова сразу · много линий · быстро на короткой дистанции'
+      },
+      ser: {
+        title: 'Последовательные',
+        html: '<p>Биты идут <strong>друг за другом</strong> по одной (или двум) линиям. Меньше проводов, больше дальность; типичный пример — RS-232 / RS-485.</p>',
+        live: 'биты по очереди · 1–2 линии · дальше · RS-232 / RS-485'
+      },
+      pser: {
+        title: 'Пар.–посл.',
+        html: '<p>Компромисс: группы бит передаются <strong>параллельно</strong>, а сами группы — <strong>последовательно</strong> во времени.</p>',
+        live: 'внутри блока — параллельно · блоки — по очереди'
+      }
+    }, 'par', false);
+
+    bindPlk('.slide-plk-iface-princ-interactive', 'plkIfacePrincPanel', 'plkIfacePrincLive', {
+      sync: {
+        title: 'Синхронные',
+        html: '<p>Есть общая <strong>тактовая синхронизация</strong> (линия CLK): данные идут непрерывным потоком с привязкой к такту.</p>',
+        live: 'общая тактовая CLK · непрерывный поток данных'
+      },
+      async: {
+        title: 'Асинхронные',
+        html: '<p>Общего такта нет: кадр выделяют <strong>старт- и стоп-битами</strong>; у каждой стороны свой таймер. Так устроен типичный RS-232.</p>',
+        live: 'старт / стоп · свой таймер · типично RS-232'
+      }
+    }, 'sync', false);
+
+    bindPlk('.slide-plk-iface-mode-interactive', 'plkIfaceModePanel', 'plkIfaceModeLive', {
+      dup: {
+        title: 'Дуплекс',
+        html: '<p>Передача <strong>туда и обратно одновременно</strong> (два независимых направления).</p>',
+        live: 'оба направления одновременно'
+      },
+      sim: {
+        title: 'Симплекс',
+        html: '<p>Обмен только в <strong>одну сторону</strong> — передатчик и приёмник зафиксированы.</p>',
+        live: 'только одно направление'
+      },
+      half: {
+        title: 'Полудуплекс',
+        html: '<p>Оба направления возможны, но <strong>по очереди</strong>: в каждый момент передаёт только одна сторона.</p>',
+        live: 'оба направления, но по очереди'
+      },
+      mux: {
+        title: 'Мультиплекс',
+        html: '<p>По одной физической среде передают <strong>несколько логических каналов</strong> (разделение во времени / частоте / кодах).</p>',
+        live: 'много каналов по одной среде'
+      }
+    }, 'dup', false);
 
     // RS-232: клик по сигналу (карточка или линия на схеме)
     (() => {
@@ -15650,6 +15919,52 @@
       show('td');
     })();
 
+    bindPlk('.slide-plk-rs232nrz-interactive', 'plkRs232nrzPanel', 'plkRs232nrzLive', {
+      nrz: {
+        title: 'NRZ',
+        html: '<p>Информация передаётся <strong>двоичным сигналом</strong> с двумя уровнями напряжения — код <strong>NRZ</strong> (Non-Return-to-Zero, без возврата к нулю).</p>',
+        live: 'код NRZ: два уровня напряжения · без возврата к нулю'
+      },
+      zero: {
+        title: '«0»',
+        html: '<p>Логическому <strong>«0»</strong> соответствует <strong>положительное</strong> напряжение: от <strong>+5 до +15 В</strong> на выходе передатчика.</p>',
+        live: 'логический «0» → +5…+15 В (передатчик)'
+      },
+      one: {
+        title: '«1»',
+        html: '<p>Логической <strong>«1»</strong> соответствует <strong>отрицательное</strong> напряжение: от <strong>−5 до −15 В</strong> на выходе передатчика.</p>',
+        live: 'логическая «1» → −5…−15 В (передатчик)'
+      },
+      wire: {
+        title: 'Провод',
+        html: '<p>Сигнал идёт <strong>по проводам</strong> между передатчиком и приёмником: два устойчивых уровня напряжения кодируют биты.</p>',
+        live: 'по проводам · двоичный сигнал двумя уровнями напряжения'
+      }
+    }, 'nrz', false);
+
+    bindPlk('.slide-plk-rs232time-interactive', 'plkRs232timePanel', 'plkRs232timeLive', {
+      frame: {
+        title: 'Кадр',
+        html: '<p>Асинхронный кадр: линия в покое на <strong>«1»</strong> (Idle), затем <strong>Start → Data → Stop</strong>, снова Idle.</p>',
+        live: 'кадр: Idle → Start → Data (LSB…MSB) → Stop → Idle'
+      },
+      start: {
+        title: 'Start',
+        html: '<p>Бит <strong>Start</strong> всегда <strong>«0»</strong>: переход с Idle «1» → «0» сообщает приёмнику о начале кадра.</p>',
+        live: 'Start = «0» · синхронизирует начало кадра'
+      },
+      data: {
+        title: 'Data',
+        html: '<p>Поле <strong>Data</strong>: биты данных, обычно от <strong>LSB</strong> (младший) к <strong>MSB</strong> (старший). Длительность одного бита = 1 / скорость (бод).</p>',
+        live: 'Data: LSB → MSB · длительность бита = 1/бод'
+      },
+      stop: {
+        title: 'Stop',
+        html: '<p>Бит(ы) <strong>Stop</strong> всегда <strong>«1»</strong>: конец кадра; линия возвращается (или остаётся) в Idle.</p>',
+        live: 'Stop = «1» · конец кадра · далее Idle'
+      }
+    }, 'frame', false);
+
     bindPlk('.slide-plk-rs232lim-interactive', 'plkRs232limPanel', 'plkRs232limLive', {
       noise: {
         title: 'Помехи',
@@ -15672,6 +15987,442 @@
         live: 'бод — частота канала · не тождественен полезным бит/с'
       }
     }, 'noise', true);
+
+    bindPlk('.slide-plk-rs485-interactive', 'plkRs485Panel', 'plkRs485Live', {
+      multi: {
+        title: 'Multidrop',
+        html: '<p>RS-485 рассчитан на соединение до <strong>32</strong> абонентов с равными правами на передачу и приём — линия <strong>multidrop</strong>.</p>',
+        live: 'RS-485: до 32 абонентов · multidrop · равные права на передачу и приём'
+      },
+      eq: {
+        title: 'Равные',
+        html: '<p>Все абоненты имеют <strong>равные права</strong>: каждый может и передавать, и принимать данные.</p>',
+        live: 'равные права: каждый абонент — и TX, и RX'
+      },
+      pair: {
+        title: 'Витая пара',
+        html: '<p>Сигналы передаются как <strong>разность потенциалов</strong> между двумя проводами витой пары (<strong>A</strong> и <strong>B</strong>).</p>',
+        live: 'витая пара A · B · сигнал = разность потенциалов'
+      },
+      half: {
+        title: 'Полудуплекс',
+        html: '<p>Используется <strong>одна</strong> пара проводов, поэтому канал <strong>полудуплексный</strong>: направления по очереди.</p>',
+        live: 'одна пара · полудуплекс · направления по очереди'
+      }
+    }, 'multi', false);
+
+    bindPlk('.slide-plk-rs485lvl-interactive', 'plkRs485lvlPanel', 'plkRs485lvlLive', {
+      diff: {
+        title: 'Разность',
+        html: '<p>Приёмник обрабатывает <strong>разность потенциалов</strong> между проводами, а не напряжение относительно «земли». Чувствительность — <strong>±200 мВ</strong>.</p>',
+        live: 'приёмник смотрит разность потенциалов A−B · чувствительность ±200 мВ'
+      },
+      one: {
+        title: '«1»',
+        html: '<p>Логическая <strong>«1»</strong>: на проводе <strong>A = +5 В</strong>, на <strong>B = −5 В</strong> (пример из рис. 6.7).</p>',
+        live: '«1»: A = +5 В · B = −5 В'
+      },
+      zero: {
+        title: '«0»',
+        html: '<p>Логический <strong>«0»</strong>: на проводе <strong>A = −5 В</strong>, на <strong>B = +5 В</strong>.</p>',
+        live: '«0»: A = −5 В · B = +5 В'
+      }
+    }, 'diff', false);
+
+    bindPlk('.slide-plk-rs485bus-interactive', 'plkRs485busPanel', 'plkRs485busLive', {
+      bus: {
+        title: 'Шина',
+        html: '<p>Все входы <strong>A</strong> соединяют одной линией, все <strong>B</strong> — другой (рис. 6.8).</p>',
+        live: 'все A — на одну шину · все B — на другую'
+      },
+      wire: {
+        title: 'Соединение',
+        html: '<p>Одноимённые провода подключают к <strong>одноимённым</strong> входам приёмников: A→A, B→B.</p>',
+        live: 'одноимённые провода → одноимённые входы приёмников'
+      },
+      n32: {
+        title: '1…32',
+        html: '<p>На общей двухпроводной шине — до <strong>32</strong> абонентов в одном сегменте.</p>',
+        live: '1…32 абонента параллельно на общей шине'
+      }
+    }, 'bus', false);
+
+    bindPlk('.slide-plk-rs485lim-interactive', 'plkRs485limPanel', 'plkRs485limLive', {
+      seg: {
+        title: 'Сегмент',
+        html: '<p>В одном сегменте — до <strong>32</strong> абонентов, длина до <strong>1200 м</strong>. Передаёт только один; остальные ждут. Больше абонентов → выше риск <strong>коллизий</strong> (разбирает протокол).</p>',
+        live: 'сегмент: до 32 абонентов · до 1200 м'
+      },
+      rep: {
+        title: 'Повторители',
+        html: '<p>Специальные <strong>повторители RS-485</strong> добавляют сегменты. Максимум абонентов — <strong>256</strong> (с учётом повторителей).</p>',
+        live: 'повторители · новые сегменты · до 256 абонентов'
+      },
+      spd: {
+        title: 'Скорость',
+        html: '<p>До <strong>10 Мбит/с</strong> при длине ≤ <strong>10 м</strong>; при <strong>1200 м</strong> — не более <strong>62,5 кбит/с</strong> (физический канал, без учёта протокола).</p>',
+        live: '10 Мбит/с ≤ 10 м · 62,5 кбит/с при 1200 м'
+      },
+      term: {
+        title: 'Терминаторы',
+        html: '<p>На длинных линиях и высоких скоростях — <strong>терминирующее сопротивление</strong> (≈ волновое сопротивление пары). Ниже <strong>9600 бит/с</strong> обычно не нужно. RS-485 часто используют ПЛК для опроса МП-датчиков.</p>',
+        live: 'терминаторы на концах · ниже 9600 бит/с часто не нужны'
+      }
+    }, 'seg', false);
+
+    bindPlk('.slide-plk-usb-interactive', 'plkUsbPanel', 'plkUsbLive', {
+      name: {
+        title: 'USB',
+        html: '<p><strong>USB</strong> — Universal Serial Bus. Современный интерфейс из мира ПК; в ПЛК применяют ограниченно.</p>',
+        live: 'USB — шина для ПК; в ПЛК — только загрузка программы и настроек'
+      },
+      use: {
+        title: 'В ПЛК',
+        html: '<p>Из‑за специфики USB в ПЛК используют <strong>только для загрузки программы и настроек</strong>, а не для обмена данными в системе.</p>',
+        live: 'в ПЛК: только загрузка программы и настроек'
+      },
+      host: {
+        title: 'Хост',
+        html: '<p>USB — <strong>опрашиваемая</strong> шина: любой обмен начинает <strong>хост-контроллер</strong>, и он должен быть <strong>один</strong>. Поэтому ПЛК выступает как <strong>USB-устройство</strong>, а не хост — для передачи данных между приборами это неудобно.</p>',
+        live: 'опрашиваемая шина · один хост · ПЛК = устройство'
+      },
+      len: {
+        title: 'Длина',
+        html: '<p>Длина кабеля USB невелика — до <strong>5 м</strong>; дальше нужны специальные повторители.</p>',
+        live: 'длина кабеля ≤ 5 м · дальше — повторители'
+      }
+    }, 'name', true);
+
+  })();
+
+  /* ===== Lecture 14: языки программирования ПЛК (тема 6.4) ===== */
+  (() => {
+    const bindPlk = (slideSel, panelId, liveId, info, defaultKey, useNodes) => {
+      const slide = document.querySelector(slideSel);
+      if (!slide) return;
+      const panel = document.getElementById(panelId);
+      const live = liveId ? document.getElementById(liveId) : null;
+      const show = (key) => {
+        const data = info[key] || info[defaultKey];
+        if (!data) return;
+        if (panel) panel.innerHTML = `<h3>${data.title}</h3>${data.html}`;
+        if (live && data.live) live.textContent = data.live;
+        slide.querySelectorAll('.app-purpose-card').forEach((b) => {
+          b.classList.toggle('active', b.dataset.info === key);
+        });
+        if (useNodes) {
+          slide.querySelectorAll('.plk-node').forEach((n) => {
+            n.classList.toggle('is-on', n.dataset.info === key);
+          });
+        }
+      };
+      slide.addEventListener('click', (e) => {
+        const el = e.target.closest('.plk-node, .app-purpose-card');
+        if (!el?.dataset.info) return;
+        e.stopPropagation();
+        show(el.dataset.info);
+      });
+      show(defaultKey);
+    };
+
+    bindPlk('.slide-plklang-why-interactive', 'plklangWhyPanel', 'plklangWhyLive', {
+      iec: {
+        title: 'МЭК 61131-3',
+        html: '<p>Стандарт <strong>МЭК 61131-3</strong> (IEC 61131-3) определяет пять языков программирования логических контроллеров.</p>',
+        live: 'МЭК 61131-3 задаёт пять стандартных языков программирования ПЛК'
+      },
+      five: {
+        title: 'Пять',
+        html: '<p>Пять языков: <strong>IL, LD, FBD, SFC, ST</strong>. В курсе подробно — четыре последних.</p>',
+        live: 'пять языков стандарта · IL в курсе не рассматриваем'
+      },
+      il: {
+        title: 'IL',
+        html: '<p><strong>IL</strong> (Instruction List) — список инструкций, низкоуровневый язык вроде ассемблера. Сегодня применяют редко; в курсе не изучаем.</p>',
+        live: 'IL — список инструкций · редко · в курсе не изучаем'
+      },
+      course: {
+        title: 'Курс',
+        html: '<p>В курсе: <strong>LD, FBD, SFC, ST</strong> — релейные, блоковые, последовательные диаграммы и структурированный текст.</p>',
+        live: 'в курсе: LD · FBD · SFC · ST'
+      }
+    }, 'iec', true);
+
+    bindPlk('.slide-plklang-ov-interactive', 'plklangOvPanel', 'plklangOvLive', {
+      ld: {
+        title: 'LD',
+        html: '<p><strong>LD</strong> — графический язык, программная интерпретация релейно-контактных схем; также называют <strong>RLL</strong> (Relay Ladder Logic).</p>',
+        live: 'LD — программный аналог релейно-контактных схем (RLL)'
+      },
+      fbd: {
+        title: 'FBD',
+        html: '<p><strong>FBD</strong> — графический язык: каждый функциональный блок (FB) — подпрограмма со входами и выходами; программу собирают соединением блоков.</p>',
+        live: 'FBD — блоки FB со входами и выходами, соединяют последовательно'
+      },
+      sfc: {
+        title: 'SFC',
+        html: '<p><strong>SFC</strong> — высокоуровневый графический язык: состояния и условия переходов между ними.</p>',
+        live: 'SFC — состояния и условия переходов'
+      },
+      st: {
+        title: 'ST',
+        html: '<p><strong>ST</strong> — текстовый язык, очень похожий на <strong>Pascal</strong>.</p>',
+        live: 'ST — структурированный текст · очень похож на Pascal'
+      }
+    }, 'ld', true);
+
+    bindPlk('.slide-plklang-cycle-interactive', 'plklangCyclePanel', 'plklangCycleLive', {
+      scan: {
+        title: 'Цикл',
+        html: '<p>Управляющая программа выполняется <strong>циклически</strong>. Между концом и новым стартом ПЛК делает внутренние задачи (рис. 6.9).</p>',
+        live: 'управляющая программа выполняется циклически'
+      },
+      steps: {
+        title: 'Шаги',
+        html: '<p>В каждом цикле: <strong>опрос входов</strong> → управляющая программа → фоновые задачи программы → <strong>установка выходов</strong>.</p>',
+        live: 'входы → программа → фон программы → выходы'
+      },
+      bg: {
+        title: 'Фон',
+        html: '<p>После выходов — <strong>самодиагностика</strong> и прочие функции контроллера, затем начинается следующий цикл.</p>',
+        live: 'самодиагностика и прочие функции · затем снова цикл'
+      },
+      rt: {
+        title: 'Реакция',
+        html: '<p><strong>Наименьшее</strong> время реакции — событие попало в опрос и отработало до выходов в том же цикле. <strong>Наибольшее</strong> — событие «пропущено» после опроса и ждёт следующего цикла (почти два прохода).</p>',
+        live: 'min ≈ один проход входы→выходы · max ≈ событие после опроса + следующий цикл'
+      }
+    }, 'scan', false);
+
+    bindPlk('.slide-plklang-ld-interactive', 'plklangLdPanel', 'plklangLdLive', {
+      parts: {
+        title: 'Состав',
+        html: '<p>Программа на LD — из <strong>условий</strong> и <strong>инструкций</strong>; в конце ветви — катушка <strong>(OUT)</strong>. Иногда допускаются собственные исполняемые функции.</p>',
+        live: 'условия и инструкции на ветвях · катушки OUT / END'
+      },
+      rail: {
+        title: 'Линия',
+        html: '<p>Условия подключают к общей вертикальной <strong>питающей линии</strong>; ветви выглядят как отростки от неё (рис. 6.10).</p>',
+        live: 'питающая линия слева · от неё — ветви программы'
+      },
+      logic: {
+        title: 'И / ИЛИ',
+        html: '<p><strong>Параллель</strong> X1∥X2 — <strong>ИЛИ</strong>; затем НЗ X3 — <strong>И</strong> → Y1. Ветка 2: сравнение <strong>V2000</strong> с <strong>K10</strong> → Y2. Ветка 3: X4 → Y6.</p>',
+        live: '(X1∨X2)∧¬X3→Y1 · V2000·K10→Y2 · X4→Y6'
+      },
+      end: {
+        title: 'END',
+        html: '<p>Некоторые ПЛК допускают инструкции <strong>без условий</strong> (как END). Зависит от компилятора: иногда только в начале программы.</p>',
+        live: 'безусловная инструкция · END · зависит от ПЛК'
+      }
+    }, 'parts', true);
+
+    bindPlk('.slide-plklang-fbd-interactive', 'plklangFbdPanel', 'plklangFbdLive', {
+      idea: {
+        title: 'Идея',
+        html: '<p><strong>FBD</strong> — графический язык, близкий к схемам на микросхемах: функциональные блоки и линии между ними (рис. 6.11, CODESYS).</p>',
+        live: 'FBD — как схема на микросхемах: блоки связаны линиями данных'
+      },
+      vsld: {
+        title: '≠ LD',
+        html: '<p>В LD связи несут «питание»; в FBD — <strong>любую информацию</strong>. Шины питания нет: на вход схемы подаются данные.</p>',
+        live: 'линии FBD передают информацию · не напряжение питания'
+      },
+      arith: {
+        title: 'Арифметика',
+        html: '<p>Сеть 1: <strong>ADD → MUL → SUB</strong>. Реализует выражение <strong>Result = (Arg1 + Arg2) × Arg3 − Arg4</strong>.</p>',
+        live: 'Result = (Arg1 + Arg2) × Arg3 − Arg4'
+      },
+      logic: {
+        title: 'Логика',
+        html: '<p>Сеть 2: <strong>AND</strong> (&amp;) с <strong>инверсией</strong> на выходе → <strong>OR</strong> (≥1) → <strong>XOR</strong> (=1) → Y1. Входы X1…X4.</p>',
+        live: 'AND (с NOT) → OR → XOR → Y1'
+      }
+    }, 'idea', true);
+
+    bindPlk('.slide-plklang-fbd2-interactive', 'plklangFbd2Panel', 'plklangFbd2Live', {
+      base: {
+        title: 'База',
+        html: '<p>В базовый набор входят <strong>арифметические</strong> и <strong>логические</strong> операции, <strong>таймеры</strong> и <strong>счётчики</strong>, операторы установки в «1» и сброса в «0».</p>',
+        live: 'база: арифметика · логика · таймеры · счётчики · SET/RESET'
+      },
+      var: {
+        title: 'Варианты',
+        html: '<p>У конкретной модели ПЛК набор может отличаться: отдельные функции для <strong>целых</strong> и <strong>float</strong>, конвертация типов, спецфункции «железа» и ОС.</p>',
+        live: 'int ≠ float · конвертация · функции HW / ОС ПЛК'
+      },
+      org: {
+        title: 'Организация',
+        html: '<p>Как и базовый LD, FBD <strong>не предусматривает</strong> организации программы, кроме <strong>переходов</strong>.</p>',
+        live: 'организация программы — только переходы · как в LD'
+      },
+      lim: {
+        title: '+/−',
+        html: '<p>Те же плюсы и минусы, что у LD: короткие программы удобны; длинные <strong>занимают много места</strong> на экране — отладка затруднена.</p>',
+        live: 'короткие — удобно · длинные — мало строк на экран'
+      }
+    }, 'base', true);
+
+    bindPlk('.slide-plklang-sfc-interactive', 'plklangSfcPanel', 'plklangSfcLive', {
+      idea: {
+        title: 'Идея',
+        html: '<p><strong>SFC</strong> — язык высокого уровня: в нём <strong>нет</strong> операторов и инструкций, только <strong>состояния</strong> и <strong>условия перехода</strong>. Нужен для структурирования программы.</p>',
+        live: 'SFC — высокий уровень: только состояния и условия перехода'
+      },
+      act: {
+        title: 'Действия',
+        html: '<p>Действия в состоянии пишут на <strong>другом</strong> языке МЭК 61131-3 (LD, FBD, ST и т.д.).</p>',
+        live: 'действия состояния — на другом языке стандарта'
+      },
+      ex: {
+        title: 'Пример',
+        html: '<p>Рис. 6.13: <strong>Init</strong> → Step0 → (Flag0) ветвление. <strong>X=1</strong>: Step1→Step2→Init. <strong>X=2</strong>: параллельно Step3 и Step4 → Init при Flag3∧Flag4.</p>',
+        live: 'Init→Step0→ветвь X=1 или параллель Step3∥Step4'
+      },
+      run: {
+        title: 'Цикл',
+        html: '<p>В цикле ПЛК выполняются только <strong>активные</strong> состояния; неактивные пропускаются. Язык упрощает структурирование и модульность.</p>',
+        live: 'выполняются только активные состояния · остальные — пропуск'
+      }
+    }, 'idea', false);
+
+    bindPlk('.slide-plklang-st-interactive', 'plklangStPanel', 'plklangStLive', {
+      idea: {
+        title: 'Идея',
+        html: '<p><strong>ST</strong> — текстовый язык; синтаксис очень близок к классическому <strong>Pascal</strong>.</p>',
+        live: 'ST — текстовый язык · синтаксис очень близок к Pascal'
+      },
+      ex: {
+        title: 'Пример',
+        html: '<p>Сначала логика: <strong>Y1 := NOT(X1 AND X2) OR X3 XOR X4</strong>. Затем <strong>IF Y1</strong> → Resul := 5, иначе Resul := 1.</p>',
+        live: 'Y1 := NOT(X1 AND X2) OR X3 XOR X4 · IF → Resul'
+      },
+      fb: {
+        title: 'FB',
+        html: '<p>В отличие от Pascal, есть <strong>таймеры и счётчики</strong> — как функциональные блоки: экземпляр объявляют в <strong>VAR</strong>, пусковые переменные — на входы.</p>',
+        live: 'таймеры и счётчики — FB · объявление в VAR'
+      },
+      hw: {
+        title: 'Особые',
+        html: '<p>Специальные функции «железа» и ОС ПЛК тоже объявляют в секции <strong>VAR</strong>.</p>',
+        live: 'особые функции HW / ОС — тоже в VAR'
+      }
+    }, 'idea', false);
+
+    bindPlk('.slide-plklang-extio-interactive', 'plklangExtioPanel', 'plklangExtioLive', {
+      role: {
+        title: 'Назначение',
+        html: '<p>Внешние модули ВВ собирают данные с датчиков и передают по <strong>MODBUS</strong>; на выходах принимают команды и выставляют значения. Для аналога внутри — <strong>АЦП/ЦАП</strong>. Пример: <strong>ADAM-6052</strong> (8DI / 8DO).</p>',
+        live: 'сбор с датчиков → MODBUS · команды на выходы · АЦП/ЦАП'
+      },
+      di: {
+        title: 'Датчики',
+        html: '<p><strong>Подключение дискретных датчиков</strong>: DI 0…7, DI_GND. Есть <strong>общая точка</strong> для дискретных датчиков.</p>',
+        live: 'дискретные датчики · DI 0…7 · общая точка'
+      },
+      eth: {
+        title: 'Ethernet',
+        html: '<p><strong>Подключение Ethernet</strong> — <strong>MODBUS TCP</strong>. Другая группа модулей: <strong>RS-485 / MODBUS RTU</strong>.</p>',
+        live: 'Ethernet · MODBUS TCP · или RS-485 · MODBUS RTU'
+      },
+      do: {
+        title: 'ИМ · питание',
+        html: '<p><strong>Исполнительные устройства</strong> и их питание: DO 0…7, DO_VDC. Отдельно — <strong>питание модуля</strong> +10…30 В.</p>',
+        live: 'DO 0…7 · питание ИМ · питание модуля +10…30 В'
+      }
+    }, 'role', false);
+
+    bindPlk('.slide-plklang-dl205-interactive', 'plklangDl205Panel', 'plklangDl205Live', {
+      base: {
+        title: 'База',
+        html: '<p>Микроконтроллеры <strong>KOYO DL205</strong> — локальная автоматизация. Модульные базы на <strong>3, 4, 6 или 9</strong> слотов со встроенным БП; крайний левый слот — всегда <strong>ЦПУ</strong>.</p>',
+        live: 'база 3 / 4 / 6 / 9 слотов · слева всегда ЦПУ'
+      },
+      cpu: {
+        title: 'ЦПУ',
+        html: '<p>На модуле ЦПУ (напр. <strong>DL240</strong>) — только <strong>RS-232</strong>. RS-485 и Ethernet — отдельными модулями в слоты ввода/вывода. ЦПУ различаются мощностью и протоколами.</p>',
+        live: 'ЦПУ · RS-232 · RS-485/Ethernet — модулями расширения'
+      },
+      soft: {
+        title: 'DirectSOFT',
+        html: '<p>Программирование и диагностика — утилита <strong>DirectSOFT</strong>. Основной язык — <strong>LD</strong>; другие стандартные языки не поддерживаются.</p>',
+        live: 'DirectSOFT · только язык LD'
+      },
+      stg: {
+        title: 'Stages',
+        html: '<p>В LD есть <strong>stages</strong> — аналог <strong>SFC</strong>: стадии активны/неактивны, при переходе меняется активность. ЦПУ выполняет только строки <strong>активных</strong> стадий.</p>',
+        live: 'stages ≈ SFC · выполняются только активные стадии'
+      }
+    }, 'base', true);
+
+    bindPlk('.slide-plklang-cp1l-interactive', 'plklangCp1lPanel', 'plklangCp1lLive', {
+      cpu: {
+        title: 'ЦПУ',
+        html: '<p>Omron <strong>CP1L</strong> — локальная автоматизация. Модуль ЦПУ — <strong>моноблок</strong>: процессор, БП и встроенные точки ВВ; встроенный <strong>USB</strong> или <strong>Ethernet</strong> — по модели.</p>',
+        live: 'ЦПУ = процессор + БП + встроенные точки ВВ'
+      },
+      opt: {
+        title: 'Платы',
+        html: '<p>На ЦПУ — <strong>1–2 слота</strong> под дополнительные платы: RS-232, RS-485, Ethernet или аналоговый ВВ.</p>',
+        live: 'слоты · платы RS-232 / RS-485 / Ethernet / AI·AO'
+      },
+      io: {
+        title: 'Расширение',
+        html: '<p>Внешние модули ВВ и спецмодули (напр. DeviceNet) подключают к ЦПУ <strong>шлейфом</strong> (плоский кабель).</p>',
+        live: 'модули ВВ · подключение шлейфом к ЦПУ'
+      },
+      lim: {
+        title: 'Лимит',
+        html: '<p>ЦПУ на <strong>30 / 40 / 60</strong> точек — до <strong>трёх</strong> модулей расширения; на <strong>14 / 20</strong> точек — только <strong>один</strong>.</p>',
+        live: '30–60 точек → 3 мод. · 14–20 точек → 1 мод.'
+      }
+    }, 'cpu', true);
+
+    bindPlk('.slide-plklang-moscad-interactive', 'plklangMoscadPanel', 'plklangMoscadLive', {
+      cpu: {
+        title: 'ЦПУ',
+        html: '<p><strong>MOSCAD</strong> (Motorola) — модульный ПЛК. Есть стандартная версия и упрощённая <strong>MOSCAD-L</strong>. Один ЦПУ — до <strong>15</strong> модулей ВВ; дальше — дополнительные ЦПУ (до 15 расширений, всего до 240 модулей).</p>',
+        live: 'MOSCAD · до 15 модулей ВВ на один ЦПУ'
+      },
+      io: {
+        title: 'ВВ',
+        html: '<p>Базы на разное число модулей ввода/вывода. В шкафу — стандартный MOSCAD с базой на <strong>два</strong> модуля ВВ рядом с ЦПУ.</p>',
+        live: 'модули ввода/вывода · база под нужное число слотов'
+      },
+      link: {
+        title: 'Связь',
+        html: '<p>В шкафу — <strong>проводной модем</strong> или модуль <strong>Ethernet</strong> для связи. Основная программа — на <strong>LD</strong>, функции можно писать на <strong>C</strong>.</p>',
+        live: 'модем / Ethernet · основная программа LD · функции на C'
+      },
+      pwr: {
+        title: 'Питание',
+        html: '<p><strong>Блок питания ~220 В</strong> и резервная <strong>аккумуляторная батарея</strong> — работа при пропадании сети.</p>',
+        live: 'БП ~220 В · аккумуляторная батарея'
+      }
+    }, 'cpu', false);
+
+    bindPlk('.slide-plklang-plk210-interactive', 'plklangPlk210Panel', 'plklangPlk210Live', {
+      cpu: {
+        title: 'ЦПУ',
+        html: '<p><strong>ОВЕН ПЛК210-01-CS</strong> — моноблок для средних и распределённых систем. <strong>TI AM3358</strong> (Cortex-A8, 800 МГц), RAM 256 МБ, ROM 512 МБ, RETAIN 64 КБ (MRAM), цикл <strong>3 мс</strong>. Программирование — <strong>CODESYS V3.5</strong>. Питание основное и резервное 24 В.</p>',
+        live: 'TI AM3358 · 800 МГц · цикл 3 мс · CODESYS V3.5'
+      },
+      io: {
+        title: 'ВВ',
+        html: '<p><strong>12</strong> быстрых дискретных входов <strong>FDI</strong> (до <strong>95 кГц</strong>) и <strong>18</strong> релейных выходов <strong>DO</strong> (время переключения ≤ <strong>10 мс</strong>). Групповая изоляция выходов — до <strong>3 кВ</strong>.</p>',
+        live: '12 FDI до 95 кГц · 18 DO (реле) ≤ 10 мс'
+      },
+      link: {
+        title: 'Связь',
+        html: '<p><strong>4× Ethernet</strong> (изоляция 1 кВ), <strong>RS-232</strong> и <strong>2× RS-485</strong> (изоляция 1,5 кВ). На плате также USB Device / Host, слот SD, часы реального времени и звуковой сигнал.</p>',
+        live: '4× Ethernet · RS-232 · 2× RS-485'
+      },
+      ui: {
+        title: 'Панель',
+        html: '<p>На лицевой панели — светодиоды состояния <strong>DO / FDI / Eth / SD</strong>, тумблер <strong>СТАРТ / СТОП</strong>, кнопка <strong>СБРОС</strong> и сервисная кнопка.</p>',
+        live: 'светодиоды · СТАРТ/СТОП · СБРОС · сервис'
+      }
+    }, 'cpu', true);
   })();
 
 

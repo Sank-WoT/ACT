@@ -10357,7 +10357,7 @@ body.overview-mode .slide-diagram { display: none; }
 .slide-plk-pts-interactive .em-plk-cards.app-purpose-grid {
   grid-template-columns: repeat(5, minmax(0, 1fr));
   flex-shrink: 0;
-  gap: 0.25em;
+  gap: 0.22em;
 }
 .slide-plk-io-interactive .slide-body.asutp-interactive,
 .slide-plk-pts-interactive .slide-body.asutp-interactive,
@@ -10410,26 +10410,31 @@ body.overview-mode .slide-diagram { display: none; }
   height: 100%;
   max-height: none;
 }
-.slide-plk-pts-interactive .em-ac-view,
 .slide-plk-di-interactive .em-ac-view {
   display: none;
 }
-.slide-plk-pts-interactive .em-ac-view.is-on,
 .slide-plk-di-interactive .em-ac-view.is-on {
   display: block;
 }
 .slide-plk-io-interactive .plk-node,
+.slide-plk-pts-interactive .plk-node,
 .slide-plk-wet-interactive .plk-node {
   opacity: 1;
   transition: opacity 0.15s;
 }
 .slide-plk-io-interactive.is-picking .plk-node,
+.slide-plk-pts-interactive.is-picking .plk-node,
 .slide-plk-wet-interactive.is-picking .plk-node {
   opacity: 0.4;
 }
 .slide-plk-io-interactive.is-picking .plk-node.is-on,
+.slide-plk-pts-interactive.is-picking .plk-node.is-on,
 .slide-plk-wet-interactive.is-picking .plk-node.is-on {
   opacity: 1;
+}
+.slide-plk-pts-interactive .app-purpose-card {
+  padding: 0.22em 0.15em;
+  font-size: 0.95em;
 }
 .slide-plk-io-interactive .em-plk-live,
 .slide-plk-pts-interactive .em-plk-live,
@@ -10674,7 +10679,900 @@ body.overview-mode .slide-diagram { display: none; }
   padding: 0.4em 0.7em;
 }
 
-.slide-plk-rs232-interactive .em-plk-cards.app-purpose-grid,
+.slide-plk-iface-def-interactive .em-plk-cards.app-purpose-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  flex-shrink: 0;
+  gap: 0.3em;
+}
+.slide-plk-iface-def-interactive .slide-body.asutp-interactive {
+  gap: 0.4em;
+}
+.slide-plk-iface-def-interactive .asutp-main {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3em;
+  min-height: 0;
+}
+.slide-plk-iface-def-interactive .asutp-diagram-wrap {
+  flex: 1.3 1 0;
+  min-height: 0;
+}
+.slide-plk-iface-def-interactive .app-purpose-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.12em;
+  padding: 0.3em 0.25em;
+  font-size: 1.02em;
+}
+.slide-plk-iface-def-interactive .asutp-panel {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  font-size: 1.12em;
+}
+.slide-plk-iface-def-interactive .em-plk-svg {
+  width: 100%;
+  height: 100%;
+  max-height: none;
+}
+.slide-plk-iface-def-interactive .plk-node {
+  opacity: 1;
+  transition: opacity 0.15s;
+}
+.slide-plk-iface-def-interactive.is-picking .plk-node {
+  opacity: 0.4;
+}
+.slide-plk-iface-def-interactive.is-picking .plk-node.is-on {
+  opacity: 1;
+}
+.slide-plk-iface-def-interactive .em-plk-live {
+  margin: 0;
+  font-weight: 700;
+  color: #1e293b;
+  font-size: 1.05em;
+}
+.slide-plk-iface-def-interactive .highlight-box-compact {
+  flex-shrink: 0;
+  margin: 0;
+  padding: 0.4em 0.7em;
+}
+
+.slide-plk-iface-xfer-interactive .em-plk-cards-3.app-purpose-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  flex-shrink: 0;
+  gap: 0.3em;
+}
+.slide-plk-iface-princ-interactive .em-plk-cards-2.app-purpose-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  flex-shrink: 0;
+  gap: 0.3em;
+}
+.slide-plk-iface-mode-interactive .em-plk-cards-4.app-purpose-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  flex-shrink: 0;
+  gap: 0.3em;
+}
+.slide-plk-iface-xfer-interactive .slide-body.asutp-interactive,
+.slide-plk-iface-princ-interactive .slide-body.asutp-interactive,
+.slide-plk-iface-mode-interactive .slide-body.asutp-interactive {
+  gap: 0.4em;
+}
+.slide-plk-iface-xfer-interactive .asutp-main,
+.slide-plk-iface-princ-interactive .asutp-main,
+.slide-plk-iface-mode-interactive .asutp-main {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3em;
+  min-height: 0;
+}
+.slide-plk-iface-xfer-interactive .asutp-diagram-wrap,
+.slide-plk-iface-princ-interactive .asutp-diagram-wrap,
+.slide-plk-iface-mode-interactive .asutp-diagram-wrap {
+  flex: 1.4 1 0;
+  min-height: 0;
+}
+.slide-plk-iface-xfer-interactive .app-purpose-card,
+.slide-plk-iface-princ-interactive .app-purpose-card,
+.slide-plk-iface-mode-interactive .app-purpose-card {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  padding: 0.35em 0.3em;
+  font-size: 1.05em;
+  min-height: 0;
+}
+.slide-plk-iface-xfer-interactive .asutp-panel,
+.slide-plk-iface-princ-interactive .asutp-panel,
+.slide-plk-iface-mode-interactive .asutp-panel {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  font-size: 1.15em;
+}
+.slide-plk-iface-xfer-interactive .em-plk-svg,
+.slide-plk-iface-princ-interactive .em-plk-svg,
+.slide-plk-iface-mode-interactive .em-plk-svg {
+  width: 100%;
+  height: 100%;
+  max-height: none;
+}
+.slide-plk-iface-xfer-interactive .em-ac-view,
+.slide-plk-iface-princ-interactive .em-ac-view,
+.slide-plk-iface-mode-interactive .em-ac-view {
+  display: none;
+}
+.slide-plk-iface-xfer-interactive .em-ac-view.is-on,
+.slide-plk-iface-princ-interactive .em-ac-view.is-on,
+.slide-plk-iface-mode-interactive .em-ac-view.is-on {
+  display: block;
+}
+.slide-plk-iface-xfer-interactive .em-plk-live,
+.slide-plk-iface-princ-interactive .em-plk-live,
+.slide-plk-iface-mode-interactive .em-plk-live {
+  margin: 0;
+  font-weight: 700;
+  color: #1e293b;
+  font-size: 1.05em;
+}
+.slide-plk-iface-xfer-interactive .highlight-box-compact,
+.slide-plk-iface-princ-interactive .highlight-box-compact,
+.slide-plk-iface-mode-interactive .highlight-box-compact {
+  flex-shrink: 0;
+  margin: 0;
+  padding: 0.4em 0.7em;
+}
+
+.slide-plk-rs232db9 .slide-body.asutp-interactive {
+  gap: 0.4em;
+}
+.slide-plk-rs232db9 .asutp-main {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3em;
+  min-height: 0;
+}
+.slide-plk-rs232db9 .asutp-diagram-wrap.plk-db9-wrap {
+  flex: 1.5 1 0;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5em;
+  background: #fff;
+}
+.slide-plk-rs232db9 .plk-db9-img {
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  display: block;
+}
+.slide-plk-rs232db9 .asutp-panel {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  font-size: 1.15em;
+}
+.slide-plk-rs232db9 .asutp-hint {
+  flex-shrink: 0;
+  margin: 0;
+}
+
+.slide-plk-rs232nrz-interactive .em-plk-cards-4.app-purpose-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  flex-shrink: 0;
+  gap: 0.3em;
+}
+.slide-plk-rs232nrz-interactive .slide-body.asutp-interactive {
+  gap: 0.4em;
+}
+.slide-plk-rs232nrz-interactive .asutp-main {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3em;
+  min-height: 0;
+}
+.slide-plk-rs232nrz-interactive .asutp-diagram-wrap {
+  flex: 1.4 1 0;
+  min-height: 0;
+}
+.slide-plk-rs232nrz-interactive .app-purpose-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.12em;
+  padding: 0.35em 0.25em;
+  font-size: 1.02em;
+}
+.slide-plk-rs232nrz-interactive .asutp-panel {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  font-size: 1.15em;
+}
+.slide-plk-rs232nrz-interactive .em-plk-svg {
+  width: 100%;
+  height: 100%;
+  max-height: none;
+}
+.slide-plk-rs232nrz-interactive .em-ac-view {
+  display: none;
+}
+.slide-plk-rs232nrz-interactive .em-ac-view.is-on {
+  display: block;
+}
+.slide-plk-rs232nrz-interactive .em-plk-live {
+  margin: 0;
+  font-weight: 700;
+  color: #1e293b;
+  font-size: 1.05em;
+}
+.slide-plk-rs232nrz-interactive .highlight-box-compact {
+  flex-shrink: 0;
+  margin: 0;
+  padding: 0.4em 0.7em;
+}
+
+.slide-plk-rs232time-interactive .em-plk-cards-4.app-purpose-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  flex-shrink: 0;
+  gap: 0.3em;
+}
+.slide-plk-rs232time-interactive .slide-body.asutp-interactive {
+  gap: 0.4em;
+}
+.slide-plk-rs232time-interactive .asutp-main {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3em;
+  min-height: 0;
+}
+.slide-plk-rs232time-interactive .asutp-diagram-wrap.plk-rs232time-wrap {
+  flex: 1.5 1 0;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.4em;
+  background: #fff;
+}
+.slide-plk-rs232time-interactive .plk-rs232time-img {
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  display: block;
+}
+.slide-plk-rs232time-interactive .app-purpose-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.12em;
+  padding: 0.35em 0.25em;
+  font-size: 1.02em;
+}
+.slide-plk-rs232time-interactive .asutp-panel {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  font-size: 1.15em;
+}
+.slide-plk-rs232time-interactive .em-plk-live {
+  margin: 0;
+  font-weight: 700;
+  color: #1e293b;
+  font-size: 1.05em;
+}
+.slide-plk-rs232time-interactive .highlight-box-compact {
+  flex-shrink: 0;
+  margin: 0;
+  padding: 0.4em 0.7em;
+}
+
+.slide-plk-rs485-interactive .em-plk-cards-4.app-purpose-grid,
+.slide-plk-rs485lim-interactive .em-plk-cards.app-purpose-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  flex-shrink: 0;
+  gap: 0.3em;
+}
+.slide-plk-rs485lvl-interactive .em-plk-cards-3.app-purpose-grid,
+.slide-plk-rs485bus-interactive .em-plk-cards-3.app-purpose-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  flex-shrink: 0;
+  gap: 0.3em;
+}
+.slide-plk-rs485-interactive .slide-body.asutp-interactive,
+.slide-plk-rs485lvl-interactive .slide-body.asutp-interactive,
+.slide-plk-rs485bus-interactive .slide-body.asutp-interactive,
+.slide-plk-rs485lim-interactive .slide-body.asutp-interactive {
+  gap: 0.4em;
+}
+.slide-plk-rs485-interactive .asutp-main,
+.slide-plk-rs485lvl-interactive .asutp-main,
+.slide-plk-rs485bus-interactive .asutp-main,
+.slide-plk-rs485lim-interactive .asutp-main {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3em;
+  min-height: 0;
+}
+.slide-plk-rs485-interactive .asutp-diagram-wrap,
+.slide-plk-rs485lvl-interactive .asutp-diagram-wrap,
+.slide-plk-rs485bus-interactive .asutp-diagram-wrap,
+.slide-plk-rs485lim-interactive .asutp-diagram-wrap {
+  flex: 1.4 1 0;
+  min-height: 0;
+}
+.slide-plk-rs485-interactive .app-purpose-card,
+.slide-plk-rs485lvl-interactive .app-purpose-card,
+.slide-plk-rs485bus-interactive .app-purpose-card,
+.slide-plk-rs485lim-interactive .app-purpose-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.12em;
+  padding: 0.35em 0.25em;
+  font-size: 1.02em;
+}
+.slide-plk-rs485-interactive .asutp-panel,
+.slide-plk-rs485lvl-interactive .asutp-panel,
+.slide-plk-rs485bus-interactive .asutp-panel,
+.slide-plk-rs485lim-interactive .asutp-panel {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  font-size: 1.15em;
+}
+.slide-plk-rs485-interactive .em-plk-svg,
+.slide-plk-rs485lvl-interactive .em-plk-svg,
+.slide-plk-rs485bus-interactive .em-plk-svg,
+.slide-plk-rs485lim-interactive .em-plk-svg {
+  width: 100%;
+  height: 100%;
+  max-height: none;
+}
+.slide-plk-rs485-interactive .em-ac-view,
+.slide-plk-rs485lvl-interactive .em-ac-view,
+.slide-plk-rs485bus-interactive .em-ac-view,
+.slide-plk-rs485lim-interactive .em-ac-view {
+  display: none;
+}
+.slide-plk-rs485-interactive .em-ac-view.is-on,
+.slide-plk-rs485lvl-interactive .em-ac-view.is-on,
+.slide-plk-rs485bus-interactive .em-ac-view.is-on,
+.slide-plk-rs485lim-interactive .em-ac-view.is-on {
+  display: block;
+}
+.slide-plk-rs485-interactive .em-plk-live,
+.slide-plk-rs485lvl-interactive .em-plk-live,
+.slide-plk-rs485bus-interactive .em-plk-live,
+.slide-plk-rs485lim-interactive .em-plk-live {
+  margin: 0;
+  font-weight: 700;
+  color: #1e293b;
+  font-size: 1.05em;
+}
+.slide-plk-rs485-interactive .highlight-box-compact,
+.slide-plk-rs485lvl-interactive .highlight-box-compact,
+.slide-plk-rs485bus-interactive .highlight-box-compact,
+.slide-plk-rs485lim-interactive .highlight-box-compact {
+  flex-shrink: 0;
+  margin: 0;
+  padding: 0.4em 0.7em;
+}
+.slide-plk-rs485lvl-interactive .asutp-hint,
+.slide-plk-rs485bus-interactive .asutp-hint {
+  flex-shrink: 0;
+  margin: 0;
+}
+
+.slide-plk-usb-interactive .em-plk-cards.app-purpose-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  flex-shrink: 0;
+  gap: 0.3em;
+}
+.slide-plk-usb-interactive .slide-body.asutp-interactive {
+  gap: 0.4em;
+}
+.slide-plk-usb-interactive .asutp-main {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3em;
+  min-height: 0;
+}
+.slide-plk-usb-interactive .asutp-diagram-wrap {
+  flex: 1.4 1 0;
+  min-height: 0;
+}
+.slide-plk-usb-interactive .app-purpose-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.12em;
+  padding: 0.3em 0.2em;
+  font-size: 0.98em;
+}
+.slide-plk-usb-interactive .asutp-panel {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  font-size: 1.15em;
+}
+.slide-plk-usb-interactive .em-plk-svg {
+  width: 100%;
+  height: 100%;
+  max-height: none;
+}
+.slide-plk-usb-interactive .plk-node {
+  opacity: 1;
+  transition: opacity 0.15s;
+}
+.slide-plk-usb-interactive.is-picking .plk-node {
+  opacity: 0.4;
+}
+.slide-plk-usb-interactive.is-picking .plk-node.is-on {
+  opacity: 1;
+}
+.slide-plk-usb-interactive .em-plk-live {
+  margin: 0;
+  font-weight: 700;
+  color: #1e293b;
+  font-size: 1.05em;
+}
+.slide-plk-usb-interactive .highlight-box-compact {
+  flex-shrink: 0;
+  margin: 0;
+  padding: 0.4em 0.7em;
+}
+.slide-plk-usb-interactive .asutp-hint {
+  flex-shrink: 0;
+  margin: 0;
+}
+
+.slide-plk-eth-pass .eth-pass-body,
+.slide-plklang-pass .eth-pass-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55em;
+  min-height: 0;
+}
+.slide-plk-eth-pass .eth-pass-lead,
+.slide-plklang-pass .eth-pass-lead {
+  margin: 0;
+  flex-shrink: 0;
+  font-size: 1.05em;
+  font-weight: 700;
+  color: #1e3a8a;
+}
+.slide-plk-eth-pass .eth-pass-grid,
+.slide-plklang-pass .eth-pass-grid {
+  flex: 1 1 0;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.7em;
+}
+.slide-plk-eth-pass .eth-pass-col,
+.slide-plklang-pass .eth-pass-col {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15em;
+  padding: 0.7em 0.85em;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  background: #f8fafc;
+  min-height: 0;
+}
+.slide-plk-eth-pass .eth-pass-col-accent,
+.slide-plklang-pass .eth-pass-col-accent {
+  background: #eff6ff;
+  border-color: #93c5fd;
+}
+.slide-plk-eth-pass .eth-pass-col h3,
+.slide-plklang-pass .eth-pass-col h3 {
+  margin: 0 0 0.35em;
+  font-size: 1.05em;
+  color: #0f172a;
+  border-bottom: 1px solid #cbd5e1;
+  padding-bottom: 0.35em;
+}
+.slide-plk-eth-pass .eth-pass-col-accent h3,
+.slide-plklang-pass .eth-pass-col-accent h3 {
+  border-bottom-color: #93c5fd;
+  color: #1e3a8a;
+}
+.slide-plk-eth-pass .eth-pass-row,
+.slide-plklang-pass .eth-pass-row {
+  display: grid;
+  grid-template-columns: 7.5em 1fr;
+  gap: 0.55em;
+  align-items: baseline;
+  padding: 0.38em 0;
+  border-bottom: 1px dashed #e2e8f0;
+  font-size: 0.98em;
+  line-height: 1.35;
+}
+.slide-plk-eth-pass .eth-pass-row:last-child,
+.slide-plklang-pass .eth-pass-row:last-child {
+  border-bottom: none;
+}
+.slide-plk-eth-pass .eth-pass-k,
+.slide-plklang-pass .eth-pass-k {
+  font-weight: 800;
+  color: #334155;
+}
+.slide-plk-eth-pass .eth-pass-v,
+.slide-plklang-pass .eth-pass-v {
+  color: #1e293b;
+}
+.slide-plk-eth-pass .eth-pass-foot,
+.slide-plklang-pass .eth-pass-foot {
+  flex-shrink: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.55em;
+}
+.slide-plk-eth-pass .eth-pass-pill,
+.slide-plklang-pass .eth-pass-pill {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2em;
+  padding: 0.55em 0.75em;
+  border-radius: 10px;
+  background: #ecfdf5;
+  border: 1px solid #86efac;
+  font-size: 0.95em;
+  line-height: 1.35;
+}
+.slide-plk-eth-pass .eth-pass-pill strong,
+.slide-plklang-pass .eth-pass-pill strong {
+  color: #166534;
+  font-size: 1.02em;
+}
+.slide-plk-eth-pass .eth-pass-pill span,
+.slide-plklang-pass .eth-pass-pill span {
+  color: #334155;
+}
+
+.slide-plklang-ld-interactive .asutp-diagram-wrap.plklang-ld-wrap {
+  flex: 1.5 1 0;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.4em;
+  background: #fff;
+}
+.slide-plklang-ld-interactive .plklang-ld-img {
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  display: block;
+}
+
+.slide-plklang-extio-interactive .asutp-diagram-wrap.plklang-extio-wrap {
+  flex: 1.8 1 0;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.2em 0.5em;
+  background: #fff;
+}
+.slide-plklang-extio-interactive .plklang-extio-fig {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  margin: 0;
+}
+.slide-plklang-extio-interactive .plklang-extio-img {
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  display: block;
+}
+
+.slide-plklang-moscad-interactive .asutp-diagram-wrap.plklang-moscad-wrap {
+  flex: 1.8 1 0;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.2em 0.5em;
+  background: #fff;
+}
+.slide-plklang-moscad-interactive .plklang-moscad-fig {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  margin: 0;
+}
+.slide-plklang-moscad-interactive .plklang-moscad-img {
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  display: block;
+}
+
+.slide-plklang-dl205-interactive .asutp-diagram-wrap.plklang-dl205-wrap ,
+.slide-plklang-cp1l-interactive .asutp-diagram-wrap.plklang-dl205-wrap {
+  flex: 1.6 1 0;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.2em;
+  background: #fff;
+}
+
+.slide-plklang-why-interactive .em-plk-cards.app-purpose-grid,
+.slide-plklang-ov-interactive .em-plk-cards.app-purpose-grid,
+.slide-plklang-set-interactive .em-plk-cards.app-purpose-grid,
+.slide-plklang-cycle-interactive .em-plk-cards.app-purpose-grid,
+.slide-plklang-ld-interactive .em-plk-cards.app-purpose-grid,
+.slide-plklang-fbd-interactive .em-plk-cards.app-purpose-grid,
+.slide-plklang-fbd2-interactive .em-plk-cards.app-purpose-grid,
+.slide-plklang-sfc-interactive .em-plk-cards.app-purpose-grid,
+.slide-plklang-st-interactive .em-plk-cards.app-purpose-grid,
+.slide-plklang-extio-interactive .em-plk-cards.app-purpose-grid ,
+.slide-plklang-dl205-interactive .em-plk-cards.app-purpose-grid ,
+.slide-plklang-cp1l-interactive .em-plk-cards.app-purpose-grid ,
+.slide-plklang-moscad-interactive .em-plk-cards.app-purpose-grid ,
+.slide-plklang-plk210-interactive .em-plk-cards.app-purpose-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  flex-shrink: 0;
+  gap: 0.3em;
+}
+.slide-plklang-why-interactive .slide-body.asutp-interactive,
+.slide-plklang-ov-interactive .slide-body.asutp-interactive,
+.slide-plklang-set-interactive .slide-body.asutp-interactive,
+.slide-plklang-cycle-interactive .slide-body.asutp-interactive,
+.slide-plklang-ld-interactive .slide-body.asutp-interactive,
+.slide-plklang-fbd-interactive .slide-body.asutp-interactive,
+.slide-plklang-fbd2-interactive .slide-body.asutp-interactive,
+.slide-plklang-sfc-interactive .slide-body.asutp-interactive,
+.slide-plklang-st-interactive .slide-body.asutp-interactive,
+.slide-plklang-extio-interactive .slide-body.asutp-interactive ,
+.slide-plklang-dl205-interactive .slide-body.asutp-interactive ,
+.slide-plklang-cp1l-interactive .slide-body.asutp-interactive ,
+.slide-plklang-moscad-interactive .slide-body.asutp-interactive ,
+.slide-plklang-plk210-interactive .slide-body.asutp-interactive {
+  gap: 0.4em;
+}
+.slide-plklang-why-interactive .asutp-main,
+.slide-plklang-ov-interactive .asutp-main,
+.slide-plklang-set-interactive .asutp-main,
+.slide-plklang-cycle-interactive .asutp-main,
+.slide-plklang-ld-interactive .asutp-main,
+.slide-plklang-fbd-interactive .asutp-main,
+.slide-plklang-fbd2-interactive .asutp-main,
+.slide-plklang-sfc-interactive .asutp-main,
+.slide-plklang-st-interactive .asutp-main,
+.slide-plklang-extio-interactive .asutp-main ,
+.slide-plklang-dl205-interactive .asutp-main ,
+.slide-plklang-cp1l-interactive .asutp-main ,
+.slide-plklang-moscad-interactive .asutp-main ,
+.slide-plklang-plk210-interactive .asutp-main {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3em;
+  min-height: 0;
+}
+.slide-plklang-why-interactive .asutp-diagram-wrap,
+.slide-plklang-ov-interactive .asutp-diagram-wrap,
+.slide-plklang-set-interactive .asutp-diagram-wrap,
+.slide-plklang-cycle-interactive .asutp-diagram-wrap,
+.slide-plklang-ld-interactive .asutp-diagram-wrap,
+.slide-plklang-fbd-interactive .asutp-diagram-wrap,
+.slide-plklang-fbd2-interactive .asutp-diagram-wrap,
+.slide-plklang-sfc-interactive .asutp-diagram-wrap,
+.slide-plklang-st-interactive .asutp-diagram-wrap,
+.slide-plklang-extio-interactive .asutp-diagram-wrap ,
+.slide-plklang-dl205-interactive .asutp-diagram-wrap ,
+.slide-plklang-cp1l-interactive .asutp-diagram-wrap ,
+.slide-plklang-moscad-interactive .asutp-diagram-wrap ,
+.slide-plklang-plk210-interactive .asutp-diagram-wrap {
+  flex: 1.4 1 0;
+  min-height: 0;
+}
+.slide-plklang-why-interactive .app-purpose-card,
+.slide-plklang-ov-interactive .app-purpose-card,
+.slide-plklang-set-interactive .app-purpose-card,
+.slide-plklang-cycle-interactive .app-purpose-card,
+.slide-plklang-ld-interactive .app-purpose-card,
+.slide-plklang-fbd-interactive .app-purpose-card,
+.slide-plklang-fbd2-interactive .app-purpose-card,
+.slide-plklang-sfc-interactive .app-purpose-card,
+.slide-plklang-st-interactive .app-purpose-card,
+.slide-plklang-extio-interactive .app-purpose-card ,
+.slide-plklang-dl205-interactive .app-purpose-card ,
+.slide-plklang-cp1l-interactive .app-purpose-card ,
+.slide-plklang-moscad-interactive .app-purpose-card ,
+.slide-plklang-plk210-interactive .app-purpose-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.12em;
+  padding: 0.3em 0.2em;
+  font-size: 0.98em;
+}
+.slide-plklang-why-interactive .asutp-panel,
+.slide-plklang-ov-interactive .asutp-panel,
+.slide-plklang-set-interactive .asutp-panel,
+.slide-plklang-cycle-interactive .asutp-panel,
+.slide-plklang-ld-interactive .asutp-panel,
+.slide-plklang-fbd-interactive .asutp-panel,
+.slide-plklang-fbd2-interactive .asutp-panel,
+.slide-plklang-sfc-interactive .asutp-panel,
+.slide-plklang-st-interactive .asutp-panel,
+.slide-plklang-extio-interactive .asutp-panel ,
+.slide-plklang-dl205-interactive .asutp-panel ,
+.slide-plklang-cp1l-interactive .asutp-panel ,
+.slide-plklang-moscad-interactive .asutp-panel ,
+.slide-plklang-plk210-interactive .asutp-panel {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  font-size: 1.12em;
+}
+.slide-plklang-why-interactive .em-plk-svg,
+.slide-plklang-ov-interactive .em-plk-svg,
+.slide-plklang-set-interactive .em-plk-svg,
+.slide-plklang-cycle-interactive .em-plk-svg,
+.slide-plklang-ld-interactive .em-plk-svg,
+.slide-plklang-fbd-interactive .em-plk-svg,
+.slide-plklang-fbd2-interactive .em-plk-svg,
+.slide-plklang-sfc-interactive .em-plk-svg,
+.slide-plklang-st-interactive .em-plk-svg,
+.slide-plklang-extio-interactive .em-plk-svg ,
+.slide-plklang-dl205-interactive .em-plk-svg ,
+.slide-plklang-cp1l-interactive .em-plk-svg ,
+.slide-plklang-moscad-interactive .em-plk-svg ,
+.slide-plklang-plk210-interactive .em-plk-svg {
+  width: 100%;
+  height: 100%;
+  max-height: none;
+  display: block;
+}
+.slide-plklang-cycle-interactive .asutp-diagram-wrap {
+  flex: 1.6 1 0;
+  align-items: stretch;
+  justify-content: stretch;
+}
+.slide-plklang-cycle-interactive .em-plk-svg {
+  min-height: 0;
+}
+.slide-plklang-cycle-interactive.is-picking .plk-node,
+.slide-plklang-cycle-interactive .plk-node {
+  opacity: 1;
+}
+.slide-plklang-why-interactive .plk-node,
+.slide-plklang-ov-interactive .plk-node,
+.slide-plklang-set-interactive .plk-node,
+.slide-plklang-cycle-interactive .plk-node,
+.slide-plklang-ld-interactive .plk-node,
+.slide-plklang-fbd-interactive .plk-node,
+.slide-plklang-fbd2-interactive .plk-node,
+.slide-plklang-sfc-interactive .plk-node,
+.slide-plklang-st-interactive .plk-node,
+.slide-plklang-extio-interactive .plk-node ,
+.slide-plklang-dl205-interactive .plk-node ,
+.slide-plklang-cp1l-interactive .plk-node ,
+.slide-plklang-moscad-interactive .plk-node ,
+.slide-plklang-plk210-interactive .plk-node {
+  opacity: 1;
+  transition: opacity 0.15s;
+}
+.slide-plklang-why-interactive.is-picking .plk-node,
+.slide-plklang-ov-interactive.is-picking .plk-node,
+.slide-plklang-set-interactive.is-picking .plk-node,
+.slide-plklang-cycle-interactive.is-picking .plk-node,
+.slide-plklang-ld-interactive.is-picking .plk-node,
+.slide-plklang-fbd-interactive.is-picking .plk-node,
+.slide-plklang-fbd2-interactive.is-picking .plk-node,
+.slide-plklang-sfc-interactive.is-picking .plk-node,
+.slide-plklang-st-interactive.is-picking .plk-node,
+.slide-plklang-extio-interactive.is-picking .plk-node ,
+.slide-plklang-dl205-interactive.is-picking .plk-node ,
+.slide-plklang-cp1l-interactive.is-picking .plk-node ,
+.slide-plklang-moscad-interactive.is-picking .plk-node ,
+.slide-plklang-plk210-interactive.is-picking .plk-node {
+  opacity: 0.4;
+}
+.slide-plklang-why-interactive.is-picking .plk-node.is-on,
+.slide-plklang-ov-interactive.is-picking .plk-node.is-on,
+.slide-plklang-set-interactive.is-picking .plk-node.is-on,
+.slide-plklang-cycle-interactive.is-picking .plk-node.is-on,
+.slide-plklang-ld-interactive.is-picking .plk-node.is-on,
+.slide-plklang-fbd-interactive.is-picking .plk-node.is-on,
+.slide-plklang-fbd2-interactive.is-picking .plk-node.is-on,
+.slide-plklang-sfc-interactive.is-picking .plk-node.is-on,
+.slide-plklang-st-interactive.is-picking .plk-node.is-on,
+.slide-plklang-extio-interactive.is-picking .plk-node.is-on ,
+.slide-plklang-dl205-interactive.is-picking .plk-node.is-on ,
+.slide-plklang-cp1l-interactive.is-picking .plk-node.is-on ,
+.slide-plklang-moscad-interactive.is-picking .plk-node.is-on ,
+.slide-plklang-plk210-interactive.is-picking .plk-node.is-on {
+  opacity: 1;
+}
+.slide-plklang-why-interactive .em-plk-live,
+.slide-plklang-ov-interactive .em-plk-live,
+.slide-plklang-set-interactive .em-plk-live,
+.slide-plklang-cycle-interactive .em-plk-live,
+.slide-plklang-ld-interactive .em-plk-live,
+.slide-plklang-fbd-interactive .em-plk-live,
+.slide-plklang-fbd2-interactive .em-plk-live,
+.slide-plklang-sfc-interactive .em-plk-live,
+.slide-plklang-st-interactive .em-plk-live,
+.slide-plklang-extio-interactive .em-plk-live ,
+.slide-plklang-dl205-interactive .em-plk-live ,
+.slide-plklang-cp1l-interactive .em-plk-live ,
+.slide-plklang-moscad-interactive .em-plk-live ,
+.slide-plklang-plk210-interactive .em-plk-live {
+  margin: 0;
+  font-weight: 700;
+  color: #1e293b;
+  font-size: 1.05em;
+}
+.slide-plklang-why-interactive .highlight-box-compact,
+.slide-plklang-ov-interactive .highlight-box-compact,
+.slide-plklang-set-interactive .highlight-box-compact,
+.slide-plklang-cycle-interactive .highlight-box-compact,
+.slide-plklang-ld-interactive .highlight-box-compact,
+.slide-plklang-fbd-interactive .highlight-box-compact,
+.slide-plklang-fbd2-interactive .highlight-box-compact,
+.slide-plklang-sfc-interactive .highlight-box-compact,
+.slide-plklang-st-interactive .highlight-box-compact,
+.slide-plklang-extio-interactive .highlight-box-compact ,
+.slide-plklang-dl205-interactive .highlight-box-compact ,
+.slide-plklang-cp1l-interactive .highlight-box-compact ,
+.slide-plklang-moscad-interactive .highlight-box-compact ,
+.slide-plklang-plk210-interactive .highlight-box-compact {
+  flex-shrink: 0;
+  margin: 0;
+  padding: 0.4em 0.7em;
+}
+.slide-plklang-why-interactive .asutp-hint,
+.slide-plklang-ov-interactive .asutp-hint,
+.slide-plklang-set-interactive .asutp-hint,
+.slide-plklang-cycle-interactive .asutp-hint,
+.slide-plklang-ld-interactive .asutp-hint,
+.slide-plklang-fbd-interactive .asutp-hint,
+.slide-plklang-fbd2-interactive .asutp-hint,
+.slide-plklang-sfc-interactive .asutp-hint,
+.slide-plklang-st-interactive .asutp-hint,
+.slide-plklang-extio-interactive .asutp-hint ,
+.slide-plklang-dl205-interactive .asutp-hint ,
+.slide-plklang-cp1l-interactive .asutp-hint ,
+.slide-plklang-moscad-interactive .asutp-hint ,
+.slide-plklang-plk210-interactive .asutp-hint {
+  flex-shrink: 0;
+  margin: 0;
+}
+
 .slide-plk-rs232lim-interactive .em-plk-cards.app-purpose-grid {
   grid-template-columns: repeat(4, minmax(0, 1fr));
   flex-shrink: 0;
@@ -10694,12 +11592,10 @@ body.overview-mode .slide-diagram { display: none; }
   padding: 0.25em 0.15em;
   font-size: 0.92em;
 }
-.slide-plk-rs232-interactive .slide-body.asutp-interactive,
 .slide-plk-rs232sig-interactive .slide-body.asutp-interactive,
 .slide-plk-rs232lim-interactive .slide-body.asutp-interactive {
   gap: 0.4em;
 }
-.slide-plk-rs232-interactive .asutp-main,
 .slide-plk-rs232sig-interactive .asutp-main,
 .slide-plk-rs232lim-interactive .asutp-main {
   display: flex;
@@ -10707,13 +11603,11 @@ body.overview-mode .slide-diagram { display: none; }
   gap: 0.3em;
   min-height: 0;
 }
-.slide-plk-rs232-interactive .asutp-diagram-wrap,
 .slide-plk-rs232sig-interactive .asutp-diagram-wrap,
 .slide-plk-rs232lim-interactive .asutp-diagram-wrap {
   flex: 1.3 1 0;
   min-height: 0;
 }
-.slide-plk-rs232-interactive .app-purpose-card,
 .slide-plk-rs232sig-interactive .app-purpose-card,
 .slide-plk-rs232lim-interactive .app-purpose-card {
   display: flex;
@@ -10724,7 +11618,6 @@ body.overview-mode .slide-diagram { display: none; }
   padding: 0.3em 0.25em;
   font-size: 1.02em;
 }
-.slide-plk-rs232-interactive .asutp-panel,
 .slide-plk-rs232sig-interactive .asutp-panel,
 .slide-plk-rs232lim-interactive .asutp-panel {
   display: flex;
@@ -10732,7 +11625,6 @@ body.overview-mode .slide-diagram { display: none; }
   justify-content: center;
   font-size: 1.12em;
 }
-.slide-plk-rs232-interactive .em-plk-svg,
 .slide-plk-rs232sig-interactive .em-plk-svg,
 .slide-plk-rs232lim-interactive .em-plk-svg {
   width: 100%;
@@ -10745,7 +11637,6 @@ body.overview-mode .slide-diagram { display: none; }
 .slide-plk-rs232sig-interactive .em-ac-view.is-on {
   display: block;
 }
-.slide-plk-rs232-interactive .plk-node,
 .slide-plk-rs232lim-interactive .plk-node {
   opacity: 1;
   transition: opacity 0.15s;
@@ -10758,7 +11649,6 @@ body.overview-mode .slide-diagram { display: none; }
   opacity: 1;
   transition: opacity 0.15s;
 }
-.slide-plk-rs232-interactive.is-picking .plk-node,
 .slide-plk-rs232lim-interactive.is-picking .plk-node {
   opacity: 0.4;
 }
@@ -10768,7 +11658,6 @@ body.overview-mode .slide-diagram { display: none; }
 .slide-plk-rs232sig-interactive.is-picking .plk-sig {
   opacity: 0.3;
 }
-.slide-plk-rs232-interactive.is-picking .plk-node.is-on,
 .slide-plk-rs232lim-interactive.is-picking .plk-node.is-on {
   opacity: 1;
 }
@@ -10778,7 +11667,6 @@ body.overview-mode .slide-diagram { display: none; }
 .slide-plk-rs232sig-interactive.is-picking .plk-sig.is-on {
   opacity: 1;
 }
-.slide-plk-rs232-interactive .em-plk-live,
 .slide-plk-rs232sig-interactive .em-plk-live,
 .slide-plk-rs232lim-interactive .em-plk-live {
   margin: 0;
@@ -10786,7 +11674,6 @@ body.overview-mode .slide-diagram { display: none; }
   color: #1e293b;
   font-size: 1.05em;
 }
-.slide-plk-rs232-interactive .highlight-box-compact,
 .slide-plk-rs232sig-interactive .highlight-box-compact,
 .slide-plk-rs232lim-interactive .highlight-box-compact {
   flex-shrink: 0;
@@ -10915,3 +11802,205 @@ body.overview-mode .slide-diagram { display: none; }
   height: 100%;
   max-height: none;
 }
+
+/* ===== Lecture 11: ADC / DAC ===== */
+.slide-adc-why-interactive .em-plk-cards.app-purpose-grid,
+.slide-adc-dac-idea-interactive .em-plk-cards.app-purpose-grid,
+.slide-adc-dac-weight-interactive .em-plk-cards.app-purpose-grid,
+.slide-adc-dac-r2r-interactive .em-plk-cards.app-purpose-grid,
+.slide-adc-dac-param-interactive .em-plk-cards.app-purpose-grid,
+.slide-adc-idea-interactive .em-plk-cards.app-purpose-grid,
+.slide-adc-flash-interactive .em-plk-cards.app-purpose-grid,
+.slide-adc-count-interactive .em-plk-cards.app-purpose-grid,
+.slide-adc-sar-interactive .em-plk-cards.app-purpose-grid,
+.slide-adc-param-interactive .em-plk-cards.app-purpose-grid,
+.slide-adc-plc-interactive .em-plk-cards.app-purpose-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  flex-shrink: 0;
+  gap: 0.3em;
+}
+.slide-adc-why-interactive .slide-body.asutp-interactive,
+.slide-adc-dac-idea-interactive .slide-body.asutp-interactive,
+.slide-adc-dac-weight-interactive .slide-body.asutp-interactive,
+.slide-adc-dac-r2r-interactive .slide-body.asutp-interactive,
+.slide-adc-dac-param-interactive .slide-body.asutp-interactive,
+.slide-adc-idea-interactive .slide-body.asutp-interactive,
+.slide-adc-flash-interactive .slide-body.asutp-interactive,
+.slide-adc-count-interactive .slide-body.asutp-interactive,
+.slide-adc-sar-interactive .slide-body.asutp-interactive,
+.slide-adc-param-interactive .slide-body.asutp-interactive,
+.slide-adc-plc-interactive .slide-body.asutp-interactive {
+  gap: 0.4em;
+}
+.slide-adc-why-interactive .asutp-main,
+.slide-adc-dac-idea-interactive .asutp-main,
+.slide-adc-dac-weight-interactive .asutp-main,
+.slide-adc-dac-r2r-interactive .asutp-main,
+.slide-adc-dac-param-interactive .asutp-main,
+.slide-adc-idea-interactive .asutp-main,
+.slide-adc-flash-interactive .asutp-main,
+.slide-adc-count-interactive .asutp-main,
+.slide-adc-sar-interactive .asutp-main,
+.slide-adc-param-interactive .asutp-main,
+.slide-adc-plc-interactive .asutp-main {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3em;
+  min-height: 0;
+}
+.slide-adc-why-interactive .asutp-diagram-wrap,
+.slide-adc-dac-idea-interactive .asutp-diagram-wrap,
+.slide-adc-dac-weight-interactive .asutp-diagram-wrap,
+.slide-adc-dac-r2r-interactive .asutp-diagram-wrap,
+.slide-adc-dac-param-interactive .asutp-diagram-wrap,
+.slide-adc-idea-interactive .asutp-diagram-wrap,
+.slide-adc-flash-interactive .asutp-diagram-wrap,
+.slide-adc-count-interactive .asutp-diagram-wrap,
+.slide-adc-sar-interactive .asutp-diagram-wrap,
+.slide-adc-param-interactive .asutp-diagram-wrap,
+.slide-adc-plc-interactive .asutp-diagram-wrap {
+  flex: 1.5 1 0;
+  min-height: 0;
+}
+.slide-adc-why-interactive .app-purpose-card,
+.slide-adc-dac-idea-interactive .app-purpose-card,
+.slide-adc-dac-weight-interactive .app-purpose-card,
+.slide-adc-dac-r2r-interactive .app-purpose-card,
+.slide-adc-dac-param-interactive .app-purpose-card,
+.slide-adc-idea-interactive .app-purpose-card,
+.slide-adc-flash-interactive .app-purpose-card,
+.slide-adc-count-interactive .app-purpose-card,
+.slide-adc-sar-interactive .app-purpose-card,
+.slide-adc-param-interactive .app-purpose-card,
+.slide-adc-plc-interactive .app-purpose-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.12em;
+  padding: 0.3em 0.2em;
+  font-size: 0.98em;
+}
+.slide-adc-why-interactive .asutp-panel,
+.slide-adc-dac-idea-interactive .asutp-panel,
+.slide-adc-dac-weight-interactive .asutp-panel,
+.slide-adc-dac-r2r-interactive .asutp-panel,
+.slide-adc-dac-param-interactive .asutp-panel,
+.slide-adc-idea-interactive .asutp-panel,
+.slide-adc-flash-interactive .asutp-panel,
+.slide-adc-count-interactive .asutp-panel,
+.slide-adc-sar-interactive .asutp-panel,
+.slide-adc-param-interactive .asutp-panel,
+.slide-adc-plc-interactive .asutp-panel {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  font-size: 1.12em;
+}
+.slide-adc-why-interactive .em-plk-svg,
+.slide-adc-dac-idea-interactive .em-plk-svg,
+.slide-adc-dac-weight-interactive .em-plk-svg,
+.slide-adc-dac-r2r-interactive .em-plk-svg,
+.slide-adc-dac-param-interactive .em-plk-svg,
+.slide-adc-idea-interactive .em-plk-svg,
+.slide-adc-flash-interactive .em-plk-svg,
+.slide-adc-count-interactive .em-plk-svg,
+.slide-adc-sar-interactive .em-plk-svg,
+.slide-adc-param-interactive .em-plk-svg,
+.slide-adc-plc-interactive .em-plk-svg {
+  width: 100%;
+  height: 100%;
+  max-height: none;
+  display: block;
+}
+.slide-adc-why-interactive .adc-node,
+.slide-adc-dac-idea-interactive .adc-node,
+.slide-adc-dac-weight-interactive .adc-node,
+.slide-adc-dac-r2r-interactive .adc-node,
+.slide-adc-dac-param-interactive .adc-node,
+.slide-adc-idea-interactive .adc-node,
+.slide-adc-flash-interactive .adc-node,
+.slide-adc-count-interactive .adc-node,
+.slide-adc-sar-interactive .adc-node,
+.slide-adc-param-interactive .adc-node,
+.slide-adc-plc-interactive .adc-node {
+  opacity: 1;
+  transition: opacity 0.15s;
+}
+.slide-adc-why-interactive.is-picking .adc-node,
+.slide-adc-dac-idea-interactive.is-picking .adc-node,
+.slide-adc-dac-weight-interactive.is-picking .adc-node,
+.slide-adc-dac-r2r-interactive.is-picking .adc-node,
+.slide-adc-dac-param-interactive.is-picking .adc-node,
+.slide-adc-idea-interactive.is-picking .adc-node,
+.slide-adc-flash-interactive.is-picking .adc-node,
+.slide-adc-count-interactive.is-picking .adc-node,
+.slide-adc-sar-interactive.is-picking .adc-node,
+.slide-adc-param-interactive.is-picking .adc-node,
+.slide-adc-plc-interactive.is-picking .adc-node {
+  opacity: 0.4;
+}
+.slide-adc-why-interactive.is-picking .adc-node.is-on,
+.slide-adc-dac-idea-interactive.is-picking .adc-node.is-on,
+.slide-adc-dac-weight-interactive.is-picking .adc-node.is-on,
+.slide-adc-dac-r2r-interactive.is-picking .adc-node.is-on,
+.slide-adc-dac-param-interactive.is-picking .adc-node.is-on,
+.slide-adc-idea-interactive.is-picking .adc-node.is-on,
+.slide-adc-flash-interactive.is-picking .adc-node.is-on,
+.slide-adc-count-interactive.is-picking .adc-node.is-on,
+.slide-adc-sar-interactive.is-picking .adc-node.is-on,
+.slide-adc-param-interactive.is-picking .adc-node.is-on,
+.slide-adc-plc-interactive.is-picking .adc-node.is-on {
+  opacity: 1;
+}
+.slide-adc-why-interactive .em-adc-live,
+.slide-adc-dac-idea-interactive .em-adc-live,
+.slide-adc-dac-weight-interactive .em-adc-live,
+.slide-adc-dac-r2r-interactive .em-adc-live,
+.slide-adc-dac-param-interactive .em-adc-live,
+.slide-adc-idea-interactive .em-adc-live,
+.slide-adc-flash-interactive .em-adc-live,
+.slide-adc-count-interactive .em-adc-live,
+.slide-adc-sar-interactive .em-adc-live,
+.slide-adc-param-interactive .em-adc-live,
+.slide-adc-plc-interactive .em-adc-live {
+  margin: 0;
+  font-weight: 700;
+  color: #1e293b;
+  font-size: 1.05em;
+}
+.slide-adc-why-interactive .highlight-box-compact,
+.slide-adc-dac-idea-interactive .highlight-box-compact,
+.slide-adc-dac-weight-interactive .highlight-box-compact,
+.slide-adc-dac-r2r-interactive .highlight-box-compact,
+.slide-adc-dac-param-interactive .highlight-box-compact,
+.slide-adc-idea-interactive .highlight-box-compact,
+.slide-adc-flash-interactive .highlight-box-compact,
+.slide-adc-count-interactive .highlight-box-compact,
+.slide-adc-sar-interactive .highlight-box-compact,
+.slide-adc-param-interactive .highlight-box-compact,
+.slide-adc-plc-interactive .highlight-box-compact {
+  flex-shrink: 0;
+  margin: 0;
+  padding: 0.4em 0.7em;
+}
+.slide-adc-sar-interactive .adc-sar-controls {
+  display: flex;
+  gap: 0.5em;
+  flex-shrink: 0;
+  margin: 0.2em 0;
+}
+``
+
+.slide-adc-types-interactive .em-plk-cards.app-purpose-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); flex-shrink: 0; gap: 0.3em; }
+.slide-adc-types-interactive .slide-body.asutp-interactive { gap: 0.4em; }
+.slide-adc-types-interactive .asutp-main { display: flex; flex-direction: column; gap: 0.3em; min-height: 0; }
+.slide-adc-types-interactive .asutp-diagram-wrap { flex: 1.5 1 0; min-height: 0; }
+.slide-adc-types-interactive .app-purpose-card { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.12em; padding: 0.3em 0.2em; font-size: 0.98em; }
+.slide-adc-types-interactive .asutp-panel { display: flex; flex-direction: column; justify-content: center; font-size: 1.12em; }
+.slide-adc-types-interactive .em-plk-svg { width: 100%; height: 100%; max-height: none; display: block; }
+.slide-adc-types-interactive .adc-node { opacity: 1; transition: opacity 0.15s; }
+.slide-adc-types-interactive.is-picking .adc-node { opacity: 0.4; }
+.slide-adc-types-interactive.is-picking .adc-node.is-on { opacity: 1; }
+.slide-adc-types-interactive .em-adc-live { margin: 0; font-weight: 700; color: #1e293b; font-size: 1.05em; }
+.slide-adc-types-interactive .highlight-box-compact { flex-shrink: 0; margin: 0; padding: 0.4em 0.7em; }

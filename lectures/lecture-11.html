@@ -3,294 +3,706 @@
 <link rel="stylesheet" href="../css/presentation.css"></head><body>
 <div class="deck">
 <section class="slide slide-title active"><span class="tag">Лекция 11 · Тема 5</span>
-<h1>Аппаратно-программные средства автоматизации</h1>
+<h1>АЦП и ЦАП</h1>
 <p>Средства автоматизации и управления</p></section>
 
 <section class="slide slide-agenda"><h2>Содержание</h2><div class="slide-body"><ol>
-<li>Тема 5 · зачем</li>
-<li>Средства управления объектом</li>
-<li>Универсальные и специализированные</li>
-<li>Универсальные ЭВМ в АСУ</li>
-<li>Критерии выбора ЭВМ</li>
-<li>ВУ · мощность · память</li>
-<li>Тенденции развития</li>
+<li>Зачем АЦП и ЦАП в АСУ</li>
+<li>ЦАП · идея</li>
+<li>ЦАП · весовые резисторы</li>
+<li>ЦАП · матрица R–2R</li>
+<li>Параметры ЦАП</li>
+<li>АЦП · идея</li>
+<li>Типы АЦП</li>
+<li>АЦП · параллельный</li>
+<li>АЦП · последовательный счёт</li>
+<li>АЦП · последовательное приближение</li>
+<li>Параметры АЦП</li>
+<li>АЦП и ЦАП в модулях ПЛК</li>
 </ol></div></section>
 
-<section class="slide slide-em-ac-interactive slide-aps-why-interactive is-picking">
-<h2>Тема 5 · зачем</h2>
+<section class="slide slide-em-ac-interactive slide-adc-why-interactive is-picking">
+<h2>Зачем АЦП и ЦАП в АСУ</h2>
 <div class="slide-body asutp-interactive">
 <div class="asutp-main">
-<p class="asutp-hint">От контроллеров — к аппаратно-программным средствам АСУ. Жмите блок</p>
-<div class="app-purpose-grid em-fast-grid em-aps-cards">
-<button type="button" class="app-purpose-card active" data-info="theme"><strong>Тема 5</strong><span>АПС</span></button>
-<button type="button" class="app-purpose-card" data-info="hard"><strong>Аппаратура</strong><span>ЭВМ · ВУ</span></button>
-<button type="button" class="app-purpose-card" data-info="soft"><strong>Программы</strong><span>семейства</span></button>
-<button type="button" class="app-purpose-card" data-info="asu"><strong>В АСУ</strong><span>управление</span></button>
+<div class="app-purpose-grid em-plk-cards">
+<button type="button" class="app-purpose-card active" data-info="chain"><strong>Цепочка</strong><span>аналог↔цифра</span></button>
+<button type="button" class="app-purpose-card" data-info="adc"><strong>АЦП</strong><span>U→код</span></button>
+<button type="button" class="app-purpose-card" data-info="cpu"><strong>ЦП</strong><span>обработка</span></button>
+<button type="button" class="app-purpose-card" data-info="dac"><strong>ЦАП</strong><span>код→U</span></button>
 </div>
-<div class="highlight-box highlight-box-compact"><p class="em-aps-live" id="apsWhyLive">аппаратно-программные средства — основа управления в АСУ</p></div>
+<div class="highlight-box highlight-box-compact"><p class="em-adc-live" id="adcWhyLive">датчик → АЦП → ЦП → ЦАП → ИМ</p></div>
 <div class="asutp-diagram-wrap">
-<svg class="em-svg em-aps-svg" viewBox="0 0 640 280" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="Тема 5">
-<defs><marker id="apsWhyArr" markerWidth="7" markerHeight="6" refX="6" refY="3" orient="auto"><path d="M0 0 L7 3 L0 6 Z" fill="#64748b"/></marker></defs>
-<rect width="640" height="280" fill="#fff"/>
-<g class="aps-node is-on" data-info="theme" style="cursor:pointer">
-<rect x="200" y="20" width="240" height="56" rx="10" fill="#eff6ff" stroke="#1d4ed8" stroke-width="2"/>
-<text x="320" y="55" text-anchor="middle" font-size="18" font-weight="800" fill="#1e3a8a">аппаратно-программные</text>
+<svg class="em-svg em-plk-svg" viewBox="0 0 760 300" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="Цепочка АЦП и ЦАП в АСУ">
+<rect width="760" height="300" fill="#fff"/>
+<defs>
+<marker id="adcWhyArr" markerWidth="7" markerHeight="6" refX="6" refY="3" orient="auto"><path d="M0 0 L7 3 L0 6 Z" fill="#64748b"/></marker>
+</defs>
+
+<!-- analog zone left -->
+<rect x="12" y="28" width="148" height="244" rx="12" fill="#f0fdf4" stroke="#bbf7d0" stroke-width="1.2"/>
+<text x="86" y="52" text-anchor="middle" font-size="12" font-weight="700" fill="#166534">аналог</text>
+
+<!-- digital zone center -->
+<rect x="170" y="28" width="420" height="244" rx="12" fill="#eff6ff" stroke="#bfdbfe" stroke-width="1.2"/>
+<text x="380" y="52" text-anchor="middle" font-size="12" font-weight="700" fill="#1e3a8a">цифра</text>
+
+<!-- analog zone right -->
+<rect x="600" y="28" width="148" height="244" rx="12" fill="#fff7ed" stroke="#fed7aa" stroke-width="1.2"/>
+<text x="674" y="52" text-anchor="middle" font-size="12" font-weight="700" fill="#9a3412">аналог</text>
+
+<!-- sensor -->
+<g class="adc-node is-on" data-info="chain" style="cursor:pointer">
+<rect x="28" y="80" width="116" height="100" rx="10" fill="#fff" stroke="#64748b" stroke-width="1.8"/>
+<text x="86" y="118" text-anchor="middle" font-size="15" font-weight="800" fill="#334155">Датчик</text>
+<path d="M48 150 Q66 128 84 150 T120 150" fill="none" stroke="#16a34a" stroke-width="2"/>
+<text x="86" y="198" text-anchor="middle" font-size="11" fill="#64748b">U(t) · I(t)</text>
 </g>
-<path d="M320 76 V100" fill="none" stroke="#94a3b8" stroke-width="2" marker-end="url(#apsWhyArr)"/>
-<g class="aps-node" data-info="hard" style="cursor:pointer">
-<rect x="60" y="110" width="200" height="90" rx="10" fill="#ecfdf5" stroke="#16a34a" stroke-width="1.8"/>
-<text x="160" y="150" text-anchor="middle" font-size="17" font-weight="800" fill="#166534">аппаратура</text>
-<text x="160" y="178" text-anchor="middle" font-size="14" fill="#64748b">ЭВМ · ВУ · интерфейсы</text>
+
+<path d="M144 130 H178" stroke="#94a3b8" stroke-width="2.2" marker-end="url(#adcWhyArr)"/>
+
+<!-- ADC -->
+<g class="adc-node" data-info="adc" style="cursor:pointer">
+<rect x="180" y="80" width="116" height="100" rx="10" fill="#fff" stroke="#16a34a" stroke-width="2"/>
+<text x="238" y="118" text-anchor="middle" font-size="18" font-weight="800" fill="#166534">АЦП</text>
+<text x="238" y="148" text-anchor="middle" font-size="12" fill="#475569">оцифровка</text>
+<text x="210" y="172" font-size="14" font-weight="700" fill="#1e3a8a">1</text>
+<text x="228" y="172" font-size="14" font-weight="700" fill="#1e3a8a">0</text>
+<text x="246" y="172" font-size="14" font-weight="700" fill="#1e3a8a">1</text>
+<text x="264" y="172" font-size="14" font-weight="700" fill="#1e3a8a">1</text>
 </g>
-<g class="aps-node" data-info="soft" style="cursor:pointer">
-<rect x="380" y="110" width="200" height="90" rx="10" fill="#faf5ff" stroke="#7c3aed" stroke-width="1.8"/>
-<text x="480" y="150" text-anchor="middle" font-size="17" font-weight="800" fill="#6d28d9">программы</text>
-<text x="480" y="178" text-anchor="middle" font-size="14" fill="#64748b">совместимые семейства</text>
+
+<path d="M296 130 H330" stroke="#94a3b8" stroke-width="2.2" marker-end="url(#adcWhyArr)"/>
+
+<!-- CPU -->
+<g class="adc-node" data-info="cpu" style="cursor:pointer">
+<rect x="332" y="80" width="116" height="100" rx="10" fill="#fff" stroke="#0f172a" stroke-width="2"/>
+<text x="390" y="118" text-anchor="middle" font-size="18" font-weight="800" fill="#0f172a">ЦП</text>
+<text x="390" y="148" text-anchor="middle" font-size="12" fill="#475569">ПЛК · ЭВМ</text>
+<text x="390" y="172" text-anchor="middle" font-size="12" fill="#64748b">алгоритм</text>
 </g>
-<g class="aps-node" data-info="asu" style="cursor:pointer">
-<rect x="180" y="220" width="280" height="44" rx="8" fill="#fff7ed" stroke="#c2410c" stroke-width="1.6"/>
-<text x="320" y="248" text-anchor="middle" font-size="15" font-weight="800" fill="#9a3412">управление компонентами АСУ</text>
+
+<path d="M448 130 H482" stroke="#94a3b8" stroke-width="2.2" marker-end="url(#adcWhyArr)"/>
+
+<!-- DAC -->
+<g class="adc-node" data-info="dac" style="cursor:pointer">
+<rect x="484" y="80" width="116" height="100" rx="10" fill="#fff" stroke="#c2410c" stroke-width="2"/>
+<text x="542" y="118" text-anchor="middle" font-size="18" font-weight="800" fill="#9a3412">ЦАП</text>
+<text x="542" y="148" text-anchor="middle" font-size="12" fill="#475569">в аналог</text>
+<path d="M504 165 Q522 148 540 165 T576 165" fill="none" stroke="#c2410c" stroke-width="2"/>
 </g>
+
+<path d="M600 130 H628" stroke="#94a3b8" stroke-width="2.2" marker-end="url(#adcWhyArr)"/>
+
+<!-- actuator -->
+<g class="adc-node" data-info="chain" style="cursor:pointer">
+<rect x="630" y="80" width="102" height="100" rx="10" fill="#fff" stroke="#64748b" stroke-width="1.8"/>
+<text x="681" y="125" text-anchor="middle" font-size="15" font-weight="800" fill="#334155">ИМ</text>
+<text x="681" y="152" text-anchor="middle" font-size="11" fill="#64748b">привод</text>
+<circle cx="681" cy="172" r="10" fill="none" stroke="#9a3412" stroke-width="1.6"/>
+</g>
+
+<!-- bottom caption -->
+<text x="380" y="250" text-anchor="middle" font-size="13" font-weight="700" fill="#334155">обязательный цикл в современных АСУ</text>
+<text x="380" y="272" text-anchor="middle" font-size="12" fill="#64748b">без АЦП/ЦАП цифровой контроллер не стыкуется с объектом</text>
 </svg>
 </div>
 </div>
-<aside class="asutp-panel" id="apsWhyPanel">
-<h3>Тема 5</h3>
-<p>Аппаратно-программные средства автоматизации: ЭВМ, внешние устройства и программные семейства для АСУ.</p>
+<aside class="asutp-panel" id="adcWhyPanel">
+<h3>Цепочка</h3>
+<p>Датчик даёт <strong>аналог</strong>, ЦП работает с <strong>кодами</strong>, ИМ снова нужен аналог — поэтому АЦП и ЦАП обязательны.</p>
+</aside>
+</div>
+</section><section class="slide slide-em-ac-interactive slide-adc-dac-idea-interactive is-picking">
+<h2>ЦАП · идея</h2>
+<div class="slide-body asutp-interactive">
+<div class="asutp-main">
+<div class="app-purpose-grid em-plk-cards">
+<button type="button" class="app-purpose-card active" data-info="in"><strong>Вход</strong><span>код Dₙ…D₀</span></button>
+<button type="button" class="app-purpose-card" data-info="out"><strong>Выход</strong><span>U / I</span></button>
+<button type="button" class="app-purpose-card" data-info="ref"><strong>Опора</strong><span>Uоп</span></button>
+<button type="button" class="app-purpose-card" data-info="bits"><strong>Разряды</strong><span>N бит</span></button>
+</div>
+<div class="highlight-box highlight-box-compact"><p class="em-adc-live" id="adcDacIdeaLive">цифровой код → напряжение / ток</p></div>
+<div class="asutp-diagram-wrap">
+<svg class="em-svg em-plk-svg" viewBox="0 0 760 300" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="ЦАП идея">
+<rect width="760" height="300" fill="#fff"/>
+<defs>
+<marker id="dacIdeaArr" markerWidth="7" markerHeight="6" refX="6" refY="3" orient="auto"><path d="M0 0 L7 3 L0 6 Z" fill="#64748b"/></marker>
+</defs>
+
+<!-- formula strip -->
+<rect x="40" y="14" width="680" height="36" rx="8" fill="#f8fafc" stroke="#e2e8f0"/>
+<text x="380" y="38" text-anchor="middle" font-size="15" font-weight="700" fill="#0f172a">Uвых = Uоп · код / 2ᴺ   ·   демо: N=4, Uоп=16 → клик по битам</text>
+
+<!-- bits column -->
+<g class="adc-node is-on" data-info="in" style="cursor:pointer">
+<text x="70" y="78" text-anchor="middle" font-size="12" font-weight="700" fill="#64748b">биты</text>
+</g>
+<g id="dacIdeaBit3" class="dac-idea-bit" data-bit="3" style="cursor:pointer">
+<rect x="30" y="88" width="80" height="36" rx="6" fill="#dbeafe" stroke="#1d4ed8" stroke-width="1.8"/>
+<text x="70" y="111" text-anchor="middle" font-size="14" font-weight="800" fill="#1e3a8a">D3=1</text>
+</g>
+<g id="dacIdeaBit2" class="dac-idea-bit" data-bit="2" style="cursor:pointer">
+<rect x="30" y="132" width="80" height="36" rx="6" fill="#eff6ff" stroke="#94a3b8" stroke-width="1.5"/>
+<text x="70" y="155" text-anchor="middle" font-size="14" font-weight="800" fill="#64748b">D2=0</text>
+</g>
+<g id="dacIdeaBit1" class="dac-idea-bit" data-bit="1" style="cursor:pointer">
+<rect x="30" y="176" width="80" height="36" rx="6" fill="#dbeafe" stroke="#1d4ed8" stroke-width="1.8"/>
+<text x="70" y="199" text-anchor="middle" font-size="14" font-weight="800" fill="#1e3a8a">D1=1</text>
+</g>
+<g id="dacIdeaBit0" class="dac-idea-bit" data-bit="0" style="cursor:pointer">
+<rect x="30" y="220" width="80" height="36" rx="6" fill="#eff6ff" stroke="#94a3b8" stroke-width="1.5"/>
+<text x="70" y="243" text-anchor="middle" font-size="14" font-weight="800" fill="#64748b">D0=0</text>
+</g>
+
+<path d="M110 160 H160" stroke="#94a3b8" stroke-width="2.2" marker-end="url(#dacIdeaArr)"/>
+
+<!-- DAC box -->
+<g class="adc-node" data-info="bits" style="cursor:pointer">
+<rect x="160" y="100" width="220" height="120" rx="12" fill="#fff7ed" stroke="#c2410c" stroke-width="2.2"/>
+<text x="270" y="150" text-anchor="middle" font-size="26" font-weight="800" fill="#9a3412">ЦАП</text>
+<text id="dacIdeaCodeLabel" x="270" y="180" text-anchor="middle" font-size="14" font-weight="700" fill="#9a3412">код 1010₂ = 10</text>
+<text x="270" y="205" text-anchor="middle" font-size="12" fill="#64748b">N = 4 разряда</text>
+</g>
+
+<!-- Uop -->
+<g class="adc-node" data-info="ref" style="cursor:pointer">
+<rect x="205" y="58" width="130" height="32" rx="7" fill="#faf5ff" stroke="#7c3aed" stroke-width="1.7"/>
+<text x="270" y="79" text-anchor="middle" font-size="14" font-weight="800" fill="#6d28d9">Uоп = 16</text>
+</g>
+<path d="M270 90 V100" stroke="#7c3aed" stroke-width="1.6"/>
+
+<path d="M380 160 H430" stroke="#94a3b8" stroke-width="2.2" marker-end="url(#dacIdeaArr)"/>
+
+<!-- output -->
+<g class="adc-node" data-info="out" style="cursor:pointer">
+<rect x="430" y="100" width="150" height="120" rx="12" fill="#ecfdf5" stroke="#16a34a" stroke-width="2"/>
+<text x="505" y="140" text-anchor="middle" font-size="14" font-weight="700" fill="#166534">Uвых</text>
+<text id="dacIdeaUout" x="505" y="175" text-anchor="middle" font-size="28" font-weight="800" fill="#166534">10</text>
+<text x="505" y="205" text-anchor="middle" font-size="12" fill="#64748b">или Iвых</text>
+</g>
+
+<!-- bar meter -->
+<g class="adc-node" data-info="out" style="cursor:pointer">
+<rect x="610" y="70" width="28" height="180" rx="4" fill="#f1f5f9" stroke="#cbd5e1"/>
+<rect id="dacIdeaBar" x="612" y="138" width="24" height="110" rx="3" fill="#22c55e"/>
+<text x="624" y="270" text-anchor="middle" font-size="11" fill="#64748b">0…Uоп</text>
+</g>
+
+<text x="380" y="290" text-anchor="middle" font-size="12" fill="#64748b">больше код → выше ступенька на выходе</text>
+</svg>
+</div>
+</div>
+<aside class="asutp-panel" id="adcDacIdeaPanel">
+<h3>Вход</h3>
+<p>На вход — параллельный <strong>двоичный код</strong>. Клик по D3…D0 меняет код и Uвых в демо.</p>
 </aside>
 </div>
 </section>
 
-<section class="slide slide-em-ac-interactive slide-aps-ctrl-interactive is-picking">
-<h2>Средства управления объектом</h2>
+<section class="slide slide-em-ac-interactive slide-adc-dac-weight-interactive is-picking">
+<h2>ЦАП · весовые резисторы</h2>
 <div class="slide-body asutp-interactive">
 <div class="asutp-main">
-<p class="asutp-hint">§ 5.1 · основное средство управления — ЭВМ. Жмите узел</p>
-<div class="app-purpose-grid em-fast-grid em-aps-cards">
-<button type="button" class="app-purpose-card active" data-info="evm"><strong>ЭВМ</strong><span>главное</span></button>
-<button type="button" class="app-purpose-card" data-info="obj"><strong>Объект</strong><span>АСУ</span></button>
-<button type="button" class="app-purpose-card" data-info="vu"><strong>ВУ</strong><span>измерение</span></button>
-<button type="button" class="app-purpose-card" data-info="act"><strong>Управление</strong><span>воздействие</span></button>
+<div class="app-purpose-grid em-plk-cards">
+<button type="button" class="app-purpose-card active" data-info="oa"><strong>ОУ</strong><span>сумматор</span></button>
+<button type="button" class="app-purpose-card" data-info="w"><strong>Веса</strong><span>R, 2R, 4R…</span></button>
+<button type="button" class="app-purpose-card" data-info="sw"><strong>Ключи</strong><span>Di = 0/1</span></button>
+<button type="button" class="app-purpose-card" data-info="lim"><strong>Минус</strong><span>разброс R</span></button>
 </div>
-<div class="highlight-box highlight-box-compact"><p class="em-aps-live" id="apsCtrlLive">основное средство управления в автоматизированных системах — ЭВМ</p></div>
+<div class="highlight-box highlight-box-compact"><p class="em-adc-live" id="adcDacWeightLive">ОУ · сумматор · Rос / R</p></div>
 <div class="asutp-diagram-wrap">
-<svg class="em-svg em-aps-svg" viewBox="0 0 640 280" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="Средства управления">
-<defs><marker id="apsCtrlArr" markerWidth="7" markerHeight="6" refX="6" refY="3" orient="auto"><path d="M0 0 L7 3 L0 6 Z" fill="#64748b"/></marker></defs>
-<rect width="640" height="280" fill="#fff"/>
-<g class="aps-node" data-info="vu" style="cursor:pointer">
-<rect x="30" y="100" width="130" height="80" rx="10" fill="#eff6ff" stroke="#1d4ed8" stroke-width="1.8"/>
-<text x="95" y="135" text-anchor="middle" font-size="16" font-weight="800" fill="#1e3a8a">ВУ</text>
-<text x="95" y="160" text-anchor="middle" font-size="13" fill="#64748b">датчики</text>
+<svg class="em-svg em-plk-svg" viewBox="0 0 760 330" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="ЦАП на весовых резисторах">
+<rect width="760" height="330" fill="#fff"/>
+
+<!-- formula -->
+<rect x="16" y="8" width="520" height="32" rx="7" fill="#f8fafc" stroke="#e2e8f0"/>
+<text x="276" y="29" text-anchor="middle" font-size="14" font-weight="700" fill="#0f172a">Uвых = −Uоп · (Rос / R) · Σ (Di / 2ⁱ)</text>
+
+<!-- D2 = 1 · R -->
+<g class="adc-node" data-info="sw" style="cursor:pointer">
+<rect x="12" y="76" width="58" height="28" rx="5" fill="#dbeafe" stroke="#1d4ed8" stroke-width="1.6"/>
+<text x="41" y="95" text-anchor="middle" font-size="12" font-weight="800" fill="#1e3a8a">D2=1</text>
 </g>
-<path d="M160 140 H210" fill="none" stroke="#94a3b8" stroke-width="2" marker-end="url(#apsCtrlArr)"/>
-<g class="aps-node is-on" data-info="evm" style="cursor:pointer">
-<rect x="210" y="70" width="220" height="140" rx="12" fill="#ecfdf5" stroke="#16a34a" stroke-width="2.2"/>
-<text x="320" y="125" text-anchor="middle" font-size="22" font-weight="800" fill="#166534">ЭВМ</text>
-<text x="320" y="158" text-anchor="middle" font-size="14" fill="#475569">средство управления</text>
-<text x="320" y="182" text-anchor="middle" font-size="13" fill="#64748b">в составе АСУ</text>
+<path d="M70 90 H92" stroke="#334155" stroke-width="1.8"/>
+<g class="adc-node" data-info="w" style="cursor:pointer">
+<path d="M92 90 H100 L108 82 L120 98 L132 82 L144 98 L156 82 L168 90 H176" fill="none" stroke="#c2410c" stroke-width="2"/>
+<text x="134" y="76" text-anchor="middle" font-size="13" font-weight="800" fill="#9a3412">R</text>
+<text x="134" y="112" text-anchor="middle" font-size="11" fill="#9a3412">вес 4</text>
 </g>
-<path d="M430 140 H480" fill="none" stroke="#94a3b8" stroke-width="2" marker-end="url(#apsCtrlArr)"/>
-<g class="aps-node" data-info="act" style="cursor:pointer">
-<rect x="480" y="100" width="130" height="80" rx="10" fill="#fff7ed" stroke="#c2410c" stroke-width="1.8"/>
-<text x="545" y="135" text-anchor="middle" font-size="15" font-weight="800" fill="#9a3412">воздействие</text>
-<text x="545" y="160" text-anchor="middle" font-size="13" fill="#64748b">на объект</text>
+<path d="M176 90 H200" stroke="#0f172a" stroke-width="1.8"/>
+
+<!-- D1 = 1 · 2R -->
+<g class="adc-node" data-info="sw" style="cursor:pointer">
+<rect x="12" y="136" width="58" height="28" rx="5" fill="#dbeafe" stroke="#1d4ed8" stroke-width="1.6"/>
+<text x="41" y="155" text-anchor="middle" font-size="12" font-weight="800" fill="#1e3a8a">D1=1</text>
 </g>
-<g class="aps-node" data-info="obj" style="cursor:pointer">
-<rect x="200" y="230" width="240" height="36" rx="8" fill="#f8fafc" stroke="#94a3b8" stroke-width="1.5"/>
-<text x="320" y="254" text-anchor="middle" font-size="14" font-weight="700" fill="#475569">объект автоматизации · АСУ</text>
+<path d="M70 150 H92" stroke="#334155" stroke-width="1.8"/>
+<g class="adc-node" data-info="w" style="cursor:pointer">
+<path d="M92 150 H100 L108 142 L120 158 L132 142 L144 158 L156 142 L168 150 H176" fill="none" stroke="#c2410c" stroke-width="2"/>
+<text x="134" y="136" text-anchor="middle" font-size="13" font-weight="800" fill="#9a3412">2R</text>
+<text x="134" y="172" text-anchor="middle" font-size="11" fill="#9a3412">вес 2</text>
 </g>
+<path d="M176 150 H200" stroke="#0f172a" stroke-width="1.8"/>
+
+<!-- omitted bits -->
+<text x="134" y="192" text-anchor="middle" font-size="16" font-weight="700" fill="#94a3b8">···</text>
+
+<!-- D0 = 0 · 4R -->
+<g class="adc-node" data-info="sw" style="cursor:pointer">
+<rect x="12" y="206" width="58" height="28" rx="5" fill="#eff6ff" stroke="#94a3b8" stroke-width="1.5"/>
+<text x="41" y="225" text-anchor="middle" font-size="12" font-weight="800" fill="#64748b">D0=0</text>
+</g>
+<path d="M70 220 H92" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4 3"/>
+<g class="adc-node" data-info="w" style="cursor:pointer">
+<path d="M92 220 H100 L108 212 L120 228 L132 212 L144 228 L156 212 L168 220 H176" fill="none" stroke="#fdba74" stroke-width="2"/>
+<text x="134" y="206" text-anchor="middle" font-size="13" font-weight="800" fill="#c2410c">4R</text>
+<text x="134" y="242" text-anchor="middle" font-size="11" fill="#9a3412">вес 1 · выкл</text>
+</g>
+<path d="M176 220 H200" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4 3"/>
+
+<!-- summing bus → inverting input -->
+<path d="M200 90 V220" stroke="#0f172a" stroke-width="2"/>
+<circle cx="200" cy="150" r="4.5" fill="#0f172a"/>
+<path d="M200 150 H228" stroke="#0f172a" stroke-width="2"/>
+
+<!-- op-amp + classic feedback Rос -->
+<g class="adc-node is-on" data-info="oa" style="cursor:pointer">
+<path d="M228 118 L338 150 L228 182 Z" fill="#ecfdf5" stroke="#16a34a" stroke-width="2"/>
+<text x="244" y="140" font-size="14" font-weight="700" fill="#166534">−</text>
+<text x="244" y="170" font-size="14" font-weight="700" fill="#166534">+</text>
+<text x="278" y="154" font-size="13" font-weight="800" fill="#166534">ОУ</text>
+<!-- output wire + tap -->
+<path d="M338 150 H398" fill="none" stroke="#16a34a" stroke-width="1.8"/>
+<!-- right drop from Rос to output -->
+<path d="M360 150 V68 H330" fill="none" stroke="#16a34a" stroke-width="1.8"/>
+<!-- Rос zigzag (same style as R, 2R, 4R) -->
+<path d="M250 68 H258 L266 60 L278 76 L290 60 L302 76 L314 60 L322 68 H330" fill="none" stroke="#16a34a" stroke-width="2"/>
+<text x="290" y="56" text-anchor="middle" font-size="13" font-weight="800" fill="#166534">Rос</text>
+<!-- left drop from Rос to summing node -->
+<path d="M250 68 H200 V146" fill="none" stroke="#16a34a" stroke-width="1.8"/>
+<rect x="398" y="128" width="88" height="44" rx="8" fill="#ecfdf5" stroke="#16a34a" stroke-width="1.8"/>
+<text x="442" y="155" text-anchor="middle" font-size="15" font-weight="800" fill="#166534">Uвых</text>
+</g>
+
+<!-- ground on + -->
+<path d="M228 171 H214 V188" stroke="#64748b" stroke-width="1.5"/>
+<path d="M204 188 H224" stroke="#64748b" stroke-width="1.6"/>
+<path d="M207 194 H221" stroke="#64748b" stroke-width="1.4"/>
+<path d="M210 200 H218" stroke="#64748b" stroke-width="1.2"/>
+
+<!-- problem -->
+<g class="adc-node" data-info="lim" style="cursor:pointer">
+<rect x="548" y="56" width="196" height="188" rx="12" fill="#fef2f2" stroke="#dc2626" stroke-width="1.8"/>
+<text x="646" y="88" text-anchor="middle" font-size="14" font-weight="800" fill="#991b1b">Проблема</text>
+<text x="646" y="118" text-anchor="middle" font-size="12" fill="#7f1d1d">при больших N</text>
+<text x="646" y="148" text-anchor="middle" font-size="13" font-weight="700" fill="#991b1b">нужен разброс</text>
+<text x="646" y="172" text-anchor="middle" font-size="13" font-weight="700" fill="#991b1b">R : 2R : … : 2ⁿR</text>
+<text x="646" y="202" text-anchor="middle" font-size="12" fill="#7f1d1d">точно выдержать трудно</text>
+<text x="646" y="226" text-anchor="middle" font-size="13" font-weight="800" fill="#991b1b">→ матрица R–2R</text>
+</g>
+
+<text x="280" y="312" text-anchor="middle" font-size="12" fill="#64748b">Di=1 → ветвь на Uоп · Di=0 → на 0 В · Rос — резистор обратной связи</text>
 </svg>
 </div>
 </div>
-<aside class="asutp-panel" id="apsCtrlPanel">
-<h3>ЭВМ</h3>
-<p>Основное средство управления в автоматизированных системах — электронно-вычислительная машина.</p>
+<aside class="asutp-panel" id="adcDacWeightPanel">
+<h3>ОУ</h3>
+<p>Инвертирующий ОУ суммирует токи весовых ветвей. <var>U</var><sub>вых</sub> = −<var>U</var><sub>оп</sub>·(<var>R</var><sub>ос</sub>/<var>R</var>)·Σ (<var>D</var><sub>i</sub>/2<sup>i</sup>). <strong>Rос</strong> — резистор в цепи обратной связи.</p>
 </aside>
 </div>
 </section>
 
-<section class="slide slide-em-ac-interactive slide-aps-kinds-interactive">
-<h2>Универсальные и специализированные</h2>
+<section class="slide slide-em-ac-interactive slide-adc-dac-r2r-interactive is-picking">
+<h2>ЦАП · матрица R–2R</h2>
+<div class="slide-body asutp-interactive"><div class="asutp-main">
+<div class="app-purpose-grid em-plk-cards">
+<button type="button" class="app-purpose-card active" data-info="lad"><strong>Лестница</strong><span>R и 2R</span></button>
+<button type="button" class="app-purpose-card" data-info="cur"><strong>Ток</strong><span>Iос</span></button>
+<button type="button" class="app-purpose-card" data-info="out"><strong>Выход</strong><span>−Iос·Rос</span></button>
+<button type="button" class="app-purpose-card" data-info="plus"><strong>Плюс</strong><span>одинаковые R</span></button>
+</div>
+<div class="highlight-box highlight-box-compact"><p class="em-adc-live" id="adcDacR2rLive">R–2R · одинаковые резисторы · точнее на больших N</p></div>
+<div class="asutp-diagram-wrap">
+<svg class="em-svg em-plk-svg" viewBox="0 0 720 280" xmlns="http://www.w3.org/2000/svg" aria-label="ЦАП R-2R">
+<rect width="720" height="280" fill="#fff"/>
+<g class="adc-node is-on" data-info="lad" style="cursor:pointer">
+<path d="M40 80 H280" stroke="#334155" stroke-width="2.2"/>
+<path d="M100 80 V160" stroke="#334155" stroke-width="2"/><path d="M180 80 V160" stroke="#334155" stroke-width="2"/><path d="M260 80 V160" stroke="#334155" stroke-width="2"/>
+<text x="70" y="70" font-size="12" font-weight="700" fill="#9a3412">R</text>
+<text x="150" y="70" font-size="12" font-weight="700" fill="#9a3412">R</text>
+<text x="100" y="180" text-anchor="middle" font-size="12" font-weight="700" fill="#1d4ed8">2R</text>
+<text x="180" y="180" text-anchor="middle" font-size="12" font-weight="700" fill="#1d4ed8">2R</text>
+<text x="260" y="180" text-anchor="middle" font-size="12" font-weight="700" fill="#1d4ed8">2R</text>
+<text x="100" y="210" text-anchor="middle" font-size="11" fill="#64748b">D2</text>
+<text x="180" y="210" text-anchor="middle" font-size="11" fill="#64748b">D1</text>
+<text x="260" y="210" text-anchor="middle" font-size="11" fill="#64748b">D0</text>
+</g>
+<g class="adc-node" data-info="cur" style="cursor:pointer">
+<path d="M280 80 H340" stroke="#c2410c" stroke-width="2.5"/>
+<text x="310" y="70" font-size="12" font-weight="700" fill="#c2410c">Iос</text>
+</g>
+<g class="adc-node" data-info="out" style="cursor:pointer">
+<path d="M360 50 L460 80 L360 110 Z" fill="#ecfdf5" stroke="#16a34a" stroke-width="1.8"/>
+<text x="390" y="84" font-size="12" font-weight="800" fill="#166534">ОУ</text>
+<path d="M460 80 H520" stroke="#334155" stroke-width="2"/>
+<text x="560" y="84" font-size="14" font-weight="700" fill="#166534">Uвых</text>
+</g>
+<g class="adc-node" data-info="plus" style="cursor:pointer">
+<rect x="400" y="180" width="260" height="50" rx="8" fill="#ecfdf5" stroke="#16a34a"/>
+<text x="530" y="210" text-anchor="middle" font-size="13" font-weight="700" fill="#166534">важна идентичность звеньев</text>
+</g>
+</svg></div></div>
+<aside class="asutp-panel" id="adcDacR2rPanel"><h3>Лестница</h3>
+<p>Матрица из резисторов только двух номиналов <strong>R</strong> и <strong>2R</strong>. <var>U</var><sub>вых</sub> = −<var>I</var><sub>ос</sub>·<var>R</var><sub>ос</sub>.</p>
+</aside></div></section>
+
+<section class="slide slide-em-ac-interactive slide-adc-dac-param-interactive is-picking">
+<h2>Параметры ЦАП</h2>
+<div class="slide-body asutp-interactive"><div class="asutp-main">
+<div class="app-purpose-grid em-plk-cards">
+<button type="button" class="app-purpose-card active" data-info="n"><strong>Разрядность</strong><span>N · уровни</span></button>
+<button type="button" class="app-purpose-card" data-info="step"><strong>Шаг</strong><span>ΔU</span></button>
+<button type="button" class="app-purpose-card" data-info="nl"><strong>Нелинейность</strong><span>инт. · дифф.</span></button>
+<button type="button" class="app-purpose-card" data-info="dyn"><strong>Динамика</strong><span>tуст · fпр</span></button>
+</div>
+<div class="highlight-box highlight-box-compact"><p class="em-adc-live" id="adcDacParamLive">N · ΔU · нелинейность · tуст · fпр</p></div>
+<div class="asutp-diagram-wrap">
+<svg class="em-svg em-plk-svg" viewBox="0 0 720 300" xmlns="http://www.w3.org/2000/svg" aria-label="Параметры ЦАП">
+<rect width="720" height="300" fill="#fff"/>
+<line x1="60" y1="240" x2="400" y2="240" stroke="#94a3b8" stroke-width="1.5"/>
+<line x1="60" y1="240" x2="60" y2="40" stroke="#94a3b8" stroke-width="1.5"/>
+<text x="230" y="270" text-anchor="middle" font-size="12" fill="#64748b">код</text>
+<text x="30" y="140" font-size="12" fill="#64748b" transform="rotate(-90 30 140)">Uвых</text>
+<g class="adc-node" data-info="nl" style="cursor:pointer">
+<path d="M60 220 L120 200 L180 170 L240 140 L300 90 L360 60" fill="none" stroke="#cbd5e1" stroke-width="1.5" stroke-dasharray="4 3"/>
+<path d="M60 220 L120 205 L180 175 L240 155 L300 100 L360 70" fill="none" stroke="#c2410c" stroke-width="2"/>
+</g>
+<g class="adc-node is-on" data-info="step" style="cursor:pointer">
+<path d="M180 175 V205" stroke="#1d4ed8" stroke-width="1.5"/><text x="195" y="195" font-size="12" font-weight="700" fill="#1e3a8a">ΔU</text>
+</g>
+<g class="adc-node" data-info="n" style="cursor:pointer">
+<circle cx="360" cy="70" r="6" fill="#7c3aed"/><text x="375" y="60" font-size="11" font-weight="700" fill="#6d28d9">конец шкалы</text>
+</g>
+<g class="adc-node" data-info="dyn" style="cursor:pointer">
+<rect x="460" y="60" width="220" height="160" rx="8" fill="#f8fafc" stroke="#64748b"/>
+<text x="570" y="90" text-anchor="middle" font-size="13" font-weight="700" fill="#334155">смена кода</text>
+<path d="M500 140 H540 V180 H620" stroke="#0f172a" stroke-width="2" fill="none"/>
+<path d="M540 140 H620" stroke="#16a34a" stroke-width="1.5" stroke-dasharray="3 2"/>
+<text x="570" y="200" text-anchor="middle" font-size="12" fill="#166534">tуст</text>
+</g>
+</svg></div></div>
+<aside class="asutp-panel" id="adcDacParamPanel"><h3>Разрядность</h3>
+<p><strong>N</strong> — число двоичных разрядов. Шаг ΔU = U<sub>max</sub> / (2<sup>N</sup> − 1). Абсолютная погрешность — отклонение в конечной точке шкалы.</p>
+</aside></div></section>
+
+<section class="slide slide-em-ac-interactive slide-adc-idea-interactive is-picking">
+<h2>АЦП · идея</h2>
+<div class="slide-body asutp-interactive"><div class="asutp-main">
+<div class="app-purpose-grid em-plk-cards">
+<button type="button" class="app-purpose-card active" data-info="in"><strong>Вход</strong><span>U / I</span></button>
+<button type="button" class="app-purpose-card" data-info="out"><strong>Выход</strong><span>код</span></button>
+<button type="button" class="app-purpose-card" data-info="mir"><strong>Зеркало</strong><span>≠ ЦАП</span></button>
+<button type="button" class="app-purpose-card" data-info="steps"><strong>Этапы</strong><span>3 шага</span></button>
+</div>
+<div class="highlight-box highlight-box-compact"><p class="em-adc-live" id="adcIdeaLive">U / I → выборка → квантование → код</p></div>
+<div class="asutp-diagram-wrap">
+<svg class="em-svg em-plk-svg" viewBox="0 0 720 280" xmlns="http://www.w3.org/2000/svg" aria-label="АЦП идея">
+<rect width="720" height="280" fill="#fff"/>
+<g class="adc-node is-on" data-info="in" style="cursor:pointer">
+<rect x="30" y="100" width="100" height="70" rx="8" fill="#ecfdf5" stroke="#16a34a" stroke-width="1.8"/>
+<text x="80" y="140" text-anchor="middle" font-size="16" font-weight="800" fill="#166534">Uвх</text>
+</g>
+<path d="M130 135 H170" stroke="#94a3b8" stroke-width="2"/>
+<g class="adc-node" data-info="mir" style="cursor:pointer">
+<rect x="170" y="90" width="160" height="90" rx="12" fill="#eff6ff" stroke="#1d4ed8" stroke-width="2"/>
+<text x="250" y="140" text-anchor="middle" font-size="22" font-weight="800" fill="#1e3a8a">АЦП</text>
+</g>
+<path d="M330 135 H370" stroke="#94a3b8" stroke-width="2"/>
+<g class="adc-node" data-info="out" style="cursor:pointer">
+<rect x="370" y="100" width="120" height="70" rx="8" fill="#fff7ed" stroke="#c2410c" stroke-width="1.8"/>
+<text x="430" y="140" text-anchor="middle" font-size="14" font-weight="800" fill="#9a3412">код</text>
+</g>
+<g class="adc-node" data-info="steps" style="cursor:pointer">
+<rect x="520" y="50" width="170" height="50" rx="6" fill="#f8fafc" stroke="#64748b"/><text x="605" y="80" text-anchor="middle" font-size="13" font-weight="700" fill="#334155">1. выборка</text>
+<rect x="520" y="115" width="170" height="50" rx="6" fill="#f8fafc" stroke="#64748b"/><text x="605" y="145" text-anchor="middle" font-size="13" font-weight="700" fill="#334155">2. квантование</text>
+<rect x="520" y="180" width="170" height="50" rx="6" fill="#f8fafc" stroke="#64748b"/><text x="605" y="210" text-anchor="middle" font-size="13" font-weight="700" fill="#334155">3. кодирование</text>
+</g>
+</svg></div></div>
+<aside class="asutp-panel" id="adcIdeaPanel"><h3>Вход</h3>
+<p>АЦП играет <strong>обратную</strong> роль ЦАП: непрерывный сигнал → цифровой код.</p>
+</aside></div></section>
+
+<section class="slide slide-em-ac-interactive slide-adc-types-interactive is-picking">
+<h2>Типы АЦП</h2>
 <div class="slide-body asutp-interactive">
 <div class="asutp-main">
-<p class="asutp-hint">Два вида ЭВМ в АСУ. Жмите тип</p>
-<div class="app-purpose-grid em-fast-grid em-aps-cards-2">
-<button type="button" class="app-purpose-card active" data-info="uni"><strong>Универсальные</strong><span>эта тема</span></button>
-<button type="button" class="app-purpose-card" data-info="spec"><strong>Специализированные</strong><span>под задачу</span></button>
+<div class="app-purpose-grid em-plk-cards">
+<button type="button" class="app-purpose-card active" data-info="par"><strong>Параллельные</strong><span>flash</span></button>
+<button type="button" class="app-purpose-card" data-info="ser"><strong>Последовательные</strong><span>три ветки</span></button>
+<button type="button" class="app-purpose-card" data-info="sar"><strong>SAR</strong><span>приближение</span></button>
+<button type="button" class="app-purpose-card" data-info="sig"><strong>ΣΔ</strong><span>интегрирующие</span></button>
 </div>
-<div class="highlight-box highlight-box-compact"><p class="em-aps-live" id="apsKindsLive">в АСУ: универсальные и специализированные ЭВМ · здесь — универсальные</p></div>
+<div class="highlight-box highlight-box-compact"><p class="em-adc-live" id="adcTypesLive">три класса: параллельные · последовательные · посл.-параллельные</p></div>
 <div class="asutp-diagram-wrap">
-<svg class="em-svg em-aps-svg" viewBox="0 0 640 280" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="Виды ЭВМ">
-<g class="em-ac-view is-on" data-view="uni">
-<rect width="640" height="280" fill="#fff"/>
-<rect x="90" y="50" width="460" height="160" rx="14" fill="#eff6ff" stroke="#1d4ed8" stroke-width="2.2"/>
-<text x="320" y="110" text-anchor="middle" font-size="24" font-weight="800" fill="#1e3a8a">универсальные ЭВМ</text>
-<text x="320" y="150" text-anchor="middle" font-size="17" fill="#475569">не создавались специально для АСУ</text>
-<text x="320" y="180" text-anchor="middle" font-size="16" fill="#64748b">но пригодны — в разной степени</text>
-<text x="320" y="250" text-anchor="middle" font-size="15" fill="#94a3b8">тема 5 рассматривает именно их применение в АСУ</text>
+<svg class="em-svg em-plk-svg" viewBox="0 0 760 310" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="Типы АЦП">
+<rect width="760" height="310" fill="#fff"/>
+
+<!-- root -->
+<rect x="230" y="12" width="300" height="40" rx="8" fill="#f1f5f9" stroke="#0f172a" stroke-width="1.8"/>
+<text x="380" y="38" text-anchor="middle" font-size="14" font-weight="800" fill="#0f172a">Аналого-цифровые преобразователи</text>
+
+<!-- trunk lines -->
+<path d="M380 52 V68" stroke="#94a3b8" stroke-width="1.6"/>
+<path d="M100 68 H660" stroke="#94a3b8" stroke-width="1.6"/>
+<path d="M100 68 V88" stroke="#94a3b8" stroke-width="1.6"/>
+<path d="M380 68 V88" stroke="#94a3b8" stroke-width="1.6"/>
+<path d="M660 68 V88" stroke="#94a3b8" stroke-width="1.6"/>
+
+<!-- level 1 -->
+<g class="adc-node is-on" data-info="par" style="cursor:pointer">
+<rect x="30" y="88" width="140" height="44" rx="8" fill="#ecfdf5" stroke="#16a34a" stroke-width="2"/>
+<text x="100" y="116" text-anchor="middle" font-size="13" font-weight="800" fill="#166534">Параллельные</text>
 </g>
-<g class="em-ac-view" data-view="spec">
-<rect width="640" height="280" fill="#fff"/>
-<rect x="90" y="50" width="460" height="160" rx="14" fill="#fff7ed" stroke="#c2410c" stroke-width="2.2"/>
-<text x="320" y="110" text-anchor="middle" font-size="24" font-weight="800" fill="#9a3412">специализированные ЭВМ</text>
-<text x="320" y="150" text-anchor="middle" font-size="17" fill="#475569">заточены под конкретные задачи управления</text>
-<text x="320" y="180" text-anchor="middle" font-size="16" fill="#64748b">в этой теме — не основной предмет</text>
-<text x="320" y="250" text-anchor="middle" font-size="15" fill="#94a3b8">оба вида применяют для управления компонентами АСУ</text>
+
+<g class="adc-node" data-info="ser" style="cursor:pointer">
+<rect x="280" y="88" width="200" height="44" rx="8" fill="#eff6ff" stroke="#1d4ed8" stroke-width="2"/>
+<text x="380" y="116" text-anchor="middle" font-size="13" font-weight="800" fill="#1e3a8a">Последовательные</text>
 </g>
+
+<g class="adc-node" data-info="hyb" style="cursor:pointer">
+<rect x="560" y="88" width="180" height="44" rx="8" fill="#fff7ed" stroke="#c2410c" stroke-width="1.8"/>
+<text x="650" y="116" text-anchor="middle" font-size="12" font-weight="800" fill="#9a3412">Посл.-параллельные</text>
+</g>
+
+<!-- serial branches -->
+<path d="M380 132 V148" stroke="#94a3b8" stroke-width="1.5"/>
+<path d="M180 148 H580" stroke="#94a3b8" stroke-width="1.5"/>
+<path d="M180 148 V168" stroke="#94a3b8" stroke-width="1.5"/>
+<path d="M380 148 V168" stroke="#94a3b8" stroke-width="1.5"/>
+<path d="M580 148 V168" stroke="#94a3b8" stroke-width="1.5"/>
+
+<g class="adc-node" data-info="cnt" style="cursor:pointer">
+<rect x="90" y="168" width="180" height="40" rx="7" fill="#f8fafc" stroke="#64748b" stroke-width="1.5"/>
+<text x="180" y="193" text-anchor="middle" font-size="12" font-weight="700" fill="#334155">Последовательного счёта</text>
+</g>
+
+<g class="adc-node" data-info="sar" style="cursor:pointer">
+<rect x="290" y="168" width="180" height="40" rx="7" fill="#dbeafe" stroke="#1d4ed8" stroke-width="2"/>
+<text x="380" y="193" text-anchor="middle" font-size="12" font-weight="800" fill="#1e3a8a">Посл. приближения</text>
+</g>
+
+<g class="adc-node" data-info="int" style="cursor:pointer">
+<rect x="490" y="168" width="180" height="40" rx="7" fill="#f8fafc" stroke="#64748b" stroke-width="1.5"/>
+<text x="580" y="193" text-anchor="middle" font-size="12" font-weight="700" fill="#334155">Интегрирующие</text>
+</g>
+
+<!-- leaves -->
+<path d="M180 208 V228" stroke="#94a3b8" stroke-width="1.4"/>
+<path d="M580 208 V228" stroke="#94a3b8" stroke-width="1.4"/>
+
+<g class="adc-node" data-info="trk" style="cursor:pointer">
+<rect x="115" y="228" width="130" height="36" rx="6" fill="#f1f5f9" stroke="#64748b"/>
+<text x="180" y="251" text-anchor="middle" font-size="12" font-weight="700" fill="#475569">Следящие</text>
+</g>
+
+<g class="adc-node" data-info="sig" style="cursor:pointer">
+<rect x="505" y="228" width="150" height="36" rx="6" fill="#faf5ff" stroke="#7c3aed" stroke-width="2"/>
+<text x="580" y="251" text-anchor="middle" font-size="12" font-weight="800" fill="#6d28d9">Сигма-дельта</text>
+</g>
+
+<text x="380" y="295" text-anchor="middle" font-size="12" fill="#64748b">жирным на схеме учебника — ключевые: параллельные · SAR · ΣΔ</text>
 </svg>
 </div>
 </div>
-<aside class="asutp-panel" id="apsKindsPanel">
-<h3>Универсальные</h3>
-<p>Все ЭВМ в АСУ делят на универсальные и специализированные. В теме 5 — применение <strong>универсальных</strong> ЭВМ.</p>
+<aside class="asutp-panel" id="adcTypesPanel">
+<h3>Параллельные</h3>
+<p><strong>Параллельные</strong> (flash) — сравнение сразу со всеми уровнями. Максимально быстрые; дорого по числу компараторов.</p>
 </aside>
 </div>
 </section>
 
-<section class="slide slide-em-ac-interactive slide-aps-uni-interactive is-picking">
-<h2>Универсальные ЭВМ в АСУ</h2>
-<div class="slide-body asutp-interactive">
-<div class="asutp-main">
-<p class="asutp-hint">Не «для АСУ», но использовать можно. Жмите тезис</p>
-<div class="app-purpose-grid em-fast-grid em-aps-cards">
-<button type="button" class="app-purpose-card active" data-info="not"><strong>Не целевые</strong><span>не для АСУ</span></button>
-<button type="button" class="app-purpose-card" data-info="fit"><strong>Пригодны</strong><span>в разной мере</span></button>
-<button type="button" class="app-purpose-card" data-info="ok"><strong>Нет барьера</strong><span>технически</span></button>
-<button type="button" class="app-purpose-card" data-info="any"><strong>Любая ЭВМ</strong><span>в принципе</span></button>
+<section class="slide slide-em-ac-interactive slide-adc-flash-interactive is-picking">
+<h2>АЦП · параллельный</h2>
+<div class="slide-body asutp-interactive"><div class="asutp-main">
+<div class="app-purpose-grid em-plk-cards">
+<button type="button" class="app-purpose-card active" data-info="cmp"><strong>Компараторы</strong><span>ОУ</span></button>
+<button type="button" class="app-purpose-card" data-info="ref"><strong>Опора</strong><span>делитель</span></button>
+<button type="button" class="app-purpose-card" data-info="code"><strong>Код</strong><span>Джонсона</span></button>
+<button type="button" class="app-purpose-card" data-info="trade"><strong>Оценка</strong><span>быстро · дорого</span></button>
 </div>
-<div class="highlight-box highlight-box-compact"><p class="em-aps-live" id="apsUniLive">универсальные ЭВМ не предназначены специально для построения АСУ</p></div>
+<div class="highlight-box highlight-box-compact"><p class="em-adc-live" id="adcFlashLive">параллельный · 1 такт · много компараторов</p></div>
 <div class="asutp-diagram-wrap">
-<svg class="em-svg em-aps-svg" viewBox="0 0 640 260" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="Универсальные ЭВМ">
-<rect width="640" height="260" fill="#fff"/>
-<g class="aps-node is-on" data-info="not" style="cursor:pointer">
-<rect x="40" y="40" width="260" height="70" rx="10" fill="#eff6ff" stroke="#1d4ed8" stroke-width="1.8"/>
-<text x="170" y="82" text-anchor="middle" font-size="16" font-weight="800" fill="#1e3a8a">не специально для АСУ</text>
+<svg class="em-svg em-plk-svg" viewBox="0 0 720 300" xmlns="http://www.w3.org/2000/svg" aria-label="АЦП параллельный">
+<rect width="720" height="300" fill="#fff"/>
+<g class="adc-node" data-info="ref" style="cursor:pointer">
+<rect x="40" y="40" width="80" height="220" rx="6" fill="#faf5ff" stroke="#7c3aed"/>
+<text x="80" y="80" text-anchor="middle" font-size="12" font-weight="700" fill="#6d28d9">Uоп</text>
+<line x1="50" y1="100" x2="110" y2="100" stroke="#7c3aed"/><line x1="50" y1="140" x2="110" y2="140" stroke="#7c3aed"/>
+<line x1="50" y1="180" x2="110" y2="180" stroke="#7c3aed"/><line x1="50" y1="220" x2="110" y2="220" stroke="#7c3aed"/>
+<text x="80" y="250" text-anchor="middle" font-size="11" fill="#64748b">делитель</text>
 </g>
-<g class="aps-node" data-info="fit" style="cursor:pointer">
-<rect x="340" y="40" width="260" height="70" rx="10" fill="#ecfdf5" stroke="#16a34a" stroke-width="1.8"/>
-<text x="470" y="82" text-anchor="middle" font-size="16" font-weight="800" fill="#166534">пригодны по-разному</text>
+<g class="adc-node is-on" data-info="cmp" style="cursor:pointer">
+<rect x="180" y="70" width="100" height="36" rx="4" fill="#ecfdf5" stroke="#16a34a"/><text x="230" y="93" text-anchor="middle" font-size="12" font-weight="700" fill="#166534">cmp1</text>
+<rect x="180" y="120" width="100" height="36" rx="4" fill="#ecfdf5" stroke="#16a34a"/><text x="230" y="143" text-anchor="middle" font-size="12" font-weight="700" fill="#166534">cmp2</text>
+<rect x="180" y="170" width="100" height="36" rx="4" fill="#ecfdf5" stroke="#16a34a"/><text x="230" y="193" text-anchor="middle" font-size="12" font-weight="700" fill="#166534">cmp3</text>
+<rect x="180" y="220" width="100" height="36" rx="4" fill="#ecfdf5" stroke="#16a34a"/><text x="230" y="243" text-anchor="middle" font-size="12" font-weight="700" fill="#166534">cmp4</text>
 </g>
-<g class="aps-node" data-info="ok" style="cursor:pointer">
-<rect x="40" y="140" width="260" height="70" rx="10" fill="#fef9c3" stroke="#ca8a04" stroke-width="1.8"/>
-<text x="170" y="182" text-anchor="middle" font-size="16" font-weight="800" fill="#854d0e">нет непреодолимых трудностей</text>
+<path d="M20 160 H180" stroke="#1d4ed8" stroke-width="1.5"/><text x="50" y="150" font-size="12" fill="#1e3a8a">Uвх</text>
+<g class="adc-node" data-info="code" style="cursor:pointer">
+<rect x="360" y="120" width="140" height="80" rx="8" fill="#fff7ed" stroke="#c2410c"/>
+<text x="430" y="165" text-anchor="middle" font-size="14" font-weight="800" fill="#9a3412">код</text>
 </g>
-<g class="aps-node" data-info="any" style="cursor:pointer">
-<rect x="340" y="140" width="260" height="70" rx="10" fill="#fff7ed" stroke="#c2410c" stroke-width="1.8"/>
-<text x="470" y="182" text-anchor="middle" font-size="16" font-weight="800" fill="#9a3412">любую ЭВМ можно включить</text>
+<path d="M280 88 H360" stroke="#94a3b8"/><path d="M280 138 H360" stroke="#94a3b8"/><path d="M280 188 H360" stroke="#94a3b8"/><path d="M280 238 H360" stroke="#94a3b8"/>
+<g class="adc-node" data-info="trade" style="cursor:pointer">
+<rect x="540" y="120" width="150" height="80" rx="8" fill="#fef2f2" stroke="#dc2626"/>
+<text x="615" y="155" text-anchor="middle" font-size="12" font-weight="700" fill="#991b1b">~2ᴺ−1</text>
+<text x="615" y="175" text-anchor="middle" font-size="12" fill="#991b1b">компараторов</text>
 </g>
-</svg>
-</div>
-</div>
-<aside class="asutp-panel" id="apsUniPanel">
-<h3>Не целевые</h3>
-<p>Универсальные ЭВМ не предназначены специально для построения автоматизированных систем.</p>
-</aside>
-</div>
-</section>
+</svg></div></div>
+<aside class="asutp-panel" id="adcFlashPanel"><h3>Компараторы</h3>
+<p>ОУ в режиме компараторов сравнивают Uвх с опорами делителя. Один такт — очень быстро, но нужно много компараторов.</p>
+</aside></div></section>
 
-<section class="slide slide-em-ac-interactive slide-aps-pick-interactive is-picking">
-<h2>Критерии выбора ЭВМ</h2>
-<div class="slide-body asutp-interactive">
-<div class="asutp-main">
-<p class="asutp-hint">Три главных критерия выбора ЭВМ для АСУ. Жмите</p>
-<div class="app-purpose-grid em-fast-grid em-aps-cards-3">
-<button type="button" class="app-purpose-card active" data-info="vu"><strong>1 · ВУ</strong><span>гибкость</span></button>
-<button type="button" class="app-purpose-card" data-info="speed"><strong>2 · Мощность</strong><span>скорость</span></button>
-<button type="button" class="app-purpose-card" data-info="mem"><strong>3 · Память</strong><span>объём ЗУ</span></button>
+<section class="slide slide-em-ac-interactive slide-adc-count-interactive is-picking">
+<h2>АЦП · последовательный счёт</h2>
+<div class="slide-body asutp-interactive"><div class="asutp-main">
+<div class="app-purpose-grid em-plk-cards">
+<button type="button" class="app-purpose-card active" data-info="cnt"><strong>Счётчик</strong><span>+1</span></button>
+<button type="button" class="app-purpose-card" data-info="dac"><strong>ЦАП</strong><span>код→U</span></button>
+<button type="button" class="app-purpose-card" data-info="cmp"><strong>Компаратор</strong><span>Uцап ≟ Uвх</span></button>
+<button type="button" class="app-purpose-card" data-info="time"><strong>Время</strong><span>2ᴺ·tтакт</span></button>
 </div>
-<div class="highlight-box highlight-box-compact"><p class="em-aps-live" id="apsPickLive">гибкость взаимодействия с нестандартными внешними устройствами (ВУ)</p></div>
+<div class="highlight-box highlight-box-compact"><p class="em-adc-live" id="adcCountLive">счёт до равенства · до 2ᴺ тактов</p></div>
 <div class="asutp-diagram-wrap">
-<svg class="em-svg em-aps-svg" viewBox="0 0 640 280" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="Критерии выбора">
-<g class="em-ac-view is-on" data-view="vu">
-<rect width="640" height="280" fill="#fff"/>
-<text x="320" y="40" text-anchor="middle" font-size="18" font-weight="800" fill="#1e3a8a">1. Гибкость взаимодействия с ВУ</text>
-<rect x="70" y="70" width="160" height="100" rx="10" fill="#ecfdf5" stroke="#16a34a" stroke-width="1.8"/>
-<text x="150" y="125" text-anchor="middle" font-size="20" font-weight="800" fill="#166534">ЭВМ</text>
-<path d="M230 120 H300" fill="none" stroke="#94a3b8" stroke-width="2"/>
-<rect x="300" y="55" width="270" height="130" rx="10" fill="#eff6ff" stroke="#1d4ed8" stroke-width="1.8"/>
-<text x="435" y="100" text-anchor="middle" font-size="16" font-weight="800" fill="#1e3a8a">нестандартные ВУ</text>
-<text x="435" y="130" text-anchor="middle" font-size="15" fill="#475569">измерительная аппаратура</text>
-<text x="435" y="158" text-anchor="middle" font-size="15" fill="#475569">управляющая аппаратура АСУ</text>
-<text x="320" y="240" text-anchor="middle" font-size="15" fill="#64748b">важно уметь стыковать «необычные» внешние устройства</text>
-</g>
-<g class="em-ac-view" data-view="speed">
-<rect width="640" height="280" fill="#fff"/>
-<text x="320" y="40" text-anchor="middle" font-size="18" font-weight="800" fill="#1e3a8a">2. Вычислительная мощность и скорость</text>
-<rect x="120" y="80" width="400" height="120" rx="12" fill="#fff7ed" stroke="#c2410c" stroke-width="2"/>
-<text x="320" y="130" text-anchor="middle" font-size="18" font-weight="800" fill="#9a3412">мощность ЭВМ ↔ скорость обработки</text>
-<text x="320" y="165" text-anchor="middle" font-size="16" fill="#475569">в ходе эксперимента / работы АСУ</text>
-<text x="320" y="250" text-anchor="middle" font-size="15" fill="#64748b">ЭВМ должна «успевать» за потоком данных</text>
-</g>
-<g class="em-ac-view" data-view="mem">
-<rect width="640" height="280" fill="#fff"/>
-<text x="320" y="40" text-anchor="middle" font-size="18" font-weight="800" fill="#1e3a8a">3. Объём запоминающих устройств</text>
-<rect x="80" y="80" width="220" height="110" rx="10" fill="#faf5ff" stroke="#7c3aed" stroke-width="1.8"/>
-<text x="190" y="125" text-anchor="middle" font-size="18" font-weight="800" fill="#6d28d9">накопление</text>
-<text x="190" y="155" text-anchor="middle" font-size="15" fill="#64748b">данных эксперимента</text>
-<rect x="340" y="80" width="220" height="110" rx="10" fill="#ecfdf5" stroke="#16a34a" stroke-width="1.8"/>
-<text x="450" y="125" text-anchor="middle" font-size="18" font-weight="800" fill="#166534">оперативная</text>
-<text x="450" y="155" text-anchor="middle" font-size="15" fill="#64748b">обработка «на лету»</text>
-<text x="320" y="250" text-anchor="middle" font-size="15" fill="#64748b">нужен достаточный объём ЗУ под обе задачи</text>
-</g>
-</svg>
-</div>
-</div>
-<aside class="asutp-panel" id="apsPickPanel">
-<h3>1 · ВУ</h3>
-<p>Гибкость взаимодействия с нестандартными внешними устройствами — измерительной и управляющей аппаратурой АСУ.</p>
-</aside>
-</div>
-</section>
+<svg class="em-svg em-plk-svg" viewBox="0 0 720 280" xmlns="http://www.w3.org/2000/svg" aria-label="АЦП счёт">
+<rect width="720" height="280" fill="#fff"/>
+<rect x="30" y="100" width="100" height="60" rx="8" fill="#f8fafc" stroke="#64748b"/><text x="80" y="135" text-anchor="middle" font-size="12" font-weight="700" fill="#334155">такт</text>
+<path d="M130 130 H160" stroke="#94a3b8" stroke-width="2"/>
+<g class="adc-node is-on" data-info="cnt" style="cursor:pointer"><rect x="160" y="100" width="110" height="60" rx="8" fill="#eff6ff" stroke="#1d4ed8"/><text x="215" y="135" text-anchor="middle" font-size="13" font-weight="800" fill="#1e3a8a">счётчик</text></g>
+<path d="M270 130 H300" stroke="#94a3b8" stroke-width="2"/>
+<g class="adc-node" data-info="dac" style="cursor:pointer"><rect x="300" y="100" width="100" height="60" rx="8" fill="#fff7ed" stroke="#c2410c"/><text x="350" y="135" text-anchor="middle" font-size="14" font-weight="800" fill="#9a3412">ЦАП</text></g>
+<path d="M400 130 H440" stroke="#94a3b8" stroke-width="2"/>
+<g class="adc-node" data-info="cmp" style="cursor:pointer"><rect x="440" y="90" width="130" height="80" rx="8" fill="#ecfdf5" stroke="#16a34a"/><text x="505" y="125" text-anchor="middle" font-size="12" font-weight="800" fill="#166534">компаратор</text><text x="505" y="148" text-anchor="middle" font-size="11" fill="#64748b">Стоп</text></g>
+<path d="M505 90 V50 H80 V100" stroke="#1d4ed8" stroke-width="1.4" fill="none"/><text x="200" y="40" font-size="12" fill="#1e3a8a">Uвх</text>
+<g class="adc-node" data-info="time" style="cursor:pointer"><rect x="200" y="200" width="320" height="50" rx="8" fill="#fef2f2" stroke="#dc2626"/><text x="360" y="230" text-anchor="middle" font-size="14" font-weight="700" fill="#991b1b">tₘₐₓ = 2ᴺ · tтакт</text></g>
+</svg></div></div>
+<aside class="asutp-panel" id="adcCountPanel"><h3>Счётчик</h3>
+<p>Такты наращивают код; ЦАП даёт Uцап; при равенстве с Uвх — <strong>Стоп</strong>. Недостаток — низкое быстродействие.</p>
+</aside></div></section>
 
-<section class="slide slide-em-ac-interactive slide-aps-trend-interactive is-picking">
-<h2>Тенденции развития ЭВМ</h2>
-<div class="slide-body asutp-interactive">
-<div class="asutp-main">
-<p class="asutp-hint">Архитектура упрощает стыковку с ВУ. Жмите тренд</p>
-<div class="app-purpose-grid em-fast-grid em-aps-cards">
-<button type="button" class="app-purpose-card active" data-info="arch"><strong>Архитектура</strong><span>много ВУ</span></button>
-<button type="button" class="app-purpose-card" data-info="fast"><strong>Быстродействие</strong><span>растёт</span></button>
-<button type="button" class="app-purpose-card" data-info="ram"><strong>ОЗУ</strong><span>объём ↑</span></button>
-<button type="button" class="app-purpose-card" data-info="fam"><strong>Семейства</strong><span>совместимость</span></button>
+<section class="slide slide-em-ac-interactive slide-adc-sar-interactive is-picking">
+<h2>АЦП · последовательное приближение</h2>
+<div class="slide-body asutp-interactive"><div class="asutp-main">
+<div class="app-purpose-grid em-plk-cards">
+<button type="button" class="app-purpose-card active" data-info="msb"><strong>Старт</strong><span>MSB = 1</span></button>
+<button type="button" class="app-purpose-card" data-info="cmp"><strong>Сравнение</strong><span>Uвх ≟ Uцап</span></button>
+<button type="button" class="app-purpose-card" data-info="dec"><strong>Решение</strong><span>оставить / 0</span></button>
+<button type="button" class="app-purpose-card" data-info="done"><strong>Итог</strong><span>N тактов</span></button>
 </div>
-<div class="highlight-box highlight-box-compact"><p class="em-aps-live" id="apsTrendLive">современные ЭВМ сравнительно просто стыкуются с большим числом ВУ</p></div>
+<div class="highlight-box highlight-box-compact"><p class="em-adc-live" id="adcSarLive">SAR · бит за битом · t = N·tтакт</p></div>
+<div class="adc-sar-controls"><button type="button" class="btn-nav" id="adcSarReset">Сброс</button><button type="button" class="btn-nav" id="adcSarStep">Шаг ▶</button></div>
 <div class="asutp-diagram-wrap">
-<svg class="em-svg em-aps-svg" viewBox="0 0 640 260" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="Тенденции">
-<rect width="640" height="260" fill="#fff"/>
-<g class="aps-node is-on" data-info="arch" style="cursor:pointer">
-<rect x="40" y="30" width="270" height="85" rx="10" fill="#eff6ff" stroke="#1d4ed8" stroke-width="1.8"/>
-<text x="175" y="70" text-anchor="middle" font-size="17" font-weight="800" fill="#1e3a8a">стыковка с многими ВУ</text>
-<text x="175" y="95" text-anchor="middle" font-size="13" fill="#64748b">в т. ч. нестандартными</text>
+<svg class="em-svg em-plk-svg" viewBox="0 0 760 300" xmlns="http://www.w3.org/2000/svg" aria-label="АЦП SAR">
+<rect width="760" height="300" fill="#fff"/>
+<g class="adc-node is-on" data-info="msb" style="cursor:pointer">
+<rect x="40" y="40" width="200" height="80" rx="8" fill="#eff6ff" stroke="#1d4ed8"/>
+<text x="140" y="75" text-anchor="middle" font-size="14" font-weight="800" fill="#1e3a8a">регистр</text>
+<text id="adcSarBits" x="140" y="100" text-anchor="middle" font-size="18" font-weight="800" fill="#0f172a">1 0 0 0</text>
 </g>
-<g class="aps-node" data-info="fast" style="cursor:pointer">
-<rect x="330" y="30" width="270" height="85" rx="10" fill="#fff7ed" stroke="#c2410c" stroke-width="1.8"/>
-<text x="465" y="80" text-anchor="middle" font-size="17" font-weight="800" fill="#9a3412">↑ быстродействие</text>
+<path d="M240 80 H280" stroke="#94a3b8" stroke-width="2"/>
+<g class="adc-node" data-info="dec" style="cursor:pointer">
+<rect x="280" y="40" width="120" height="80" rx="8" fill="#fff7ed" stroke="#c2410c"/>
+<text x="340" y="85" text-anchor="middle" font-size="16" font-weight="800" fill="#9a3412">ЦАП</text>
 </g>
-<g class="aps-node" data-info="ram" style="cursor:pointer">
-<rect x="40" y="140" width="270" height="85" rx="10" fill="#ecfdf5" stroke="#16a34a" stroke-width="1.8"/>
-<text x="175" y="190" text-anchor="middle" font-size="17" font-weight="800" fill="#166534">↑ объём ОЗУ</text>
+<path d="M400 80 H440" stroke="#94a3b8" stroke-width="2"/>
+<g class="adc-node" data-info="cmp" style="cursor:pointer">
+<rect x="440" y="40" width="140" height="80" rx="8" fill="#ecfdf5" stroke="#16a34a"/>
+<text x="510" y="85" text-anchor="middle" font-size="13" font-weight="800" fill="#166534">компаратор</text>
 </g>
-<g class="aps-node" data-info="fam" style="cursor:pointer">
-<rect x="330" y="140" width="270" height="85" rx="10" fill="#faf5ff" stroke="#7c3aed" stroke-width="1.8"/>
-<text x="465" y="175" text-anchor="middle" font-size="16" font-weight="800" fill="#6d28d9">программно совместимые</text>
-<text x="465" y="200" text-anchor="middle" font-size="16" font-weight="800" fill="#6d28d9">семейства</text>
+<path d="M510 40 V20 H80 V40" stroke="#1d4ed8" stroke-width="1.4" fill="none"/>
+<text x="200" y="16" font-size="12" fill="#1e3a8a">Uвх (демо = 10/16)</text>
+<g class="adc-node" data-info="done" style="cursor:pointer">
+<rect x="200" y="180" width="360" height="70" rx="8" fill="#f8fafc" stroke="#64748b"/>
+<text id="adcSarStatus" x="380" y="220" text-anchor="middle" font-size="14" font-weight="700" fill="#334155">шаг 0 · пробуем MSB</text>
 </g>
-</svg>
+</svg></div></div>
+<aside class="asutp-panel" id="adcSarPanel"><h3>Старт</h3>
+<p>Старший разряд ставят в <strong>1</strong>. Сравнивают с Uвх; при необходимости сбрасывают и переходят к следующему биту. За <strong>N</strong> тактов — готовый код.</p>
+</aside></div></section>
+
+<section class="slide slide-em-ac-interactive slide-adc-param-interactive is-picking">
+<h2>Параметры АЦП</h2>
+<div class="slide-body asutp-interactive"><div class="asutp-main">
+<div class="app-purpose-grid em-plk-cards">
+<button type="button" class="app-purpose-card active" data-info="st"><strong>Статика</strong><span>N · погрешность</span></button>
+<button type="button" class="app-purpose-card" data-info="fs"><strong>fд</strong><span>дискретизация</span></button>
+<button type="button" class="app-purpose-card" data-info="ap"><strong>Апертура</strong><span>неопределённость</span></button>
+<button type="button" class="app-purpose-card" data-info="enc"><strong>Кодирование</strong><span>время кода</span></button>
 </div>
+<div class="highlight-box highlight-box-compact"><p class="em-adc-live" id="adcParamLive">статика · fд · апертура · время кодирования</p></div>
+<div class="asutp-diagram-wrap">
+<svg class="em-svg em-plk-svg" viewBox="0 0 720 280" xmlns="http://www.w3.org/2000/svg" aria-label="Параметры АЦП">
+<rect width="720" height="280" fill="#fff"/>
+<g class="adc-node" data-info="fs" style="cursor:pointer">
+<path d="M40 140 Q100 60 160 140 T280 140 T400 140 T520 140" fill="none" stroke="#64748b" stroke-width="2"/>
+</g>
+<g class="adc-node is-on" data-info="ap" style="cursor:pointer">
+<rect x="150" y="100" width="20" height="80" fill="#93c5fd" opacity="0.7"/>
+<rect x="270" y="100" width="20" height="80" fill="#93c5fd" opacity="0.7"/>
+<rect x="390" y="100" width="20" height="80" fill="#93c5fd" opacity="0.7"/>
+<text x="280" y="210" text-anchor="middle" font-size="12" font-weight="700" fill="#1e3a8a">апертура</text>
+</g>
+<g class="adc-node" data-info="enc" style="cursor:pointer">
+<rect x="270" y="100" width="80" height="20" fill="#fde68a" opacity="0.9"/>
+<text x="450" y="90" font-size="12" fill="#92400e">время кодирования</text>
+</g>
+<g class="adc-node" data-info="st" style="cursor:pointer">
+<rect x="560" y="80" width="130" height="120" rx="8" fill="#f1f5f9" stroke="#0f172a"/>
+<text x="625" y="130" text-anchor="middle" font-size="13" font-weight="700" fill="#0f172a">статика</text>
+<text x="625" y="155" text-anchor="middle" font-size="12" fill="#64748b">≈ как ЦАП</text>
+</g>
+</svg></div></div>
+<aside class="asutp-panel" id="adcParamPanel"><h3>Статика</h3>
+<p>Статические параметры <strong>аналогичны ЦАП</strong>: разрядность, диапазон, погрешность, нелинейность.</p>
+</aside></div></section>
+
+<section class="slide slide-em-ac-interactive slide-adc-plc-interactive is-picking">
+<h2>АЦП и ЦАП в модулях ПЛК</h2>
+<div class="slide-body asutp-interactive"><div class="asutp-main">
+<div class="app-purpose-grid em-plk-cards">
+<button type="button" class="app-purpose-card active" data-info="ai"><strong>AI</strong><span>вход · АЦП</span></button>
+<button type="button" class="app-purpose-card" data-info="ao"><strong>AO</strong><span>выход · ЦАП</span></button>
+<button type="button" class="app-purpose-card" data-info="res"><strong>Разрядность</strong><span>12…16 бит</span></button>
+<button type="button" class="app-purpose-card" data-info="ch"><strong>Канал</strong><span>точка ВВ</span></button>
 </div>
-<aside class="asutp-panel" id="apsTrendPanel">
-<h3>Архитектура</h3>
-<p>Архитектура современных ЭВМ допускает сравнительно простое взаимодействие с большим количеством ВУ, в том числе нестандартных.</p>
-</aside>
-</div>
-</section>
+<div class="highlight-box highlight-box-compact"><p class="em-adc-live" id="adcPlcLive">AI = АЦП · AO = ЦАП · точка канала</p></div>
+<div class="asutp-diagram-wrap">
+<svg class="em-svg em-plk-svg" viewBox="0 0 720 280" xmlns="http://www.w3.org/2000/svg" aria-label="АЦП ЦАП в ПЛК">
+<rect width="720" height="280" fill="#fff"/>
+<defs><marker id="adcArr2" markerWidth="7" markerHeight="6" refX="6" refY="3" orient="auto"><path d="M0 0 L7 3 L0 6 Z" fill="#64748b"/></marker></defs>
+<rect x="20" y="100" width="90" height="60" rx="8" fill="#f8fafc" stroke="#64748b"/><text x="65" y="135" text-anchor="middle" font-size="13" font-weight="700" fill="#334155">датчик</text>
+<path d="M110 130 H140" stroke="#94a3b8" stroke-width="2" marker-end="url(#adcArr2)"/>
+<g class="adc-node is-on" data-info="ai" style="cursor:pointer"><rect x="140" y="90" width="120" height="80" rx="8" fill="#eff6ff" stroke="#1d4ed8" stroke-width="2"/><text x="200" y="125" text-anchor="middle" font-size="14" font-weight="800" fill="#1e3a8a">AI</text><text x="200" y="148" text-anchor="middle" font-size="12" fill="#64748b">АЦП</text></g>
+<path d="M260 130 H290" stroke="#94a3b8" stroke-width="2" marker-end="url(#adcArr2)"/>
+<g class="adc-node" data-info="ch" style="cursor:pointer"><rect x="290" y="90" width="120" height="80" rx="8" fill="#f1f5f9" stroke="#0f172a"/><text x="350" y="125" text-anchor="middle" font-size="13" font-weight="800" fill="#0f172a">ЦПУ</text><text x="350" y="148" text-anchor="middle" font-size="12" fill="#64748b">ПЛК</text></g>
+<path d="M410 130 H440" stroke="#94a3b8" stroke-width="2" marker-end="url(#adcArr2)"/>
+<g class="adc-node" data-info="ao" style="cursor:pointer"><rect x="440" y="90" width="120" height="80" rx="8" fill="#fff7ed" stroke="#c2410c" stroke-width="2"/><text x="500" y="125" text-anchor="middle" font-size="14" font-weight="800" fill="#9a3412">AO</text><text x="500" y="148" text-anchor="middle" font-size="12" fill="#64748b">ЦАП</text></g>
+<path d="M560 130 H590" stroke="#94a3b8" stroke-width="2" marker-end="url(#adcArr2)"/>
+<rect x="590" y="100" width="100" height="60" rx="8" fill="#f8fafc" stroke="#64748b"/><text x="640" y="135" text-anchor="middle" font-size="13" font-weight="700" fill="#334155">ИМ</text>
+<g class="adc-node" data-info="res" style="cursor:pointer"><rect x="200" y="200" width="300" height="44" rx="8" fill="#fef9c3" stroke="#ca8a04"/><text x="350" y="227" text-anchor="middle" font-size="13" font-weight="700" fill="#854d0e">12 / 14 / 16 бит</text></g>
+</svg></div></div>
+<aside class="asutp-panel" id="adcPlcPanel"><h3>AI</h3>
+<p>Аналоговый <strong>вход</strong> модуля содержит АЦП. Подробнее об AI — в <a href="lecture-13.html">лекции 13</a>.</p>
+</aside></div></section>
 
 <section class="slide slide-title"><span class="tag">Конец лекции 11</span>
 <h1>Продолжение следует</h1>
-<p>Тема 5 начата: универсальные ЭВМ в АСУ и критерии выбора.</p>
-<p><a href="lecture-12.html" class="link-home">Лекция 12. Программируемые логические контроллеры →</a></p>
+<p>Тема 5: ЦАП (веса, R–2R) · типы АЦП · параметры · связь с ПЛК.</p>
 <p><a href="lecture-10.html" class="link-home">← Лекция 10. Автоматические выключатели</a></p>
-<p><a href="lecture-9.html" class="link-home">← Лекция 9. УПЭ и микропроцессорные регуляторы</a></p>
+<p><a href="lecture-12.html" class="link-home">Лекция 12. Аппаратно-программные средства →</a></p>
+<p><a href="lecture-13.html" class="link-home">Лекция 13. ПЛК · AI/AO →</a></p>
 <p><a href="../index.html" class="link-home">← На главную</a></p></section>
 </div>
 
@@ -304,11 +716,11 @@
 <button class="btn-nav" id="nextBtn">Вперёд →</button>
 </div>
 <div class="progress-wrap"><div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div></div>
-<span class="slide-counter" id="slideCounter">1 / 8</span>
+<span class="slide-counter" id="slideCounter">1 / 15</span>
 <div class="controls-right">
 <button class="btn-nav" id="overviewBtn">Обзор</button>
 <button class="btn-nav" id="fullscreenBtn">⛶</button>
 </div>
 </div>
 <script src="../js/presentation.js"></script>
-</body></html>
+</body></html><secti
