@@ -18,6 +18,17 @@
 <li>АЦП · последовательный счёт</li>
 <li>АЦП · последовательное приближение</li>
 <li>Параметры АЦП</li>
+<li>Z-преобразование</li>
+<li>Z · a<sup>k</sup></li>
+<li>Z · свойства</li>
+<li>Z · пример</li>
+<li>Z · H(z)</li>
+<li>Z · ∞ память</li>
+<li>Z · обратное</li>
+<li>Z · Фурье</li>
+<li>Линейный фильтр</li>
+<li>Трансверсальный</li>
+<li>Z · АЧХ</li>
 <li>АЦП и ЦАП в модулях ПЛК</li>
 </ol></div></section>
 
@@ -318,44 +329,125 @@
 <h2>ЦАП · матрица R–2R</h2>
 <div class="slide-body asutp-interactive"><div class="asutp-main">
 <div class="app-purpose-grid em-plk-cards">
-<button type="button" class="app-purpose-card active" data-info="lad"><strong>Лестница</strong><span>R и 2R</span></button>
-<button type="button" class="app-purpose-card" data-info="cur"><strong>Ток</strong><span>Iос</span></button>
+<button type="button" class="app-purpose-card" data-info="lad"><strong>Лестница</strong><span>R и 2R</span></button>
+<button type="button" class="app-purpose-card active" data-info="cur"><strong>Ток</strong><span>I → I/2</span></button>
 <button type="button" class="app-purpose-card" data-info="out"><strong>Выход</strong><span>−Iос·Rос</span></button>
 <button type="button" class="app-purpose-card" data-info="plus"><strong>Плюс</strong><span>одинаковые R</span></button>
 </div>
-<div class="highlight-box highlight-box-compact"><p class="em-adc-live" id="adcDacR2rLive">R–2R · одинаковые резисторы · точнее на больших N</p></div>
+<div class="highlight-box highlight-box-compact"><p class="em-adc-live" id="adcDacR2rLive">пример: D2=1 · на узле I → I/2 + I/2</p></div>
 <div class="asutp-diagram-wrap">
-<svg class="em-svg em-plk-svg" viewBox="0 0 720 280" xmlns="http://www.w3.org/2000/svg" aria-label="ЦАП R-2R">
-<rect width="720" height="280" fill="#fff"/>
-<g class="adc-node is-on" data-info="lad" style="cursor:pointer">
-<path d="M40 80 H280" stroke="#334155" stroke-width="2.2"/>
-<path d="M100 80 V160" stroke="#334155" stroke-width="2"/><path d="M180 80 V160" stroke="#334155" stroke-width="2"/><path d="M260 80 V160" stroke="#334155" stroke-width="2"/>
-<text x="70" y="70" font-size="12" font-weight="700" fill="#9a3412">R</text>
-<text x="150" y="70" font-size="12" font-weight="700" fill="#9a3412">R</text>
-<text x="100" y="180" text-anchor="middle" font-size="12" font-weight="700" fill="#1d4ed8">2R</text>
-<text x="180" y="180" text-anchor="middle" font-size="12" font-weight="700" fill="#1d4ed8">2R</text>
-<text x="260" y="180" text-anchor="middle" font-size="12" font-weight="700" fill="#1d4ed8">2R</text>
-<text x="100" y="210" text-anchor="middle" font-size="11" fill="#64748b">D2</text>
-<text x="180" y="210" text-anchor="middle" font-size="11" fill="#64748b">D1</text>
-<text x="260" y="210" text-anchor="middle" font-size="11" fill="#64748b">D0</text>
+<svg class="em-svg em-plk-svg" viewBox="0 0 760 340" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="ЦАП R-2R">
+<defs>
+<marker id="r2r-arr" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+<path d="M0,0 L8,4 L0,8 Z" fill="#c2410c"/>
+</marker>
+</defs>
+<rect width="760" height="340" fill="#fff"/>
+
+<rect x="16" y="8" width="520" height="32" rx="7" fill="#fff7ed" stroke="#fdba74"/>
+<text id="r2rHint" x="276" y="29" text-anchor="middle" font-size="14" font-weight="700" fill="#9a3412">клик по D2 D1 D0 · Iос = I/2</text>
+
+<g class="adc-node" data-info="lad" style="cursor:pointer">
+<!-- series R between nodes 90 · 180 · 270 · 360 -->
+<path d="M90 110 H98 L106 102 L118 118 L130 102 L142 118 L154 102 L166 110 H180" fill="none" stroke="#c2410c" stroke-width="2"/>
+<text x="135" y="96" text-anchor="middle" font-size="13" font-weight="800" fill="#9a3412">R</text>
+<path d="M180 110 H188 L196 102 L208 118 L220 102 L232 118 L244 102 L256 110 H270" fill="none" stroke="#c2410c" stroke-width="2"/>
+<text x="225" y="96" text-anchor="middle" font-size="13" font-weight="800" fill="#9a3412">R</text>
+<path d="M270 110 H278 L286 102 L298 118 L310 102 L322 118 L334 102 L346 110 H360" fill="none" stroke="#c2410c" stroke-width="2"/>
+<text x="315" y="96" text-anchor="middle" font-size="13" font-weight="800" fill="#9a3412">R</text>
+<circle cx="90" cy="110" r="3.5" fill="#0f172a"/>
+<circle cx="180" cy="110" r="3.5" fill="#0f172a"/>
+<circle cx="270" cy="110" r="3.5" fill="#0f172a"/>
+<circle cx="360" cy="110" r="3.5" fill="#0f172a"/>
+
+<!-- term 2R → GND -->
+<path d="M90 110 V118 L82 126 L98 138 L82 150 L98 162 L82 174 L90 182 V198" fill="none" stroke="#1d4ed8" stroke-width="2"/>
+<text x="70" y="158" text-anchor="end" font-size="12" font-weight="800" fill="#1e3a8a">2R</text>
+<path d="M90 198 V214" stroke="#64748b" stroke-width="1.5"/>
+<path d="M80 214 H100" stroke="#64748b" stroke-width="1.6"/>
+<path d="M83 220 H97" stroke="#64748b" stroke-width="1.4"/>
+<path d="M86 226 H94" stroke="#64748b" stroke-width="1.2"/>
+<text x="90" y="246" text-anchor="middle" font-size="11" fill="#64748b">земля</text>
+
+<!-- D0 LSB -->
+<path d="M180 110 V118 L172 126 L188 138 L172 150 L188 162 L172 174 L180 182 V200" fill="none" stroke="#1d4ed8" stroke-width="2"/>
+<text x="160" y="158" text-anchor="end" font-size="12" font-weight="800" fill="#1e3a8a">2R</text>
 </g>
-<g class="adc-node" data-info="cur" style="cursor:pointer">
-<path d="M280 80 H340" stroke="#c2410c" stroke-width="2.5"/>
-<text x="310" y="70" font-size="12" font-weight="700" fill="#c2410c">Iос</text>
+<g id="r2rBit0" class="r2r-bit" data-bit="0" style="cursor:pointer">
+<rect x="153" y="200" width="54" height="26" rx="5" fill="#eff6ff" stroke="#94a3b8" stroke-width="1.5"/>
+<text x="180" y="218" text-anchor="middle" font-size="12" font-weight="800" fill="#64748b">D0=0</text>
+<text x="180" y="244" text-anchor="middle" font-size="11" fill="#94a3b8">вес I/8</text>
 </g>
+<g class="adc-node" data-info="lad" style="cursor:pointer">
+
+<!-- D1 -->
+<path d="M270 110 V118 L262 126 L278 138 L262 150 L278 162 L262 174 L270 182 V200" fill="none" stroke="#1d4ed8" stroke-width="2"/>
+<text x="250" y="158" text-anchor="end" font-size="12" font-weight="800" fill="#1e3a8a">2R</text>
+</g>
+<g id="r2rBit1" class="r2r-bit" data-bit="1" style="cursor:pointer">
+<rect x="243" y="200" width="54" height="26" rx="5" fill="#eff6ff" stroke="#94a3b8" stroke-width="1.5"/>
+<text x="270" y="218" text-anchor="middle" font-size="12" font-weight="800" fill="#64748b">D1=0</text>
+<text x="270" y="244" text-anchor="middle" font-size="11" fill="#94a3b8">вес I/4</text>
+</g>
+<g class="adc-node" data-info="lad" style="cursor:pointer">
+
+<!-- D2 MSB, nearest OA -->
+<path d="M360 110 V118 L352 126 L368 138 L352 150 L368 162 L352 174 L360 182 V200" fill="none" stroke="#1d4ed8" stroke-width="2"/>
+<text x="340" y="158" text-anchor="end" font-size="12" font-weight="800" fill="#1e3a8a">2R</text>
+</g>
+<g id="r2rBit2" class="r2r-bit" data-bit="2" style="cursor:pointer">
+<rect x="333" y="200" width="54" height="26" rx="5" fill="#dbeafe" stroke="#1d4ed8" stroke-width="1.6"/>
+<text x="360" y="218" text-anchor="middle" font-size="12" font-weight="800" fill="#1e3a8a">D2=1</text>
+<text x="360" y="244" text-anchor="middle" font-size="11" fill="#1e3a8a">вес I/2</text>
+</g>
+
+<g class="adc-node is-on" data-info="cur" style="cursor:pointer">
+<path d="M360 110 H418" stroke="#c2410c" stroke-width="2.4" marker-end="url(#r2r-arr)"/>
+<text id="r2rIosLab" x="388" y="98" text-anchor="middle" font-size="13" font-weight="800" fill="#c2410c">Iос = I/2</text>
+<g id="r2rInj2">
+<path d="M372 178 L372 128" fill="none" stroke="#c2410c" stroke-width="2.2" marker-end="url(#r2r-arr)"/>
+<text x="386" y="158" font-size="12" font-weight="800" fill="#c2410c">I</text>
+</g>
+<g id="r2rInj1" opacity="0.15">
+<path d="M282 178 L282 128" fill="none" stroke="#c2410c" stroke-width="2" marker-end="url(#r2r-arr)"/>
+<text x="296" y="158" font-size="12" font-weight="800" fill="#c2410c">I</text>
+</g>
+<g id="r2rInj0" opacity="0.15">
+<path d="M192 178 L192 128" fill="none" stroke="#c2410c" stroke-width="2" marker-end="url(#r2r-arr)"/>
+<text x="206" y="158" font-size="12" font-weight="800" fill="#c2410c">I</text>
+</g>
+</g>
+
 <g class="adc-node" data-info="out" style="cursor:pointer">
-<path d="M360 50 L460 80 L360 110 Z" fill="#ecfdf5" stroke="#16a34a" stroke-width="1.8"/>
-<text x="390" y="84" font-size="12" font-weight="800" fill="#166534">ОУ</text>
-<path d="M460 80 H520" stroke="#334155" stroke-width="2"/>
-<text x="560" y="84" font-size="14" font-weight="700" fill="#166534">Uвых</text>
+<path d="M418 78 L528 110 L418 142 Z" fill="#ecfdf5" stroke="#16a34a" stroke-width="2"/>
+<text x="434" y="102" font-size="14" font-weight="700" fill="#166534">−</text>
+<text x="434" y="130" font-size="14" font-weight="700" fill="#166534">+</text>
+<text x="468" y="114" font-size="13" font-weight="800" fill="#166534">ОУ</text>
+<path d="M528 110 H575" fill="none" stroke="#16a34a" stroke-width="1.8"/>
+<path d="M548 110 V50 H500" fill="none" stroke="#16a34a" stroke-width="1.8"/>
+<path d="M420 50 H428 L436 42 L448 58 L460 42 L472 58 L484 42 L492 50 H500" fill="none" stroke="#16a34a" stroke-width="2"/>
+<text x="460" y="38" text-anchor="middle" font-size="13" font-weight="800" fill="#166534">Rос</text>
+<path d="M420 50 H400 V110" fill="none" stroke="#16a34a" stroke-width="1.8"/>
+<rect x="575" y="88" width="88" height="52" rx="8" fill="#ecfdf5" stroke="#16a34a" stroke-width="1.8"/>
+<text x="619" y="110" text-anchor="middle" font-size="13" font-weight="800" fill="#166534">Uвых</text>
+<text id="r2rUout" x="619" y="130" text-anchor="middle" font-size="12" font-weight="800" fill="#166534">−I/2·Rос</text>
+<path d="M418 130 H404 V150" stroke="#64748b" stroke-width="1.5"/>
+<path d="M394 150 H414" stroke="#64748b" stroke-width="1.6"/>
+<path d="M397 156 H411" stroke="#64748b" stroke-width="1.4"/>
+<path d="M400 162 H408" stroke="#64748b" stroke-width="1.2"/>
 </g>
+
 <g class="adc-node" data-info="plus" style="cursor:pointer">
-<rect x="400" y="180" width="260" height="50" rx="8" fill="#ecfdf5" stroke="#16a34a"/>
-<text x="530" y="210" text-anchor="middle" font-size="13" font-weight="700" fill="#166534">важна идентичность звеньев</text>
+<rect x="430" y="200" width="310" height="70" rx="10" fill="#ecfdf5" stroke="#16a34a" stroke-width="1.6"/>
+<text x="585" y="230" text-anchor="middle" font-size="13" font-weight="800" fill="#166534">только два номинала: R и 2R</text>
+<text x="585" y="252" text-anchor="middle" font-size="12" fill="#166534">важна идентичность звеньев</text>
 </g>
-</svg></div></div>
-<aside class="asutp-panel" id="adcDacR2rPanel"><h3>Лестница</h3>
-<p>Матрица из резисторов только двух номиналов <strong>R</strong> и <strong>2R</strong>. <var>U</var><sub>вых</sub> = −<var>I</var><sub>ос</sub>·<var>R</var><sub>ос</sub>.</p>
+
+<text x="300" y="322" text-anchor="middle" font-size="12" fill="#64748b">клик по D2 · D1 · D0 — ток ветви I, в Iос доходит I/2 · I/4 · I/8</text>
+</svg>
+</div></div>
+<aside class="asutp-panel" id="adcDacR2rPanel"><h3>Ток</h3>
+<p>Клик по <strong>D2 D1 D0</strong>. Включённый разряд даёт ток I в свою ветвь 2R. Из‑за деления пополам в Iос доходит: D2 → I/2, D1 → I/4, D0 → I/8. Сумма = Iос.</p>
 </aside></div></section>
 
 <section class="slide slide-em-ac-interactive slide-adc-dac-param-interactive is-picking">
@@ -363,38 +455,172 @@
 <div class="slide-body asutp-interactive"><div class="asutp-main">
 <div class="app-purpose-grid em-plk-cards">
 <button type="button" class="app-purpose-card active" data-info="n"><strong>Разрядность</strong><span>N · уровни</span></button>
+<button type="button" class="app-purpose-card" data-info="rng"><strong>Диапазон</strong><span>Umin…Umax</span></button>
 <button type="button" class="app-purpose-card" data-info="step"><strong>Шаг</strong><span>ΔU</span></button>
+<button type="button" class="app-purpose-card" data-info="res"><strong>Разрешение</strong><span>dᵣ · dₐ</span></button>
 <button type="button" class="app-purpose-card" data-info="nl"><strong>Нелинейность</strong><span>инт. · дифф.</span></button>
 <button type="button" class="app-purpose-card" data-info="dyn"><strong>Динамика</strong><span>tуст · fпр</span></button>
 </div>
-<div class="highlight-box highlight-box-compact"><p class="em-adc-live" id="adcDacParamLive">N · ΔU · нелинейность · tуст · fпр</p></div>
+<div class="highlight-box highlight-box-compact"><p class="em-adc-live" id="adcDacParamLive">N разрядов · 2ᴺ уровней · клик по N</p></div>
 <div class="asutp-diagram-wrap">
-<svg class="em-svg em-plk-svg" viewBox="0 0 720 300" xmlns="http://www.w3.org/2000/svg" aria-label="Параметры ЦАП">
-<rect width="720" height="300" fill="#fff"/>
-<line x1="60" y1="240" x2="400" y2="240" stroke="#94a3b8" stroke-width="1.5"/>
-<line x1="60" y1="240" x2="60" y2="40" stroke="#94a3b8" stroke-width="1.5"/>
-<text x="230" y="270" text-anchor="middle" font-size="12" fill="#64748b">код</text>
-<text x="30" y="140" font-size="12" fill="#64748b" transform="rotate(-90 30 140)">Uвых</text>
+<svg class="em-svg em-plk-svg" viewBox="0 0 760 330" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="Параметры ЦАП">
+<rect width="760" height="330" fill="#fff"/>
+
+<rect x="16" y="8" width="430" height="32" rx="7" fill="#f8fafc" stroke="#e2e8f0"/>
+<text id="dacParHint" x="231" y="29" text-anchor="middle" font-size="14" font-weight="700" fill="#0f172a">N=3 · 8 уровней · ΔU = Umax / 7</text>
+
+<!-- N picker -->
+<g id="dacParN2" class="dac-par-n" data-n="2" style="cursor:pointer">
+<rect x="460" y="10" width="88" height="28" rx="6" fill="#eff6ff" stroke="#94a3b8"/>
+<text x="504" y="29" text-anchor="middle" font-size="13" font-weight="800" fill="#64748b">N=2</text>
+</g>
+<g id="dacParN3" class="dac-par-n" data-n="3" style="cursor:pointer">
+<rect x="556" y="10" width="88" height="28" rx="6" fill="#dbeafe" stroke="#1d4ed8" stroke-width="1.6"/>
+<text x="600" y="29" text-anchor="middle" font-size="13" font-weight="800" fill="#1e3a8a">N=3</text>
+</g>
+<g id="dacParN4" class="dac-par-n" data-n="4" style="cursor:pointer">
+<rect x="652" y="10" width="88" height="28" rx="6" fill="#eff6ff" stroke="#94a3b8"/>
+<text x="696" y="29" text-anchor="middle" font-size="13" font-weight="800" fill="#64748b">N=4</text>
+</g>
+
+<!-- axes -->
+<line x1="56" y1="268" x2="430" y2="268" stroke="#94a3b8" stroke-width="1.5"/>
+<line x1="56" y1="268" x2="56" y2="52" stroke="#94a3b8" stroke-width="1.5"/>
+<text x="240" y="318" text-anchor="middle" font-size="12" fill="#64748b">код</text>
+<text x="18" y="168" font-size="12" fill="#64748b" transform="rotate(-90 18 168)">Uвых</text>
+
+<g class="adc-node" data-info="rng" style="cursor:pointer">
+<rect id="dacParRangeBand" x="56" y="60" width="374" height="208" fill="#ede9fe" opacity="0.35"/>
+<path d="M42 60 V268" stroke="#7c3aed" stroke-width="2.2"/>
+<path d="M36 60 H48" stroke="#7c3aed" stroke-width="2"/>
+<path d="M36 268 H48" stroke="#7c3aed" stroke-width="2"/>
+<text x="48" y="56" text-anchor="end" font-size="11" font-weight="700" fill="#6d28d9">Umax</text>
+<text id="dacParUminLab" x="48" y="286" text-anchor="end" font-size="11" font-weight="700" fill="#6d28d9">Umin</text>
+<text id="dacParRangeLab" x="70" y="78" text-anchor="start" font-size="12" font-weight="800" fill="#6d28d9">0…Umax</text>
+</g>
+
+<!-- staircase + overlays, filled by JS -->
+<path id="dacParIdeal" fill="none" stroke="#cbd5e1" stroke-width="1.6" stroke-dasharray="5 3"/>
+<path id="dacParStairs" fill="none" stroke="#1d4ed8" stroke-width="2.2"/>
+<path id="dacParNl" fill="none" stroke="#c2410c" stroke-width="2"/>
+<g id="dacParTicks"></g>
+<circle id="dacParDot" cx="80" cy="250" r="7" fill="#16a34a" stroke="#ffffff" stroke-width="2"/>
+<rect id="dacParHit" x="56" y="52" width="374" height="216" fill="transparent" style="cursor:pointer"/>
+
+<g class="adc-node is-on" data-info="n" style="cursor:pointer">
+<circle id="dacParFs" cx="400" cy="60" r="6" fill="#7c3aed"/>
+<text id="dacParFsLab" x="438" y="56" text-anchor="start" font-size="11" font-weight="700" fill="#6d28d9">шкала</text>
+</g>
+
+<g class="adc-node" data-info="step" style="cursor:pointer">
+<g id="dacParDu"></g>
+</g>
+
+<g class="adc-node" data-info="res" style="cursor:pointer">
+<text id="dacParDrLab" x="70" y="96" font-size="12" font-weight="800" fill="#0e7490">dᵣ = 1/7 шкалы</text>
+<text id="dacParDaLab" x="250" y="190" font-size="12" font-weight="800" fill="#1e3a8a">dₐ = ΔU</text>
+</g>
+
 <g class="adc-node" data-info="nl" style="cursor:pointer">
-<path d="M60 220 L120 200 L180 170 L240 140 L300 90 L360 60" fill="none" stroke="#cbd5e1" stroke-width="1.5" stroke-dasharray="4 3"/>
-<path d="M60 220 L120 205 L180 175 L240 155 L300 100 L360 70" fill="none" stroke="#c2410c" stroke-width="2"/>
+<text id="dacParInl" x="250" y="100" font-size="12" font-weight="800" fill="#c2410c">INL</text>
+<text id="dacParDnl" x="160" y="200" font-size="12" font-weight="800" fill="#c2410c">DNL</text>
+<g id="dacParNlAnno" display="none">
+<line id="dacParNlUmaxH" x1="56" y1="60" x2="430" y2="60" stroke="#93c5fd" stroke-width="1.2" stroke-dasharray="4 3"/>
+<line id="dacParNlMidV" x1="240" y1="60" x2="240" y2="268" stroke="#93c5fd" stroke-width="1.2" stroke-dasharray="4 3"/>
+<line id="dacParIntMarks" x1="240" y1="140" x2="240" y2="180" stroke="#c2410c" stroke-width="2"/>
+<circle id="dacParIntCirc" cx="240" cy="160" r="16" fill="#dbeafe" fill-opacity="0.45" stroke="#1d4ed8" stroke-width="1.8"/>
+<text id="dacParIntLab" x="252" y="188" font-size="13" font-weight="800" fill="#9a3412">d_int</text>
+<line id="dacParDdMarks" x1="438" y1="60" x2="438" y2="78" stroke="#7c3aed" stroke-width="2.2"/>
+<text id="dacParDdLab" x="448" y="74" font-size="13" font-weight="800" fill="#6d28d9">Δd</text>
+<text id="dacParMidLab" x="240" y="304" text-anchor="middle" font-size="12" font-weight="800" fill="#1e3a8a">2ᴺ⁻¹</text>
+<path id="dacParNlLead" d="M256 160 C320 148 400 148 470 148" fill="none" stroke="#1d4ed8" stroke-width="1.4" stroke-dasharray="5 4"/>
 </g>
-<g class="adc-node is-on" data-info="step" style="cursor:pointer">
-<path d="M180 175 V205" stroke="#1d4ed8" stroke-width="1.5"/><text x="195" y="195" font-size="12" font-weight="700" fill="#1e3a8a">ΔU</text>
 </g>
-<g class="adc-node" data-info="n" style="cursor:pointer">
-<circle cx="360" cy="70" r="6" fill="#7c3aed"/><text x="375" y="60" font-size="11" font-weight="700" fill="#6d28d9">конец шкалы</text>
+
+<g id="dacParLiveBox">
+<rect x="470" y="48" width="274" height="258" rx="10" fill="#f8fafc" stroke="#cbd5e1"/>
+<text x="607" y="72" text-anchor="middle" font-size="12" fill="#64748b">живой ЦАП · клик по ступеньке / битам</text>
+<text id="dacParU" x="607" y="108" text-anchor="middle" font-size="26" font-weight="800" fill="#166534">3 ΔU</text>
+<text id="dacParCode" x="607" y="130" text-anchor="middle" font-size="13" font-weight="700" fill="#1e3a8a">код 011₂ = 3</text>
+<g id="dacParBits"></g>
+<g id="dacParPlay" style="cursor:pointer">
+<rect x="492" y="248" width="108" height="34" rx="8" fill="#dcfce7" stroke="#16a34a" stroke-width="1.6"/>
+<text id="dacParPlayLab" x="546" y="270" text-anchor="middle" font-size="13" font-weight="800" fill="#166534">▶ ход кодов</text>
 </g>
-<g class="adc-node" data-info="dyn" style="cursor:pointer">
-<rect x="460" y="60" width="220" height="160" rx="8" fill="#f8fafc" stroke="#64748b"/>
-<text x="570" y="90" text-anchor="middle" font-size="13" font-weight="700" fill="#334155">смена кода</text>
-<path d="M500 140 H540 V180 H620" stroke="#0f172a" stroke-width="2" fill="none"/>
-<path d="M540 140 H620" stroke="#16a34a" stroke-width="1.5" stroke-dasharray="3 2"/>
-<text x="570" y="200" text-anchor="middle" font-size="12" fill="#166534">tуст</text>
+<g id="dacParDynBtn" style="cursor:pointer">
+<rect x="612" y="248" width="114" height="34" rx="8" fill="#fff7ed" stroke="#c2410c"/>
+<text x="669" y="270" text-anchor="middle" font-size="12" font-weight="800" fill="#9a3412">tуст · fпр</text>
 </g>
-</svg></div></div>
+</g>
+
+<g id="dacParResBox" display="none">
+<rect x="470" y="48" width="274" height="258" rx="10" fill="#f0fdfa" stroke="#0e7490" stroke-width="1.6"/>
+<text x="607" y="72" text-anchor="middle" font-size="13" font-weight="800" fill="#134e4a">разрешающая способность</text>
+<rect x="486" y="86" width="242" height="96" rx="8" fill="#ecfeff" stroke="#0e7490"/>
+<text x="607" y="108" text-anchor="middle" font-size="11" font-weight="800" fill="#0f766e">относительная</text>
+<text x="607" y="132" text-anchor="middle" font-size="16" font-weight="800" fill="#134e4a">dᵣ = 1 / (2ᴺ − 1)</text>
+<text id="dacParDrVal" x="607" y="156" text-anchor="middle" font-size="18" font-weight="800" fill="#0e7490">= 1/7</text>
+<text x="607" y="174" text-anchor="middle" font-size="11" fill="#115e59">обратна числу ступенек</text>
+<rect x="486" y="192" width="242" height="96" rx="8" fill="#eff6ff" stroke="#1d4ed8"/>
+<text x="607" y="214" text-anchor="middle" font-size="11" font-weight="800" fill="#1e40af">абсолютная</text>
+<text x="607" y="238" text-anchor="middle" font-size="15" font-weight="800" fill="#1e3a8a">dₐ = Umax / (2ᴺ − 1)</text>
+<text id="dacParDaVal" x="607" y="262" text-anchor="middle" font-size="18" font-weight="800" fill="#1d4ed8">= ΔU</text>
+<text x="607" y="280" text-anchor="middle" font-size="11" fill="#1e40af">численно равна шагу квантования</text>
+</g>
+<g id="dacParNlBox" display="none">
+<rect x="470" y="48" width="274" height="258" rx="10" fill="#fff7ed" stroke="#c2410c" stroke-width="1.6"/>
+<text x="607" y="70" text-anchor="middle" font-size="13" font-weight="800" fill="#9a3412">нелинейность</text>
+<circle id="dacParNlZoom" cx="607" cy="142" r="64" fill="#ffffff" stroke="#1d4ed8" stroke-width="1.8"/>
+<path d="M548 178 H576 V160 H606 V142 H666" fill="none" stroke="#86efac" stroke-width="1.8" stroke-dasharray="4 3"/>
+<path d="M548 178 H576 V160 H606 V118 H666" fill="none" stroke="#c2410c" stroke-width="2.5"/>
+<line x1="666" y1="142" x2="666" y2="118" stroke="#9a3412" stroke-width="1.8"/>
+<path d="M666 118 l-4 6 M666 118 l4 6" fill="none" stroke="#9a3412" stroke-width="1.6"/>
+<path d="M666 142 l-4 -6 M666 142 l4 -6" fill="none" stroke="#9a3412" stroke-width="1.6"/>
+<text x="678" y="134" font-size="13" font-weight="800" fill="#9a3412">d_dif</text>
+<text id="dacParNlExplain" x="607" y="220" text-anchor="middle" font-size="11" fill="#7c2d12">клик: d_int · d_dif · Δd</text>
+<g id="dacParNlIntBtn" style="cursor:pointer">
+<rect x="482" y="232" width="80" height="28" rx="6" fill="#ffedd5" stroke="#c2410c"/>
+<text x="522" y="251" text-anchor="middle" font-size="11" font-weight="800" fill="#9a3412">d_int</text>
+</g>
+<g id="dacParNlDifBtn" style="cursor:pointer">
+<rect x="568" y="232" width="80" height="28" rx="6" fill="#ffedd5" stroke="#c2410c"/>
+<text x="608" y="251" text-anchor="middle" font-size="11" font-weight="800" fill="#9a3412">d_dif</text>
+</g>
+<g id="dacParNlDdBtn" style="cursor:pointer">
+<rect x="654" y="232" width="80" height="28" rx="6" fill="#ffedd5" stroke="#7c3aed"/>
+<text x="694" y="251" text-anchor="middle" font-size="11" font-weight="800" fill="#6d28d9">Δd</text>
+</g>
+<text x="607" y="278" text-anchor="middle" font-size="11" fill="#7c2d12">зелёная — идеал · красная — факт</text>
+</g>
+<g id="dacParDynBox" display="none">
+<rect x="470" y="48" width="274" height="258" rx="10" fill="#fff7ed" stroke="#c2410c" stroke-width="1.6"/>
+<text x="590" y="70" text-anchor="middle" font-size="13" font-weight="800" fill="#9a3412">скачок кода min → max</text>
+<g id="dacParDynReplay" style="cursor:pointer">
+<rect x="678" y="54" width="56" height="22" rx="6" fill="#fed7aa" stroke="#c2410c"/>
+<text x="706" y="70" text-anchor="middle" font-size="11" font-weight="800" fill="#9a3412">▶ ещё</text>
+</g>
+<text id="dacParDynHint" x="607" y="90" text-anchor="middle" font-size="11" fill="#7c2d12">код уже новый · Uвых ещё догоняет</text>
+<line x1="502" y1="186" x2="728" y2="186" stroke="#94a3b8" stroke-width="1.3"/>
+<line x1="502" y1="186" x2="502" y2="100" stroke="#94a3b8" stroke-width="1.3"/>
+<text x="734" y="190" font-size="11" fill="#64748b">t</text>
+<text x="494" y="104" text-anchor="end" font-size="11" fill="#166534">Umax</text>
+<text x="494" y="190" text-anchor="end" font-size="11" fill="#64748b">0</text>
+<path id="dacParSettleIdeal" d="M502 186 H528 V102 H728" fill="none" stroke="#86efac" stroke-width="1.8" stroke-dasharray="4 3"/>
+<line id="dacParTmark" x1="620" y1="102" x2="620" y2="186" stroke="#9a3412" stroke-width="1.5" stroke-dasharray="3 2"/>
+<text id="dacParTlab" x="620" y="202" text-anchor="middle" font-size="12" font-weight="800" fill="#9a3412">tуст</text>
+<path id="dacParSettle" d="M502 186" fill="none" stroke="#c2410c" stroke-width="2.6"/>
+<circle id="dacParSettleDot" cx="502" cy="186" r="6" fill="#c2410c" stroke="#fff" stroke-width="1.5"/>
+<rect x="482" y="212" width="250" height="40" rx="7" fill="#ffedd5" stroke="#c2410c"/>
+<text x="607" y="228" text-anchor="middle" font-size="11" font-weight="800" fill="#9a3412">tуст — от смены кода min→max</text>
+<text x="607" y="244" text-anchor="middle" font-size="11" fill="#7c2d12">до заданной величины Uвых</text>
+<rect x="482" y="256" width="250" height="42" rx="7" fill="#fff7ed" stroke="#9a3412"/>
+<text id="dacParFpr" x="607" y="274" text-anchor="middle" font-size="12" font-weight="800" fill="#9a3412">fпр — max частота смены кода</text>
+<text x="607" y="290" text-anchor="middle" font-size="11" fill="#7c2d12">fпр ≈ 1 / tуст</text>
+</g>
+</svg>
+</div></div>
 <aside class="asutp-panel" id="adcDacParamPanel"><h3>Разрядность</h3>
-<p><strong>N</strong> — число двоичных разрядов. Шаг ΔU = U<sub>max</sub> / (2<sup>N</sup> − 1). Абсолютная погрешность — отклонение в конечной точке шкалы.</p>
+<p><strong>N</strong> — разряды. Уровней 2<sup>N</sup>. Кликните ступеньку или биты — увидите код и Uвых. ▶ ход прогоняет все коды.</p>
 </aside></div></section>
 
 <section class="slide slide-em-ac-interactive slide-adc-idea-interactive is-picking">
@@ -528,69 +754,228 @@
 <div class="slide-body asutp-interactive"><div class="asutp-main">
 <div class="app-purpose-grid em-plk-cards">
 <button type="button" class="app-purpose-card active" data-info="cmp"><strong>Компараторы</strong><span>ОУ</span></button>
-<button type="button" class="app-purpose-card" data-info="ref"><strong>Опора</strong><span>делитель</span></button>
+<button type="button" class="app-purpose-card" data-info="ref"><strong>Опора</strong><span>Un = Uоп·n/N</span></button>
 <button type="button" class="app-purpose-card" data-info="code"><strong>Код</strong><span>Джонсона</span></button>
 <button type="button" class="app-purpose-card" data-info="trade"><strong>Оценка</strong><span>быстро · дорого</span></button>
 </div>
-<div class="highlight-box highlight-box-compact"><p class="em-adc-live" id="adcFlashLive">параллельный · 1 такт · много компараторов</p></div>
+<div class="highlight-box highlight-box-compact"><p class="em-adc-live" id="adcFlashLive">клик по шкале Uвх · Un = Uоп · n / N</p></div>
 <div class="asutp-diagram-wrap">
-<svg class="em-svg em-plk-svg" viewBox="0 0 720 300" xmlns="http://www.w3.org/2000/svg" aria-label="АЦП параллельный">
-<rect width="720" height="300" fill="#fff"/>
-<g class="adc-node" data-info="ref" style="cursor:pointer">
-<rect x="40" y="40" width="80" height="220" rx="6" fill="#faf5ff" stroke="#7c3aed"/>
-<text x="80" y="80" text-anchor="middle" font-size="12" font-weight="700" fill="#6d28d9">Uоп</text>
-<line x1="50" y1="100" x2="110" y2="100" stroke="#7c3aed"/><line x1="50" y1="140" x2="110" y2="140" stroke="#7c3aed"/>
-<line x1="50" y1="180" x2="110" y2="180" stroke="#7c3aed"/><line x1="50" y1="220" x2="110" y2="220" stroke="#7c3aed"/>
-<text x="80" y="250" text-anchor="middle" font-size="11" fill="#64748b">делитель</text>
+<svg class="em-svg em-plk-svg" viewBox="0 0 760 320" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="АЦП параллельного преобразования">
+<rect width="760" height="320" fill="#fff"/>
+<rect x="16" y="8" width="728" height="28" rx="7" fill="#f8fafc" stroke="#e2e8f0"/>
+<text id="flashHint" x="380" y="27" text-anchor="middle" font-size="13" font-weight="700" fill="#0f172a">клик по шкале Uвх слева</text>
+
+<!-- Uвх scale -->
+<g class="adc-node" data-info="cmp" style="cursor:pointer">
+<text x="40" y="54" text-anchor="middle" font-size="13" font-weight="800" fill="#1e3a8a">Uвх</text>
+<line x1="40" y1="62" x2="40" y2="288" stroke="#1d4ed8" stroke-width="2"/>
+<g id="flashTicks"></g>
+<circle id="flashUinDot" cx="40" cy="175" r="9" fill="#16a34a" stroke="#fff" stroke-width="2" style="cursor:grab"/>
+<text id="flashUinLab" x="62" y="179" font-size="13" font-weight="800" fill="#166534">2/4</text>
+<rect id="flashUinHit" x="8" y="50" width="78" height="252" fill="transparent" style="cursor:ns-resize"/>
 </g>
-<g class="adc-node is-on" data-info="cmp" style="cursor:pointer">
-<rect x="180" y="70" width="100" height="36" rx="4" fill="#ecfdf5" stroke="#16a34a"/><text x="230" y="93" text-anchor="middle" font-size="12" font-weight="700" fill="#166534">cmp1</text>
-<rect x="180" y="120" width="100" height="36" rx="4" fill="#ecfdf5" stroke="#16a34a"/><text x="230" y="143" text-anchor="middle" font-size="12" font-weight="700" fill="#166534">cmp2</text>
-<rect x="180" y="170" width="100" height="36" rx="4" fill="#ecfdf5" stroke="#16a34a"/><text x="230" y="193" text-anchor="middle" font-size="12" font-weight="700" fill="#166534">cmp3</text>
-<rect x="180" y="220" width="100" height="36" rx="4" fill="#ecfdf5" stroke="#16a34a"/><text x="230" y="243" text-anchor="middle" font-size="12" font-weight="700" fill="#166534">cmp4</text>
+
+<!-- resistor matrix -->
+<g class="adc-node is-on" data-info="ref" style="cursor:pointer">
+<text x="150" y="50" text-anchor="middle" font-size="13" font-weight="800" fill="#6d28d9">Uоп</text>
+<line x1="150" y1="54" x2="150" y2="64" stroke="#6d28d9" stroke-width="1.8"/>
+<path d="M150 64 L142 72 L158 80 L142 88 L158 96 L150 104" fill="none" stroke="#c2410c" stroke-width="2"/>
+<text x="128" y="88" text-anchor="end" font-size="12" font-weight="800" fill="#9a3412">R</text>
+<line x1="150" y1="104" x2="150" y2="118" stroke="#334155" stroke-width="1.8"/>
+<circle cx="150" cy="118" r="3.5" fill="#6d28d9"/>
+<path d="M150 118 L142 126 L158 134 L142 142 L158 150 L150 158" fill="none" stroke="#c2410c" stroke-width="2"/>
+<text x="128" y="142" text-anchor="end" font-size="12" font-weight="800" fill="#9a3412">R</text>
+<line x1="150" y1="158" x2="150" y2="174" stroke="#334155" stroke-width="1.8"/>
+<circle cx="150" cy="174" r="3.5" fill="#6d28d9"/>
+<path d="M150 174 L142 182 L158 190 L142 198 L158 206 L150 214" fill="none" stroke="#c2410c" stroke-width="2"/>
+<text x="128" y="198" text-anchor="end" font-size="12" font-weight="800" fill="#9a3412">R</text>
+<line x1="150" y1="214" x2="150" y2="230" stroke="#334155" stroke-width="1.8"/>
+<circle cx="150" cy="230" r="3.5" fill="#6d28d9"/>
+<path d="M150 230 L142 238 L158 246 L142 254 L158 262 L150 270" fill="none" stroke="#c2410c" stroke-width="2"/>
+<text x="128" y="254" text-anchor="end" font-size="12" font-weight="800" fill="#9a3412">R</text>
+<line x1="150" y1="270" x2="150" y2="288" stroke="#334155" stroke-width="1.8"/>
+<path d="M138 288 H162 M150 288 V296 M144 296 H156" stroke="#0f172a" stroke-width="1.6"/>
 </g>
-<path d="M20 160 H180" stroke="#1d4ed8" stroke-width="1.5"/><text x="50" y="150" font-size="12" fill="#1e3a8a">Uвх</text>
+
+<!-- Un taps to − (lower) of OA -->
+<line x1="150" y1="118" x2="250" y2="130" stroke="#6d28d9" stroke-width="1.5"/>
+<text x="198" y="112" font-size="11" font-weight="800" fill="#6d28d9">U3=¾</text>
+<line x1="150" y1="174" x2="250" y2="186" stroke="#6d28d9" stroke-width="1.5"/>
+<text x="198" y="170" font-size="11" font-weight="800" fill="#6d28d9">U2=½</text>
+<line x1="150" y1="230" x2="250" y2="242" stroke="#6d28d9" stroke-width="1.5"/>
+<text x="198" y="226" font-size="11" font-weight="800" fill="#6d28d9">U1=¼</text>
+
+<!-- static Uвх bus to + (upper): over the top, then down -->
+<line x1="40" y1="62" x2="236" y2="62" stroke="#1d4ed8" stroke-width="1.5"/>
+<line x1="236" y1="62" x2="236" y2="220" stroke="#1d4ed8" stroke-width="1.5"/>
+<line x1="236" y1="108" x2="250" y2="108" stroke="#1d4ed8" stroke-width="1.4"/>
+<line x1="236" y1="164" x2="250" y2="164" stroke="#1d4ed8" stroke-width="1.4"/>
+<line x1="236" y1="220" x2="250" y2="220" stroke="#1d4ed8" stroke-width="1.4"/>
+
+<!-- comparators -->
+<g id="flashCmp2" class="adc-node" data-info="cmp" style="cursor:pointer">
+<path d="M250 96 L250 140 L312 118 Z" fill="#ecfdf5" stroke="#16a34a" stroke-width="1.8"/>
+<text x="260" y="114" font-size="11" font-weight="800" fill="#1e3a8a">+</text>
+<text x="260" y="130" font-size="11" font-weight="800" fill="#6d28d9">−</text>
+<line x1="312" y1="118" x2="328" y2="118" stroke="#334155" stroke-width="1.6"/>
+<rect x="328" y="104" width="52" height="28" rx="6" fill="#dcfce7" stroke="#16a34a"/>
+<text id="flashD2" x="354" y="123" text-anchor="middle" font-size="13" font-weight="800" fill="#166534">D2=1</text>
+<text id="flashEq2" x="354" y="148" text-anchor="middle" font-size="10" fill="#64748b">2≥3?</text>
+</g>
+<g id="flashCmp1" class="adc-node" data-info="cmp" style="cursor:pointer">
+<path d="M250 152 L250 196 L312 174 Z" fill="#ecfdf5" stroke="#16a34a" stroke-width="1.8"/>
+<text x="260" y="170" font-size="11" font-weight="800" fill="#1e3a8a">+</text>
+<text x="260" y="186" font-size="11" font-weight="800" fill="#6d28d9">−</text>
+<line x1="312" y1="174" x2="328" y2="174" stroke="#334155" stroke-width="1.6"/>
+<rect x="328" y="160" width="52" height="28" rx="6" fill="#dcfce7" stroke="#16a34a"/>
+<text id="flashD1" x="354" y="179" text-anchor="middle" font-size="13" font-weight="800" fill="#166534">D1=1</text>
+<text id="flashEq1" x="354" y="204" text-anchor="middle" font-size="10" fill="#64748b">2≥2?</text>
+</g>
+<g id="flashCmp0" class="adc-node" data-info="cmp" style="cursor:pointer">
+<path d="M250 208 L250 252 L312 230 Z" fill="#ecfdf5" stroke="#16a34a" stroke-width="1.8"/>
+<text x="260" y="226" font-size="11" font-weight="800" fill="#1e3a8a">+</text>
+<text x="260" y="242" font-size="11" font-weight="800" fill="#6d28d9">−</text>
+<line x1="312" y1="230" x2="328" y2="230" stroke="#334155" stroke-width="1.6"/>
+<rect x="328" y="216" width="52" height="28" rx="6" fill="#dcfce7" stroke="#16a34a"/>
+<text id="flashD0" x="354" y="235" text-anchor="middle" font-size="13" font-weight="800" fill="#166534">D0=1</text>
+<text id="flashEq0" x="354" y="260" text-anchor="middle" font-size="10" fill="#64748b">2≥1?</text>
+</g>
+
+<!-- Johnson panel -->
 <g class="adc-node" data-info="code" style="cursor:pointer">
-<rect x="360" y="120" width="140" height="80" rx="8" fill="#fff7ed" stroke="#c2410c"/>
-<text x="430" y="165" text-anchor="middle" font-size="14" font-weight="800" fill="#9a3412">код</text>
+<rect x="400" y="48" width="344" height="176" rx="10" fill="#fff7ed" stroke="#c2410c" stroke-width="1.6"/>
+<text x="530" y="74" text-anchor="middle" font-size="14" font-weight="800" fill="#9a3412">код Джонсона · D2 D1 D0</text>
+<g id="flashPlay" style="cursor:pointer">
+<rect x="678" y="54" width="52" height="26" rx="6" fill="#dcfce7" stroke="#16a34a"/>
+<text id="flashPlayLab" x="704" y="72" text-anchor="middle" font-size="11" font-weight="800" fill="#166534">▶ ход</text>
 </g>
-<path d="M280 88 H360" stroke="#94a3b8"/><path d="M280 138 H360" stroke="#94a3b8"/><path d="M280 188 H360" stroke="#94a3b8"/><path d="M280 238 H360" stroke="#94a3b8"/>
+<text id="flashJohn" x="572" y="128" text-anchor="middle" font-size="36" font-weight="800" fill="#9a3412">011</text>
+<text id="flashEqLine" x="572" y="160" text-anchor="middle" font-size="13" fill="#7c2d12">D2: 2≥3 → 0 · D1: 2≥2 → 1 · D0: 2≥1 → 1</text>
+<text id="flashBin" x="572" y="186" text-anchor="middle" font-size="13" font-weight="700" fill="#1e3a8a">2 единицы · дальше в двоичный</text>
+<text x="572" y="208" text-anchor="middle" font-size="12" fill="#9a3412">тяните зелёную точку · ▶ прогон 0→Uоп</text>
+</g>
 <g class="adc-node" data-info="trade" style="cursor:pointer">
-<rect x="540" y="120" width="150" height="80" rx="8" fill="#fef2f2" stroke="#dc2626"/>
-<text x="615" y="155" text-anchor="middle" font-size="12" font-weight="700" fill="#991b1b">~2ᴺ−1</text>
-<text x="615" y="175" text-anchor="middle" font-size="12" fill="#991b1b">компараторов</text>
+<rect x="400" y="236" width="344" height="64" rx="10" fill="#fef2f2" stroke="#dc2626"/>
+<text x="572" y="262" text-anchor="middle" font-size="14" font-weight="800" fill="#991b1b">1 такт · N−1 компараторов</text>
+<text x="572" y="284" text-anchor="middle" font-size="13" fill="#991b1b">для N двоичных бит нужно 2ᴺ−1 штук</text>
 </g>
 </svg></div></div>
 <aside class="asutp-panel" id="adcFlashPanel"><h3>Компараторы</h3>
-<p>ОУ в режиме компараторов сравнивают Uвх с опорами делителя. Один такт — очень быстро, но нужно много компараторов.</p>
+<p>ОУ в режиме компараторов. На «+» — Uвх, на «−» — опора Un с резистивной матрицы. Выход 1, если Uвх ≥ Un. Клик по шкале Uвх слева.</p>
 </aside></div></section>
+
 
 <section class="slide slide-em-ac-interactive slide-adc-count-interactive is-picking">
 <h2>АЦП · последовательный счёт</h2>
 <div class="slide-body asutp-interactive"><div class="asutp-main">
 <div class="app-purpose-grid em-plk-cards">
-<button type="button" class="app-purpose-card active" data-info="cnt"><strong>Счётчик</strong><span>+1</span></button>
-<button type="button" class="app-purpose-card" data-info="dac"><strong>ЦАП</strong><span>код→U</span></button>
-<button type="button" class="app-purpose-card" data-info="cmp"><strong>Компаратор</strong><span>Uцап ≟ Uвх</span></button>
-<button type="button" class="app-purpose-card" data-info="time"><strong>Время</strong><span>2ᴺ·tтакт</span></button>
+<button type="button" class="app-purpose-card active" data-info="cnt"><strong>Счётчик</strong><span>такты · +1</span></button>
+<button type="button" class="app-purpose-card" data-info="dac"><strong>ЦАП</strong><span>X(t)</span></button>
+<button type="button" class="app-purpose-card" data-info="cmp"><strong>Компаратор</strong><span>Стоп</span></button>
+<button type="button" class="app-purpose-card" data-info="time"><strong>Время</strong><span>t = 2ᴺ⁻¹ tтакт</span></button>
 </div>
-<div class="highlight-box highlight-box-compact"><p class="em-adc-live" id="adcCountLive">счёт до равенства · до 2ᴺ тактов</p></div>
+<div class="highlight-box highlight-box-compact"><p class="em-adc-live" id="adcCountLive">Пуск · счёт · Стоп при X(t)=A</p></div>
 <div class="asutp-diagram-wrap">
-<svg class="em-svg em-plk-svg" viewBox="0 0 720 280" xmlns="http://www.w3.org/2000/svg" aria-label="АЦП счёт">
-<rect width="720" height="280" fill="#fff"/>
-<rect x="30" y="100" width="100" height="60" rx="8" fill="#f8fafc" stroke="#64748b"/><text x="80" y="135" text-anchor="middle" font-size="12" font-weight="700" fill="#334155">такт</text>
-<path d="M130 130 H160" stroke="#94a3b8" stroke-width="2"/>
-<g class="adc-node is-on" data-info="cnt" style="cursor:pointer"><rect x="160" y="100" width="110" height="60" rx="8" fill="#eff6ff" stroke="#1d4ed8"/><text x="215" y="135" text-anchor="middle" font-size="13" font-weight="800" fill="#1e3a8a">счётчик</text></g>
-<path d="M270 130 H300" stroke="#94a3b8" stroke-width="2"/>
-<g class="adc-node" data-info="dac" style="cursor:pointer"><rect x="300" y="100" width="100" height="60" rx="8" fill="#fff7ed" stroke="#c2410c"/><text x="350" y="135" text-anchor="middle" font-size="14" font-weight="800" fill="#9a3412">ЦАП</text></g>
-<path d="M400 130 H440" stroke="#94a3b8" stroke-width="2"/>
-<g class="adc-node" data-info="cmp" style="cursor:pointer"><rect x="440" y="90" width="130" height="80" rx="8" fill="#ecfdf5" stroke="#16a34a"/><text x="505" y="125" text-anchor="middle" font-size="12" font-weight="800" fill="#166534">компаратор</text><text x="505" y="148" text-anchor="middle" font-size="11" fill="#64748b">Стоп</text></g>
-<path d="M505 90 V50 H80 V100" stroke="#1d4ed8" stroke-width="1.4" fill="none"/><text x="200" y="40" font-size="12" fill="#1e3a8a">Uвх</text>
-<g class="adc-node" data-info="time" style="cursor:pointer"><rect x="200" y="200" width="320" height="50" rx="8" fill="#fef2f2" stroke="#dc2626"/><text x="360" y="230" text-anchor="middle" font-size="14" font-weight="700" fill="#991b1b">tₘₐₓ = 2ᴺ · tтакт</text></g>
+<svg class="em-svg em-plk-svg" viewBox="0 0 760 320" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="АЦП последовательного счёта">
+<rect width="760" height="320" fill="#fff"/>
+<defs>
+<marker id="cntArr" markerWidth="7" markerHeight="6" refX="6" refY="3" orient="auto"><path d="M0 0 L7 3 L0 6 Z" fill="#64748b"/></marker>
+<marker id="cntArrG" markerWidth="7" markerHeight="6" refX="6" refY="3" orient="auto"><path d="M0 0 L7 3 L0 6 Z" fill="#16a34a"/></marker>
+<marker id="cntArrO" markerWidth="7" markerHeight="6" refX="6" refY="3" orient="auto"><path d="M0 0 L7 3 L0 6 Z" fill="#c2410c"/></marker>
+<marker id="cntArrB" markerWidth="7" markerHeight="6" refX="6" refY="3" orient="auto"><path d="M0 0 L7 3 L0 6 Z" fill="#1d4ed8"/></marker>
+<marker id="cntArrP" markerWidth="7" markerHeight="6" refX="6" refY="3" orient="auto"><path d="M0 0 L7 3 L0 6 Z" fill="#7c3aed"/></marker>
+</defs>
+
+<!-- comparator: Uвх on +, X(t) on − -->
+<text x="16" y="62" font-size="13" font-weight="800" fill="#1e3a8a">Uвх = A</text>
+<line x1="80" y1="58" x2="248" y2="58" stroke="#1d4ed8" stroke-width="1.6" marker-end="url(#cntArrB)"/>
+<g class="adc-node is-on" data-info="cmp" style="cursor:pointer">
+<path id="cntKtri" d="M250 36 L250 96 L312 66 Z" fill="#ecfdf5" stroke="#16a34a" stroke-width="1.8"/>
+<text x="260" y="60" font-size="11" font-weight="800" fill="#1e3a8a">+</text>
+<text x="260" y="84" font-size="11" font-weight="800" fill="#c2410c">−</text>
+<text x="286" y="72" font-size="15" font-weight="800" fill="#166534">K</text>
+</g>
+<line x1="312" y1="66" x2="388" y2="66" stroke="#16a34a" stroke-width="1.6"/>
+<text id="cntStopLab" x="350" y="58" text-anchor="middle" font-size="12" font-weight="800" fill="#94a3b8">Стоп</text>
+
+<!-- clock + DAC -->
+<g class="adc-node" data-info="cnt" style="cursor:pointer">
+<rect x="16" y="112" width="112" height="48" rx="8" fill="#f8fafc" stroke="#64748b"/>
+<text x="72" y="132" text-anchor="middle" font-size="12" font-weight="800" fill="#334155">тактовый</text>
+<text x="72" y="150" text-anchor="middle" font-size="12" font-weight="800" fill="#334155">генератор</text>
+</g>
+<g class="adc-node" data-info="dac" style="cursor:pointer">
+<rect x="168" y="112" width="108" height="48" rx="8" fill="#fff7ed" stroke="#c2410c" stroke-width="1.6"/>
+<text x="222" y="132" text-anchor="middle" font-size="15" font-weight="800" fill="#9a3412">ЦАП</text>
+<text id="cntDacU" x="222" y="150" text-anchor="middle" font-size="12" fill="#9a3412">X=0 Δx</text>
+</g>
+<line x1="72" y1="160" x2="72" y2="184" stroke="#64748b" stroke-width="1.5" marker-end="url(#cntArr)"/>
+<text x="84" y="176" font-size="11" fill="#64748b">такты</text>
+<text x="190" y="100" font-size="12" font-weight="700" fill="#c2410c">X(t)</text>
+<line x1="222" y1="112" x2="222" y2="82" stroke="#c2410c" stroke-width="1.5"/>
+<line x1="222" y1="82" x2="250" y2="82" stroke="#c2410c" stroke-width="1.5" marker-end="url(#cntArrO)"/>
+
+<!-- counter + buffer -->
+<g class="adc-node" data-info="cnt" style="cursor:pointer">
+<rect x="16" y="184" width="112" height="52" rx="8" fill="#eff6ff" stroke="#1d4ed8" stroke-width="1.6"/>
+<text x="72" y="204" text-anchor="middle" font-size="14" font-weight="800" fill="#1e3a8a">счётчик</text>
+<text id="cntCode" x="72" y="224" text-anchor="middle" font-size="12" font-weight="700" fill="#1e3a8a">код 000</text>
+</g>
+<g class="adc-node" data-info="dac" style="cursor:pointer">
+<rect x="168" y="184" width="108" height="52" rx="8" fill="#faf5ff" stroke="#7c3aed"/>
+<text x="222" y="204" text-anchor="middle" font-size="12" font-weight="800" fill="#6d28d9">буферный</text>
+<text id="cntBuf" x="222" y="224" text-anchor="middle" font-size="12" font-weight="700" fill="#6d28d9">вых —</text>
+</g>
+<!-- код: счётчик → ЦАП (зазор между блоками) -->
+<line x1="128" y1="210" x2="148" y2="210" stroke="#1d4ed8" stroke-width="1.5"/>
+<line x1="148" y1="210" x2="148" y2="136" stroke="#1d4ed8" stroke-width="1.5"/>
+<line x1="148" y1="136" x2="168" y2="136" stroke="#1d4ed8" stroke-width="1.5" marker-end="url(#cntArrB)"/>
+<!-- код → буфер -->
+<line x1="148" y1="210" x2="168" y2="210" stroke="#7c3aed" stroke-width="1.5" marker-end="url(#cntArrP)"/>
+<line x1="276" y1="210" x2="318" y2="210" stroke="#7c3aed" stroke-width="1.5" marker-end="url(#cntArrP)"/>
+<text x="330" y="206" font-size="13" font-weight="800" fill="#6d28d9">Вых</text>
+
+<!-- Стоп: вправо от K, вниз у края, под блоками, в счётчик снизу -->
+<line x1="388" y1="66" x2="388" y2="250" stroke="#16a34a" stroke-width="1.5"/>
+<line x1="110" y1="250" x2="388" y2="250" stroke="#16a34a" stroke-width="1.5"/>
+<line x1="110" y1="250" x2="110" y2="236" stroke="#16a34a" stroke-width="1.5" marker-end="url(#cntArrG)"/>
+<text x="360" y="244" text-anchor="middle" font-size="11" fill="#166534">Стоп</text>
+
+<g id="cntStart" style="cursor:pointer">
+<rect x="16" y="268" width="56" height="28" rx="7" fill="#dcfce7" stroke="#16a34a" stroke-width="1.5"/>
+<text id="cntStartLab" x="44" y="287" text-anchor="middle" font-size="12" font-weight="800" fill="#166534">▶ Пуск</text>
+</g>
+<g id="cntReset" style="cursor:pointer">
+<rect x="80" y="268" width="56" height="28" rx="7" fill="#fee2e2" stroke="#dc2626"/>
+<text x="108" y="287" text-anchor="middle" font-size="12" font-weight="800" fill="#991b1b">Сброс</text>
+</g>
+<g class="adc-node" data-info="time" style="cursor:pointer">
+<text x="268" y="278" text-anchor="middle" font-size="11" font-weight="700" fill="#991b1b">tₘₐₓ = 2ᴺ⁻¹ tтакт</text>
+<text x="268" y="294" text-anchor="middle" font-size="11" fill="#9a3412">низкое быстродействие</text>
+</g>
+
+<!-- plot X(t) -->
+<g class="adc-node" data-info="dac">
+<rect x="420" y="16" width="328" height="292" rx="10" fill="#f8fafc" stroke="#e2e8f0"/>
+<text x="584" y="40" text-anchor="middle" font-size="14" font-weight="800" fill="#0f172a">X(t)</text>
+<line x1="460" y1="268" x2="724" y2="268" stroke="#94a3b8" stroke-width="1.4"/>
+<line x1="460" y1="268" x2="460" y2="56" stroke="#94a3b8" stroke-width="1.4"/>
+<text x="732" y="272" font-size="11" fill="#64748b">t</text>
+<line id="cntUsh" x1="460" y1="64" x2="724" y2="64" stroke="#94a3b8" stroke-dasharray="4 3"/>
+<text x="718" y="60" text-anchor="end" font-size="11" fill="#64748b">Uш</text>
+<line id="cntAline" x1="460" y1="160" x2="724" y2="160" stroke="#1d4ed8" stroke-width="1.8"/>
+<text id="cntAlab" x="452" y="156" text-anchor="end" font-size="13" font-weight="800" fill="#1e3a8a">A</text>
+<path id="cntGhost" fill="none" stroke="#fdba74" stroke-width="1.7" stroke-dasharray="5 4"/>
+<path id="cntStairs" fill="none" stroke="#c2410c" stroke-width="2.4"/>
+<circle id="cntDot" cx="460" cy="268" r="6" fill="#c2410c" stroke="#fff" stroke-width="1.5"/>
+<text id="cntDx" x="584" y="294" text-anchor="middle" font-size="12" fill="#9a3412">Δx = Uш / (2ᴺ−1) · клик = A</text>
+<rect id="cntPlotHit" x="460" y="56" width="264" height="212" fill="transparent" style="cursor:pointer"/>
+</g>
 </svg></div></div>
 <aside class="asutp-panel" id="adcCountPanel"><h3>Счётчик</h3>
-<p>Такты наращивают код; ЦАП даёт Uцап; при равенстве с Uвх — <strong>Стоп</strong>. Недостаток — низкое быстродействие.</p>
+<p>Такты наращивают параллельный код. Кликните уровень <strong>A</strong> на графике, затем <strong>Пуск</strong>.</p>
 </aside></div></section>
+
 
 <section class="slide slide-em-ac-interactive slide-adc-sar-interactive is-picking">
 <h2>АЦП · последовательное приближение</h2>
@@ -636,36 +1021,660 @@
 <h2>Параметры АЦП</h2>
 <div class="slide-body asutp-interactive"><div class="asutp-main">
 <div class="app-purpose-grid em-plk-cards">
-<button type="button" class="app-purpose-card active" data-info="st"><strong>Статика</strong><span>N · погрешность</span></button>
-<button type="button" class="app-purpose-card" data-info="fs"><strong>fд</strong><span>дискретизация</span></button>
-<button type="button" class="app-purpose-card" data-info="ap"><strong>Апертура</strong><span>неопределённость</span></button>
-<button type="button" class="app-purpose-card" data-info="enc"><strong>Кодирование</strong><span>время кода</span></button>
+<button type="button" class="app-purpose-card active" data-info="n"><strong>Разрядность</strong><span>N · код</span></button>
+<button type="button" class="app-purpose-card" data-info="rng"><strong>Диапазон</strong><span>Umin…Umax</span></button>
+<button type="button" class="app-purpose-card" data-info="err"><strong>Погрешность</strong><span>Δd абс. · d_int</span></button>
+<button type="button" class="app-purpose-card" data-info="fs"><strong>fд</strong><span>частота дискр.</span></button>
+<button type="button" class="app-purpose-card" data-info="ap"><strong>Апертура</strong><span>время tа</span></button>
+<button type="button" class="app-purpose-card" data-info="enc"><strong>Кодирование</strong><span>время tкод</span></button>
 </div>
-<div class="highlight-box highlight-box-compact"><p class="em-adc-live" id="adcParamLive">статика · fд · апертура · время кодирования</p></div>
+<div class="highlight-box highlight-box-compact"><p class="em-adc-live" id="adcParamLive">статика как у ЦАП · клик по Uвх</p></div>
 <div class="asutp-diagram-wrap">
-<svg class="em-svg em-plk-svg" viewBox="0 0 720 280" xmlns="http://www.w3.org/2000/svg" aria-label="Параметры АЦП">
+<svg class="em-svg em-plk-svg" viewBox="0 0 760 330" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="Параметры АЦП">
+<rect width="760" height="330" fill="#fff"/>
+<defs>
+<marker id="adcParArr" markerWidth="7" markerHeight="6" refX="6" refY="3" orient="auto"><path d="M0 0 L7 3 L0 6 Z" fill="#64748b"/></marker>
+<marker id="adcParArrO" markerWidth="7" markerHeight="6" refX="6" refY="3" orient="auto"><path d="M0 0 L7 3 L0 6 Z" fill="#c2410c"/></marker>
+</defs>
+
+<rect x="16" y="8" width="430" height="32" rx="7" fill="#f8fafc" stroke="#e2e8f0"/>
+<text id="adcParHint" x="231" y="29" text-anchor="middle" font-size="13" font-weight="700" fill="#0f172a">N=3 · 8 кодов · клик по Uвх</text>
+<g id="adcParN2" class="adc-par-n" data-n="2" style="cursor:pointer">
+<rect x="460" y="10" width="88" height="28" rx="6" fill="#eff6ff" stroke="#94a3b8"/>
+<text x="504" y="29" text-anchor="middle" font-size="13" font-weight="800" fill="#64748b">N=2</text>
+</g>
+<g id="adcParN3" class="adc-par-n" data-n="3" style="cursor:pointer">
+<rect x="556" y="10" width="88" height="28" rx="6" fill="#dbeafe" stroke="#1d4ed8" stroke-width="1.6"/>
+<text x="600" y="29" text-anchor="middle" font-size="13" font-weight="800" fill="#1e3a8a">N=3</text>
+</g>
+<g id="adcParN4" class="adc-par-n" data-n="4" style="cursor:pointer">
+<rect x="652" y="10" width="88" height="28" rx="6" fill="#eff6ff" stroke="#94a3b8"/>
+<text x="696" y="29" text-anchor="middle" font-size="13" font-weight="800" fill="#64748b">N=4</text>
+</g>
+
+<!-- характеристика Uвх → код -->
+<g id="adcParChar">
+<g class="adc-node" data-info="rng" style="cursor:pointer">
+<rect id="adcParRangeBand" x="56" y="52" width="374" height="216" fill="#ede9fe" opacity="0.32"/>
+<text x="48" y="56" text-anchor="end" font-size="11" font-weight="700" fill="#6d28d9">макс. код</text>
+<text x="48" y="284" text-anchor="end" font-size="11" font-weight="700" fill="#6d28d9">0</text>
+<text id="adcParUminLab" x="56" y="302" font-size="11" font-weight="700" fill="#6d28d9">Umin</text>
+<text id="adcParUmaxLab" x="420" y="302" text-anchor="end" font-size="11" font-weight="700" fill="#6d28d9">Umax</text>
+<text id="adcParRangeLab" x="70" y="72" font-size="12" font-weight="800" fill="#6d28d9">вход Umin…Umax</text>
+</g>
+<line x1="56" y1="268" x2="430" y2="268" stroke="#94a3b8" stroke-width="1.5"/>
+<line x1="56" y1="268" x2="56" y2="52" stroke="#94a3b8" stroke-width="1.5"/>
+<text x="240" y="322" text-anchor="middle" font-size="12" fill="#64748b">Uвх</text>
+<text x="18" y="168" font-size="12" fill="#64748b" transform="rotate(-90 18 168)">код</text>
+<path id="adcParIdeal" fill="none" stroke="#86efac" stroke-width="1.8" stroke-dasharray="5 3"/>
+<path id="adcParStairs" fill="none" stroke="#1d4ed8" stroke-width="2.2"/>
+<path id="adcParNl" fill="none" stroke="#c2410c" stroke-width="2" display="none"/>
+<g id="adcParTicks"></g>
+<line id="adcParUline" x1="200" y1="52" x2="200" y2="268" stroke="#16a34a" stroke-width="1.5" stroke-dasharray="4 3"/>
+<circle id="adcParDot" cx="200" cy="180" r="7" fill="#16a34a" stroke="#fff" stroke-width="2"/>
+<g class="adc-node" data-info="err" style="cursor:pointer">
+<g id="adcParErrAnno" display="none">
+<line id="adcParDdMarks" x1="430" y1="56" x2="430" y2="78" stroke="#7c3aed" stroke-width="2.2"/>
+<text id="adcParDdLab" x="438" y="72" font-size="12" font-weight="800" fill="#6d28d9">Δd абс.</text>
+<line id="adcParIntMarks" x1="238" y1="140" x2="238" y2="168" stroke="#c2410c" stroke-width="2"/>
+<text id="adcParIntLab" x="248" y="158" font-size="12" font-weight="800" fill="#9a3412">d_int инт.</text>
+</g>
+</g>
+<rect id="adcParHit" x="56" y="52" width="374" height="216" fill="transparent" style="cursor:pointer"/>
+</g>
+
+<!-- время: выборки / апертура / кодирование -->
+<g id="adcParTime" display="none">
+<line x1="56" y1="268" x2="430" y2="268" stroke="#94a3b8" stroke-width="1.5"/>
+<line x1="56" y1="268" x2="56" y2="52" stroke="#94a3b8" stroke-width="1.5"/>
+<text x="240" y="322" text-anchor="middle" font-size="12" fill="#64748b">t · время</text>
+<text x="18" y="168" font-size="12" fill="#64748b" transform="rotate(-90 18 168)">Uвх</text>
+<path id="adcParSine" fill="none" stroke="#64748b" stroke-width="1.8"/>
+<g id="adcParApWins"></g>
+<g id="adcParSamples"></g>
+<g id="adcParEncBars"></g>
+<g id="adcParTdMark"></g>
+<text id="adcParTimeCap" x="240" y="48" text-anchor="middle" font-size="12" font-weight="700" fill="#1e3a8a">выборки · fд</text>
+<g id="adcParPlay" style="cursor:pointer">
+<rect x="16" y="292" width="88" height="28" rx="7" fill="#dcfce7" stroke="#16a34a" stroke-width="1.5"/>
+<text id="adcParPlayLab" x="60" y="311" text-anchor="middle" font-size="12" font-weight="800" fill="#166534">▶ ход</text>
+</g>
+<text id="adcParTimeHint" x="118" y="311" font-size="12" fill="#64748b">Tд — период дискретизации (шаг между точками)</text>
+</g>
+
+<g id="adcParLiveBox">
+<rect x="470" y="48" width="274" height="258" rx="10" fill="#f8fafc" stroke="#cbd5e1"/>
+<text x="607" y="76" text-anchor="middle" font-size="12" fill="#64748b">живой АЦП · клик по Uвх</text>
+<text id="adcParUin" x="607" y="118" text-anchor="middle" font-size="24" font-weight="800" fill="#166534">Uвх = 5 ΔU</text>
+<text id="adcParCode" x="607" y="148" text-anchor="middle" font-size="15" font-weight="700" fill="#1e3a8a">код 101₂ = 5</text>
+<g id="adcParBits"></g>
+<text id="adcParNlab" x="607" y="236" text-anchor="middle" font-size="13" font-weight="800" fill="#0f172a">N=3 · кодов 8</text>
+<text x="607" y="262" text-anchor="middle" font-size="12" fill="#64748b">ΔU — шаг квантования</text>
+<text x="607" y="286" text-anchor="middle" font-size="12" fill="#6d28d9">вход: Umin … Umax</text>
+</g>
+
+<g id="adcParErrBox" display="none">
+<rect x="470" y="48" width="274" height="258" rx="10" fill="#fff7ed" stroke="#c2410c" stroke-width="1.6"/>
+<text x="607" y="74" text-anchor="middle" font-size="13" font-weight="800" fill="#9a3412">статика · погрешности</text>
+<rect x="486" y="88" width="242" height="96" rx="8" fill="#faf5ff" stroke="#7c3aed"/>
+<text x="607" y="112" text-anchor="middle" font-size="12" font-weight="800" fill="#6d28d9">Δd — абс. погрешность</text>
+<text x="607" y="136" text-anchor="middle" font-size="12" fill="#5b21b6">в конечной точке шкалы</text>
+<text x="607" y="158" text-anchor="middle" font-size="12" fill="#5b21b6">реал − идеал</text>
+<text x="607" y="176" text-anchor="middle" font-size="11" fill="#7c3aed">не путать с нелинейностью</text>
+<rect x="486" y="196" width="242" height="92" rx="8" fill="#fff7ed" stroke="#c2410c"/>
+<text x="607" y="220" text-anchor="middle" font-size="12" font-weight="800" fill="#9a3412">d_int — инт. нелинейность</text>
+<text x="607" y="244" text-anchor="middle" font-size="12" fill="#7c2d12">макс. уход реальной</text>
+<text x="607" y="264" text-anchor="middle" font-size="12" fill="#7c2d12">характеристики от идеала</text>
+<text x="607" y="282" text-anchor="middle" font-size="11" fill="#9a3412">зелёная — идеал · красная — факт</text>
+</g>
+
+<g id="adcParFsBox" display="none">
+<rect x="470" y="48" width="274" height="258" rx="10" fill="#eff6ff" stroke="#1d4ed8" stroke-width="1.6"/>
+<text x="607" y="72" text-anchor="middle" font-size="13" font-weight="800" fill="#1e3a8a">динамика · частота</text>
+<rect x="486" y="84" width="242" height="152" rx="8" fill="#fff" stroke="#93c5fd"/>
+<text x="607" y="108" text-anchor="middle" font-size="13" font-weight="800" fill="#1d4ed8">fд — частота дискретизации</text>
+<text x="607" y="128" text-anchor="middle" font-size="11" fill="#1e40af">сколько выборок в секунду</text>
+<text x="607" y="154" text-anchor="middle" font-size="13" font-weight="800" fill="#1e3a8a">Tд — период дискретизации</text>
+<text x="607" y="174" text-anchor="middle" font-size="11" fill="#1e40af">время между двумя выборками</text>
+<text x="607" y="204" text-anchor="middle" font-size="16" font-weight="800" fill="#1e3a8a">fд = 1 / Tд</text>
+<text x="607" y="224" text-anchor="middle" font-size="11" fill="#1e40af">= макс. частота преобразования</text>
+<text x="607" y="256" text-anchor="middle" font-size="12" fill="#334155">скобка Tд — шаг между точками</text>
+<text x="607" y="278" text-anchor="middle" font-size="12" fill="#64748b">▶ ход — выборка за выборкой</text>
+</g>
+
+<g id="adcParApBox" display="none">
+<rect x="470" y="48" width="274" height="258" rx="10" fill="#eff6ff" stroke="#0e7490" stroke-width="1.6"/>
+<text x="607" y="74" text-anchor="middle" font-size="13" font-weight="800" fill="#134e4a">апертура</text>
+<rect x="486" y="86" width="242" height="100" rx="8" fill="#ecfeff" stroke="#0e7490"/>
+<text x="607" y="110" text-anchor="middle" font-size="12" font-weight="800" fill="#0f766e">tа — апертурное время</text>
+<text x="607" y="134" text-anchor="middle" font-size="12" fill="#115e59">пока идёт выборка, неясно</text>
+<text x="607" y="154" text-anchor="middle" font-size="12" fill="#115e59">к какому моменту относится</text>
+<text x="607" y="174" text-anchor="middle" font-size="12" fill="#115e59">значение Uвх</text>
+<rect x="486" y="198" width="242" height="90" rx="8" fill="#fff7ed" stroke="#c2410c"/>
+<text x="607" y="222" text-anchor="middle" font-size="12" font-weight="800" fill="#9a3412">δtа — неопределённость</text>
+<text x="607" y="246" text-anchor="middle" font-size="12" fill="#7c2d12">случайный разброс tа</text>
+<text x="607" y="268" text-anchor="middle" font-size="12" fill="#7c2d12">в точке характеристики · δtа</text>
+</g>
+
+<g id="adcParEncBox" display="none">
+<rect x="470" y="48" width="274" height="258" rx="10" fill="#fffbeb" stroke="#d97706" stroke-width="1.6"/>
+<text x="607" y="76" text-anchor="middle" font-size="13" font-weight="800" fill="#92400e">tкод — время кодирования</text>
+<rect x="486" y="96" width="242" height="148" rx="8" fill="#fff" stroke="#fcd34d"/>
+<text x="607" y="128" text-anchor="middle" font-size="13" font-weight="800" fill="#92400e">от импульса запуска</text>
+<text x="607" y="156" text-anchor="middle" font-size="13" font-weight="800" fill="#92400e">до появления кода</text>
+<line x1="510" y1="184" x2="710" y2="184" stroke="#94a3b8" stroke-width="1.4"/>
+<rect x="548" y="172" width="88" height="24" rx="4" fill="#fde68a" stroke="#d97706"/>
+<text x="592" y="188" text-anchor="middle" font-size="11" font-weight="800" fill="#92400e">tкод</text>
+<text x="522" y="208" font-size="11" fill="#64748b">пуск</text>
+<text x="686" y="208" text-anchor="end" font-size="11" fill="#1e3a8a">код</text>
+<text x="607" y="268" text-anchor="middle" font-size="12" fill="#78350f">жёлтая полоса после выборки</text>
+</g>
+</svg>
+</div></div>
+<aside class="asutp-panel" id="adcParamPanel"><h3>Разрядность</h3>
+<p><strong>N</strong> — число двоичных разрядов <strong>выходного кода</strong>. Кликните по оси Uвх — увидите код. Статика аналогична ЦАП.</p>
+</aside></div></section>
+
+<section class="slide slide-em-ac-interactive slide-adc-zdef-interactive is-picking">
+<h2>Z-преобразование</h2>
+<div class="slide-body asutp-interactive"><div class="asutp-main">
+<div class="app-purpose-grid em-plk-cards">
+<button type="button" class="app-purpose-card active" data-info="def"><strong>Определение</strong><span>формула X(z)</span></button>
+<button type="button" class="app-purpose-card" data-info="imp"><strong>Импульс</strong><span>(1, 0, 0, …)</span></button>
+<button type="button" class="app-purpose-card" data-info="three"><strong>Три единицы</strong><span>(1, 1, 1, 0, …)</span></button>
+<button type="button" class="app-purpose-card" data-info="ones"><strong>Все 1</strong><span>(1, 1, 1, …)</span></button>
+</div>
+<div class="highlight-box highlight-box-compact adc-zdef-livebox"><p class="em-adc-live" id="adcZdefLive"></p></div>
+<div class="asutp-diagram-wrap adc-zdef-diag">
+<svg class="em-svg em-plk-svg" viewBox="0 0 340 300" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="Набор отсчётов x k">
+<rect width="340" height="300" fill="#fff"/>
+<g>
+<rect x="8" y="8" width="324" height="250" rx="10" fill="#eff6ff" stroke="#bfdbfe"/>
+<text x="170" y="32" text-anchor="middle" font-size="15" font-weight="800" fill="#1e3a8a">набор отсчётов</text>
+<line x1="40" y1="232" x2="308" y2="232" stroke="#94a3b8" stroke-width="1.4"/>
+<line x1="40" y1="232" x2="40" y2="52" stroke="#94a3b8" stroke-width="1.4"/>
+<text x="318" y="236" font-size="13" font-weight="700" fill="#64748b">k</text>
+<g id="adcZdefStems"></g>
+</g>
+<g id="adcZdefPlay" style="cursor:pointer">
+<rect x="8" y="266" width="88" height="28" rx="7" fill="#dcfce7" stroke="#16a34a" stroke-width="1.5"/>
+<text id="adcZdefPlayLab" x="52" y="285" text-anchor="middle" font-size="13" font-weight="800" fill="#166534">▶ ход</text>
+</g>
+<text x="108" y="285" font-size="12" fill="#64748b">член за членом</text>
+</svg>
+<div class="adc-zdef-formulas">
+<p class="adc-zdef-caption" id="adcZdefCaption">X(z) — функция комплексного z</p>
+<div class="adc-zdef-eqline" id="adcZdefDef">
+<span class="char-eq"><var>X</var>(<var>z</var>) = </span>
+<span class="z-sum" aria-hidden="true"><span class="z-sum-lim">∞</span><span class="z-sum-sigma">Σ</span><span class="z-sum-lim">k = 0</span></span>
+<span class="char-eq"><var>x</var><sub>k</sub> <var>z</var><sup>−k</sup></span>
+</div>
+<div class="adc-zdef-eqline adc-zdef-expand">
+<span class="char-eq">= <var>x</var><sub>0</sub> + <var>x</var><sub>1</sub><var>z</var><sup>−1</sup> + <var>x</var><sub>2</sub><var>z</var><sup>−2</sup> + <var>x</var><sub>3</sub><var>z</var><sup>−3</sup> + …</span>
+</div>
+<div class="adc-zdef-series" id="adcZdefSeries"></div>
+<div class="adc-zdef-closed" id="adcZdefClosed"></div>
+<p class="adc-zdef-note" id="adcZdefNote"></p>
+<p class="adc-zdef-note" id="adcZdefConv"></p>
+</div>
+</div></div>
+<aside class="asutp-panel" id="adcZdefPanel"><h3>Определение</h3>
+<p>Отсчёты АЦП — последовательность {x<sub>k</sub>}.</p>
+</aside></div></section>
+
+<section class="slide slide-em-ac-interactive slide-adc-zgeo-interactive is-picking">
+<h2>Z · геометрическая {1, a, a², …}</h2>
+<div class="slide-body asutp-interactive"><div class="asutp-main">
+<div class="app-purpose-grid em-plk-cards">
+<button type="button" class="app-purpose-card active" data-info="idea"><strong>Идея</strong><span>обобщение единиц</span></button>
+<button type="button" class="app-purpose-card" data-info="half"><strong>a = ½</strong><span>затухает</span></button>
+<button type="button" class="app-purpose-card" data-info="one"><strong>a = 1</strong><span>все единицы</span></button>
+<button type="button" class="app-purpose-card" data-info="grow"><strong>a = 1.5</strong><span>растёт</span></button>
+</div>
+<div class="highlight-box highlight-box-compact adc-zdef-livebox"><p class="em-adc-live" id="adcZgeoLive"></p></div>
+<div class="asutp-diagram-wrap adc-zdef-diag">
+<svg class="em-svg em-plk-svg" viewBox="0 0 340 300" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="Отсчёты a в степени k">
+<rect width="340" height="300" fill="#fff"/>
+<g>
+<rect x="8" y="8" width="324" height="250" rx="10" fill="#eff6ff" stroke="#bfdbfe"/>
+<text x="170" y="32" text-anchor="middle" font-size="15" font-weight="800" fill="#1e3a8a">отсчёты aᵏ</text>
+<line x1="40" y1="232" x2="308" y2="232" stroke="#94a3b8" stroke-width="1.4"/>
+<line x1="40" y1="232" x2="40" y2="52" stroke="#94a3b8" stroke-width="1.4"/>
+<text x="318" y="236" font-size="13" font-weight="700" fill="#64748b">k</text>
+<g id="adcZgeoStems"></g>
+</g>
+<g id="adcZgeoPlay" style="cursor:pointer">
+<rect x="8" y="266" width="88" height="28" rx="7" fill="#dcfce7" stroke="#16a34a" stroke-width="1.5"/>
+<text id="adcZgeoPlayLab" x="52" y="285" text-anchor="middle" font-size="13" font-weight="800" fill="#166534">▶ ход</text>
+</g>
+<text x="108" y="285" font-size="12" fill="#64748b">ряд 1 + a/z + a²/z² + …</text>
+</svg>
+<div class="adc-zdef-formulas">
+<p class="adc-zdef-caption" id="adcZgeoCaption">{x<sub>k</sub>} = (1, a, a², a³, …)</p>
+<div class="adc-zdef-eqline">
+<span class="char-eq"><var>X</var>(<var>z</var>) = 1 + <var>a</var><var>z</var><sup>−1</sup> + <var>a</var><sup>2</sup><var>z</var><sup>−2</sup> + …</span>
+</div>
+<div class="adc-zdef-series" id="adcZgeoSeries"></div>
+<div class="adc-zdef-closed" id="adcZgeoClosed"></div>
+<p class="adc-zdef-note" id="adcZgeoNote"></p>
+</div>
+</div></div>
+<aside class="asutp-panel" id="adcZgeoPanel"><h3>Идея</h3>
+<p>Все единицы — частный случай: a = 1.</p>
+</aside></div></section>
+
+<section class="slide slide-em-ac-interactive slide-adc-zprop-interactive is-picking">
+<h2>Z · свойства</h2>
+<div class="slide-body asutp-interactive"><div class="asutp-main">
+<div class="app-purpose-grid em-plk-cards">
+<button type="button" class="app-purpose-card active" data-info="lin"><strong>Линейность</strong><span>x + y</span></button>
+<button type="button" class="app-purpose-card" data-info="shift"><strong>Сдвиг</strong><span>× 1/z</span></button>
+<button type="button" class="app-purpose-card" data-info="conv"><strong>Свёртка</strong><span>H · X</span></button>
+</div>
+<div class="highlight-box highlight-box-compact adc-zdef-livebox"><p class="em-adc-live" id="adcZpropLive"></p></div>
+<div class="asutp-diagram-wrap adc-zdef-diag">
+<svg class="em-svg em-plk-svg" viewBox="0 0 340 300" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="Пример свойства Z">
+<rect width="340" height="300" fill="#fff"/>
+<g id="adcZpropDraw"></g>
+<g id="adcZpropPlay" style="cursor:pointer">
+<rect x="8" y="266" width="88" height="28" rx="7" fill="#dcfce7" stroke="#16a34a" stroke-width="1.5"/>
+<text id="adcZpropPlayLab" x="52" y="285" text-anchor="middle" font-size="13" font-weight="800" fill="#166534">▶ ход</text>
+</g>
+<text id="adcZpropFoot" x="108" y="285" font-size="12" fill="#64748b">пример по шагам</text>
+</svg>
+<div class="adc-zdef-formulas">
+<p class="adc-zdef-caption" id="adcZpropCaption"></p>
+<div class="adc-zdef-series" id="adcZpropSeries"></div>
+<div class="adc-zdef-closed" id="adcZpropClosed"></div>
+<p class="adc-zdef-note" id="adcZpropNote"></p>
+</div>
+</div></div>
+<aside class="asutp-panel" id="adcZpropPanel"><h3>Линейность</h3>
+<p>Сумма последовательностей → сумма X(z).</p>
+</aside></div></section>
+
+<section class="slide slide-em-ac-interactive slide-adc-z-interactive is-picking">
+<h2>Z · пример</h2>
+<div class="slide-body asutp-interactive"><div class="asutp-main">
+<div class="app-purpose-grid em-plk-cards">
+<button type="button" class="app-purpose-card active" data-info="task"><strong>Задача</strong><span>истина 5.0</span></button>
+<button type="button" class="app-purpose-card" data-info="list"><strong>АЦП</strong><span>список x</span></button>
+<button type="button" class="app-purpose-card" data-info="dumb"><strong>Сырой</strong><span>клапан дёргается</span></button>
+<button type="button" class="app-purpose-card" data-info="z"><strong>z⁻¹</strong><span>память такта</span></button>
+<button type="button" class="app-purpose-card" data-info="xz"><strong>X(z)</strong><span>Σ xₖ z⁻ᵏ</span></button>
+</div>
+<div class="highlight-box highlight-box-compact"><p class="em-adc-live" id="adcZLive">истина 5.0 · авария если &gt; 5.5 · Tд = 1 с</p></div>
+<div class="asutp-diagram-wrap">
+<svg class="em-svg em-plk-svg" viewBox="0 0 760 330" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="Пример Z: давление, таблица отсчётов, z в минус первой">
+<rect width="760" height="330" fill="#fff"/>
+<defs>
+<marker id="adcZArr" markerWidth="7" markerHeight="6" refX="6" refY="3" orient="auto"><path d="M0 0 L7 3 L0 6 Z" fill="#64748b"/></marker>
+</defs>
+<rect x="16" y="8" width="728" height="32" rx="7" fill="#f8fafc" stroke="#e2e8f0"/>
+<text id="adcZHint" x="380" y="29" text-anchor="middle" font-size="13" font-weight="700" fill="#0f172a">давление всегда 5.0 · датчик шумит · клапан открыть если &gt; 5.5</text>
+
+<!-- plot -->
+<g class="adc-node" data-info="list" style="cursor:pointer">
+<rect x="16" y="48" width="300" height="232" rx="10" fill="#f8fafc" stroke="#e2e8f0"/>
+<text x="166" y="68" text-anchor="middle" font-size="12" font-weight="800" fill="#0f172a">P(t) · отсчёты АЦП</text>
+<line x1="48" y1="232" x2="292" y2="232" stroke="#94a3b8" stroke-width="1.3"/>
+<line x1="48" y1="232" x2="48" y2="80" stroke="#94a3b8" stroke-width="1.3"/>
+<text x="300" y="236" font-size="11" fill="#64748b">t, с</text>
+<line id="adcZTrue" x1="48" y1="160" x2="292" y2="160" stroke="#86efac" stroke-width="1.7" stroke-dasharray="5 3"/>
+<line id="adcZLim" x1="48" y1="120" x2="292" y2="120" stroke="#fca5a5" stroke-width="1.2" stroke-dasharray="3 3"/>
+<text x="50" y="156" font-size="10" fill="#166534">5.0 истина</text>
+<text x="50" y="114" font-size="10" fill="#b91c1c">5.5 порог</text>
+<path id="adcZRaw" fill="none" stroke="#1d4ed8" stroke-width="2"/>
+<path id="adcZFilt" fill="none" stroke="#c2410c" stroke-width="2.2"/>
+<g id="adcZDots"></g>
+</g>
+
+<!-- table + memory -->
+<g class="adc-node" data-info="dumb" style="cursor:pointer">
+<rect x="328" y="48" width="416" height="232" rx="10" fill="#fff7ed" stroke="#fed7aa"/>
+<text x="536" y="68" text-anchor="middle" font-size="12" font-weight="800" fill="#9a3412">такт · что видит ПЛК</text>
+<text x="360" y="86" font-size="11" font-weight="800" fill="#64748b">k</text>
+<text x="400" y="86" font-size="11" font-weight="800" fill="#64748b">t</text>
+<text x="454" y="86" font-size="11" font-weight="800" fill="#1e3a8a">x сейчас</text>
+<text x="548" y="86" font-size="11" font-weight="800" fill="#c2410c">y среднее</text>
+<text x="656" y="86" font-size="11" font-weight="800" fill="#334155">клапан</text>
+<g id="adcZRows"></g>
+<g class="adc-node" data-info="xz" style="cursor:pointer">
+<rect x="336" y="188" width="400" height="84" rx="8" fill="#fff" stroke="#c2410c" stroke-width="1.6"/>
+<text x="536" y="206" text-anchor="middle" font-size="12" font-weight="800" fill="#9a3412">определение · Z-преобразование</text>
+<text x="536" y="226" text-anchor="middle" font-size="13" font-weight="800" fill="#c2410c">X(z) = Σₖ xₖ z⁻ᵏ = x₀ + x₁z⁻¹ + x₂z⁻² + …</text>
+<text id="adcZX" x="536" y="248" text-anchor="middle" font-size="12" font-weight="700" fill="#7c2d12">X(z) = …</text>
+<text x="536" y="266" text-anchor="middle" font-size="11" fill="#9a3412">z⁻ᵏ = сдвиг на k тактов · z⁻¹ = на 1 с назад</text>
+</g>
+</g>
+<g class="adc-node" data-info="z" style="cursor:pointer">
+<g id="adcZMem"></g>
+</g>
+
+<g id="adcZPlay" style="cursor:pointer">
+<rect x="16" y="292" width="88" height="28" rx="7" fill="#dcfce7" stroke="#16a34a" stroke-width="1.5"/>
+<text id="adcZPlayLab" x="60" y="311" text-anchor="middle" font-size="12" font-weight="800" fill="#166534">▶ ход</text>
+</g>
+<g id="adcZSmooth" style="cursor:pointer">
+<rect x="112" y="292" width="168" height="28" rx="7" fill="#ffedd5" stroke="#c2410c"/>
+<text id="adcZSmoothLab" x="196" y="311" text-anchor="middle" font-size="12" font-weight="800" fill="#9a3412">смотреть на среднее: нет</text>
+</g>
+<text id="adcZFoot" x="500" y="311" font-size="12" fill="#64748b">z⁻¹ = число с прошлого такта (память на 1 с)</text>
+</svg>
+</div></div>
+<aside class="asutp-panel" id="adcZPanel"><h3>Задача</h3>
+<p>В трубе давление <strong>всегда 5.0</strong>. Клапан аварии открыть, только если измерение <strong>&gt; 5.5</strong>. Датчик шумит. АЦП раз в <strong>1 с</strong> даёт число.</p>
+</aside></div></section>
+
+<section class="slide slide-em-ac-interactive slide-adc-zh-interactive is-picking">
+<h2>Z · что такое H(z)</h2>
+<div class="slide-body asutp-interactive"><div class="asutp-main">
+<div class="app-purpose-grid em-plk-cards">
+<button type="button" class="app-purpose-card active" data-info="nums"><strong>Три числа</strong><span>память ПЛК</span></button>
+<button type="button" class="app-purpose-card" data-info="avg"><strong>Среднее</strong><span>(6.1+3.8+6.4)/3</span></button>
+<button type="button" class="app-purpose-card" data-info="hz"><strong>H(z)</strong><span>тот же рецепт</span></button>
+<button type="button" class="app-purpose-card" data-info="plc"><strong>Зачем</strong><span>не считать z</span></button>
+</div>
+<div class="highlight-box highlight-box-compact adc-zdef-livebox"><p class="em-adc-live" id="adcZhLive"></p></div>
+<div class="asutp-diagram-wrap adc-zdef-diag">
+<svg class="em-svg em-plk-svg" viewBox="0 0 340 300" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="Три отсчёта и среднее">
+<rect width="340" height="300" fill="#fff"/>
+<g id="adcZhDraw"></g>
+<g id="adcZhPlay" style="cursor:pointer">
+<rect x="8" y="266" width="88" height="28" rx="7" fill="#dcfce7" stroke="#16a34a" stroke-width="1.5"/>
+<text id="adcZhPlayLab" x="52" y="285" text-anchor="middle" font-size="13" font-weight="800" fill="#166534">▶ ход</text>
+</g>
+<text id="adcZhFoot" x="108" y="285" font-size="12" fill="#64748b">такт t = 2 с из примера с трубой</text>
+</svg>
+<div class="adc-zdef-formulas">
+<p class="adc-zdef-caption" id="adcZhCaption"></p>
+<div class="adc-zdef-series" id="adcZhSeries"></div>
+<div class="adc-zdef-closed" id="adcZhClosed"></div>
+<p class="adc-zdef-note" id="adcZhNote"></p>
+</div>
+</div></div>
+<aside class="asutp-panel" id="adcZhPanel"><h3>Три числа</h3>
+<p>ПЛК помнит три отсчёта.</p>
+</aside></div></section>
+
+<section class="slide slide-em-ac-interactive slide-adc-ziir-interactive is-picking">
+<h2>Z · бесконечная память</h2>
+<div class="slide-body asutp-interactive"><div class="asutp-main">
+<div class="app-purpose-grid em-plk-cards">
+<button type="button" class="app-purpose-card active" data-info="idea"><strong>Идея</strong><span>не три, а всё</span></button>
+<button type="button" class="app-purpose-card" data-info="eq"><strong>Формула</strong><span>½x + ½y</span></button>
+<button type="button" class="app-purpose-card" data-info="run"><strong>Ход</strong><span>такты трубы</span></button>
+<button type="button" class="app-purpose-card" data-info="hz"><strong>H(z)</strong><span>0.5 / (1 − 0.5/z)</span></button>
+</div>
+<div class="highlight-box highlight-box-compact adc-zdef-livebox"><p class="em-adc-live" id="adcZiirLive"></p></div>
+<div class="asutp-diagram-wrap adc-zdef-diag">
+<svg class="em-svg em-plk-svg" viewBox="0 0 340 300" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="Экспоненциальный фильтр">
+<rect width="340" height="300" fill="#fff"/>
+<g id="adcZiirDraw"></g>
+<g id="adcZiirPlay" style="cursor:pointer">
+<rect x="8" y="266" width="88" height="28" rx="7" fill="#dcfce7" stroke="#16a34a" stroke-width="1.5"/>
+<text id="adcZiirPlayLab" x="52" y="285" text-anchor="middle" font-size="13" font-weight="800" fill="#166534">▶ ход</text>
+</g>
+<text id="adcZiirFoot" x="108" y="285" font-size="12" fill="#64748b">одна ячейка: прошлый y</text>
+</svg>
+<div class="adc-zdef-formulas">
+<p class="adc-zdef-caption" id="adcZiirCaption"></p>
+<div class="adc-zdef-series" id="adcZiirSeries"></div>
+<div class="adc-zdef-closed" id="adcZiirClosed"></div>
+<p class="adc-zdef-note" id="adcZiirNote"></p>
+</div>
+</div></div>
+<aside class="asutp-panel" id="adcZiirPanel"><h3>Идея</h3>
+<p>Фильтр помнит всю историю через прошлый выход.</p>
+</aside></div></section>
+
+<section class="slide slide-em-ac-interactive slide-adc-zinv-interactive is-picking">
+<h2>Z · обратное</h2>
+<div class="slide-body asutp-interactive"><div class="asutp-main">
+<div class="app-purpose-grid em-plk-cards">
+<button type="button" class="app-purpose-card active" data-info="idea"><strong>Идея</strong><span>назад к {x<sub>k</sub>}</span></button>
+<button type="button" class="app-purpose-card" data-info="tab"><strong>Таблица</strong><span>готовые пары</span></button>
+<button type="button" class="app-purpose-card" data-info="ser"><strong>Ряд</strong><span>коэффициенты</span></button>
+<button type="button" class="app-purpose-card" data-info="ex"><strong>Пример</strong><span>z/(z−a)</span></button>
+</div>
+<div class="highlight-box highlight-box-compact adc-zdef-livebox"><p class="em-adc-live" id="adcZinvLive"></p></div>
+<div class="asutp-diagram-wrap adc-zdef-diag">
+<svg class="em-svg em-plk-svg" viewBox="0 0 340 300" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="Обратное Z">
+<rect width="340" height="300" fill="#fff"/>
+<defs><marker id="adcZinvArr" markerWidth="8" markerHeight="7" refX="7" refY="3.5" orient="auto"><path d="M0 0 L8 3.5 L0 7 Z" fill="#64748b"/></marker></defs>
+<g class="adc-node is-on" data-info="idea">
+<rect x="20" y="40" width="120" height="70" rx="10" fill="#eff6ff" stroke="#1d4ed8" stroke-width="1.8"/>
+<text x="80" y="70" text-anchor="middle" font-size="18" font-weight="800" fill="#1e3a8a">X(z)</text>
+<text x="80" y="92" text-anchor="middle" font-size="12" fill="#64748b">формула</text>
+</g>
+<path d="M140 75 H200" stroke="#64748b" stroke-width="2" marker-end="url(#adcZinvArr)"/>
+<text x="170" y="64" text-anchor="middle" font-size="12" font-weight="800" fill="#9a3412">обр. Z</text>
+<g class="adc-node" data-info="idea">
+<rect x="200" y="40" width="120" height="70" rx="10" fill="#fff7ed" stroke="#c2410c" stroke-width="1.8"/>
+<text x="260" y="70" text-anchor="middle" font-size="18" font-weight="800" fill="#9a3412">{x_k}</text>
+<text x="260" y="92" text-anchor="middle" font-size="12" fill="#64748b">отсчёты</text>
+</g>
+<g class="adc-node" data-info="ser">
+<rect x="16" y="132" width="308" height="70" rx="10" fill="#f8fafc" stroke="#e2e8f0"/>
+<text x="170" y="160" text-anchor="middle" font-size="14" font-weight="800" fill="#0f172a">X(z) = x0 + x1 z⁻¹ + x2 z⁻² + …</text>
+<text x="170" y="184" text-anchor="middle" font-size="13" fill="#64748b">коэффициент при z⁻ᵏ и есть xₖ</text>
+</g>
+<g class="adc-node" data-info="ex">
+<text x="170" y="232" text-anchor="middle" font-size="15" font-weight="800" fill="#c2410c">z / (z − a)  →  (1, a, a², …)</text>
+<text x="170" y="258" text-anchor="middle" font-size="13" fill="#9a3412">без вычетов: таблица или ряд</text>
+</g>
+</svg>
+<div class="adc-zdef-formulas">
+<p class="adc-zdef-caption">готовые пары (таблица)</p>
+<div class="adc-zinv-table" id="adcZinvTable">
+<div class="adc-zinv-row"><span class="char-eq">{x<sub>k</sub>}</span><span class="char-eq"><var>X</var>(<var>z</var>)</span></div>
+<div class="adc-zinv-row adc-node" data-info="tab"><span>(1, 0, 0, …)</span><span class="char-eq">1</span></div>
+<div class="adc-zinv-row adc-node" data-info="tab"><span>(1, 1, 1, …)</span><span class="char-frac"><span class="char-frac-part"><var>z</var></span><span class="char-frac-bar"></span><span class="char-frac-part"><var>z</var> − 1</span></span></div>
+<div class="adc-zinv-row adc-node" data-info="ex"><span>(1, a, a², …)</span><span class="char-frac"><span class="char-frac-part"><var>z</var></span><span class="char-frac-bar"></span><span class="char-frac-part"><var>z</var> − <var>a</var></span></span></div>
+</div>
+<p class="adc-zdef-note">прямое и обратное — одна таблица, читаем в обе стороны</p>
+</div>
+</div></div>
+<aside class="asutp-panel" id="adcZinvPanel"><h3>Идея</h3>
+<p>Обратное Z возвращает отсчёты из X(z).</p>
+</aside></div></section>
+
+<section class="slide slide-em-ac-interactive slide-adc-zf-interactive">
+<h2>Z · связь с Фурье</h2>
+<div class="slide-body adc-zf-body">
+<ol class="adc-zf-chain" id="adcZfChain">
+<li class="adc-zf-step">
+<p class="adc-zf-tag">1 · Z</p>
+<p class="adc-zf-say">z — комплексная переменная. Отсчёт x<sub>k</sub> стоит при степени z<sup>−k</sup>.</p>
+<div class="adc-zf-line"><span class="char-eq"><var>X</var>(<var>z</var>) = </span><span class="z-sum"><span class="z-sum-lim">∞</span><span class="z-sum-sigma">Σ</span><span class="z-sum-lim">k = 0</span></span><span class="char-eq"> <var>x</var><sub>k</sub> <var>z</var><sup>−k</sup></span></div>
+</li>
+<li class="adc-zf-step">
+<p class="adc-zf-tag">2 · Фурье</p>
+<p class="adc-zf-say">Та же сумма. Вместо степени z — экспонента.</p>
+<div class="adc-zf-line"><span class="char-eq"><var>S</var>(<var>iω</var>) = Δ </span><span class="z-sum"><span class="z-sum-lim">∞</span><span class="z-sum-sigma">Σ</span><span class="z-sum-lim">k = 0</span></span><span class="char-eq"> <var>x</var><sub>k</sub> <var>e</var><sup>−iωkΔ</sup></span></div>
+</li>
+<li class="adc-zf-step">
+<p class="adc-zf-tag">3 · Степень</p>
+<p class="adc-zf-say">Экспоненту записывают как степень.</p>
+<div class="adc-zf-line"><span class="char-eq"><var>e</var><sup>−iωkΔ</sup> = (<var>e</var><sup>iωΔ</sup>)<sup>−k</sup></span></div>
+</li>
+<li class="adc-zf-step">
+<p class="adc-zf-tag">4 · Замена</p>
+<p class="adc-zf-say">Положить z = e<sup>iωΔ</sup>. Фурье становится суммой Z, умноженной на Δ.</p>
+<div class="adc-zf-line"><span class="char-eq"><var>z</var> = <var>e</var><sup>iωΔ</sup></span></div>
+<div class="adc-zf-line"><span class="char-eq"><var>S</var>(<var>iω</var>) = Δ </span><span class="z-sum"><span class="z-sum-lim">∞</span><span class="z-sum-sigma">Σ</span><span class="z-sum-lim">k = 0</span></span><span class="char-eq"> <var>x</var><sub>k</sub> <var>z</var><sup>−k</sup></span></div>
+</li>
+</ol>
+</div></section>
+
+<section class="slide slide-em-ac-interactive slide-adc-zlin-interactive is-picking">
+<h2>Линейный цифровой фильтр</h2>
+<div class="slide-body asutp-interactive"><div class="asutp-main">
+<div class="app-purpose-grid em-plk-cards">
+<button type="button" class="app-purpose-card active" data-info="map"><strong>Отсчёты</strong><span>{x<sub>k</sub>} → {y<sub>k</sub>}</span></button>
+<button type="button" class="app-purpose-card" data-info="lin"><strong>Линейность</strong><span>α₁x¹ + …</span></button>
+<button type="button" class="app-purpose-card" data-info="sum"><strong>Сумма</strong><span>(2,0)+(0,2)</span></button>
+<button type="button" class="app-purpose-card" data-info="scale"><strong>Масштаб</strong><span>2x → 2y</span></button>
+</div>
+<div class="highlight-box highlight-box-compact"><p class="em-adc-live" id="adcZlinLive"></p></div>
+<div class="asutp-diagram-wrap">
+<svg class="em-svg em-plk-svg" viewBox="0 0 720 240" xmlns="http://www.w3.org/2000/svg" aria-label="Линейный цифровой фильтр">
+<rect width="720" height="240" fill="#fff"/>
+<defs><marker id="adcZlinArr" markerWidth="8" markerHeight="7" refX="7" refY="3.5" orient="auto"><path d="M0 0 L8 3.5 L0 7 Z" fill="#64748b"/></marker></defs>
+<g class="adc-node adc-zlin-view" data-info="map">
+<rect x="16" y="78" width="78" height="64" rx="10" fill="#eff6ff" stroke="#1d4ed8" stroke-width="1.8"/>
+<text x="55" y="116" text-anchor="middle" font-size="22" font-weight="800" fill="#1e3a8a">x₀</text>
+<rect x="104" y="78" width="78" height="64" rx="10" fill="#eff6ff" stroke="#1d4ed8" stroke-width="1.8"/>
+<text x="143" y="116" text-anchor="middle" font-size="22" font-weight="800" fill="#1e3a8a">x₁</text>
+<rect x="192" y="78" width="78" height="64" rx="10" fill="#eff6ff" stroke="#1d4ed8" stroke-width="1.8"/>
+<text x="231" y="116" text-anchor="middle" font-size="22" font-weight="800" fill="#1e3a8a">x₂</text>
+<path d="M278 110 H318" stroke="#64748b" stroke-width="2" marker-end="url(#adcZlinArr)"/>
+<rect x="326" y="62" width="150" height="96" rx="12" fill="#f0fdf4" stroke="#16a34a" stroke-width="1.8"/>
+<text x="401" y="104" text-anchor="middle" font-size="18" font-weight="800" fill="#166534">фильтр</text>
+<text x="401" y="130" text-anchor="middle" font-size="13" fill="#166534">список → список</text>
+<path d="M484 110 H508" stroke="#64748b" stroke-width="2" marker-end="url(#adcZlinArr)"/>
+<rect x="516" y="82" width="62" height="56" rx="10" fill="#fff7ed" stroke="#c2410c" stroke-width="1.8"/>
+<text x="547" y="116" text-anchor="middle" font-size="20" font-weight="800" fill="#9a3412">y₀</text>
+<rect x="584" y="82" width="62" height="56" rx="10" fill="#fff7ed" stroke="#c2410c" stroke-width="1.8"/>
+<text x="615" y="116" text-anchor="middle" font-size="20" font-weight="800" fill="#9a3412">y₁</text>
+<rect x="652" y="82" width="62" height="56" rx="10" fill="#fff7ed" stroke="#c2410c" stroke-width="1.8"/>
+<text x="683" y="116" text-anchor="middle" font-size="20" font-weight="800" fill="#9a3412">y₂</text>
+</g>
+<g class="adc-node adc-zlin-view" data-info="lin">
+<rect x="28" y="36" width="250" height="64" rx="10" fill="#eff6ff" stroke="#1d4ed8" stroke-width="1.8"/>
+<text x="153" y="76" text-anchor="middle" font-size="20" font-weight="800" fill="#1e3a8a">α₁ · {x⁽¹⁾}</text>
+<rect x="28" y="140" width="250" height="64" rx="10" fill="#eff6ff" stroke="#1d4ed8" stroke-width="1.8"/>
+<text x="153" y="180" text-anchor="middle" font-size="20" font-weight="800" fill="#1e3a8a">αₙ · {x⁽ᴺ⁾}</text>
+<path d="M286 68 H360" stroke="#64748b" stroke-width="2" marker-end="url(#adcZlinArr)"/>
+<path d="M286 172 H360" stroke="#64748b" stroke-width="2" marker-end="url(#adcZlinArr)"/>
+<rect x="368" y="78" width="120" height="84" rx="12" fill="#f0fdf4" stroke="#16a34a" stroke-width="1.8"/>
+<text x="428" y="128" text-anchor="middle" font-size="22" font-weight="800" fill="#166534">Σ</text>
+<path d="M496 120 H540" stroke="#64748b" stroke-width="2" marker-end="url(#adcZlinArr)"/>
+<rect x="548" y="78" width="150" height="84" rx="10" fill="#fff7ed" stroke="#c2410c" stroke-width="1.8"/>
+<text x="623" y="116" text-anchor="middle" font-size="16" font-weight="800" fill="#9a3412">те же α</text>
+<text x="623" y="140" text-anchor="middle" font-size="16" font-weight="800" fill="#9a3412">у {y}</text>
+</g>
+<g class="adc-node adc-zlin-view" data-info="sum">
+<text x="150" y="46" text-anchor="middle" font-size="22" font-weight="800" fill="#1e3a8a">(2, 0, 0)</text>
+<text x="360" y="46" text-anchor="middle" font-size="22" fill="#64748b">→</text>
+<text x="560" y="46" text-anchor="middle" font-size="22" font-weight="800" fill="#9a3412">(2, 1, 0)</text>
+<text x="48" y="96" text-anchor="middle" font-size="22" font-weight="800" fill="#64748b">+</text>
+<text x="150" y="118" text-anchor="middle" font-size="22" font-weight="800" fill="#1e3a8a">(0, 2, 0)</text>
+<text x="360" y="118" text-anchor="middle" font-size="22" fill="#64748b">→</text>
+<text x="560" y="118" text-anchor="middle" font-size="22" font-weight="800" fill="#9a3412">(0, 2, 1)</text>
+<rect x="70" y="148" width="610" height="64" rx="10" fill="#f0fdf4" stroke="#16a34a" stroke-width="1.6"/>
+<text x="40" y="188" text-anchor="middle" font-size="22" font-weight="800" fill="#166534">=</text>
+<text x="180" y="188" text-anchor="middle" font-size="22" font-weight="800" fill="#1e3a8a">(2, 2, 0)</text>
+<text x="360" y="188" text-anchor="middle" font-size="22" fill="#64748b">→</text>
+<text x="560" y="188" text-anchor="middle" font-size="22" font-weight="800" fill="#9a3412">(2, 3, 1)</text>
+</g>
+<g class="adc-node adc-zlin-view" data-info="scale">
+<text x="180" y="64" text-anchor="middle" font-size="24" font-weight="800" fill="#1e3a8a">(2, 0, 0)</text>
+<text x="360" y="64" text-anchor="middle" font-size="24" fill="#64748b">→</text>
+<text x="540" y="64" text-anchor="middle" font-size="24" font-weight="800" fill="#9a3412">(2, 1, 0)</text>
+<text x="180" y="124" text-anchor="middle" font-size="20" font-weight="800" fill="#166534">× 2</text>
+<text x="540" y="124" text-anchor="middle" font-size="20" font-weight="800" fill="#166534">× 2</text>
+<rect x="40" y="148" width="640" height="68" rx="10" fill="#f0fdf4" stroke="#16a34a" stroke-width="1.6"/>
+<text x="180" y="190" text-anchor="middle" font-size="24" font-weight="800" fill="#1e3a8a">(4, 0, 0)</text>
+<text x="360" y="190" text-anchor="middle" font-size="24" fill="#64748b">→</text>
+<text x="540" y="190" text-anchor="middle" font-size="24" font-weight="800" fill="#9a3412">(4, 2, 0)</text>
+</g>
+</svg>
+</div>
+</div>
+<aside class="asutp-panel" id="adcZlinPanel"><h3>Отсчёты</h3>
+<p>Фильтр переводит список входа в список выхода.</p>
+</aside></div></section>
+
+<section class="slide slide-em-ac-interactive slide-adc-ztr-interactive is-picking">
+<h2>Трансверсальный фильтр</h2>
+<div class="slide-body asutp-interactive"><div class="asutp-main">
+<div class="app-purpose-grid em-plk-cards">
+<button type="button" class="app-purpose-card active" data-info="alg"><strong>Алгоритм</strong><span>сумма входов</span></button>
+<button type="button" class="app-purpose-card" data-info="z"><strong>Z</strong><span>сдвиг → z<sup>−k</sup></span></button>
+<button type="button" class="app-purpose-card" data-info="g"><strong>G(z)</strong><span>Y / X</span></button>
+<button type="button" class="app-purpose-card" data-info="ex"><strong>Пример</strong><span>m = 2 · труба</span></button>
+</div>
+<div class="highlight-box highlight-box-compact"><p class="em-adc-live" id="adcZtrLive"></p></div>
+<div class="asutp-diagram-wrap">
+<svg class="em-svg em-plk-svg" viewBox="0 0 720 220" xmlns="http://www.w3.org/2000/svg" aria-label="Трансверсальный фильтр, линия задержек">
+<rect width="720" height="220" fill="#fff"/>
+<defs><marker id="adcZtrArr" markerWidth="8" markerHeight="7" refX="7" refY="3.5" orient="auto"><path d="M0 0 L8 3.5 L0 7 Z" fill="#64748b"/></marker></defs>
+<rect x="20" y="36" width="128" height="64" rx="10" fill="#eff6ff" stroke="#1d4ed8" stroke-width="1.8"/>
+<text id="adcZtrS0" x="84" y="76" text-anchor="middle" font-size="22" font-weight="800" fill="#1e3a8a">xᵢ</text>
+<path d="M148 68 H196" stroke="#64748b" stroke-width="2" marker-end="url(#adcZtrArr)"/>
+<text x="172" y="56" text-anchor="middle" font-size="14" font-weight="800" fill="#9a3412">1/z</text>
+<rect x="204" y="36" width="128" height="64" rx="10" fill="#eff6ff" stroke="#1d4ed8" stroke-width="1.8"/>
+<text id="adcZtrS1" x="268" y="76" text-anchor="middle" font-size="22" font-weight="800" fill="#1e3a8a">xᵢ₋₁</text>
+<path d="M332 68 H380" stroke="#64748b" stroke-width="2" marker-end="url(#adcZtrArr)"/>
+<text x="356" y="56" text-anchor="middle" font-size="14" font-weight="800" fill="#9a3412">1/z</text>
+<rect x="388" y="36" width="128" height="64" rx="10" fill="#eff6ff" stroke="#1d4ed8" stroke-width="1.8"/>
+<text id="adcZtrS2" x="452" y="76" text-anchor="middle" font-size="22" font-weight="800" fill="#1e3a8a">xᵢ₋₂</text>
+<line x1="84" y1="100" x2="84" y2="156" stroke="#c2410c" stroke-width="1.8"/>
+<line x1="268" y1="100" x2="268" y2="156" stroke="#c2410c" stroke-width="1.8"/>
+<line x1="452" y1="100" x2="452" y2="156" stroke="#c2410c" stroke-width="1.8"/>
+<text id="adcZtrA0" x="96" y="132" font-size="16" font-weight="800" fill="#c2410c">a₀</text>
+<text id="adcZtrA1" x="280" y="132" font-size="16" font-weight="800" fill="#c2410c">a₁</text>
+<text id="adcZtrA2" x="464" y="132" font-size="16" font-weight="800" fill="#c2410c">a₂</text>
+<line x1="84" y1="156" x2="560" y2="156" stroke="#166534" stroke-width="2"/>
+<path d="M560 156 H592" stroke="#166534" stroke-width="2" marker-end="url(#adcZtrArr)"/>
+<circle cx="624" cy="156" r="24" fill="#f0fdf4" stroke="#16a34a" stroke-width="1.8"/>
+<text x="624" y="164" text-anchor="middle" font-size="22" font-weight="800" fill="#166534">+</text>
+<text id="adcZtrY" x="624" y="206" text-anchor="middle" font-size="20" font-weight="800" fill="#9a3412">yᵢ</text>
+</svg>
+</div>
+</div>
+<aside class="asutp-panel" id="adcZtrPanel"><h3>Алгоритм</h3>
+<p>Выход — сумма входных отсчётов с коэффициентами.</p>
+</aside></div></section>
+
+<section class="slide slide-em-ac-interactive slide-adc-zfr-interactive is-picking">
+<h2>Z · фильтр и АЧХ</h2>
+<div class="slide-body asutp-interactive"><div class="asutp-main">
+<div class="app-purpose-grid em-plk-cards">
+<button type="button" class="app-purpose-card active" data-info="hz"><strong>H(z)</strong><span>формула фильтра</span></button>
+<button type="button" class="app-purpose-card" data-info="sub"><strong>Подстановка</strong><span>z = e<sup>iωΔ</sup></span></button>
+<button type="button" class="app-purpose-card" data-info="ach"><strong>АЧХ</strong><span>график |H|</span></button>
+<button type="button" class="app-purpose-card" data-info="cut"><strong>Срез</strong><span>где давит</span></button>
+</div>
+<div class="highlight-box highlight-box-compact"><p class="em-adc-live" id="adcZfrLive"></p></div>
+<div class="asutp-diagram-wrap">
+<svg class="em-svg em-plk-svg" id="adcZfrSvg" viewBox="0 0 720 280" xmlns="http://www.w3.org/2000/svg" aria-label="АЧХ и как фильтр давит волну">
 <rect width="720" height="280" fill="#fff"/>
-<g class="adc-node" data-info="fs" style="cursor:pointer">
-<path d="M40 140 Q100 60 160 140 T280 140 T400 140 T520 140" fill="none" stroke="#64748b" stroke-width="2"/>
+<line x1="48" y1="18" x2="48" y2="182" stroke="#cbd5e1" stroke-width="1.4"/>
+<line x1="48" y1="182" x2="334" y2="182" stroke="#cbd5e1" stroke-width="1.4"/>
+<line x1="48" y1="67" x2="334" y2="67" stroke="#e2e8f0" stroke-width="1"/>
+<text x="44" y="22" text-anchor="end" font-size="12" fill="#64748b">1</text>
+<text x="44" y="71" text-anchor="end" font-size="12" fill="#64748b">0.7</text>
+<text x="44" y="186" text-anchor="end" font-size="12" fill="#64748b">0</text>
+<text x="14" y="100" text-anchor="middle" font-size="13" font-weight="800" fill="#9a3412" transform="rotate(-90 14 100)">|H|</text>
+<text x="48" y="200" text-anchor="middle" font-size="12" fill="#64748b">0</text>
+<text x="178" y="200" text-anchor="middle" font-size="12" fill="#64748b">10</text>
+<text x="307" y="200" text-anchor="middle" font-size="12" fill="#64748b">20</text>
+<text x="334" y="200" text-anchor="end" font-size="12" font-weight="700" fill="#64748b">кГц</text>
+<polyline id="adcZfrCurve" fill="none" stroke="#c2410c" stroke-width="2.6" stroke-linejoin="round"/>
+<line id="adcZfrMark" y1="18" y2="182" stroke="#1d4ed8" stroke-width="2"/>
+<circle id="adcZfrDot" r="5" fill="#1d4ed8"/>
+<rect id="adcZfrHit" x="48" y="18" width="286" height="164" fill="transparent" style="cursor:crosshair"/>
+<line x1="352" y1="14" x2="352" y2="210" stroke="#e2e8f0" stroke-width="1.4"/>
+<text x="368" y="32" font-size="13" font-weight="800" fill="#1d4ed8">вход · A = 1</text>
+<line x1="368" y1="70" x2="698" y2="70" stroke="#e2e8f0" stroke-width="1" stroke-dasharray="4 4"/>
+<polyline id="adcZfrIn" fill="none" stroke="#1d4ed8" stroke-width="2.4" stroke-linejoin="round"/>
+<text x="368" y="126" font-size="13" font-weight="800" fill="#c2410c">выход</text>
+<text id="adcZfrOutAmp" x="430" y="126" font-size="13" font-weight="800" fill="#9a3412">A = 1</text>
+<line x1="368" y1="164" x2="698" y2="164" stroke="#e2e8f0" stroke-width="1" stroke-dasharray="4 4"/>
+<polyline id="adcZfrGhost" fill="none" stroke="#cbd5e1" stroke-width="2" stroke-linejoin="round"/>
+<polyline id="adcZfrOut" fill="none" stroke="#c2410c" stroke-width="2.6" stroke-linejoin="round"/>
+<g id="adcZfrPlay" style="cursor:pointer">
+<rect x="48" y="242" width="88" height="28" rx="7" fill="#dcfce7" stroke="#16a34a" stroke-width="1.5"/>
+<text id="adcZfrPlayLab" x="92" y="261" text-anchor="middle" font-size="13" font-weight="800" fill="#166534">▶ ход</text>
 </g>
-<g class="adc-node is-on" data-info="ap" style="cursor:pointer">
-<rect x="150" y="100" width="20" height="80" fill="#93c5fd" opacity="0.7"/>
-<rect x="270" y="100" width="20" height="80" fill="#93c5fd" opacity="0.7"/>
-<rect x="390" y="100" width="20" height="80" fill="#93c5fd" opacity="0.7"/>
-<text x="280" y="210" text-anchor="middle" font-size="12" font-weight="700" fill="#1e3a8a">апертура</text>
-</g>
-<g class="adc-node" data-info="enc" style="cursor:pointer">
-<rect x="270" y="100" width="80" height="20" fill="#fde68a" opacity="0.9"/>
-<text x="450" y="90" font-size="12" fill="#92400e">время кодирования</text>
-</g>
-<g class="adc-node" data-info="st" style="cursor:pointer">
-<rect x="560" y="80" width="130" height="120" rx="8" fill="#f1f5f9" stroke="#0f172a"/>
-<text x="625" y="130" text-anchor="middle" font-size="13" font-weight="700" fill="#0f172a">статика</text>
-<text x="625" y="155" text-anchor="middle" font-size="12" fill="#64748b">≈ как ЦАП</text>
-</g>
-</svg></div></div>
-<aside class="asutp-panel" id="adcParamPanel"><h3>Статика</h3>
-<p>Статические параметры <strong>аналогичны ЦАП</strong>: разрядность, диапазон, погрешность, нелинейность.</p>
+<text x="148" y="261" font-size="13" fill="#64748b">серая волна — как было · оранжевая — как стало</text>
+</svg>
+</div>
+</div>
+<aside class="asutp-panel" id="adcZfrPanel"><h3>H(z)</h3>
+<p>Цифровой фильтр задают формулой от z.</p>
 </aside></div></section>
 
 <section class="slide slide-em-ac-interactive slide-adc-plc-interactive is-picking">
@@ -699,10 +1708,9 @@
 
 <section class="slide slide-title"><span class="tag">Конец лекции 11</span>
 <h1>Продолжение следует</h1>
-<p>Тема 5: ЦАП (веса, R–2R) · типы АЦП · параметры · связь с ПЛК.</p>
-<p><a href="lecture-10.html" class="link-home">← Лекция 10. Автоматические выключатели</a></p>
+<p>Дальше — аппаратно-программные средства.</p>
 <p><a href="lecture-12.html" class="link-home">Лекция 12. Аппаратно-программные средства →</a></p>
-<p><a href="lecture-13.html" class="link-home">Лекция 13. ПЛК · AI/AO →</a></p>
+<p><a href="lecture-10.html" class="link-home">← Лекция 10. Усилительно-преобразовательные элементы</a></p>
 <p><a href="../index.html" class="link-home">← На главную</a></p></section>
 </div>
 
@@ -723,4 +1731,4 @@
 </div>
 </div>
 <script src="../js/presentation.js"></script>
-</body></html><secti
+</body></html>

@@ -9472,7 +9472,7 @@
     },
     arm: {
       title: 'Якорь',
-      html: '<p>В переменном токе рабочую обмотку часто зовут <strong>якорем</strong> — но она на статоре, не на роторе.</p><p>Это не якорь МПТ из лекции 5. Если путается — говорите «обмотка статора» и «ротор с полем».</p>',
+      html: '<p>В переменном токе рабочую обмотку часто зовут <strong>якорем</strong> — но она на статоре, не на роторе.</p><p>Это не якорь МПТ из лекции 6. Если путается — говорите «обмотка статора» и «ротор с полем».</p>',
       view: 'real'
     }
   }, 'school');
@@ -11925,7 +11925,7 @@
 
   bindEm2phSlide('.slide-em-2ph-same-interactive', 'em2phSamePanel', {
     same: { title: 'Одинаково', html: '<p>Динамика двухфазного асинхронного такая же по форме, как у двигателя постоянного тока.</p><p>Структурную схему можно брать ту же: U → Kдв → сумма с −Kм Mн → инерция → ω.</p>' },
-    dc: { title: 'МПТ', html: '<p>В лекции 5 для МПТ писали то же якорное управление. Часто ещё вычитали момент потерь M₀.</p>' },
+    dc: { title: 'МПТ', html: '<p>В лекции 6 для МПТ писали то же якорное управление. Часто ещё вычитали момент потерь M₀.</p>' },
     ac: { title: 'Двухфазный', html: '<p>Здесь M₀ в модель не ставят. Управление — Uупр на обмотку, не Uя постоянного тока.</p>' }
   }, 'same');
 
@@ -12195,7 +12195,7 @@
   bindEmAcSlide('.slide-ir-bridge-interactive', 'irBridgePanel', {
     cmd: {
       title: 'φвх · задание',
-      html: '<p>Угол, который нужно отработать: рукоятка, сельсин-датчик, код.</p><p>На лекции 7 мы крутили вал — но ещё не сравнивали его с заданием.</p>'
+      html: '<p>Угол, который нужно отработать: рукоятка, сельсин-датчик, код.</p><p>На лекции 8 мы крутили вал — но ещё не сравнивали его с заданием.</p>'
     },
     load: {
       title: 'φн · вал',
@@ -13229,7 +13229,7 @@
     bindSimple('.slide-upe-bridge-interactive', 'upeBridgePanel', {
       ir: {
         title: 'ИР',
-        html: '<p>На лекции 8 измеритель рассогласования сравнил углы и выдал слабый сигнал ошибки.</p><p>Сам по себе он силовой усилитель не «прокормит» — нужен промежуточный блок.</p>'
+        html: '<p>На лекции 9 измеритель рассогласования сравнил углы и выдал слабый сигнал ошибки.</p><p>Сам по себе он силовой усилитель не «прокормит» — нужен промежуточный блок.</p>'
       },
       upe: {
         title: 'УПЭ',
@@ -14630,7 +14630,7 @@
 
 /* ===== Lecture 11: АЦП и ЦАП ===== */
   (() => {
-    const bindAdc = (slideSel, panelId, liveId, info, defaultKey) => {
+    const bindAdc = (slideSel, panelId, liveId, info, defaultKey, onShow) => {
       const slide = document.querySelector(slideSel);
       if (!slide) return;
       const panel = document.getElementById(panelId);
@@ -14639,13 +14639,17 @@
         const data = info[key] || info[defaultKey];
         if (!data) return;
         if (panel) panel.innerHTML = `<h3>${data.title}</h3>${data.html}`;
-        if (live && data.live) live.textContent = data.live;
+        if (live && data.live) {
+          if (String(data.live).includes('<')) live.innerHTML = data.live;
+          else live.textContent = data.live;
+        }
         slide.querySelectorAll('.app-purpose-card').forEach((b) => {
           b.classList.toggle('active', b.dataset.info === key);
         });
         slide.querySelectorAll('.adc-node').forEach((n) => {
           n.classList.toggle('is-on', n.dataset.info === key);
         });
+        if (typeof onShow === 'function') onShow(key);
       };
       slide.querySelectorAll('.app-purpose-card').forEach((b) => {
         b.addEventListener('click', () => show(b.dataset.info));
@@ -14731,17 +14735,463 @@
 
     bindAdc('.slide-adc-dac-r2r-interactive', 'adcDacR2rPanel', 'adcDacR2rLive', {
       lad: { title: 'Лестница', html: '<p>Матрица из резисторов только двух номиналов <strong>R</strong> и <strong>2R</strong> — технологически проще.</p>', live: 'лестница R–2R' },
-      cur: { title: 'Ток', html: '<p>Суммарный ток обратной связи пропорционален коду.</p>', live: 'Iос ~ код' },
+      cur: { title: 'Ток', html: '<p>Клик по <strong>D2 D1 D0</strong>. Включённый разряд даёт ток I в свою ветвь 2R. Из‑за деления пополам в Iос доходит: D2 → I/2, D1 → I/4, D0 → I/8. Сумма = Iос.</p>', live: 'клик по битам · Iос = Σ Di·I/2⁽ⁱ⁺¹⁾' },
       out: { title: 'Выход', html: '<p><var>U</var><sub>вых</sub> = −<var>I</var><sub>ос</sub>·<var>R</var><sub>ос</sub>. Абсолютное значение R сокращается — важны <strong>отношения</strong>.</p>', live: 'Uвых = −Iос · Rос' },
       plus: { title: 'Плюс', html: '<p>Чем выше <strong>идентичность</strong> звеньев, тем точнее преобразование.</p>', live: 'идентичность звеньев' }
-    }, 'lad');
+    }, 'cur');
 
+    (() => {
+      const slide = document.querySelector('.slide-adc-dac-r2r-interactive');
+      if (!slide) return;
+      const bits = [0, 0, 1];
+      const frac = (n) => {
+        if (n === 0) return '0';
+        const g = (a, b) => (b ? g(b, a % b) : a);
+        const d = g(n, 8);
+        const num = n / d;
+        const den = 8 / d;
+        return den === 1 ? 'I' : (num === 1 ? 'I/' + den : num + 'I/' + den);
+      };
+      const paint = () => {
+        const n = bits[0] + 2 * bits[1] + 4 * bits[2];
+        const f = frac(n);
+        bits.forEach((v, i) => {
+          const gEl = document.getElementById('r2rBit' + i);
+          if (!gEl) return;
+          const rect = gEl.querySelector('rect');
+          const texts = gEl.querySelectorAll('text');
+          const on = !!v;
+          if (rect) {
+            rect.setAttribute('fill', on ? '#dbeafe' : '#eff6ff');
+            rect.setAttribute('stroke', on ? '#1d4ed8' : '#94a3b8');
+            rect.setAttribute('stroke-width', on ? '1.6' : '1.5');
+          }
+          if (texts[0]) {
+            texts[0].textContent = 'D' + i + '=' + v;
+            texts[0].setAttribute('fill', on ? '#1e3a8a' : '#64748b');
+          }
+          if (texts[1]) texts[1].setAttribute('fill', on ? '#1e3a8a' : '#94a3b8');
+          const inj = document.getElementById('r2rInj' + i);
+          if (inj) inj.setAttribute('opacity', on ? '1' : '0.12');
+        });
+        const ios = document.getElementById('r2rIosLab');
+        if (ios) ios.textContent = 'Iос = ' + f;
+        const uEl = document.getElementById('r2rUout');
+        if (uEl) uEl.textContent = n === 0 ? '0' : '−' + f + '·Rос';
+        const hint = document.getElementById('r2rHint');
+        const code = '' + bits[2] + bits[1] + bits[0];
+        if (hint) hint.textContent = 'код ' + code + '₂ = ' + n + '  ·  Iос = ' + f + '  ·  клик по битам';
+        const live = document.getElementById('adcDacR2rLive');
+        if (live) live.textContent = 'D2D1D0=' + code + ' · Iос=' + f + ' · Uвых=−' + (n === 0 ? '0' : f + '·Rос');
+      };
+      slide.querySelectorAll('.r2r-bit').forEach((gEl) => {
+        gEl.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const i = Number(gEl.dataset.bit);
+          bits[i] = bits[i] ? 0 : 1;
+          paint();
+        });
+      });
+      paint();
+    })();
+
+    let dacParShowKey = () => {};
     bindAdc('.slide-adc-dac-param-interactive', 'adcDacParamPanel', 'adcDacParamLive', {
-      n: { title: 'Разрядность', html: '<p><strong>N</strong> — число двоичных разрядов. Диапазон U<sub>min</sub>…U<sub>max</sub>. Абсолютная погрешность — отклонение в конечной точке шкалы.</p>', live: 'N разрядов · конец шкалы' },
-      step: { title: 'Шаг', html: '<p>Шаг квантования ΔU = U<sub>max</sub>/(2<sup>N</sup>−1). Относительная разрешающая способность 1/(2<sup>N</sup>−1).</p>', live: 'ΔU = Umax / (2ᴺ−1)' },
-      nl: { title: 'Нелинейность', html: '<p><strong>Интегральная</strong> — макс. отклонение от идеальной прямой. <strong>Дифференциальная</strong> — макс. разность двух соседних шагов.</p>', live: 'интегральная · дифференциальная' },
-      dyn: { title: 'Динамика', html: '<p><var>t</var><sub>уст</sub> — от смены кода min→max до заданной точности на выходе. <var>f</var><sub>пр</sub> — макс. частота смены кода.</p>', live: 'tуст · fпр' }
-    }, 'n');
+      n: { title: 'Разрядность', html: '<p><strong>N</strong> — число разрядов, уровней <strong>2<sup>N</sup></strong>. Кликните ступеньку или биты — точка бежит по характеристике. ▶ ход прогоняет коды 0…2<sup>N</sup>−1.</p>', live: 'клик по ступеньке / битам · ▶ ход' },
+      rng: { title: 'Диапазон', html: '<p>Диапазон выходной величины — от <strong>U<sub>min</sub></strong> до <strong>U<sub>max</sub></strong> (униполярный ЦАП: обычно 0…U<sub>max</sub>). Все коды 0…2<sup>N</sup>−1 лежат внутри этого интервала. Абсолютная погрешность — отклонение в конце шкалы.</p>', live: 'Uвых ∈ [Umin; Umax]' },
+      step: { title: 'Шаг', html: '<p>Шаг <strong>ΔU = U<sub>max</sub> / (2<sup>N</sup>−1)</strong> — высота ступеньки. В демо Uвых = код · ΔU.</p>', live: 'ΔU = Umax / (2ᴺ−1)' },
+      res: { title: 'Разрешение', html: '<p><strong>Относительная</strong> разрешающая способность — величина, обратная числу уровней квантования: <strong>d<sub>r</sub> = 1/(2<sup>N</sup>−1)</strong>.</p><p><strong>Абсолютная</strong> численно равна шагу квантования: <strong>d<sub>A</sub> = U<sub>max</sub>/(2<sup>N</sup>−1) = ΔU</strong>. Меняйте N — знаменатель 2<sup>N</sup>−1 меняется.</p>', live: 'dᵣ = 1/(2ᴺ−1) · dₐ = ΔU' },
+      nl: { title: 'Нелинейность', html: '<p><strong>Зелёная</strong> — идеал, <strong>красная</strong> — реальный ЦАП.</p><p><strong>d<sub>int</sub></strong> (INL) — уход от прямой. <strong>d<sub>dif</sub></strong> (DNL) — ступенька ≠ ΔU (лупа). <strong>Δd</strong> — погрешность в конце шкалы, не нелинейность.</p><p>Кликните d_int / d_dif / Δd на панели.</p>', live: 'd_int · d_dif · Δd' },
+      dyn: { title: 'Динамика', html: '<p><strong>Время установления t<sub>уст</sub></strong> выходного напряжения или тока — интервал от начала изменения входного двоичного кода <strong>от минимального до максимального</strong> значения до момента, когда выходной аналоговый сигнал достигнет <strong>заданной величины</strong>.</p><p><strong>Максимальная частота преобразования f<sub>пр</sub></strong> — наибольшая частота смены входного кода. Обычно <strong>f<sub>пр</sub> ≈ 1/t<sub>уст</sub></strong>.</p>', live: 'tуст: min→max кода до заданного Uвых · fпр — max частота смены кода' }
+    }, 'n', (key) => dacParShowKey(key));
+
+    (() => {
+      const slide = document.querySelector('.slide-adc-dac-param-interactive');
+      if (!slide) return;
+      let N = 3;
+      let code = 3;
+      let timer = 0;
+      let dynMode = false;
+      let resMode = false;
+      let nlMode = false;
+      let nlFocus = 'int';
+      const NS = 'http://www.w3.org/2000/svg';
+      const x0 = 56, x1 = 430, y0 = 268, y1 = 60;
+      const byId = (id) => document.getElementById(id);
+      const geom = () => {
+        const levels = 1 << N;
+        const steps = levels - 1;
+        const dx = (x1 - x0) / levels;
+        const dy = (y0 - y1) / steps;
+        return {
+          levels,
+          steps,
+          dx,
+          dy,
+          yk: (k) => y0 - k * dy,
+          xk: (k) => x0 + k * dx
+        };
+      };
+      const bin = () => {
+        let s = '';
+        for (let i = N - 1; i >= 0; i--) s += (code >> i) & 1;
+        return s;
+      };
+      const paint = () => {
+        const g = geom();
+        if (code > g.steps) code = g.steps;
+        let d = 'M' + x0 + ' ' + g.yk(0);
+        for (let k = 0; k < g.levels; k++) {
+          d += ' H' + g.xk(k + 1);
+          if (k < g.steps) d += ' V' + g.yk(k + 1);
+        }
+        byId('dacParStairs').setAttribute('d', d);
+        byId('dacParStairs').setAttribute('opacity', nlMode ? '0.12' : '1');
+        byId('dacParDot').setAttribute('opacity', nlMode ? '0.15' : '1');
+        const ideal = byId('dacParIdeal');
+        ideal.setAttribute('d', 'M' + x0 + ' ' + y0 + ' L' + x1 + ' ' + y1);
+        ideal.setAttribute('stroke', nlMode ? '#16a34a' : '#cbd5e1');
+        ideal.setAttribute('stroke-dasharray', nlMode ? '0' : '5 3');
+        ideal.setAttribute('stroke-width', nlMode ? '2.6' : '1.6');
+        const realY = (t) => y0 + t * (y1 - y0) + 22 * Math.sin(2 * Math.PI * t) + 14 * t;
+        const nlPath = byId('dacParNl');
+        if (nlMode) {
+          let ds = 'M' + x0 + ' ' + y0;
+          for (let i = 1; i <= 32; i++) {
+            const t = i / 32;
+            ds += ' L' + (x0 + t * (x1 - x0)).toFixed(1) + ' ' + realY(t).toFixed(1);
+          }
+          nlPath.setAttribute('d', ds);
+          nlPath.setAttribute('stroke-width', '2.6');
+        } else {
+          let dn = 'M' + x0 + ' ' + g.yk(0);
+          for (let k = 0; k < g.levels; k++) {
+            const wobble = k === Math.floor(g.levels / 2) ? g.dy * 0.4 : k === 1 ? -g.dy * 0.2 : 0;
+            dn += ' H' + g.xk(k + 1);
+            if (k < g.steps) dn += ' V' + (g.yk(k + 1) + wobble);
+          }
+          nlPath.setAttribute('d', dn);
+          nlPath.setAttribute('stroke-width', '2');
+        }
+        const ticks = byId('dacParTicks');
+        ticks.replaceChildren();
+        for (let k = 0; k < g.levels; k++) {
+          if (g.levels > 8 && k % 2 && k !== g.steps) continue;
+          const tx = document.createElementNS(NS, 'text');
+          tx.setAttribute('x', String(g.xk(k) + g.dx / 2));
+          tx.setAttribute('y', '284');
+          tx.setAttribute('text-anchor', 'middle');
+          tx.setAttribute('font-size', '10');
+          tx.setAttribute('fill', k === code ? '#166534' : '#64748b');
+          tx.setAttribute('font-weight', k === code ? '800' : '400');
+          tx.textContent = String(k);
+          ticks.appendChild(tx);
+        }
+        byId('dacParFs').setAttribute('cx', String(g.xk(g.levels)));
+        byId('dacParFs').setAttribute('cy', String(y1));
+        byId('dacParDot').setAttribute('cx', String(g.xk(code) + g.dx / 2));
+        byId('dacParDot').setAttribute('cy', String(g.yk(code)));
+        const du = byId('dacParDu');
+        du.replaceChildren();
+        const from = Math.max(0, code - (code === 0 ? 0 : 1));
+        const to = from === code ? Math.min(g.steps, code + 1) : code;
+        const midX = g.xk(Math.max(code, 1)) + 4;
+        const p = document.createElementNS(NS, 'path');
+        p.setAttribute('d', 'M' + midX + ' ' + g.yk(from) + ' V' + g.yk(to === from ? from + 1 : to));
+        p.setAttribute('stroke', '#1d4ed8');
+        p.setAttribute('stroke-width', '2');
+        du.appendChild(p);
+        const t = document.createElementNS(NS, 'text');
+        t.setAttribute('x', String(midX + 8));
+        t.setAttribute('y', String((g.yk(from) + g.yk(from === to ? from + 1 : to)) / 2 + 4));
+        t.setAttribute('font-size', '13');
+        t.setAttribute('font-weight', '800');
+        t.setAttribute('fill', '#1e3a8a');
+        t.textContent = resMode ? 'dₐ = ΔU' : 'ΔU';
+        du.appendChild(t);
+        const drLab = byId('dacParDrLab');
+        if (drLab) drLab.textContent = 'dᵣ = 1/' + g.steps + ' шкалы';
+        const daLab = byId('dacParDaLab');
+        if (daLab) {
+          daLab.setAttribute('x', String(midX + 8));
+          daLab.setAttribute('y', String((g.yk(from) + g.yk(from === to ? from + 1 : to)) / 2 + 20));
+        }
+        const drVal = byId('dacParDrVal');
+        if (drVal) drVal.textContent = '= 1/' + g.steps + ' ≈ ' + (1 / g.steps).toFixed(3).replace('.', ',');
+        [2, 3, 4].forEach((nn) => {
+          const gg = byId('dacParN' + nn);
+          const on = nn === N;
+          gg.querySelector('rect').setAttribute('fill', on ? '#dbeafe' : '#eff6ff');
+          gg.querySelector('rect').setAttribute('stroke', on ? '#1d4ed8' : '#94a3b8');
+          gg.querySelector('text').setAttribute('fill', on ? '#1e3a8a' : '#64748b');
+        });
+        const bitsG = byId('dacParBits');
+        bitsG.replaceChildren();
+        const bw = Math.min(52, 220 / N);
+        const bx0 = 607 - (N * (bw + 8) - 8) / 2;
+        for (let i = 0; i < N; i++) {
+          const bit = N - 1 - i;
+          const on = !!(code & (1 << bit));
+          const gEl = document.createElementNS(NS, 'g');
+          gEl.setAttribute('class', 'dac-par-bit');
+          gEl.setAttribute('data-bit', String(bit));
+          gEl.setAttribute('style', 'cursor:pointer');
+          const r = document.createElementNS(NS, 'rect');
+          r.setAttribute('x', String(bx0 + i * (bw + 8)));
+          r.setAttribute('y', '150');
+          r.setAttribute('width', String(bw));
+          r.setAttribute('height', '36');
+          r.setAttribute('rx', '6');
+          r.setAttribute('fill', on ? '#dbeafe' : '#eff6ff');
+          r.setAttribute('stroke', on ? '#1d4ed8' : '#94a3b8');
+          r.setAttribute('stroke-width', on ? '1.8' : '1.4');
+          const tx = document.createElementNS(NS, 'text');
+          tx.setAttribute('x', String(bx0 + i * (bw + 8) + bw / 2));
+          tx.setAttribute('y', '173');
+          tx.setAttribute('text-anchor', 'middle');
+          tx.setAttribute('font-size', '12');
+          tx.setAttribute('font-weight', '800');
+          tx.setAttribute('fill', on ? '#1e3a8a' : '#64748b');
+          tx.textContent = 'D' + bit + '=' + (on ? 1 : 0);
+          gEl.appendChild(r);
+          gEl.appendChild(tx);
+          bitsG.appendChild(gEl);
+        }
+        bitsG.querySelectorAll('.dac-par-bit').forEach((el) => {
+          el.addEventListener('click', (e) => {
+            e.stopPropagation();
+            stopPlay();
+            const b = Number(el.getAttribute('data-bit'));
+            code = code ^ (1 << b);
+            paint();
+          });
+        });
+        byId('dacParU').textContent = code + ' ΔU';
+        byId('dacParCode').textContent = 'код ' + bin() + '₂ = ' + code;
+        byId('dacParHint').textContent = 'N=' + N + ' · код ' + code + '/' + g.steps + ' · Uвых = ' + code + ' ΔU';
+        const rngLab = byId('dacParRangeLab');
+        if (rngLab) rngLab.textContent = '0…' + g.steps + ' ΔU';
+        if (dynMode) {
+          byId('dacParHint').textContent = 'код уже ' + g.steps + ' · Uвых ещё догоняет';
+        } else if (resMode) {
+          byId('dacParHint').textContent = 'dᵣ = 1/' + g.steps + ' · dₐ = ΔU';
+        } else if (nlMode) {
+          byId('dacParHint').textContent = 'зелёная — идеал · красная — факт · Δd конец шкалы';
+        } else {
+          const live = byId('adcDacParamLive');
+          if (live) live.textContent = 'N=' + N + ' · ' + bin() + '₂ = ' + code + ' · Uвых=' + code + 'ΔU · ΔU=Umax/' + g.steps;
+        }
+        byId('dacParInl').setAttribute('x', String(g.xk(Math.floor(g.levels / 2)) + 8));
+        byId('dacParInl').setAttribute('y', String(g.yk(Math.floor(g.levels / 2)) - 12));
+        byId('dacParDnl').setAttribute('x', String(g.xk(1) + 16));
+        byId('dacParDnl').setAttribute('y', String(g.yk(1) + 22));
+        byId('dacParInl').setAttribute('opacity', nlMode ? '0' : '1');
+        byId('dacParDnl').setAttribute('opacity', nlMode ? '0' : '1');
+        const fsLab = byId('dacParFsLab');
+        if (fsLab) fsLab.setAttribute('opacity', nlMode ? '0' : '1');
+        const anno = byId('dacParNlAnno');
+        if (anno) {
+          anno.style.display = nlMode ? 'inline' : 'none';
+          anno.setAttribute('display', nlMode ? 'inline' : 'none');
+        }
+        if (nlMode) {
+          const midK = 1 << (N - 1);
+          const tMid = midK / g.steps;
+          const xMid = x0 + tMid * (x1 - x0);
+          const yI = y0 + tMid * (y1 - y0);
+          const yR = realY(tMid);
+          const yC = (yI + yR) / 2;
+          const yFsR = realY(1);
+          const setLine = (id, xa, ya, xb, yb) => {
+            const el = byId(id);
+            if (!el) return;
+            el.setAttribute('x1', String(xa));
+            el.setAttribute('y1', String(ya));
+            el.setAttribute('x2', String(xb));
+            el.setAttribute('y2', String(yb));
+          };
+          setLine('dacParNlUmaxH', x0, y1, x1, y1);
+          setLine('dacParNlMidV', xMid, y1, xMid, y0);
+          setLine('dacParIntMarks', xMid, yI, xMid, yR);
+          setLine('dacParDdMarks', x1 + 8, y1, x1 + 8, yFsR);
+          const circ = byId('dacParIntCirc');
+          circ.setAttribute('cx', String(xMid));
+          circ.setAttribute('cy', String(yC));
+          circ.setAttribute('stroke-width', nlFocus === 'int' ? '3' : '1.8');
+          const intLab = byId('dacParIntLab');
+          intLab.setAttribute('x', String(xMid + 18));
+          intLab.setAttribute('y', String(Math.max(yI, yR) + 16));
+          const ddLab = byId('dacParDdLab');
+          ddLab.setAttribute('x', String(x1 + 16));
+          ddLab.setAttribute('y', String((y1 + yFsR) / 2 + 4));
+          ddLab.setAttribute('font-weight', nlFocus === 'dd' ? '800' : '700');
+          const midLab = byId('dacParMidLab');
+          midLab.setAttribute('x', String(xMid));
+          midLab.textContent = '2ᴺ⁻¹';
+          const lead = byId('dacParNlLead');
+          lead.setAttribute('d', 'M' + (xMid + 16).toFixed(1) + ' ' + yC.toFixed(1) + ' C ' + (xMid + 80).toFixed(1) + ' 142 430 142 470 142');
+          lead.setAttribute('opacity', nlFocus === 'dif' ? '1' : '0.35');
+          const zoom = byId('dacParNlZoom');
+          if (zoom) zoom.setAttribute('stroke-width', nlFocus === 'dif' ? '3.2' : '1.8');
+          const expl = byId('dacParNlExplain');
+          if (expl) {
+            expl.textContent = nlFocus === 'dif'
+              ? 'd_dif — ступенька выше/ниже ΔU'
+              : nlFocus === 'dd'
+                ? 'Δd — не дотянули до Umax'
+                : 'd_int — красная ушла от прямой';
+          }
+          const hiBtn = (id, on) => {
+            const r = byId(id) && byId(id).querySelector('rect');
+            if (!r) return;
+            r.setAttribute('fill', on ? '#fed7aa' : '#fff7ed');
+            r.setAttribute('stroke-width', on ? '2' : '1.2');
+          };
+          hiBtn('dacParNlIntBtn', nlFocus === 'int');
+          hiBtn('dacParNlDifBtn', nlFocus === 'dif');
+          hiBtn('dacParNlDdBtn', nlFocus === 'dd');
+        }
+      };
+      const stopPlay = () => {
+        if (timer) {
+          clearInterval(timer);
+          timer = 0;
+        }
+        const lab = byId('dacParPlayLab');
+        if (lab) lab.textContent = '▶ ход кодов';
+      };
+      const startPlay = () => {
+        if (timer) {
+          stopPlay();
+          return;
+        }
+        byId('dacParPlayLab').textContent = '■ стоп';
+        timer = setInterval(() => {
+          const g = geom();
+          code = code >= g.steps ? 0 : code + 1;
+          paint();
+        }, 450);
+      };
+      slide.querySelectorAll('.dac-par-n').forEach((gEl) => {
+        gEl.addEventListener('click', (e) => {
+          e.stopPropagation();
+          stopPlay();
+          N = Number(gEl.dataset.n);
+          const max = (1 << N) - 1;
+          if (code > max) code = max;
+          paint();
+          if (dynMode) runSettle();
+        });
+      });
+      byId('dacParHit').addEventListener('click', (e) => {
+        e.stopPropagation();
+        stopPlay();
+        const svg = e.currentTarget.ownerSVGElement;
+        const pt = svg.createSVGPoint();
+        pt.x = e.clientX;
+        pt.y = e.clientY;
+        const loc = pt.matrixTransform(svg.getScreenCTM().inverse());
+        const g = geom();
+        let k = Math.floor((loc.x - x0) / g.dx);
+        if (k < 0) k = 0;
+        if (k > g.steps) k = g.steps;
+        code = k;
+        paint();
+      });
+      byId('dacParPlay').addEventListener('click', (e) => {
+        e.stopPropagation();
+        startPlay();
+      });
+      let settleTimer = 0;
+      const tx0 = 502, tx1 = 728, uy0 = 186, uy1 = 102;
+      const tMax = 1.15;
+      const tSettle = 0.55;
+      const tau = tSettle / 3.2;
+      const uOf = (tn) => 1 - Math.exp(-tn / tau);
+      const tn95 = -Math.log(0.05) * tau;
+      const setG = (el, on) => {
+        if (!el) return;
+        el.style.display = on ? 'inline' : 'none';
+        el.setAttribute('display', on ? 'inline' : 'none');
+      };
+      const showPanel = (key) => {
+        dynMode = key === 'dyn';
+        resMode = key === 'res';
+        nlMode = key === 'nl';
+        if (settleTimer) {
+          cancelAnimationFrame(settleTimer);
+          settleTimer = 0;
+        }
+        setG(byId('dacParLiveBox'), !dynMode && !resMode && !nlMode);
+        setG(byId('dacParDynBox'), dynMode);
+        setG(byId('dacParResBox'), resMode);
+        setG(byId('dacParNlBox'), nlMode);
+        if (dynMode) {
+          stopPlay();
+          runSettle();
+        } else {
+          paint();
+        }
+      };
+      const showDyn = (on) => showPanel(on ? 'dyn' : 'n');
+      const runSettle = () => {
+        if (settleTimer) cancelAnimationFrame(settleTimer);
+        const g = geom();
+        code = g.steps;
+        paint();
+        const xm = tx0 + (tn95 / tMax) * (tx1 - tx0);
+        const tmark = byId('dacParTmark');
+        tmark.setAttribute('x1', String(xm));
+        tmark.setAttribute('x2', String(xm));
+        const tlab = byId('dacParTlab');
+        if (tlab) tlab.setAttribute('x', String(xm));
+        const fpr = byId('dacParFpr');
+        if (fpr) fpr.textContent = 'fпр — max частота смены кода';
+        const hint = byId('dacParDynHint');
+        if (hint) hint.textContent = 'код уже ' + g.steps + ' · Uвых ещё догоняет';
+        let tn = 0;
+        let d = 'M' + tx0 + ' ' + uy0;
+        const step = () => {
+          tn += 0.016;
+          const u = Math.min(1, uOf(tn));
+          const x = tx0 + Math.min(1, tn / tMax) * (tx1 - tx0);
+          const y = uy0 + (uy1 - uy0) * u;
+          d += ' L' + x.toFixed(1) + ' ' + y.toFixed(1);
+          byId('dacParSettle').setAttribute('d', d);
+          byId('dacParSettleDot').setAttribute('cx', String(x));
+          byId('dacParSettleDot').setAttribute('cy', String(y));
+          if (hint && u >= 0.95) hint.textContent = 'достигли заданной величины · дальше не чаще fпр';
+          if (tn < tMax) settleTimer = requestAnimationFrame(step);
+        };
+        byId('dacParSettle').setAttribute('d', d);
+        byId('dacParSettleDot').setAttribute('cx', String(tx0));
+        byId('dacParSettleDot').setAttribute('cy', String(uy0));
+        settleTimer = requestAnimationFrame(step);
+      };
+      dacParShowKey = (key) => showPanel(key);
+      slide.querySelectorAll('.app-purpose-card').forEach((b) => {
+        b.addEventListener('click', () => showPanel(b.dataset.info));
+      });
+      [['dacParNlIntBtn', 'int'], ['dacParNlDifBtn', 'dif'], ['dacParNlDdBtn', 'dd']].forEach((pair) => {
+        const el = byId(pair[0]);
+        if (!el) return;
+        el.addEventListener('click', (e) => {
+          e.stopPropagation();
+          nlFocus = pair[1];
+          paint();
+        });
+      });
+      byId('dacParDynBtn').addEventListener('click', (e) => {
+        e.stopPropagation();
+        const card = slide.querySelector('.app-purpose-card[data-info="dyn"]');
+        if (card) card.click();
+      });
+      byId('dacParDynReplay').addEventListener('click', (e) => {
+        e.stopPropagation();
+        runSettle();
+      });
+      paint();
+    })();
 
     bindAdc('.slide-adc-idea-interactive', 'adcIdeaPanel', 'adcIdeaLive', {
       in: { title: 'Вход', html: '<p>На вход — аналоговый сигнал (напряжение/ток в диапазоне модуля).</p>', live: 'вход · U / I' },
@@ -14763,18 +15213,342 @@
     }, 'par');
 
     bindAdc('.slide-adc-flash-interactive', 'adcFlashPanel', 'adcFlashLive', {
-      cmp: { title: 'Компараторы', html: '<p>ОУ в режиме <strong>компараторов</strong> сравнивают Uвх с индивидуальной опорой.</p>', live: 'компараторы на ОУ' },
-      ref: { title: 'Опора', html: '<p>Опоры задаёт <strong>резистивная матрица</strong> от Uоп: U<sub>n</sub> = Uоп·n/N.</p>', live: 'делитель опор' },
-      code: { title: 'Код', html: '<p>На выходе — код Джонсона (термометровый), далее обычно в двоичный.</p>', live: 'код Джонсона' },
-      trade: { title: 'Оценка', html: '<p>Один такт сравнения — очень быстро; для N бит нужно порядка <strong>2<sup>N</sup>−1</strong> компараторов.</p>', live: 'быстро · дорого по железу' }
+      cmp: { title: 'Компараторы', html: '<p>ОУ в режиме <strong>компараторов</strong>. На «+» — <strong>U<sub>вх</sub></strong>, на «−» — своя опора U<sub>n</sub>. Выход 1, если U<sub>вх</sub> ≥ U<sub>n</sub>. Все сравнения — <strong>в одном такте</strong>.</p>', live: 'ОУ-компараторы · клик по шкале Uвх' },
+      ref: { title: 'Опора', html: '<p>Опоры задаёт резистивная матрица из одинаковых <strong>R</strong>. На n-м отводе: <strong>U<sub>n</sub> = U<sub>оп</sub> · n / N</strong> (N — число резисторов). В демо N=4, U<sub>1</sub>=Uоп/4, U<sub>2</sub>=Uоп/2, U<sub>3</sub>=3Uоп/4.</p>', live: 'Un = Uоп · n / N' },
+      code: { title: 'Код', html: '<p>На выходах компараторов — <strong>код Джонсона</strong> (термометр: пачка единиц, затем нули). Его дальше перекодируют в обычный двоичный.</p>', live: 'код Джонсона → двоичный' },
+      trade: { title: 'Оценка', html: '<p>Один такт — максимально быстро. Для двоичной разрядности N нужно <strong>2<sup>N</sup>−1</strong> компараторов: дорого по железу.</p>', live: '1 такт · 2ᴺ−1 компараторов' }
     }, 'cmp');
 
+    (() => {
+      const slide = document.querySelector('.slide-adc-flash-interactive');
+      if (!slide) return;
+      const Nres = 4;
+      const Uref = 4;
+      const yTop = 62;
+      const yBot = 288;
+      const NS = 'http://www.w3.org/2000/svg';
+      let uin = 2;
+      let timer = 0;
+      let dragging = false;
+      const byId = (id) => document.getElementById(id);
+      const Un = (n) => (Uref * n) / Nres;
+      const yOf = (u) => yBot - (u / Uref) * (yBot - yTop);
+      const svgPoint = (el, e) => {
+        const svg = el.ownerSVGElement || el;
+        const pt = svg.createSVGPoint();
+        pt.x = e.clientX;
+        pt.y = e.clientY;
+        return pt.matrixTransform(svg.getScreenCTM().inverse());
+      };
+      const uFromY = (y) => Math.max(0, Math.min(Uref, Math.round(Uref * (yBot - y) / (yBot - yTop))));
+      const stopPlay = () => {
+        if (timer) {
+          clearInterval(timer);
+          timer = 0;
+        }
+        const lab = byId('flashPlayLab');
+        if (lab) lab.textContent = '▶ ход';
+      };
+      const paintCmp = (id, on, labId, name) => {
+        const gEl = byId(id);
+        if (!gEl) return;
+        const p = gEl.querySelector('path');
+        if (p) {
+          p.setAttribute('fill', on ? '#dcfce7' : '#f8fafc');
+          p.setAttribute('stroke', on ? '#16a34a' : '#94a3b8');
+        }
+        const r = gEl.querySelector('rect');
+        if (r) {
+          r.setAttribute('fill', on ? '#dcfce7' : '#f1f5f9');
+          r.setAttribute('stroke', on ? '#16a34a' : '#94a3b8');
+        }
+        const t = byId(labId);
+        if (t) {
+          t.textContent = name + '=' + (on ? 1 : 0);
+          t.setAttribute('fill', on ? '#166534' : '#64748b');
+        }
+      };
+      const ticksG = byId('flashTicks');
+      if (ticksG) {
+        ticksG.replaceChildren();
+        for (let k = 0; k <= Uref; k++) {
+          const gEl = document.createElementNS(NS, 'g');
+          gEl.setAttribute('data-u', String(k));
+          gEl.setAttribute('style', 'cursor:pointer');
+          const y = yOf(k);
+          const c = document.createElementNS(NS, 'circle');
+          c.setAttribute('cx', '40');
+          c.setAttribute('cy', String(y));
+          c.setAttribute('r', '5');
+          c.setAttribute('fill', '#dbeafe');
+          c.setAttribute('stroke', '#1d4ed8');
+          const tx = document.createElementNS(NS, 'text');
+          tx.setAttribute('x', '22');
+          tx.setAttribute('y', String(y + 4));
+          tx.setAttribute('text-anchor', 'end');
+          tx.setAttribute('font-size', '11');
+          tx.setAttribute('font-weight', '700');
+          tx.setAttribute('fill', '#1e3a8a');
+          tx.textContent = String(k);
+          gEl.appendChild(c);
+          gEl.appendChild(tx);
+          ticksG.appendChild(gEl);
+        }
+      }
+      const paint = () => {
+        const y = yOf(uin);
+        const dot = byId('flashUinDot');
+        if (dot) dot.setAttribute('cy', String(y));
+        const ulab = byId('flashUinLab');
+        if (ulab) {
+          ulab.setAttribute('y', String(y + 4));
+          ulab.textContent = uin + '/4';
+        }
+        if (ticksG) {
+          ticksG.querySelectorAll('g').forEach((gEl) => {
+            const on = Number(gEl.getAttribute('data-u')) === uin;
+            const c = gEl.querySelector('circle');
+            if (c) {
+              c.setAttribute('fill', on ? '#16a34a' : '#dbeafe');
+              c.setAttribute('stroke', on ? '#166534' : '#1d4ed8');
+            }
+          });
+        }
+        const d0 = uin >= Un(1) ? 1 : 0;
+        const d1 = uin >= Un(2) ? 1 : 0;
+        const d2 = uin >= Un(3) ? 1 : 0;
+        paintCmp('flashCmp0', d0, 'flashD0', 'D0');
+        paintCmp('flashCmp1', d1, 'flashD1', 'D1');
+        paintCmp('flashCmp2', d2, 'flashD2', 'D2');
+        const setEq = (id, n, bit) => {
+          const el = byId(id);
+          if (!el) return;
+          el.textContent = uin + '≥' + n + ' → ' + bit;
+          el.setAttribute('fill', bit ? '#166534' : '#64748b');
+        };
+        setEq('flashEq2', 3, d2);
+        setEq('flashEq1', 2, d1);
+        setEq('flashEq0', 1, d0);
+        const john = '' + d2 + d1 + d0;
+        const ones = d0 + d1 + d2;
+        const johnEl = byId('flashJohn');
+        if (johnEl) johnEl.textContent = john;
+        const line = byId('flashEqLine');
+        if (line) line.textContent = 'D2: ' + uin + '≥3 → ' + d2 + '   D1: ' + uin + '≥2 → ' + d1 + '   D0: ' + uin + '≥1 → ' + d0;
+        const bin = byId('flashBin');
+        if (bin) {
+          const w = ones === 1 ? ' единица' : (ones < 5 ? ' единицы' : ' единиц');
+          bin.textContent = ones + w + ' · дальше в двоичный';
+        }
+        const hint = byId('flashHint');
+        if (hint) hint.textContent = 'Uвх = ' + uin + '/4 Uоп · Джонсон ' + john + ' · тяните точку или ▶';
+        const live = byId('adcFlashLive');
+        if (live) live.textContent = 'Uвх=' + uin + '/4 Uоп · ' + john + ' · 1 если Uвх ≥ Un';
+      };
+      const setUin = (u, keepPlay) => {
+        uin = u;
+        if (!keepPlay) stopPlay();
+        paint();
+      };
+      const hit = byId('flashUinHit');
+      if (hit) {
+        hit.addEventListener('pointerdown', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          dragging = true;
+          hit.setPointerCapture(e.pointerId);
+          setUin(uFromY(svgPoint(hit, e).y));
+        });
+        hit.addEventListener('pointermove', (e) => {
+          if (!dragging) return;
+          uin = uFromY(svgPoint(hit, e).y);
+          paint();
+        });
+        hit.addEventListener('pointerup', () => { dragging = false; });
+        hit.addEventListener('pointercancel', () => { dragging = false; });
+      }
+      if (ticksG) {
+        ticksG.querySelectorAll('g').forEach((gEl) => {
+          gEl.addEventListener('click', (e) => {
+            e.stopPropagation();
+            setUin(Number(gEl.getAttribute('data-u')));
+          });
+        });
+      }
+      const play = byId('flashPlay');
+      if (play) {
+        play.addEventListener('click', (e) => {
+          e.stopPropagation();
+          if (timer) {
+            stopPlay();
+            return;
+          }
+          const lab = byId('flashPlayLab');
+          if (lab) lab.textContent = '■ стоп';
+          uin = 0;
+          paint();
+          timer = setInterval(() => {
+            uin = uin >= Uref ? 0 : uin + 1;
+            paint();
+          }, 550);
+        });
+      }
+      paint();
+    })();
+
     bindAdc('.slide-adc-count-interactive', 'adcCountPanel', 'adcCountLive', {
-      cnt: { title: 'Счётчик', html: '<p>Тактовые импульсы наращивают параллельный двоичный код.</p>', live: 'счётчик +1' },
-      dac: { title: 'ЦАП', html: '<p>Код превращается в напряжение Uцап.</p>', live: 'код → Uцап' },
-      cmp: { title: 'Компаратор', html: '<p>Пока Uцап &lt; Uвх — счёт идёт; при равенстве — сигнал <strong>Стоп</strong>.</p>', live: 'Стоп при равенстве' },
-      time: { title: 'Время', html: '<p>Макс. время t = 2<sup>N</sup>·t<sub>такт</sub> — <strong>низкое быстродействие</strong> при большой разрядности.</p>', live: 't = 2ᴺ · tтакт' }
+      cnt: { title: 'Счётчик', html: '<p>Импульсы тактового генератора наращивают <strong>параллельный двоичный код</strong>. <strong>Пуск</strong> начинает счёт, <strong>Сброс</strong> обнуляет. Кликните уровень A на графике.</p>', live: 'такты → код +1' },
+      dac: { title: 'ЦАП', html: '<p>Код счётчика превращается в напряжение <strong>X(t)</strong> — ступеньки высотой Δx = U<sub>ш</sub>/(2<sup>N</sup>−1). Лестница растёт, пока не догонит A.</p>', live: 'код → X(t) · ступеньки Δx' },
+      cmp: { title: 'Компаратор', html: '<p>Сравнивает U<sub>вх</sub>=A и X(t). Когда они сравняются, вырабатывается <strong>Стоп</strong>: счётчик останавливается, код защёлкивается в буферный регистр — это выход АЦП.</p>', live: 'X(t)=A → Стоп → буфер' },
+      time: { title: 'Время', html: '<p>Максимальное время преобразования <strong>t = 2<sup>N−1</sup> t<sub>такт</sub></strong>. Недостаток — <strong>низкое быстродействие</strong>: чем больше A, тем дольше счёт.</p>', live: 't = 2ᴺ⁻¹ tтакт · медленно' }
     }, 'cnt');
+
+    (() => {
+      const slide = document.querySelector('.slide-adc-count-interactive');
+      if (!slide) return;
+      const N = 3;
+      const maxCode = (1 << N) - 1;
+      const x0 = 460, x1 = 724, y0 = 268, y1 = 64;
+      let A = 5;
+      let code = 0;
+      let buf = '—';
+      let timer = 0;
+      let stopped = false;
+      const byId = (id) => document.getElementById(id);
+      const yOf = (k) => y0 - (k / maxCode) * (y0 - y1);
+      const xOf = (k) => x0 + (k / maxCode) * (x1 - x0);
+      const bin = (k) => {
+        let s = '';
+        for (let i = N - 1; i >= 0; i--) s += (k >> i) & 1;
+        return s;
+      };
+      const stopTimer = () => {
+        if (timer) {
+          clearInterval(timer);
+          timer = 0;
+        }
+        const lab = byId('cntStartLab');
+        if (lab) lab.textContent = '▶ Пуск';
+      };
+      const stairPath = (upto) => {
+        let d = 'M' + x0 + ' ' + y0;
+        for (let k = 0; k <= upto; k++) {
+          d += ' H' + xOf(k).toFixed(1);
+          if (k < upto) d += ' V' + yOf(k + 1).toFixed(1);
+        }
+        return d;
+      };
+      const paint = () => {
+        const ghost = byId('cntGhost');
+        if (ghost) ghost.setAttribute('d', stairPath(A));
+        const stairs = byId('cntStairs');
+        if (stairs) stairs.setAttribute('d', stairPath(code));
+        const dot = byId('cntDot');
+        if (dot) {
+          dot.setAttribute('cx', String(xOf(code)));
+          dot.setAttribute('cy', String(yOf(code)));
+        }
+        const aline = byId('cntAline');
+        if (aline) {
+          aline.setAttribute('y1', String(yOf(A)));
+          aline.setAttribute('y2', String(yOf(A)));
+        }
+        const alab = byId('cntAlab');
+        if (alab) {
+          alab.setAttribute('y', String(yOf(A) + 4));
+          alab.textContent = 'A=' + A;
+        }
+        const ktri = byId('cntKtri');
+        if (ktri) {
+          ktri.setAttribute('fill', stopped ? '#dcfce7' : '#ecfdf5');
+          ktri.setAttribute('stroke', stopped ? '#16a34a' : '#94a3b8');
+        }
+        const stopLab = byId('cntStopLab');
+        if (stopLab) {
+          stopLab.textContent = stopped ? 'Стоп!' : 'Стоп';
+          stopLab.setAttribute('fill', stopped ? '#166534' : '#94a3b8');
+        }
+        const codeEl = byId('cntCode');
+        if (codeEl) codeEl.textContent = 'код ' + bin(code);
+        const dacU = byId('cntDacU');
+        if (dacU) dacU.textContent = 'X=' + code + ' Δx';
+        const bufEl = byId('cntBuf');
+        if (bufEl) bufEl.textContent = 'вых ' + buf;
+        const hint = byId('cntHint');
+        if (hint) {
+          hint.textContent = stopped
+            ? 'Стоп: X=' + code + ' = A · буфер ' + buf
+            : 'A=' + A + ' · код ' + code + '/' + maxCode + ' · Пуск считает до A';
+        }
+        const live = byId('adcCountLive');
+        if (live) live.textContent = stopped
+          ? 'Стоп · код ' + bin(code) + ' · t = ' + code + ' tтакт'
+          : 'A=' + A + ' · счёт ' + code + ' · Δx=Uш/' + maxCode;
+      };
+      const reset = () => {
+        stopTimer();
+        code = 0;
+        buf = '—';
+        stopped = false;
+        paint();
+      };
+      const start = () => {
+        if (timer) {
+          stopTimer();
+          return;
+        }
+        if (stopped || code >= A) reset();
+        const lab = byId('cntStartLab');
+        if (lab) lab.textContent = '■ стоп';
+        timer = setInterval(() => {
+          if (code >= A || code >= maxCode) {
+            stopped = true;
+            buf = bin(code) + '₂';
+            stopTimer();
+            paint();
+            return;
+          }
+          code += 1;
+          if (code >= A) {
+            stopped = true;
+            buf = bin(code) + '₂';
+            stopTimer();
+          }
+          paint();
+        }, 380);
+      };
+      const startBtn = byId('cntStart');
+      if (startBtn) {
+        startBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          start();
+        });
+      }
+      const rst = byId('cntReset');
+      if (rst) {
+        rst.addEventListener('click', (e) => {
+          e.stopPropagation();
+          reset();
+        });
+      }
+      const plot = byId('cntPlotHit');
+      if (plot) {
+        plot.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const svg = e.currentTarget.ownerSVGElement;
+          const pt = svg.createSVGPoint();
+          pt.x = e.clientX;
+          pt.y = e.clientY;
+          const loc = pt.matrixTransform(svg.getScreenCTM().inverse());
+          let k = Math.round(((y0 - loc.y) / (y0 - y1)) * maxCode);
+          if (k < 1) k = 1;
+          if (k > maxCode) k = maxCode;
+          A = k;
+          reset();
+        });
+      }
+      paint();
+    })();
 
     bindAdc('.slide-adc-sar-interactive', 'adcSarPanel', 'adcSarLive', {
       msb: { title: 'Старт', html: '<p>Старший разряд ЦАП ставят в <strong>1</strong>, остальные в 0.</p>', live: 'MSB = 1 · начинаем' },
@@ -14783,12 +15557,1454 @@
       done: { title: 'Итог', html: '<p>После <strong>N</strong> сравнений — N-разрядный код. Время t = N·t<sub>такт</sub> (быстрее счётчика).</p>', live: 't = N · tтакт' }
     }, 'msb');
 
+    let adcParShowKey = () => {};
     bindAdc('.slide-adc-param-interactive', 'adcParamPanel', 'adcParamLive', {
-      st: { title: 'Статика', html: '<p>Статика <strong>аналогична ЦАП</strong>: разрядность, диапазон, погрешность, нелинейность.</p>', live: 'статика ≈ как у ЦАП' },
-      fs: { title: 'fд', html: '<p>Макс. частота преобразования ≈ частота <strong>дискретизации</strong> входного сигнала.</p>', live: 'частота дискретизации' },
-      ap: { title: 'Апертура', html: '<p><strong>Апертурное время</strong> — неопределённость «к какому моменту относится выборка». Апертурная неопределённость — случайный разброс этого интервала.</p>', live: 'апертура · неопределённость' },
-      enc: { title: 'Кодирование', html: '<p><strong>Время кодирования</strong> — от импульса запуска до появления устойчивого выходного кода.</p>', live: 'время до появления кода' }
-    }, 'st');
+      n: { title: 'N — разрядность', html: '<p>Статические параметры АЦП <strong>аналогичны ЦАП</strong>. <strong>N</strong> — разрядность: число двоичных разрядов <strong>выходного кода</strong>. Кликните по оси U<sub>вх</sub>.</p>', live: 'N — разрядность · число разрядов кода' },
+      rng: { title: 'Диапазон входа', html: '<p><strong>U<sub>min</sub> … U<sub>max</sub></strong> — диапазон <strong>входной</strong> величины (интервал входного напряжения). У ЦАП тот же смысл, но для выхода.</p>', live: 'Umin…Umax — диапазон входного напряжения' },
+      err: { title: 'Δd и d_int', html: '<p><strong>Δd</strong> — абсолютная погрешность: максимальное отклонение в <strong>конечной точке</strong> реальной характеристики от идеальной.</p><p><strong>d<sub>int</sub></strong> — интегральная нелинейность: максимальный уход реальной характеристики от идеала.</p>', live: 'Δd — абс. погрешность · d_int — инт. нелинейность' },
+      fs: { title: 'fд — частота дискретизации', html: '<p><strong>f<sub>д</sub></strong> — частота дискретизации (сколько выборок в секунду). <strong>T<sub>д</sub></strong> — период дискретизации (время между двумя соседними выборками). Связь: <strong>f<sub>д</sub> = 1/T<sub>д</sub></strong>. Это и есть максимальная частота преобразования.</p>', live: 'fд — частота дискр. · Tд — период (шаг между точками)' },
+      ap: { title: 'tа — апертурное время', html: '<p><strong>t<sub>а</sub></strong> — апертурное время: пока идёт выборка, неясно, к какому моменту относится U<sub>вх</sub>.</p><p><strong>δt<sub>а</sub></strong> — апертурная неопределённость: случайный разброс t<sub>а</sub>.</p>', live: 'tа — апертурное время · δtа — неопределённость' },
+      enc: { title: 'tкод — время кодирования', html: '<p><strong>t<sub>код</sub></strong> — время кодирования: от <strong>импульса запуска</strong> до появления устойчивого выходного кода.</p>', live: 'tкод — время кодирования (пуск → код)' }
+    }, 'n', (key) => adcParShowKey(key));
+
+    (() => {
+      const slide = document.querySelector('.slide-adc-param-interactive');
+      if (!slide) return;
+      let N = 3;
+      let uFrac = 5 / 7;
+      let mode = 'n';
+      let sampleI = -1;
+      let timer = 0;
+      const NS = 'http://www.w3.org/2000/svg';
+      const nSamp = 8;
+      const x0 = 56, x1 = 430, y0 = 268, y1 = 56;
+      const byId = (id) => document.getElementById(id);
+      const maxCode = () => (1 << N) - 1;
+      const codeOf = (frac) => {
+        const m = maxCode();
+        let k = Math.round(frac * m);
+        if (k < 0) k = 0;
+        if (k > m) k = m;
+        return k;
+      };
+      const xOf = (k) => x0 + (k / maxCode()) * (x1 - x0);
+      const yOf = (k) => y0 - (k / maxCode()) * (y0 - y1);
+      const xOfU = (frac) => x0 + frac * (x1 - x0);
+      const yReal = (k) => {
+        const m = maxCode();
+        return yOf(k) + Math.sin((Math.PI * k) / m) * 16 + (k / m) * 10;
+      };
+      const bin = (k) => {
+        let s = '';
+        for (let i = N - 1; i >= 0; i--) s += (k >> i) & 1;
+        return s;
+      };
+      const stairD = (real) => {
+        const m = maxCode();
+        let d = 'M' + x0 + ' ' + yOf(0);
+        for (let k = 0; k < m; k++) {
+          const x = xOf(k + 1);
+          const y = real ? yReal(k + 1) : yOf(k + 1);
+          d += ' H' + x.toFixed(1) + ' V' + y.toFixed(1);
+        }
+        return d + ' H' + x1;
+      };
+      const sineY = (x) => {
+        const t = (x - x0) / (x1 - x0);
+        const mid = (y0 + y1) / 2;
+        const amp = (y0 - y1) * 0.38;
+        return mid - amp * Math.sin(2 * Math.PI * t * 2);
+      };
+      const sineD = () => {
+        let d = '';
+        for (let i = 0; i <= 48; i++) {
+          const x = x0 + (i / 48) * (x1 - x0);
+          const y = sineY(x);
+          d += (i ? ' L' : 'M') + x.toFixed(1) + ' ' + y.toFixed(1);
+        }
+        return d;
+      };
+      const stopPlay = () => {
+        if (timer) {
+          clearInterval(timer);
+          timer = 0;
+        }
+        const lab = byId('adcParPlayLab');
+        if (lab) lab.textContent = '▶ ход';
+      };
+      const showPanel = (key) => {
+        mode = key;
+        const time = key === 'fs' || key === 'ap' || key === 'enc';
+        const char = byId('adcParChar');
+        const tm = byId('adcParTime');
+        if (char) char.setAttribute('display', time ? 'none' : '');
+        if (tm) tm.setAttribute('display', time ? '' : 'none');
+        const boxOf = { n: 'adcParLiveBox', rng: 'adcParLiveBox', err: 'adcParErrBox', fs: 'adcParFsBox', ap: 'adcParApBox', enc: 'adcParEncBox' };
+        ['adcParLiveBox', 'adcParErrBox', 'adcParFsBox', 'adcParApBox', 'adcParEncBox'].forEach((id) => {
+          const el = byId(id);
+          if (el) el.setAttribute('display', boxOf[key] === id ? '' : 'none');
+        });
+        const nl = byId('adcParNl');
+        const anno = byId('adcParErrAnno');
+        const stairs = byId('adcParStairs');
+        if (nl) nl.setAttribute('display', key === 'err' ? '' : 'none');
+        if (anno) anno.setAttribute('display', key === 'err' ? '' : 'none');
+        if (stairs) stairs.setAttribute('display', key === 'err' ? 'none' : '');
+        if (!time) {
+          stopPlay();
+          sampleI = -1;
+        }
+        paint();
+      };
+      adcParShowKey = showPanel;
+      const paint = () => {
+        const m = maxCode();
+        const code = codeOf(uFrac);
+        const stairs = byId('adcParStairs');
+        if (stairs) stairs.setAttribute('d', stairD(false));
+        const ideal = byId('adcParIdeal');
+        if (ideal) {
+          ideal.setAttribute('d', stairD(false));
+          ideal.setAttribute('opacity', mode === 'err' ? '1' : '0.4');
+        }
+        const nl = byId('adcParNl');
+        if (nl) nl.setAttribute('d', stairD(true));
+        const xu = xOfU(uFrac);
+        const line = byId('adcParUline');
+        if (line) {
+          line.setAttribute('x1', String(xu));
+          line.setAttribute('x2', String(xu));
+        }
+        const dot = byId('adcParDot');
+        if (dot) {
+          dot.setAttribute('cx', String(xu));
+          dot.setAttribute('cy', String(yOf(code)));
+        }
+        const dd = byId('adcParDdMarks');
+        if (dd) {
+          dd.setAttribute('y1', String(yOf(m)));
+          dd.setAttribute('y2', String(yReal(m)));
+        }
+        const ddl = byId('adcParDdLab');
+        if (ddl) ddl.setAttribute('y', String((yOf(m) + yReal(m)) / 2 + 4));
+        const mid = Math.round(m / 2);
+        const im = byId('adcParIntMarks');
+        if (im) {
+          const xm = xOf(mid);
+          im.setAttribute('x1', String(xm));
+          im.setAttribute('x2', String(xm));
+          im.setAttribute('y1', String(yOf(mid)));
+          im.setAttribute('y2', String(yReal(mid)));
+        }
+        const il = byId('adcParIntLab');
+        if (il) {
+          il.setAttribute('x', String(xOf(mid) + 8));
+          il.setAttribute('y', String((yOf(mid) + yReal(mid)) / 2 + 4));
+        }
+        const ticks = byId('adcParTicks');
+        if (ticks) {
+          ticks.replaceChildren();
+          for (let k = 0; k <= m; k++) {
+            if (m > 8 && k !== 0 && k !== m && k !== code) continue;
+            const tx = document.createElementNS(NS, 'text');
+            tx.setAttribute('x', String(xOf(k)));
+            tx.setAttribute('y', '286');
+            tx.setAttribute('text-anchor', 'middle');
+            tx.setAttribute('font-size', '10');
+            tx.setAttribute('fill', k === code ? '#166534' : '#94a3b8');
+            tx.setAttribute('font-weight', k === code ? '800' : '400');
+            tx.textContent = String(k);
+            ticks.appendChild(tx);
+          }
+        }
+        [2, 3, 4].forEach((nn) => {
+          const g = byId('adcParN' + nn);
+          if (!g) return;
+          const on = nn === N;
+          g.querySelector('rect').setAttribute('fill', on ? '#dbeafe' : '#eff6ff');
+          g.querySelector('rect').setAttribute('stroke', on ? '#1d4ed8' : '#94a3b8');
+          g.querySelector('text').setAttribute('fill', on ? '#1e3a8a' : '#64748b');
+        });
+        const uin = byId('adcParUin');
+        if (uin) uin.textContent = 'Uвх = ' + code + ' ΔU';
+        const codeEl = byId('adcParCode');
+        if (codeEl) codeEl.textContent = 'код ' + bin(code) + '₂ = ' + code;
+        const nlab = byId('adcParNlab');
+        if (nlab) nlab.textContent = 'N=' + N + ' · кодов ' + (m + 1);
+        const bitsG = byId('adcParBits');
+        if (bitsG) {
+          bitsG.replaceChildren();
+          const bw = Math.min(52, 220 / N);
+          const bx0 = 607 - (N * (bw + 8) - 8) / 2;
+          for (let i = 0; i < N; i++) {
+            const bit = N - 1 - i;
+            const on = !!(code & (1 << bit));
+            const r = document.createElementNS(NS, 'rect');
+            r.setAttribute('x', String(bx0 + i * (bw + 8)));
+            r.setAttribute('y', '168');
+            r.setAttribute('width', String(bw));
+            r.setAttribute('height', '36');
+            r.setAttribute('rx', '6');
+            r.setAttribute('fill', on ? '#dbeafe' : '#eff6ff');
+            r.setAttribute('stroke', on ? '#1d4ed8' : '#94a3b8');
+            const tx = document.createElementNS(NS, 'text');
+            tx.setAttribute('x', String(bx0 + i * (bw + 8) + bw / 2));
+            tx.setAttribute('y', '191');
+            tx.setAttribute('text-anchor', 'middle');
+            tx.setAttribute('font-size', '12');
+            tx.setAttribute('font-weight', '800');
+            tx.setAttribute('fill', on ? '#1e3a8a' : '#64748b');
+            tx.textContent = 'D' + bit + '=' + (on ? 1 : 0);
+            bitsG.appendChild(r);
+            bitsG.appendChild(tx);
+          }
+        }
+        const hint = byId('adcParHint');
+        if (hint) {
+          const texts = {
+            err: 'Δd — абс. погрешность · d_int — инт. нелинейность',
+            fs: 'fд — частота дискр. · Tд — период (шаг между точками)',
+            ap: 'tа — апертурное время · δtа — неопределённость',
+            enc: 'tкод — время кодирования (пуск → код)',
+            rng: 'Umin…Umax — диапазон входного напряжения'
+          };
+          hint.textContent = texts[mode] || ('N=' + N + ' · ' + (m + 1) + ' кодов · клик по Uвх');
+        }
+        const sine = byId('adcParSine');
+        if (sine) sine.setAttribute('d', sineD());
+        const cap = byId('adcParTimeCap');
+        if (cap) cap.textContent = mode === 'ap' ? 'tа — апертурное время · δtа — разброс' : mode === 'enc' ? 'tкод — от пуска до кода' : 'fд — частота дискретизации';
+        const th = byId('adcParTimeHint');
+        if (th) th.textContent = mode === 'enc' ? 'tкод — время кодирования' : mode === 'ap' ? 'голубое окно = tа, сдвиг = δtа' : 'Tд — период дискретизации (шаг между точками)';
+        const samples = byId('adcParSamples');
+        const wins = byId('adcParApWins');
+        const bars = byId('adcParEncBars');
+        const tdMark = byId('adcParTdMark');
+        if (samples) samples.replaceChildren();
+        if (wins) wins.replaceChildren();
+        if (bars) bars.replaceChildren();
+        if (tdMark) tdMark.replaceChildren();
+        if (mode === 'fs' && tdMark) {
+          const xa = x0 + (2 / (nSamp - 1)) * (x1 - x0);
+          const xb = x0 + (3 / (nSamp - 1)) * (x1 - x0);
+          const yb = 256;
+          const mk = (name, attrs) => {
+            const el = document.createElementNS(NS, name);
+            Object.keys(attrs).forEach((k) => el.setAttribute(k, attrs[k]));
+            tdMark.appendChild(el);
+            return el;
+          };
+          mk('line', { x1: String(xa), y1: '268', x2: String(xa), y2: String(yb), stroke: '#1d4ed8', 'stroke-width': '1.3' });
+          mk('line', { x1: String(xb), y1: '268', x2: String(xb), y2: String(yb), stroke: '#1d4ed8', 'stroke-width': '1.3' });
+          mk('line', { x1: String(xa), y1: String(yb), x2: String(xb), y2: String(yb), stroke: '#1d4ed8', 'stroke-width': '1.6' });
+          const lab = mk('text', { x: String((xa + xb) / 2), y: '250', 'text-anchor': 'middle', 'font-size': '12', 'font-weight': '800', fill: '#1e3a8a' });
+          lab.textContent = 'Tд период';
+        }
+        const shown = sampleI < 0 ? nSamp : sampleI + 1;
+        for (let i = 0; i < nSamp; i++) {
+          const x = x0 + (i / (nSamp - 1)) * (x1 - x0);
+          const y = sineY(x);
+          const on = i < shown;
+          const cur = sampleI === i;
+          if (mode === 'ap' && wins && on) {
+            const w = document.createElementNS(NS, 'rect');
+            w.setAttribute('x', String(x - 7));
+            w.setAttribute('y', String(y1));
+            w.setAttribute('width', '14');
+            w.setAttribute('height', String(y0 - y1));
+            w.setAttribute('fill', cur ? '#67e8f9' : '#a5f3fc');
+            w.setAttribute('opacity', cur ? '0.45' : '0.22');
+            wins.appendChild(w);
+            if (cur) {
+              const xj = x + 10;
+              const yj = sineY(xj);
+              const l = document.createElementNS(NS, 'line');
+              l.setAttribute('x1', String(x));
+              l.setAttribute('y1', String(y));
+              l.setAttribute('x2', String(xj));
+              l.setAttribute('y2', String(yj));
+              l.setAttribute('stroke', '#c2410c');
+              l.setAttribute('stroke-width', '1.6');
+              l.setAttribute('stroke-dasharray', '3 2');
+              wins.appendChild(l);
+              const c2 = document.createElementNS(NS, 'circle');
+              c2.setAttribute('cx', String(xj));
+              c2.setAttribute('cy', String(yj));
+              c2.setAttribute('r', '5');
+              c2.setAttribute('fill', 'none');
+              c2.setAttribute('stroke', '#c2410c');
+              c2.setAttribute('stroke-width', '1.6');
+              wins.appendChild(c2);
+              const t = document.createElementNS(NS, 'text');
+              t.setAttribute('x', String(xj + 6));
+              t.setAttribute('y', String(yj - 8));
+              t.setAttribute('font-size', '11');
+              t.setAttribute('font-weight', '800');
+              t.setAttribute('fill', '#c2410c');
+              t.textContent = 'δtа';
+              wins.appendChild(t);
+            }
+          }
+          if (mode === 'enc' && bars && on) {
+            const br = document.createElementNS(NS, 'rect');
+            br.setAttribute('x', String(x));
+            br.setAttribute('y', '250');
+            br.setAttribute('width', '22');
+            br.setAttribute('height', '10');
+            br.setAttribute('rx', '2');
+            br.setAttribute('fill', cur ? '#fbbf24' : '#fde68a');
+            br.setAttribute('stroke', '#d97706');
+            bars.appendChild(br);
+            if (cur) {
+              const tx = document.createElementNS(NS, 'text');
+              tx.setAttribute('x', String(x + 11));
+              tx.setAttribute('y', '246');
+              tx.setAttribute('text-anchor', 'middle');
+              tx.setAttribute('font-size', '10');
+              tx.setAttribute('font-weight', '800');
+              tx.setAttribute('fill', '#92400e');
+              tx.textContent = 'tкод';
+              bars.appendChild(tx);
+            }
+          }
+          if (samples) {
+            const c = document.createElementNS(NS, 'circle');
+            c.setAttribute('cx', String(x));
+            c.setAttribute('cy', String(y));
+            c.setAttribute('r', cur ? '7' : '5');
+            c.setAttribute('fill', on ? '#1d4ed8' : '#cbd5e1');
+            c.setAttribute('stroke', '#fff');
+            c.setAttribute('stroke-width', '1.5');
+            samples.appendChild(c);
+            if (on && (mode === 'enc' || mode === 'fs')) {
+              const frac = (y0 - y) / (y0 - y1);
+              const cd = codeOf(Math.max(0, Math.min(1, frac)));
+              const tx = document.createElementNS(NS, 'text');
+              tx.setAttribute('x', String(x));
+              tx.setAttribute('y', String(y - 10));
+              tx.setAttribute('text-anchor', 'middle');
+              tx.setAttribute('font-size', '10');
+              tx.setAttribute('font-weight', '700');
+              tx.setAttribute('fill', cur ? '#1e3a8a' : '#94a3b8');
+              tx.textContent = bin(cd);
+              samples.appendChild(tx);
+            }
+          }
+        }
+      };
+      slide.querySelectorAll('.adc-par-n').forEach((g) => {
+        g.addEventListener('click', (e) => {
+          e.stopPropagation();
+          N = Number(g.dataset.n);
+          paint();
+        });
+      });
+      const hit = byId('adcParHit');
+      if (hit) {
+        hit.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const svg = e.currentTarget.ownerSVGElement;
+          const pt = svg.createSVGPoint();
+          pt.x = e.clientX;
+          pt.y = e.clientY;
+          const loc = pt.matrixTransform(svg.getScreenCTM().inverse());
+          uFrac = (loc.x - x0) / (x1 - x0);
+          if (uFrac < 0) uFrac = 0;
+          if (uFrac > 1) uFrac = 1;
+          paint();
+        });
+      }
+      const play = byId('adcParPlay');
+      if (play) {
+        play.addEventListener('click', (e) => {
+          e.stopPropagation();
+          if (timer) {
+            stopPlay();
+            return;
+          }
+          sampleI = 0;
+          const lab = byId('adcParPlayLab');
+          if (lab) lab.textContent = '■ стоп';
+          paint();
+          timer = setInterval(() => {
+            sampleI += 1;
+            if (sampleI >= nSamp) {
+              sampleI = nSamp - 1;
+              stopPlay();
+              paint();
+              return;
+            }
+            paint();
+          }, 420);
+        });
+      }
+      paint();
+    })();
+
+    let adcZShowKey = () => {};
+    bindAdc('.slide-adc-z-interactive', 'adcZPanel', 'adcZLive', {
+      task: { title: 'Задача', html: '<p>В трубе давление <strong>всегда 5.0</strong> (зелёный пунктир). Аварийный клапан открыть, только если измерение <strong>&gt; 5.5</strong> (красный пунктир). Датчик шумит. АЦП раз в <strong>1 с</strong> выдаёт число в ПЛК.</p>', live: 'истина 5.0 · порог 5.5 · Tд = 1 с' },
+      list: { title: 'АЦП', html: '<p>ПЛК кривую не видит. Он видит список: <strong>6.4, 3.8, 6.1, 4.1, 6.3</strong>. Это x — «сейчас». ▶ ход показывает такт за тактом.</p>', live: 'x = то, что АЦП выдал в эту секунду' },
+      dumb: { title: 'Сырой', html: '<p>Если клапан смотрит на <strong>x</strong>: 6.4 открыть → 3.8 закрыть → 6.1 открыть. Дёргается, хотя в трубе 5.0. Включите «смотреть на среднее».</p>', live: 'по x клапан дёргается каждый такт' },
+      z: { title: 'z⁻¹', html: '<p><strong>z⁻¹</strong> — ячейка памяти: «что было <strong>секунду назад</strong>». y = (сейчас + z⁻¹ + z⁻²) / 3. На t=2 с: (6.1+3.8+6.4)/3 = 5.43 → клапан закрыт.</p>', live: 'z⁻¹ = прошлый отсчёт · z⁻² = ещё старше' },
+      xz: { title: 'X(z)', html: '<p>Определение: <strong>X(z) = Σ x<sub>k</sub> z<sup>−k</sup></strong> = x<sub>0</sub> + x<sub>1</sub>z<sup>−1</sup> + x<sub>2</sub>z<sup>−2</sup> + …</p><p>Для нашего списка: 6.4 + 3.8 z<sup>−1</sup> + 6.1 z<sup>−2</sup> + 4.1 z<sup>−3</sup> + 6.3 z<sup>−4</sup>. Это и есть Z-преобразование отсчётов АЦП.</p>', live: 'X(z) = Σ xₖ z⁻ᵏ' }
+    }, 'task', (key) => adcZShowKey(key));
+
+    (() => {
+      const slide = document.querySelector('.slide-adc-z-interactive');
+      if (!slide) return;
+      const NS = 'http://www.w3.org/2000/svg';
+      const byId = (id) => document.getElementById(id);
+      const raw = [6.4, 3.8, 6.1, 4.1, 6.3];
+      const n = raw.length;
+      const truth = 5;
+      const lim = 5.5;
+      const filtOf = (i) => {
+        if (i <= 0) return raw[0];
+        if (i === 1) return +((raw[1] + raw[0]) / 2).toFixed(2);
+        return +((raw[i] + raw[i - 1] + raw[i - 2]) / 3).toFixed(2);
+      };
+      let mode = 'task';
+      let smooth = false;
+      let shown = n;
+      let timer = 0;
+      const stopPlay = () => {
+        if (timer) {
+          clearInterval(timer);
+          timer = 0;
+        }
+        const lab = byId('adcZPlayLab');
+        if (lab) lab.textContent = '▶ ход';
+      };
+      const yOf = (v) => 232 - ((v - 3.2) / (7.2 - 3.2)) * (232 - 88);
+      const xOf = (k) => 56 + (k / (n - 1)) * 220;
+      const mk = (parent, name, attrs, text) => {
+        const el = document.createElementNS(NS, name);
+        Object.keys(attrs).forEach((a) => el.setAttribute(a, attrs[a]));
+        if (text != null) el.textContent = text;
+        parent.appendChild(el);
+        return el;
+      };
+      const paint = () => {
+        const trueEl = byId('adcZTrue');
+        if (trueEl) {
+          trueEl.setAttribute('y1', String(yOf(truth)));
+          trueEl.setAttribute('y2', String(yOf(truth)));
+        }
+        const limEl = byId('adcZLim');
+        if (limEl) {
+          limEl.setAttribute('y1', String(yOf(lim)));
+          limEl.setAttribute('y2', String(yOf(lim)));
+        }
+        const dots = byId('adcZDots');
+        if (dots) dots.replaceChildren();
+        let dR = '', dF = '';
+        const vis = mode === 'task' ? 0 : shown;
+        for (let k = 0; k < vis; k++) {
+          const x = xOf(k);
+          const yr = yOf(raw[k]);
+          const yf = yOf(filtOf(k));
+          dR += (k ? ' L' : 'M') + x.toFixed(1) + ' ' + yr.toFixed(1);
+          dF += (k ? ' L' : 'M') + x.toFixed(1) + ' ' + yf.toFixed(1);
+          mk(dots, 'line', { x1: String(x), y1: '232', x2: String(x), y2: String(yr), stroke: '#93c5fd', 'stroke-width': '1.3' });
+          mk(dots, 'circle', { cx: String(x), cy: String(yr), r: '5', fill: '#1d4ed8', stroke: '#fff', 'stroke-width': '1.2' });
+          mk(dots, 'text', { x: String(x), y: '248', 'text-anchor': 'middle', 'font-size': '10', fill: '#64748b' }, String(k));
+          if (smooth) mk(dots, 'circle', { cx: String(x), cy: String(yf), r: '4', fill: '#c2410c' });
+        }
+        const pr = byId('adcZRaw');
+        if (pr) pr.setAttribute('d', dR);
+        const pf = byId('adcZFilt');
+        if (pf) {
+          pf.setAttribute('d', smooth && vis ? dF : '');
+          pf.setAttribute('opacity', smooth && vis ? '1' : '0');
+        }
+        const rows = byId('adcZRows');
+        if (rows) {
+          rows.replaceChildren();
+          for (let k = 0; k < n; k++) {
+            const on = k < vis;
+            const cur = vis && k === vis - 1;
+            const y = 100 + k * 15;
+            if (cur) mk(rows, 'rect', { x: '336', y: String(y - 12), width: '400', height: '16', rx: '3', fill: '#ffedd5' });
+            const yv = filtOf(k);
+            const use = smooth ? yv : raw[k];
+            const open = on && use > lim;
+            mk(rows, 'text', { x: '368', y: String(y), 'text-anchor': 'middle', 'font-size': '12', 'font-weight': cur ? '800' : '600', fill: on ? '#0f172a' : '#cbd5e1' }, String(k));
+            mk(rows, 'text', { x: '408', y: String(y), 'text-anchor': 'middle', 'font-size': '12', fill: on ? '#334155' : '#cbd5e1' }, k + ' с');
+            mk(rows, 'text', { x: '470', y: String(y), 'text-anchor': 'middle', 'font-size': '13', 'font-weight': '800', fill: on ? '#1d4ed8' : '#cbd5e1' }, on ? String(raw[k]) : '·');
+            mk(rows, 'text', { x: '560', y: String(y), 'text-anchor': 'middle', 'font-size': '13', 'font-weight': '800', fill: on && smooth ? '#c2410c' : '#cbd5e1' }, on && smooth ? String(yv) : '—');
+            mk(rows, 'text', { x: '668', y: String(y), 'text-anchor': 'middle', 'font-size': '12', 'font-weight': '800', fill: !on ? '#cbd5e1' : open ? '#166534' : '#991b1b' }, !on ? '—' : open ? 'открыт' : 'закрыт');
+          }
+        }
+        const mem = byId('adcZMem');
+        if (mem) mem.replaceChildren();
+        const pows = ['', 'z⁻¹', 'z⁻²', 'z⁻³', 'z⁻⁴'];
+        const terms = [];
+        for (let k = 0; k < vis; k++) {
+          terms.push(k === 0 ? String(raw[k]) : raw[k] + pows[k]);
+        }
+        const xz = byId('adcZX');
+        if (xz) xz.textContent = vis ? ('X(z) = ' + terms.join(' + ')) : 'X(z) = …  (▶ ход подставит числа xₖ)';
+        const sm = byId('adcZSmoothLab');
+        if (sm) sm.textContent = smooth ? 'смотреть на среднее: да' : 'смотреть на среднее: нет';
+        const smG = byId('adcZSmooth');
+        if (smG) {
+          smG.querySelector('rect').setAttribute('fill', smooth ? '#dcfce7' : '#ffedd5');
+          smG.querySelector('rect').setAttribute('stroke', smooth ? '#16a34a' : '#c2410c');
+          sm.setAttribute('fill', smooth ? '#166534' : '#9a3412');
+        }
+        const hint = byId('adcZHint');
+        const last = vis - 1;
+        if (hint) {
+          if (mode === 'xz') hint.textContent = vis ? ('X(z) = ' + terms.join(' + ')) : 'X(z) = Σ xₖ z⁻ᵏ  ·  ▶ ход подставит отсчёты';
+          else if (mode === 'task' || vis <= 0) hint.textContent = 'давление всегда 5.0 · датчик шумит · клапан открыть если > 5.5';
+          else if (!smooth) hint.textContent = 't=' + last + ' с · x=' + raw[last] + (raw[last] > lim ? ' > 5.5 → открыт' : ' ≤ 5.5 → закрыт') + ' · дёргается';
+          else hint.textContent = 't=' + last + ' с · y=(сейчас+z⁻¹+z⁻²)/3=' + filtOf(last) + (filtOf(last) > lim ? ' → открыт' : ' → закрыт');
+        }
+        const foot = byId('adcZFoot');
+        if (foot) foot.textContent = 'X(z)=Σ xₖ z⁻ᵏ  ·  z⁻¹ = сдвиг на 1 такт (1 с)';
+      };
+      adcZShowKey = (key) => {
+        mode = key;
+        if (key === 'z' || key === 'xz') {
+          smooth = key === 'z';
+          shown = n;
+        }
+        if (key === 'dumb') smooth = false;
+        if (key === 'task') {
+          stopPlay();
+          shown = 0;
+        } else if (key === 'list') {
+          shown = n;
+          smooth = false;
+        }
+        paint();
+      };
+      const play = byId('adcZPlay');
+      if (play) {
+        play.addEventListener('click', (e) => {
+          e.stopPropagation();
+          if (timer) {
+            stopPlay();
+            return;
+          }
+          if (mode === 'task') mode = 'list';
+          shown = 0;
+          const lab = byId('adcZPlayLab');
+          if (lab) lab.textContent = '■ стоп';
+          paint();
+          timer = setInterval(() => {
+            shown += 1;
+            if (shown >= n) {
+              shown = n;
+              stopPlay();
+            }
+            paint();
+          }, 700);
+        });
+      }
+      const smBtn = byId('adcZSmooth');
+      if (smBtn) {
+        smBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          smooth = !smooth;
+          if (mode === 'task') {
+            mode = 'list';
+            shown = n;
+          }
+          paint();
+        });
+      }
+      paint();
+    })();
+
+    let adcZdefShow = () => {};
+    bindAdc('.slide-adc-zdef-interactive', 'adcZdefPanel', 'adcZdefLive', {
+      def: {
+        title: 'Определение',
+        html: '<p>Отсчёты после АЦП — последовательность <strong>{x<sub>k</sub>} = (x<sub>0</sub>, x<sub>1</sub>, x<sub>2</sub>, …)</strong>.</p><p class="adc-zdef-panel-eq"><span class="char-eq"><var>X</var>(<var>z</var>) = </span><span class="z-sum"><span class="z-sum-lim">∞</span><span class="z-sum-sigma">Σ</span><span class="z-sum-lim">k = 0</span></span><span class="char-eq"><var>x</var><sub>k</sub> <var>z</var><sup>−k</sup></span></p><p>Это и есть Z-преобразование набора отсчётов.</p>',
+        live: '<span class="char-eq"><var>X</var>(<var>z</var>) = </span><span class="z-sum"><span class="z-sum-lim">∞</span><span class="z-sum-sigma">Σ</span><span class="z-sum-lim">k = 0</span></span><span class="char-eq"><var>x</var><sub>k</sub> <var>z</var><sup>−k</sup> = <var>x</var><sub>0</sub> + <var>x</var><sub>1</sub>/<var>z</var> + <var>x</var><sub>2</sub>/<var>z</var><sup>2</sup> + …</span>'
+      },
+      imp: {
+        title: 'Импульс',
+        html: '<p>{x<sub>k</sub>} = <strong>(1, 0, 0, …)</strong> — только нулевой отсчёт ненулевой.</p><p class="adc-zdef-panel-eq"><span class="char-eq"><var>X</var>(<var>z</var>) = <var>x</var><sub>0</sub> = 1</span></p>',
+        live: '<span class="char-eq">{x<sub>k</sub>} = (1, 0, 0, …) &nbsp;→&nbsp; <var>X</var>(<var>z</var>) = 1</span>'
+      },
+      three: {
+        title: 'Три единицы',
+        html: '<p>{x<sub>k</sub>} = <strong>(1, 1, 1, 0, 0, …)</strong></p><p class="adc-zdef-panel-eq"><span class="char-eq"><var>X</var>(<var>z</var>) = 1 + </span><span class="char-frac"><span class="char-frac-part">1</span><span class="char-frac-bar"></span><span class="char-frac-part"><var>z</var></span></span><span class="char-eq"> + </span><span class="char-frac"><span class="char-frac-part">1</span><span class="char-frac-bar"></span><span class="char-frac-part"><var>z</var><sup>2</sup></span></span><span class="char-eq"> = </span><span class="char-frac"><span class="char-frac-part"><var>z</var><sup>2</sup> + <var>z</var> + 1</span><span class="char-frac-bar"></span><span class="char-frac-part"><var>z</var><sup>2</sup></span></span></p>',
+        live: '<span class="char-eq"><var>X</var>(<var>z</var>) = 1 + 1/<var>z</var> + 1/<var>z</var><sup>2</sup> = </span><span class="char-frac"><span class="char-frac-part"><var>z</var><sup>2</sup> + <var>z</var> + 1</span><span class="char-frac-bar"></span><span class="char-frac-part"><var>z</var><sup>2</sup></span></span>'
+      },
+      ones: {
+        title: 'Все единицы',
+        html: '<p>{x<sub>k</sub>} = <strong>(1, 1, 1, …)</strong> — геометрическая прогрессия. Сходится при <strong>|z| &gt; 1</strong>.</p><p class="adc-zdef-panel-eq"><span class="char-eq"><var>X</var>(<var>z</var>) = </span><span class="char-frac"><span class="char-frac-part">1</span><span class="char-frac-bar"></span><span class="char-frac-part">1 − 1/<var>z</var></span></span><span class="char-eq"> = </span><span class="char-frac"><span class="char-frac-part"><var>z</var></span><span class="char-frac-bar"></span><span class="char-frac-part"><var>z</var> − 1</span></span></p>',
+        live: '<span class="char-eq">при |<var>z</var>| &gt; 1: &nbsp;<var>X</var>(<var>z</var>) = </span><span class="char-frac"><span class="char-frac-part"><var>z</var></span><span class="char-frac-bar"></span><span class="char-frac-part"><var>z</var> − 1</span></span>'
+      }
+    }, 'def', (key) => adcZdefShow(key));
+
+    (() => {
+      const slide = document.querySelector('.slide-adc-zdef-interactive');
+      if (!slide) return;
+      const NS = 'http://www.w3.org/2000/svg';
+      const byId = (id) => document.getElementById(id);
+      const frac = (num, den) => `<span class="char-frac"><span class="char-frac-part">${num}</span><span class="char-frac-bar"></span><span class="char-frac-part">${den}</span></span>`;
+      const seqs = {
+        def: { x: [1, 0, 1, 0, 1, 0], closed: '', note: 'любой набор {x<sub>k</sub>} даёт один ряд X(z)', conv: '', caption: 'X(z) — функция комплексного z', dots: false },
+        imp: { x: [1, 0, 0, 0, 0, 0], closed: '<span class="char-eq"><var>X</var>(<var>z</var>) = 1</span>', note: 'остался только x<sub>0</sub> = 1', conv: '', caption: 'импульс (1, 0, 0, …)', dots: false },
+        three: { x: [1, 1, 1, 0, 0, 0], closed: `<span class="char-eq"><var>X</var>(<var>z</var>) = </span>${frac('<var>z</var><sup>2</sup> + <var>z</var> + 1', '<var>z</var><sup>2</sup>')}`, note: 'три ненулевых члена, дальше нули', conv: '', caption: 'три единицы (1, 1, 1, 0, …)', dots: false },
+        ones: { x: [1, 1, 1, 1, 1, 1], closed: `<span class="char-eq"><var>X</var>(<var>z</var>) = </span>${frac('<var>z</var>', '<var>z</var> − 1')}`, note: 'геометрическая прогрессия', conv: 'сходится при |z| &gt; 1', caption: 'все единицы (1, 1, 1, …)', dots: true }
+      };
+      let key = 'def';
+      let shown = 6;
+      let timer = 0;
+      const n = 6;
+      const stopPlay = () => {
+        if (timer) {
+          clearInterval(timer);
+          timer = 0;
+        }
+        const lab = byId('adcZdefPlayLab');
+        if (lab) lab.textContent = '▶ ход';
+      };
+      const mk = (parent, name, attrs, text) => {
+        const el = document.createElementNS(NS, name);
+        Object.keys(attrs).forEach((a) => el.setAttribute(a, attrs[a]));
+        if (text != null) el.textContent = text;
+        parent.appendChild(el);
+      };
+      const termHtml = (v, k) => {
+        if (!v) return '';
+        if (k === 0) return `<span class="char-eq">${v}</span>`;
+        const num = v === 1 ? '1' : String(v);
+        if (k === 1) return `<span class="char-eq">${num}/<var>z</var></span>`;
+        return `<span class="char-eq">${num}/<var>z</var><sup>${k}</sup></span>`;
+      };
+      const paint = () => {
+        const box = slide.querySelector('.adc-zdef-formulas');
+        if (box) box.classList.toggle('is-example', key !== 'def');
+        const cap = byId('adcZdefCaption');
+        if (cap) cap.textContent = seqs[key].caption;
+        const xs = seqs[key].x;
+        const stems = byId('adcZdefStems');
+        if (stems) {
+          stems.replaceChildren();
+          for (let k = 0; k < n; k++) {
+            const on = k < shown;
+            const x = 64 + k * 42;
+            const y = 232 - xs[k] * 140;
+            mk(stems, 'line', { x1: String(x), y1: '232', x2: String(x), y2: String(on ? y : 232), stroke: on ? '#1d4ed8' : '#cbd5e1', 'stroke-width': '3' });
+            mk(stems, 'circle', { cx: String(x), cy: String(on ? y : 232), r: '7', fill: on ? (xs[k] ? '#1d4ed8' : '#94a3b8') : '#e2e8f0', stroke: '#fff' });
+            const lab = document.createElementNS(NS, 'text');
+            lab.setAttribute('x', String(x));
+            lab.setAttribute('y', '252');
+            lab.setAttribute('text-anchor', 'middle');
+            lab.setAttribute('font-size', '15');
+            lab.setAttribute('font-weight', '800');
+            lab.setAttribute('fill', on ? '#1e3a8a' : '#cbd5e1');
+            lab.appendChild(document.createTextNode('x'));
+            const sub = document.createElementNS(NS, 'tspan');
+            sub.setAttribute('dx', '1');
+            sub.setAttribute('dy', '6');
+            sub.setAttribute('font-size', '11');
+            sub.textContent = String(k);
+            lab.appendChild(sub);
+            stems.appendChild(lab);
+            mk(stems, 'text', { x: String(x), y: String((on ? y : 232) - 14), 'text-anchor': 'middle', 'font-size': '16', 'font-weight': '800', fill: on ? '#0f172a' : '#cbd5e1' }, on ? String(xs[k]) : '');
+          }
+        }
+        const parts = [];
+        const limit = seqs[key].dots ? Math.min(shown, 3) : shown;
+        for (let k = 0; k < limit; k++) {
+          const t = termHtml(xs[k], k);
+          if (!t) continue;
+          if (parts.length) parts.push('<span class="char-eq">+</span>');
+          parts.push(t);
+        }
+        if (seqs[key].dots && shown >= 3) parts.push('<span class="char-eq">+ …</span>');
+        const ser = byId('adcZdefSeries');
+        if (ser) ser.innerHTML = '<span class="char-eq"><var>X</var>(<var>z</var>) = </span>' + (parts.length ? parts.join('') : '<span class="char-eq">0</span>');
+        const cl = byId('adcZdefClosed');
+        if (cl) cl.innerHTML = shown >= n ? seqs[key].closed : '';
+        const note = byId('adcZdefNote');
+        if (note) note.innerHTML = seqs[key].note;
+        const conv = byId('adcZdefConv');
+        if (conv) conv.innerHTML = shown >= n ? seqs[key].conv : '';
+      };
+      adcZdefShow = (k) => {
+        key = k;
+        shown = n;
+        stopPlay();
+        paint();
+      };
+      const play = byId('adcZdefPlay');
+      if (play) {
+        play.addEventListener('click', (e) => {
+          e.stopPropagation();
+          if (timer) {
+            stopPlay();
+            return;
+          }
+          shown = 0;
+          const lab = byId('adcZdefPlayLab');
+          if (lab) lab.textContent = '■ стоп';
+          paint();
+          timer = setInterval(() => {
+            shown += 1;
+            if (shown >= n) {
+              shown = n;
+              stopPlay();
+            }
+            paint();
+          }, 420);
+        });
+      }
+      paint();
+    })();
+
+    const zFrac = (num, den) => `<span class="char-frac"><span class="char-frac-part">${num}</span><span class="char-frac-bar"></span><span class="char-frac-part">${den}</span></span>`;
+    let adcZgeoShow = () => {};
+    bindAdc('.slide-adc-zgeo-interactive', 'adcZgeoPanel', 'adcZgeoLive', {
+      idea: {
+        title: 'Идея',
+        html: '<p>Все единицы — частный случай <strong>a = 1</strong>. Для любого вещественного a: {x<sub>k</sub>} = (1, a, a<sup>2</sup>, …).</p><p class="adc-zdef-panel-eq"><span class="char-eq"><var>X</var>(<var>z</var>) = </span>' + zFrac('<var>z</var>', '<var>z</var> − <var>a</var>') + '</p><p>Ряд сходится при <strong>|z| &gt; |a|</strong>.</p>',
+        live: '<span class="char-eq">(1, a, a<sup>2</sup>, …) → </span>' + zFrac('<var>z</var>', '<var>z</var> − <var>a</var>')
+      },
+      half: {
+        title: 'a = ½',
+        html: '<p>Затухает: 1, 0.5, 0.25, 0.13, …</p><p class="adc-zdef-panel-eq"><span class="char-eq"><var>X</var>(<var>z</var>) = </span>' + zFrac('<var>z</var>', '<var>z</var> − ½') + '</p><p>Сходится при |z| &gt; ½.</p>',
+        live: '<span class="char-eq">a = ½ · затухает · |z| &gt; ½</span>'
+      },
+      one: {
+        title: 'a = 1',
+        html: '<p>Это снова все единицы.</p><p class="adc-zdef-panel-eq"><span class="char-eq"><var>X</var>(<var>z</var>) = </span>' + zFrac('<var>z</var>', '<var>z</var> − 1') + '</p>',
+        live: '<span class="char-eq">a = 1 → все единицы · z/(z−1)</span>'
+      },
+      grow: {
+        title: 'a = 1.5',
+        html: '<p>Растёт: 1, 1.5, 2.25, 3.38, …</p><p class="adc-zdef-panel-eq"><span class="char-eq"><var>X</var>(<var>z</var>) = </span>' + zFrac('<var>z</var>', '<var>z</var> − 1.5') + '</p><p>Сходится при |z| &gt; 1.5.</p>',
+        live: '<span class="char-eq">a = 1.5 · растёт · |z| &gt; 1.5</span>'
+      }
+    }, 'idea', (key) => adcZgeoShow(key));
+
+    (() => {
+      const slide = document.querySelector('.slide-adc-zgeo-interactive');
+      if (!slide) return;
+      const NS = 'http://www.w3.org/2000/svg';
+      const byId = (id) => document.getElementById(id);
+      const as = { idea: 0.7, half: 0.5, one: 1, grow: 1.5 };
+      let key = 'idea';
+      let shown = 6;
+      let timer = 0;
+      const n = 6;
+      const stopPlay = () => {
+        if (timer) { clearInterval(timer); timer = 0; }
+        const lab = byId('adcZgeoPlayLab');
+        if (lab) lab.textContent = '▶ ход';
+      };
+      const mk = (parent, name, attrs, text) => {
+        const el = document.createElementNS(NS, name);
+        Object.keys(attrs).forEach((a) => el.setAttribute(a, attrs[a]));
+        if (text != null) el.textContent = text;
+        parent.appendChild(el);
+      };
+      const fmt = (v) => {
+        const r = Math.round(v * 100) / 100;
+        return Number.isInteger(r) ? String(r) : r.toFixed(2);
+      };
+      const paint = () => {
+        const a = as[key];
+        const xs = Array.from({ length: n }, (_, k) => a ** k);
+        const maxv = Math.max(1, ...xs);
+        const stems = byId('adcZgeoStems');
+        if (stems) {
+          stems.replaceChildren();
+          for (let k = 0; k < n; k++) {
+            const on = k < shown;
+            const x = 64 + k * 42;
+            const y = 232 - (xs[k] / maxv) * 150;
+            mk(stems, 'line', { x1: String(x), y1: '232', x2: String(x), y2: String(on ? y : 232), stroke: on ? '#1d4ed8' : '#cbd5e1', 'stroke-width': '3' });
+            mk(stems, 'circle', { cx: String(x), cy: String(on ? y : 232), r: '7', fill: on ? '#1d4ed8' : '#e2e8f0', stroke: '#fff' });
+            mk(stems, 'text', { x: String(x), y: '252', 'text-anchor': 'middle', 'font-size': '14', 'font-weight': '800', fill: on ? '#1e3a8a' : '#cbd5e1' }, 'k=' + k);
+            mk(stems, 'text', { x: String(x), y: String((on ? y : 232) - 12), 'text-anchor': 'middle', 'font-size': '13', 'font-weight': '800', fill: on ? '#0f172a' : '#cbd5e1' }, on ? fmt(xs[k]) : '');
+          }
+        }
+        const parts = [];
+        const lim = Math.min(shown, 3);
+        for (let k = 0; k < lim; k++) {
+          if (parts.length) parts.push('<span class="char-eq">+</span>');
+          if (k === 0) parts.push('<span class="char-eq">1</span>');
+          else if (key === 'idea') parts.push(`<span class="char-eq"><var>a</var><sup>${k}</sup>/<var>z</var><sup>${k}</sup></span>`);
+          else parts.push(`<span class="char-eq">${fmt(xs[k])}/<var>z</var>${k === 1 ? '' : '<sup>' + k + '</sup>'}</span>`);
+        }
+        if (shown >= 3) parts.push('<span class="char-eq">+ …</span>');
+        const ser = byId('adcZgeoSeries');
+        if (ser) ser.innerHTML = '<span class="char-eq"><var>X</var>(<var>z</var>) = </span>' + (parts.length ? parts.join('') : '<span class="char-eq">…</span>');
+        const cl = byId('adcZgeoClosed');
+        const aLab = key === 'idea' ? '<var>a</var>' : String(a);
+        if (cl) cl.innerHTML = shown >= n ? ('<span class="char-eq"><var>X</var>(<var>z</var>) = </span>' + zFrac('<var>z</var>', '<var>z</var> − ' + aLab)) : '';
+        const note = byId('adcZgeoNote');
+        if (note) note.innerHTML = shown >= n ? ('сходится при |z| &gt; |' + (key === 'idea' ? 'a' : String(a)) + '|') : '';
+        const cap = byId('adcZgeoCaption');
+        if (cap) cap.innerHTML = key === 'idea' ? '{x<sub>k</sub>} = (1, a, a², …)' : ('a = ' + String(a) + ' · {1, a, a², …}');
+      };
+      adcZgeoShow = (k) => { key = k; shown = n; stopPlay(); paint(); };
+      const play = byId('adcZgeoPlay');
+      if (play) {
+        play.addEventListener('click', (e) => {
+          e.stopPropagation();
+          if (timer) { stopPlay(); return; }
+          shown = 0;
+          const lab = byId('adcZgeoPlayLab');
+          if (lab) lab.textContent = '■ стоп';
+          paint();
+          timer = setInterval(() => {
+            shown += 1;
+            if (shown >= n) { shown = n; stopPlay(); }
+            paint();
+          }, 420);
+        });
+      }
+      paint();
+    })();
+
+    let adcZpropShow = () => {};
+    bindAdc('.slide-adc-zprop-interactive', 'adcZpropPanel', 'adcZpropLive', {
+      lin: {
+        title: 'Линейность',
+        html: '<p>В общем виде: u<sub>k</sub> = α x<sub>k</sub> + β y<sub>k</sub> даёт U(z) = α X(z) + β Y(z).</p><p>Пример при α = β = 1: x = (1, 2), y = (3, 0). Сложили отсчёт к отсчёту → (4, 2).</p><p class="adc-zdef-panel-eq"><span class="char-eq"><var>X</var> + <var>Y</var> = (1 + 2/<var>z</var>) + 3 = 4 + 2/<var>z</var></span></p>',
+        live: '<span class="char-eq">(1, 2) + (3, 0) = (4, 2)</span>'
+      },
+      shift: {
+        title: 'Сдвиг · 1/z',
+        html: '<p>Сдвиг на один такт назад: y<sub>k</sub> = x<sub>k−1</sub>. Тогда Y(z) = (1/z) · X(z).</p><p>Было (3, 1, 2) → стало (0, 3, 1, 2).</p><p class="adc-zdef-panel-eq"><span class="char-eq"><var>Y</var>(<var>z</var>) = (1/<var>z</var>) · <var>X</var>(<var>z</var>)</span></p><p>1/z — оператор единичной задержки. Это не z − 1.</p>',
+        live: '<span class="char-eq">(3, 1, 2) → (0, 3, 1, 2) = умножили на 1/<var>z</var></span>'
+      },
+      conv: {
+        title: 'Свёртка',
+        html: '<p>Фильтр «сейчас + прошлый»: h = (1, 1). Вход x = (2, 1).</p><p>y<sub>0</sub> = 2, y<sub>1</sub> = 2+1 = 3, y<sub>2</sub> = 1 → (2, 3, 1).</p><p class="adc-zdef-panel-eq"><span class="char-eq">(1 + 1/<var>z</var>)(2 + 1/<var>z</var>) = 2 + 3/<var>z</var> + 1/<var>z</var><sup>2</sup></span></p>',
+        live: '<span class="char-eq">Y(z) = H(z) · X(z)</span>'
+      }
+    }, 'lin', (key) => adcZpropShow(key));
+
+    (() => {
+      const slide = document.querySelector('.slide-adc-zprop-interactive');
+      if (!slide) return;
+      const NS = 'http://www.w3.org/2000/svg';
+      const byId = (id) => document.getElementById(id);
+      const g = byId('adcZpropDraw');
+      let key = 'lin';
+      let step = 2;
+      let timer = 0;
+      const maxStep = { lin: 2, shift: 1, conv: 2 };
+      const stopPlay = () => {
+        if (timer) { clearInterval(timer); timer = 0; }
+        const lab = byId('adcZpropPlayLab');
+        if (lab) lab.textContent = '▶ ход';
+      };
+      const mk = (parent, name, attrs, text) => {
+        const el = document.createElementNS(NS, name);
+        Object.keys(attrs).forEach((a) => el.setAttribute(a, attrs[a]));
+        if (text != null) el.textContent = text;
+        parent.appendChild(el);
+      };
+      const row = (vals, y, color, title, fade) => {
+        mk(g, 'text', { x: '16', y: String(y + 6), 'font-size': '13', 'font-weight': '800', fill: fade ? '#cbd5e1' : color }, title);
+        vals.forEach((v, k) => {
+          const x = 86 + k * 62;
+          mk(g, 'rect', { x: String(x - 22), y: String(y - 22), width: '44', height: '40', rx: '7', fill: '#fff', stroke: fade ? '#e2e8f0' : color, 'stroke-width': '2' });
+          mk(g, 'text', { x: String(x), y: String(y + 5), 'text-anchor': 'middle', 'font-size': '18', 'font-weight': '800', fill: fade ? '#cbd5e1' : color }, String(v));
+          mk(g, 'text', { x: String(x), y: String(y + 28), 'text-anchor': 'middle', 'font-size': '11', fill: fade ? '#e2e8f0' : '#64748b' }, 'k=' + k);
+        });
+      };
+      const setHtml = (id, html) => {
+        const el = byId(id);
+        if (el) el.innerHTML = html || '';
+      };
+      const paint = () => {
+        if (!g) return;
+        g.replaceChildren();
+        if (key === 'lin') {
+          row([1, 2], 48, '#1d4ed8', 'x', step < 0);
+          row([3, 0], 118, '#c2410c', 'y', step < 1);
+          row([4, 2], 188, '#166534', 'x+y', step < 2);
+          setHtml('adcZpropCaption', 'сложили отсчёт к отсчёту');
+          setHtml('adcZpropSeries', step >= 0 ? '<span class="char-eq"><var>X</var> = 1 + 2/<var>z</var></span>' : '');
+          setHtml('adcZpropClosed', step >= 1 ? '<span class="char-eq"><var>Y</var> = 3</span>' : '');
+          setHtml('adcZpropNote', step >= 2 ? 'X + Y = 4 + 2/<var>z</var> — та же сумма, что (4, 2)' : '▶ ход: сначала x, потом y, потом сумма');
+        } else if (key === 'shift') {
+          row([3, 1, 2], 56, '#1d4ed8', 'было', false);
+          row([0, 3, 1, 2], 168, '#c2410c', 'стало', step < 1);
+          setHtml('adcZpropCaption', 'сдвиг на 1 такт = × 1/z');
+          setHtml('adcZpropSeries', '<span class="char-eq"><var>X</var> = 3 + 1/<var>z</var> + 2/<var>z</var><sup>2</sup></span>');
+          setHtml('adcZpropClosed', step >= 1 ? '<span class="char-eq">(1/<var>z</var>)·<var>X</var> = 3/<var>z</var> + 1/<var>z</var><sup>2</sup> + 2/<var>z</var><sup>3</sup></span>' : '');
+          setHtml('adcZpropNote', step >= 1 ? 'числа уехали вправо, впереди 0 · это не z − 1' : '▶ ход — сдвиг');
+        } else {
+          row([2, 1], 48, '#1d4ed8', 'x', step < 0);
+          row([1, 1], 118, '#c2410c', 'h', step < 1);
+          row([2, 3, 1], 188, '#166534', 'y', step < 2);
+          setHtml('adcZpropCaption', 'h = сейчас + прошлый такт');
+          setHtml('adcZpropSeries', step >= 1 ? '<span class="char-eq"><var>H</var> = 1 + 1/<var>z</var> · <var>X</var> = 2 + 1/<var>z</var></span>' : '<span class="char-eq"><var>X</var> = 2 + 1/<var>z</var></span>');
+          setHtml('adcZpropClosed', step >= 2 ? '<span class="char-eq"><var>Y</var> = <var>H</var>·<var>X</var> = 2 + 3/<var>z</var> + 1/<var>z</var><sup>2</sup></span>' : '');
+          setHtml('adcZpropNote', step >= 2 ? 'во времени свёртка, в Z — умножение' : '▶ ход: вход, фильтр, выход');
+        }
+        const foot = byId('adcZpropFoot');
+        if (foot) foot.textContent = key === 'shift' ? '1/z = память на 1 такт' : 'пример по шагам';
+      };
+      adcZpropShow = (k) => {
+        key = k;
+        step = maxStep[k];
+        stopPlay();
+        paint();
+      };
+      const play = byId('adcZpropPlay');
+      if (play) {
+        play.addEventListener('click', (e) => {
+          e.stopPropagation();
+          if (timer) { stopPlay(); return; }
+          step = -1;
+          const lab = byId('adcZpropPlayLab');
+          if (lab) lab.textContent = '■ стоп';
+          paint();
+          timer = setInterval(() => {
+            step += 1;
+            if (step >= maxStep[key]) { step = maxStep[key]; stopPlay(); }
+            paint();
+          }, 700);
+        });
+      }
+      paint();
+    })();
+
+    let adcZhShow = () => {};
+    bindAdc('.slide-adc-zh-interactive', 'adcZhPanel', 'adcZhLive', {
+      nums: {
+        title: 'Три числа',
+        html: '<p>Тот же такт t = 2 с из примера с трубой. ПЛК видит не кривую, а <strong>три ячейки</strong>:</p><p>сейчас <strong>6.1</strong>, секунду назад <strong>3.8</strong>, две секунды назад <strong>6.4</strong>.</p><p>«Секунду назад» в Z пишут как <strong>1/z</strong>.</p>',
+        live: '<span class="char-eq">сейчас 6.1 · 1 с назад 3.8 · 2 с назад 6.4</span>'
+      },
+      avg: {
+        title: 'Среднее',
+        html: '<p>Клапан смотрит не на сырое 6.1 (это уже &gt; 5.5), а на среднее трёх тактов.</p><p class="adc-zdef-panel-eq"><span class="char-eq">y = (6.1 + 3.8 + 6.4) / 3 = 5.43</span></p><p>5.43 &lt; 5.5 → клапан <strong>закрыт</strong>. Шум не открыл аварию.</p>',
+        live: '<span class="char-eq">y = 5.43 &lt; 5.5 → закрыт</span>'
+      },
+      hz: {
+        title: 'H(z)',
+        html: '<p>Рецепт «сложить три такта и разделить на 3» и есть <strong>H(z)</strong>.</p><p class="adc-zdef-panel-eq"><span class="char-eq">y = (x + x·(1/<var>z</var>) + x·(1/<var>z</var><sup>2</sup>)) / 3</span></p><p>Значит H(z) = (1 + 1/z + 1/z²) / 3. Это не новая физика — та же формула средним.</p>',
+        live: '<span class="char-eq"><var>H</var>(<var>z</var>) = (1 + 1/<var>z</var> + 1/<var>z</var><sup>2</sup>) / 3</span>'
+      },
+      plc: {
+        title: 'Зачем H(z)',
+        html: '<p>Контроллер <strong>не считает</strong> комплексный z. В программе: две ячейки памяти и деление на 3.</p><p>H(z) — короткая запись этого рецепта. Тогда выход фильтра пишут так: <strong>Y(z) = H(z) · X(z)</strong>.</p>',
+        live: '<span class="char-eq">Y = H · X &nbsp;·&nbsp; в ПЛК это просто среднее</span>'
+      }
+    }, 'nums', (key) => adcZhShow(key));
+
+    (() => {
+      const slide = document.querySelector('.slide-adc-zh-interactive');
+      if (!slide) return;
+      const NS = 'http://www.w3.org/2000/svg';
+      const byId = (id) => document.getElementById(id);
+      const g = byId('adcZhDraw');
+      let key = 'nums';
+      let step = 2;
+      let timer = 0;
+      const stopPlay = () => {
+        if (timer) { clearInterval(timer); timer = 0; }
+        const lab = byId('adcZhPlayLab');
+        if (lab) lab.textContent = '▶ ход';
+      };
+      const mk = (parent, name, attrs, text) => {
+        const el = document.createElementNS(NS, name);
+        Object.keys(attrs).forEach((a) => el.setAttribute(a, attrs[a]));
+        if (text != null) el.textContent = text;
+        parent.appendChild(el);
+      };
+      const cell = (x, y, val, lab, color, on) => {
+        mk(g, 'rect', { x: String(x), y: String(y), width: '96', height: '78', rx: '10', fill: '#fff', stroke: on ? color : '#e2e8f0', 'stroke-width': '2' });
+        mk(g, 'text', { x: String(x + 48), y: String(y + 36), 'text-anchor': 'middle', 'font-size': '22', 'font-weight': '800', fill: on ? color : '#cbd5e1' }, val);
+        mk(g, 'text', { x: String(x + 48), y: String(y + 58), 'text-anchor': 'middle', 'font-size': '11', 'font-weight': '700', fill: on ? '#64748b' : '#e2e8f0' }, lab);
+      };
+      const setHtml = (id, html) => {
+        const el = byId(id);
+        if (el) el.innerHTML = html || '';
+      };
+      const paint = () => {
+        if (!g) return;
+        g.replaceChildren();
+        const s = step;
+        cell(16, 36, '6.4', '2 с назад', '#64748b', s >= 0);
+        cell(122, 36, '3.8', '1 с назад', '#c2410c', s >= 1);
+        cell(228, 36, '6.1', 'сейчас', '#1d4ed8', s >= 2);
+        if (key === 'nums') {
+          mk(g, 'text', { x: '170', y: '150', 'text-anchor': 'middle', 'font-size': '13', fill: '#64748b' }, '1 с назад = 1/z ·  2 с назад = 1/z²');
+          mk(g, 'text', { x: '170', y: '198', 'text-anchor': 'middle', 'font-size': '15', 'font-weight': '800', fill: '#1e3a8a' }, s >= 2 ? 'три ячейки памяти ПЛК' : '▶ ход — три такта');
+          setHtml('adcZhCaption', 'что лежит в памяти на t = 2 с');
+          setHtml('adcZhSeries', s >= 2 ? '<span class="char-eq">6.4 · (1/<var>z</var><sup>2</sup>) + 3.8 · (1/<var>z</var>) + 6.1</span>' : '');
+          setHtml('adcZhClosed', '');
+          setHtml('adcZhNote', 'это не комплексное число — просто «прошлый такт»');
+        } else if (key === 'avg') {
+          mk(g, 'text', { x: '170', y: '148', 'text-anchor': 'middle', 'font-size': '16', 'font-weight': '800', fill: '#0f172a' }, '(6.1 + 3.8 + 6.4) / 3');
+          mk(g, 'rect', { x: '90', y: '166', width: '160', height: '56', rx: '10', fill: '#dcfce7', stroke: '#16a34a', 'stroke-width': '2' });
+          mk(g, 'text', { x: '170', y: '190', 'text-anchor': 'middle', 'font-size': '22', 'font-weight': '800', fill: '#166534' }, 'y = 5.43');
+          mk(g, 'text', { x: '170', y: '210', 'text-anchor': 'middle', 'font-size': '12', fill: '#166534' }, '5.43 < 5.5 → закрыт');
+          setHtml('adcZhCaption', 'клапан смотрит на среднее, не на 6.1');
+          setHtml('adcZhSeries', '<span class="char-eq">сырой x = 6.1 открыл бы аварию</span>');
+          setHtml('adcZhClosed', '<span class="char-eq">y = 5.43 — аварии нет</span>');
+          setHtml('adcZhNote', 'ради этого и усредняем');
+        } else if (key === 'hz') {
+          mk(g, 'text', { x: '170', y: '150', 'text-anchor': 'middle', 'font-size': '14', 'font-weight': '800', fill: '#9a3412' }, 'тот же рецепт одним символом H(z)');
+          mk(g, 'text', { x: '170', y: '186', 'text-anchor': 'middle', 'font-size': '15', 'font-weight': '800', fill: '#c2410c' }, 'y = (x + x/z + x/z²) / 3');
+          mk(g, 'text', { x: '170', y: '222', 'text-anchor': 'middle', 'font-size': '14', fill: '#7c2d12' }, 'H(z) = (1 + 1/z + 1/z²) / 3');
+          setHtml('adcZhCaption', 'H(z) — запись фильтра');
+          setHtml('adcZhSeries', '<span class="char-eq"><var>H</var> = (1 + 1/<var>z</var> + 1/<var>z</var><sup>2</sup>) / 3</span>');
+          setHtml('adcZhClosed', '<span class="char-eq"><var>Y</var> = <var>H</var> · <var>X</var></span>');
+          setHtml('adcZhNote', 'умножили X на рецепт — получили среднее');
+        } else {
+          mk(g, 'rect', { x: '24', y: '130', width: '292', height: '100', rx: '10', fill: '#fff7ed', stroke: '#fdba74' });
+          mk(g, 'text', { x: '170', y: '162', 'text-anchor': 'middle', 'font-size': '14', 'font-weight': '800', fill: '#9a3412' }, 'в коде ПЛК нет комплексного z');
+          mk(g, 'text', { x: '170', y: '190', 'text-anchor': 'middle', 'font-size': '13', fill: '#7c2d12' }, 'ячейка «прошлый» + ячейка «позапрошлый»');
+          mk(g, 'text', { x: '170', y: '214', 'text-anchor': 'middle', 'font-size': '13', fill: '#7c2d12' }, 'сложить с сейчас, разделить на 3');
+          setHtml('adcZhCaption', 'H(z) — как записать рецепт');
+          setHtml('adcZhSeries', '<span class="char-eq">в ПЛК: память двух тактов</span>');
+          setHtml('adcZhClosed', '<span class="char-eq"><var>Y</var>(<var>z</var>) = <var>H</var>(<var>z</var>) · <var>X</var>(<var>z</var>)</span>');
+          setHtml('adcZhNote', 'формула для понимания, код — три числа');
+        }
+      };
+      adcZhShow = (k) => {
+        key = k;
+        step = 2;
+        stopPlay();
+        paint();
+      };
+      const play = byId('adcZhPlay');
+      if (play) {
+        play.addEventListener('click', (e) => {
+          e.stopPropagation();
+          if (timer) { stopPlay(); return; }
+          step = -1;
+          const lab = byId('adcZhPlayLab');
+          if (lab) lab.textContent = '■ стоп';
+          paint();
+          timer = setInterval(() => {
+            step += 1;
+            if (step >= 2) { step = 2; stopPlay(); }
+            paint();
+          }, 700);
+        });
+      }
+      paint();
+    })();
+
+    let adcZiirShow = () => {};
+    bindAdc('.slide-adc-ziir-interactive', 'adcZiirPanel', 'adcZiirLive', {
+      idea: {
+        title: 'Идея',
+        html: '<p>Среднее из трёх <strong>забывает</strong> всё старше двух секунд. Другой фильтр: в память кладут не сырой x, а <strong>прошлый выход y</strong>.</p><p>Тогда в y сидит вся история: вчерашний y уже содержал позавчерашний, и так до первого такта. Старое <strong>затухает</strong>, но формально память бесконечная.</p>',
+        live: '<span class="char-eq">помним не три x, а один прошлый y</span>'
+      },
+      eq: {
+        title: 'Формула',
+        html: '<p class="adc-zdef-panel-eq"><span class="char-eq">y = ½ · x<sub>сейчас</sub> + ½ · y<sub>прошлый</sub></span></p><p>Половина нового измерения, половина того, что фильтр уже думал. В ПЛК одна ячейка.</p>',
+        live: '<span class="char-eq">y = 0.5 x + 0.5 y<sub>прошлый</sub></span>'
+      },
+      run: {
+        title: 'Ход',
+        html: '<p>Те же отсчёты трубы: 6.4, 3.8, 6.1, 4.1, 6.3. Старт: прошлого y нет → 0.</p><p>3.20 → 3.50 → 4.80 → 4.45 → 5.38. Сырой 6.1 не открывает клапан: y = 4.80 &lt; 5.5.</p>',
+        live: '<span class="char-eq">▶ ход по тактам трубы</span>'
+      },
+      hz: {
+        title: 'H(z)',
+        html: '<p>y = 0.5 x + 0.5 · (y / z), потому что прошлый y — это y · (1/z).</p><p class="adc-zdef-panel-eq"><span class="char-eq"><var>H</var>(<var>z</var>) = 0.5 / (1 − 0.5/<var>z</var>) = 0.5<var>z</var> / (<var>z</var> − 0.5)</span></p><p>Знаменатель как раз и даёт бесконечный хвост 1, 0.5, 0.25, 0.13, …</p>',
+        live: '<span class="char-eq"><var>H</var> = 0.5 / (1 − 0.5/<var>z</var>)</span>'
+      }
+    }, 'idea', (key) => adcZiirShow(key));
+
+    (() => {
+      const slide = document.querySelector('.slide-adc-ziir-interactive');
+      if (!slide) return;
+      const NS = 'http://www.w3.org/2000/svg';
+      const byId = (id) => document.getElementById(id);
+      const g = byId('adcZiirDraw');
+      const raw = [6.4, 3.8, 6.1, 4.1, 6.3];
+      const ys = [];
+      raw.forEach((x, i) => {
+        ys.push(+(0.5 * x + 0.5 * (i ? ys[i - 1] : 0)).toFixed(2));
+      });
+      const fmt = (v) => Number(v).toFixed(2);
+      let key = 'idea';
+      let shown = 5;
+      let timer = 0;
+      const stopPlay = () => {
+        if (timer) { clearInterval(timer); timer = 0; }
+        const lab = byId('adcZiirPlayLab');
+        if (lab) lab.textContent = '▶ ход';
+      };
+      const mk = (parent, name, attrs, text) => {
+        const el = document.createElementNS(NS, name);
+        Object.keys(attrs).forEach((a) => el.setAttribute(a, attrs[a]));
+        if (text != null) el.textContent = text;
+        parent.appendChild(el);
+      };
+      const setHtml = (id, html) => {
+        const el = byId(id);
+        if (el) el.innerHTML = html || '';
+      };
+      const box = (x, y, w, h, stroke, fill, t1, c1, t2, c2) => {
+        mk(g, 'rect', { x: String(x), y: String(y), width: String(w), height: String(h), rx: '10', fill, stroke, 'stroke-width': '2' });
+        mk(g, 'text', { x: String(x + w / 2), y: String(y + (t2 ? 32 : 38)), 'text-anchor': 'middle', 'font-size': t2 ? '20' : '16', 'font-weight': '800', fill: c1 }, t1);
+        if (t2) mk(g, 'text', { x: String(x + w / 2), y: String(y + 54), 'text-anchor': 'middle', 'font-size': '12', 'font-weight': '700', fill: c2 || '#64748b' }, t2);
+      };
+      const paintTable = (vis) => {
+        mk(g, 'text', { x: '40', y: '24', 'font-size': '12', 'font-weight': '800', fill: '#64748b' }, 'k');
+        mk(g, 'text', { x: '108', y: '24', 'font-size': '12', 'font-weight': '800', fill: '#1e3a8a' }, 'x сырой');
+        mk(g, 'text', { x: '200', y: '24', 'font-size': '12', 'font-weight': '800', fill: '#c2410c' }, 'y');
+        mk(g, 'text', { x: '286', y: '24', 'font-size': '12', 'font-weight': '800', fill: '#166534' }, 'клапан');
+        for (let k = 0; k < 5; k++) {
+          const on = k < vis;
+          const y = 48 + k * 36;
+          if (on && k === vis - 1) mk(g, 'rect', { x: '8', y: String(y - 20), width: '324', height: '34', rx: '6', fill: '#ffedd5' });
+          mk(g, 'text', { x: '40', y: String(y), 'text-anchor': 'middle', 'font-size': '15', 'font-weight': '800', fill: on ? '#0f172a' : '#e2e8f0' }, String(k));
+          mk(g, 'text', { x: '108', y: String(y), 'text-anchor': 'middle', 'font-size': '16', 'font-weight': '800', fill: !on ? '#e2e8f0' : raw[k] > 5.5 ? '#b91c1c' : '#1d4ed8' }, on ? fmt(raw[k]) : '·');
+          mk(g, 'text', { x: '200', y: String(y), 'text-anchor': 'middle', 'font-size': '16', 'font-weight': '800', fill: on ? '#c2410c' : '#e2e8f0' }, on ? fmt(ys[k]) : '·');
+          const open = on && ys[k] > 5.5;
+          mk(g, 'text', { x: '286', y: String(y), 'text-anchor': 'middle', 'font-size': '13', 'font-weight': '800', fill: !on ? '#e2e8f0' : open ? '#166534' : '#991b1b' }, !on ? '—' : open ? 'открыт' : 'закрыт');
+        }
+      };
+      const paint = () => {
+        if (!g) return;
+        g.replaceChildren();
+        const vis = key === 'run' ? shown : 5;
+        const last = vis - 1;
+        const yPrev = last > 0 ? ys[last - 1] : 0;
+        if (key === 'idea') {
+          mk(g, 'text', { x: '170', y: '28', 'text-anchor': 'middle', 'font-size': '13', 'font-weight': '800', fill: '#64748b' }, 'окно из трёх — старше уже нет');
+          box(8, 42, 74, 64, '#e2e8f0', '#f8fafc', '—', '#cbd5e1', '3 с назад', '#94a3b8');
+          box(90, 42, 74, 64, '#93c5fd', '#eff6ff', '6.4', '#64748b', '2 с назад', '#64748b');
+          box(172, 42, 74, 64, '#1d4ed8', '#dbeafe', '3.8', '#1d4ed8', '1 с назад', '#1e3a8a');
+          box(254, 42, 74, 64, '#1d4ed8', '#bfdbfe', '6.1', '#1e3a8a', 'сейчас', '#1e3a8a');
+          mk(g, 'text', { x: '170', y: '132', 'text-anchor': 'middle', 'font-size': '13', 'font-weight': '800', fill: '#c2410c' }, 'через y — ничего не выкинули');
+          box(70, 148, 200, 78, '#c2410c', '#fff7ed', 'y прошлый', '#c2410c', 'внутри все x: ½, ¼, ⅛, …', '#9a3412');
+          mk(g, 'path', { d: 'M270 187 H304 V226 H170', fill: 'none', stroke: '#c2410c', 'stroke-width': '2.2' });
+          mk(g, 'polygon', { points: '170,226 178,221 178,231', fill: '#c2410c' });
+          setHtml('adcZiirCaption', 'три x забывают старое · y тащит всё прошлое');
+          setHtml('adcZiirSeries', '<span class="char-eq">y<sub>k</sub> = 0.5 x<sub>k</sub> + 0.5 y<sub>k−1</sub></span>');
+          setHtml('adcZiirClosed', '');
+          setHtml('adcZiirNote', 'в y<sub>k−1</sub> уже сидят x<sub>0</sub>…x<sub>k−1</sub>, но всё слабее');
+        } else if (key === 'eq') {
+          box(16, 36, 130, 70, '#1d4ed8', '#eff6ff', 'x сейчас', '#1d4ed8', fmt(raw[4]), '#1e3a8a');
+          box(16, 128, 130, 70, '#c2410c', '#fff7ed', 'y прошлый', '#c2410c', fmt(ys[3]), '#9a3412');
+          mk(g, 'text', { x: '168', y: '78', 'font-size': '16', 'font-weight': '800', fill: '#64748b' }, '× ½');
+          mk(g, 'text', { x: '168', y: '170', 'font-size': '16', 'font-weight': '800', fill: '#64748b' }, '× ½');
+          mk(g, 'path', { d: 'M146 71 H200 V100', fill: 'none', stroke: '#1d4ed8', 'stroke-width': '2' });
+          mk(g, 'path', { d: 'M146 163 H200 V124', fill: 'none', stroke: '#c2410c', 'stroke-width': '2' });
+          mk(g, 'circle', { cx: '200', cy: '112', r: '16', fill: '#fff', stroke: '#0f172a', 'stroke-width': '2' });
+          mk(g, 'text', { x: '200', y: '118', 'text-anchor': 'middle', 'font-size': '22', 'font-weight': '800', fill: '#0f172a' }, '+');
+          mk(g, 'path', { d: 'M216 112 H236', fill: 'none', stroke: '#0f172a', 'stroke-width': '2' });
+          box(236, 76, 90, 72, '#166534', '#dcfce7', fmt(ys[4]), '#166534', 'y сейчас', '#166534');
+          mk(g, 'text', { x: '170', y: '232', 'text-anchor': 'middle', 'font-size': '14', 'font-weight': '800', fill: '#9a3412' }, 'в ПЛК одна ячейка «прошлый y»');
+          setHtml('adcZiirCaption', 'половина нового, половина памяти');
+          setHtml('adcZiirSeries', `<span class="char-eq">y = 0.5·${fmt(raw[4])} + 0.5·${fmt(ys[3])} = ${fmt(ys[4])}</span>`);
+          setHtml('adcZiirClosed', '');
+          setHtml('adcZiirNote', 'потом это y станет «прошлым»');
+        } else if (key === 'hz') {
+          box(16, 40, 70, 56, '#1d4ed8', '#eff6ff', 'x', '#1d4ed8', '', '');
+          mk(g, 'text', { x: '108', y: '74', 'font-size': '14', 'font-weight': '800', fill: '#64748b' }, '×0.5');
+          mk(g, 'path', { d: 'M86 68 H128', fill: 'none', stroke: '#1d4ed8', 'stroke-width': '2' });
+          mk(g, 'circle', { cx: '150', cy: '68', r: '16', fill: '#fff', stroke: '#0f172a', 'stroke-width': '2' });
+          mk(g, 'text', { x: '150', y: '74', 'text-anchor': 'middle', 'font-size': '20', 'font-weight': '800' }, '+');
+          mk(g, 'path', { d: 'M166 68 H214', fill: 'none', stroke: '#0f172a', 'stroke-width': '2' });
+          box(214, 40, 70, 56, '#c2410c', '#fff7ed', 'y', '#c2410c', '', '');
+          mk(g, 'path', { d: 'M249 96 V148 H150 V84', fill: 'none', stroke: '#c2410c', 'stroke-width': '2.2' });
+          mk(g, 'polygon', { points: '150,84 145,94 155,94', fill: '#c2410c' });
+          mk(g, 'rect', { x: '168', y: '132', width: '64', height: '28', rx: '6', fill: '#fff', stroke: '#c2410c', 'stroke-width': '1.6' });
+          mk(g, 'text', { x: '200', y: '152', 'text-anchor': 'middle', 'font-size': '13', 'font-weight': '800', fill: '#c2410c' }, '×0.5 / z');
+          mk(g, 'text', { x: '170', y: '196', 'text-anchor': 'middle', 'font-size': '15', 'font-weight': '800', fill: '#c2410c' }, 'H = 0.5 / (1 − 0.5/z)');
+          mk(g, 'text', { x: '170', y: '228', 'text-anchor': 'middle', 'font-size': '14', fill: '#9a3412' }, '= 0.5 z / (z − 0.5)');
+          setHtml('adcZiirCaption', 'знаменатель = бесконечный хвост');
+          setHtml('adcZiirSeries', '<span class="char-eq"><var>H</var>(<var>z</var>) = 0.5 / (1 − 0.5/<var>z</var>)</span>');
+          setHtml('adcZiirClosed', '<span class="char-eq">= 0.5<var>z</var> / (<var>z</var> − 0.5)</span>');
+          setHtml('adcZiirNote', 'веса прошлого: 0.5, 0.25, 0.125, … никогда не ноль');
+        } else {
+          paintTable(vis);
+          setHtml('adcZiirCaption', last >= 0 ? ('такт ' + last + ' · сырой ' + fmt(raw[last]) + (raw[last] > 5.5 ? ' открыл бы' : '')) : '▶ ход по тактам');
+          setHtml('adcZiirSeries', last >= 0 ? `<span class="char-eq">0.5·${fmt(raw[last])} + 0.5·${fmt(yPrev)} = ${fmt(ys[last])}</span>` : '');
+          setHtml('adcZiirClosed', last >= 0 ? '<span class="char-eq">y ≤ 5.5 → закрыт</span>' : '');
+          setHtml('adcZiirNote', 'сырой 6.1 и 6.3 открыли бы · y ни разу');
+        }
+      };
+      let holdShown = false;
+      adcZiirShow = (k) => {
+        key = k;
+        if (!holdShown) shown = 5;
+        stopPlay();
+        paint();
+      };
+      const play = byId('adcZiirPlay');
+      if (play) {
+        play.addEventListener('click', (e) => {
+          e.stopPropagation();
+          if (timer) { stopPlay(); paint(); return; }
+          holdShown = true;
+          shown = 0;
+          const runBtn = slide.querySelector('[data-info="run"]');
+          if (runBtn) runBtn.click();
+          holdShown = false;
+          const lab = byId('adcZiirPlayLab');
+          if (lab) lab.textContent = '■ стоп';
+          timer = setInterval(() => {
+            shown += 1;
+            if (shown >= 5) { shown = 5; stopPlay(); }
+            paint();
+          }, 700);
+        });
+      }
+      paint();
+    })();
+
+    bindAdc('.slide-adc-zinv-interactive', 'adcZinvPanel', 'adcZinvLive', {
+      idea: {
+        title: 'Идея',
+        html: '<p>Прямое Z: отсчёты → формула X(z). <strong>Обратное</strong>: формула → снова {x<sub>k</sub>}.</p><p>Для курса достаточно таблицы и разложения в ряд — без вычетов и контура.</p>',
+        live: '<span class="char-eq">X(z) → {x<sub>k</sub>}</span>'
+      },
+      tab: {
+        title: 'Таблица',
+        html: '<p>Те же пары, что уже вывели, читаем справа налево.</p><p>(1,0,0,…) ↔ 1 · (1,1,1,…) ↔ z/(z−1) · (1,a,a²,…) ↔ z/(z−a).</p>',
+        live: '<span class="char-eq">готовые пары в обе стороны</span>'
+      },
+      ser: {
+        title: 'Ряд',
+        html: '<p>Разложите X(z) по степеням z<sup>−1</sup>. Коэффициент при z<sup>−k</sup> и есть x<sub>k</sub>.</p><p class="adc-zdef-panel-eq"><span class="char-eq"><var>X</var>(<var>z</var>) = x<sub>0</sub> + x<sub>1</sub> z<sup>−1</sup> + x<sub>2</sub> z<sup>−2</sup> + …</span></p>',
+        live: '<span class="char-eq">коэффициент при z<sup>−k</sup> = x<sub>k</sub></span>'
+      },
+      ex: {
+        title: 'Пример',
+        html: '<p>Известно X(z) = z / (z − a). По таблице сразу {x<sub>k</sub>} = (1, a, a<sup>2</sup>, …).</p><p>Проверка рядом: z/(z−a) = 1 / (1 − a z<sup>−1</sup>) = 1 + a z<sup>−1</sup> + a<sup>2</sup> z<sup>−2</sup> + …</p>',
+        live: '<span class="char-eq">z/(z−a) → (1, a, a<sup>2</sup>, …)</span>'
+      }
+    }, 'idea');
+
+    bindAdc('.slide-adc-zlin-interactive', 'adcZlinPanel', 'adcZlinLive', {
+      map: {
+        title: 'Отсчёты',
+        html: '<p>Линейный цифровой фильтр переводит последовательность отсчётов входа в последовательность отсчётов выхода.</p><p class="adc-zdef-panel-eq"><span class="char-eq">{x<sub>k</sub>} → {y<sub>k</sub>}</span></p><p>На входе список чисел, на выходе другой список. Оба бесконечные или конечные — правило одно.</p>',
+        live: '<span class="char-eq">{x<sub>k</sub>} → {y<sub>k</sub>}</span>'
+      },
+      lin: {
+        title: 'Линейность',
+        html: '<p>Если каждый вход даёт свой выход, линейная комбинация входов даёт ту же комбинацию выходов.</p><p class="adc-zdef-panel-eq"><span class="char-eq">α₁{x<sub>k</sub><sup>(1)</sup>} + … + α<sub>N</sub>{x<sub>k</sub><sup>(N)</sup>}</span></p><p class="adc-zdef-panel-eq"><span class="char-eq">→ α₁{y<sub>k</sub><sup>(1)</sup>} + … + α<sub>N</sub>{y<sub>k</sub><sup>(N)</sup>}</span></p>',
+        live: '<span class="char-eq">α₁x⁽¹⁾ + … + αₙx⁽ᴺ⁾ → α₁y⁽¹⁾ + … + αₙy⁽ᴺ⁾</span>'
+      },
+      sum: {
+        title: 'Сумма',
+        html: '<p>Короткий фильтр для проверки: <span class="char-eq">y<sub>k</sub> = x<sub>k</sub> + 0.5 x<sub>k−1</sub></span>.</p><p>(2, 0, 0) → (2, 1, 0), (0, 2, 0) → (0, 2, 1).</p><p>Сумма входов (2, 2, 0) даёт (2, 3, 1). Это ровно сумма двух выходов.</p>',
+        live: '<span class="char-eq">(2, 1, 0) + (0, 2, 1) = (2, 3, 1)</span>'
+      },
+      scale: {
+        title: 'Масштаб',
+        html: '<p>Тот же фильтр. Вход умножили на 2 — выход умножился на 2.</p><p class="adc-zdef-panel-eq"><span class="char-eq">2·(2, 0, 0) → 2·(2, 1, 0) = (4, 2, 0)</span></p><p>Отдельно масштаб и сумма — это и есть линейность.</p>',
+        live: '<span class="char-eq">2·(2, 0, 0) → (4, 2, 0)</span>'
+      }
+    }, 'map');
+
+    let adcZtrPaint = () => {};
+    bindAdc('.slide-adc-ztr-interactive', 'adcZtrPanel', 'adcZtrLive', {
+      alg: {
+        title: 'Алгоритм',
+        html: '<p>Выход — взвешенная сумма входных отсчётов. Прошлого y в формуле нет.</p><p class="adc-zdef-panel-eq"><span class="char-eq">y<sub>i</sub> = a<sub>0</sub>x<sub>i</sub> + a<sub>1</sub>x<sub>i−1</sub> + … + a<sub>m</sub>x<sub>i−m</sub></span></p><p>m — порядок, a<sub>0</sub>…a<sub>m</sub> — коэффициенты. На схеме задержка на такт — это 1/z.</p>',
+        live: '<span class="char-eq">y<sub>i</sub> = a<sub>0</sub>x<sub>i</sub> + … + a<sub>m</sub>x<sub>i−m</sub></span>'
+      },
+      z: {
+        title: 'Z',
+        html: '<p>К обеим частям — Z-преобразование. Сдвиг на k тактов умножает на z<sup>−k</sup>, то есть на 1/z<sup>k</sup>.</p><p class="adc-zdef-panel-eq"><span class="char-eq">Y(z) = (a<sub>0</sub> + a<sub>1</sub>z<sup>−1</sup> + … + a<sub>m</sub>z<sup>−m</sup>) X(z)</span></p>',
+        live: '<span class="char-eq">Y = (a<sub>0</sub> + a<sub>1</sub>z<sup>−1</sup> + … + a<sub>m</sub>z<sup>−m</sup>) X</span>'
+      },
+      g: {
+        title: 'Системная функция',
+        html: '<p>G<sub>T</sub> — отношение выхода ко входу.</p><p class="adc-zdef-panel-eq"><span class="char-eq">G<sub>T</sub>(z) = Y(z) / X(z) = (a<sub>0</sub>z<sup>m</sup> + … + a<sub>m</sub>) / z<sup>m</sup></span></p><p>В нуле полюс кратности m и m нулей — корни числителя.</p>',
+        live: '<span class="char-eq">G<sub>T</sub>(z) = (a<sub>0</sub>z<sup>m</sup> + … + a<sub>m</sub>) / z<sup>m</sup></span>'
+      },
+      ex: {
+        title: 'Порядок 2',
+        html: '<p>m = 2 и a<sub>0</sub> = a<sub>1</sub> = a<sub>2</sub> = 1/3 — среднее трёх тактов из примера с трубой.</p><p class="adc-zdef-panel-eq"><span class="char-eq">y = (6.1 + 3.8 + 6.4) / 3 = 5.43</span></p><p class="adc-zdef-panel-eq"><span class="char-eq">G<sub>T</sub>(z) = (1 + z<sup>−1</sup> + z<sup>−2</sup>) / 3</span></p>',
+        live: '<span class="char-eq">(6.1 + 3.8 + 6.4) / 3 = 5.43</span>'
+      }
+    }, 'alg', (key) => adcZtrPaint(key));
+
+    (() => {
+      const set = (id, text) => {
+        const n = document.getElementById(id);
+        if (n) n.textContent = text;
+      };
+      adcZtrPaint = (key) => {
+        const ex = key === 'ex';
+        set('adcZtrS0', ex ? '6.1' : 'xᵢ');
+        set('adcZtrS1', ex ? '3.8' : 'xᵢ₋₁');
+        set('adcZtrS2', ex ? '6.4' : 'xᵢ₋₂');
+        set('adcZtrA0', ex ? '1/3' : 'a₀');
+        set('adcZtrA1', ex ? '1/3' : 'a₁');
+        set('adcZtrA2', ex ? '1/3' : 'a₂');
+        set('adcZtrY', ex ? '5.43' : 'yᵢ');
+      };
+    })();
+
+    let adcZfrOnShow = () => {};
+    bindAdc('.slide-adc-zfr-interactive', 'adcZfrPanel', 'adcZfrLive', {
+      hz: {
+        title: 'Фильтр',
+        html: '<p>Цифровой ФНЧ записывают через z, а не через частоту.</p><p class="adc-zdef-panel-eq"><span class="char-eq"><var>H</var>(<var>z</var>) = 0.1 / (1 − 0.9 <var>z</var><sup>−1</sup>)</span></p><p><var>z</var><sup>−1</sup> = 1/<var>z</var> — задержка на один такт. На нулевой частоте |H| = 1.</p>',
+        live: '<span class="char-eq">H(z) = 0.1 / (1 − 0.9 z<sup>−1</sup>)</span>'
+      },
+      sub: {
+        title: 'Подстановка',
+        html: '<p>С прошлого слайда: <var>z</var> = e<sup>iωΔ</sup>. Такт записи Δ = 1/44100 с, поэтому <var>z</var><sup>−1</sup> = e<sup>−iω/44100</sup>.</p><p class="adc-zdef-panel-eq"><span class="char-eq">|<var>H</var>(<var>iω</var>)| = |0.1 / (1 − 0.9 e<sup>−iω/44100</sup>)|</span></p><p>Так формула фильтра становится зависимостью от частоты — это АЧХ.</p>',
+        live: '<span class="char-eq">z = e<sup>iωΔ</sup> · Δ = 1/44100</span>'
+      },
+      ach: {
+        title: 'АЧХ',
+        html: '<p>|H| — во сколько раз меняется амплитуда. Справа: серая волна — вход 1, оранжевая — выход.</p><p>Высота оранжевой = |H|. Клик по графику |H| или ▶ ход.</p>',
+        live: '<span class="char-eq">|H| от частоты</span>'
+      },
+      cut: {
+        title: 'Где срез',
+        html: '<p>У этой формулы |H| падает до 0.7 около <strong>0.7 кГц</strong>. Это и есть срез, его не видно из записи H(z) без подстановки.</p><p>На <strong>20 кГц</strong> остаётся около 0.05: эти частоты задавлены. До 22 кГц — половина такта 44.1 кГц.</p>',
+        live: '<span class="char-eq">срез ≈ 0.7 кГц</span>'
+      }
+    }, 'hz', (key) => adcZfrOnShow(key));
+
+    (() => {
+      const slide = document.querySelector('.slide-adc-zfr-interactive');
+      const svg = document.getElementById('adcZfrSvg');
+      const curve = document.getElementById('adcZfrCurve');
+      const mark = document.getElementById('adcZfrMark');
+      const dot = document.getElementById('adcZfrDot');
+      const waveIn = document.getElementById('adcZfrIn');
+      const waveGhost = document.getElementById('adcZfrGhost');
+      const waveOut = document.getElementById('adcZfrOut');
+      const outAmp = document.getElementById('adcZfrOutAmp');
+      const hit = document.getElementById('adcZfrHit');
+      const play = document.getElementById('adcZfrPlay');
+      const playLab = document.getElementById('adcZfrPlayLab');
+      const live = document.getElementById('adcZfrLive');
+      if (!slide || !svg || !curve || !mark || !dot || !waveIn || !waveOut) return;
+      const FS = 44100;
+      const FMAX = 22050;
+      const x0 = 48;
+      const y0 = 18;
+      const pw = 286;
+      const ph = 164;
+      const mag = (f) => {
+        const th = (2 * Math.PI * f) / FS;
+        return 0.1 / Math.sqrt(1.81 - 1.8 * Math.cos(th));
+      };
+      const xOf = (f) => x0 + (f / FMAX) * pw;
+      const yOf = (m) => y0 + (1 - Math.max(0, Math.min(1, m))) * ph;
+      const fmtF = (f) => (f >= 1000 ? (f / 1000).toFixed(f % 1000 ? 1 : 0) + ' кГц' : Math.round(f) + ' Гц');
+      let freq = 5000;
+      let current = 'hz';
+      let fromPlay = false;
+      let timer = 0;
+      const pts = [];
+      for (let i = 0; i <= 120; i += 1) pts.push(mag((FMAX * i) / 120));
+      curve.setAttribute('points', pts.map((m, i) => xOf((FMAX * i) / 120).toFixed(1) + ',' + yOf(m).toFixed(1)).join(' '));
+      const wavePts = (mid, amp) => {
+        const wx = 368;
+        const ww = 330;
+        const hAmp = 28;
+        if (freq < 40) {
+          const y = (mid - amp * hAmp).toFixed(1);
+          return wx + ',' + y + ' ' + (wx + ww) + ',' + y;
+        }
+        const pts = [];
+        for (let i = 0; i <= 72; i += 1) {
+          const t = i / 72;
+          const yy = mid - Math.sin(t * 2.5 * Math.PI * 2) * amp * hAmp;
+          pts.push((wx + t * ww).toFixed(1) + ',' + yy.toFixed(1));
+        }
+        return pts.join(' ');
+      };
+      const drawMark = () => {
+        const m = mag(freq);
+        const x = xOf(freq);
+        const y = yOf(m);
+        mark.setAttribute('x1', String(x));
+        mark.setAttribute('x2', String(x));
+        dot.setAttribute('cx', String(x));
+        dot.setAttribute('cy', String(y));
+        waveIn.setAttribute('points', wavePts(70, 1));
+        if (waveGhost) waveGhost.setAttribute('points', wavePts(164, 1));
+        waveOut.setAttribute('points', wavePts(164, m));
+        if (outAmp) outAmp.textContent = 'A = ' + m.toFixed(2);
+      };
+      const pressOf = (m) => {
+        if (m >= 0.85) return 'не давит';
+        if (m >= 0.5) return 'на срезе';
+        const times = 1 / m;
+        const n = times >= 10 ? Math.round(times) : Math.round(times * 10) / 10;
+        const unit = Number.isInteger(n) && (n % 10 < 2 || n % 10 > 4 || (n % 100 >= 10 && n % 100 < 20)) ? 'раз' : 'раза';
+        return 'давит в ' + String(n).replace('.', ',') + ' ' + unit;
+      };
+      const writeLive = () => {
+        if (!live) return;
+        const m = mag(freq);
+        live.innerHTML = '<span class="char-eq">|H| = ' + m.toFixed(2) + '</span> · вход 1 → выход ' + m.toFixed(2) + ' · ' + pressOf(m);
+      };
+      const stop = () => {
+        if (timer) { clearInterval(timer); timer = 0; }
+        if (playLab) playLab.textContent = '▶ ход';
+      };
+      const setF = (f, toAch) => {
+        freq = Math.max(0, Math.min(FMAX, f));
+        if (toAch) {
+          const b = slide.querySelector('.app-purpose-card[data-info="ach"]');
+          if (b && !b.classList.contains('active')) {
+            fromPlay = true;
+            b.click();
+            fromPlay = false;
+            return;
+          }
+        }
+        drawMark();
+        if (current === 'ach' || current === 'cut' || toAch) writeLive();
+      };
+      adcZfrOnShow = (key) => {
+        current = key;
+        if (!fromPlay && timer) stop();
+        if (key === 'cut') freq = 740;
+        drawMark();
+        if (key === 'ach' || key === 'cut') writeLive();
+      };
+      if (hit) {
+        hit.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const pt = svg.createSVGPoint();
+          pt.x = e.clientX;
+          pt.y = e.clientY;
+          const ctm = svg.getScreenCTM();
+          if (!ctm) return;
+          const p = pt.matrixTransform(ctm.inverse());
+          let f = ((p.x - x0) / pw) * FMAX;
+          f = Math.round(Math.max(0, Math.min(FMAX, f)) / 50) * 50;
+          setF(f, true);
+        });
+      }
+      if (play) {
+        const seq = [0, 740, 5000, 20000];
+        play.addEventListener('click', (e) => {
+          e.stopPropagation();
+          if (timer) { stop(); return; }
+          let i = 0;
+          if (playLab) playLab.textContent = '■ стоп';
+          setF(seq[0], true);
+          timer = setInterval(() => {
+            i += 1;
+            if (i >= seq.length) { stop(); return; }
+            setF(seq[i], true);
+          }, 900);
+        });
+      }
+      drawMark();
+    })();
 
     bindAdc('.slide-adc-plc-interactive', 'adcPlcPanel', 'adcPlcLive', {
       ai: { title: 'AI', html: '<p>Аналоговый <strong>вход</strong> модуля содержит АЦП. Подробнее — <a href="lecture-13.html">лекция 13</a>.</p>', live: 'AI = вход · АЦП' },
@@ -14840,8 +17056,6 @@
       reset();
     }
   })();
-
-``
 
   /* ===== Lecture 12: аппаратно-программные средства (тема 5) ===== */
   (() => {
@@ -16480,29 +18694,115 @@
         title: 'Дуга',
         html: '<p>Камера над контактами — как в лекции 4: щель, решётка, дутьё. Без гашения дуги автомат не имеет коммутационной способности Icu.</p>'
       },
-      handle: { title: 'Рукоятка', html: '<p>Взводит механизм и показывает состояние: вверх — включён, вниз — отключён, среднее — сработал расцепитель (нужно сбросить).</p>' },
-      latch: { title: 'Механизм', html: '<p>Защёлка держит контакты замкнутыми. Удар расцепителя срывает её — энергия пружины размыкает цепь.</p>' },
-      contact: { title: 'Контакты', html: '<p>Силовые контакты проводят ток нагрузки. При размыкании под током между ними дуга — дальше камера.</p>' },
-      chamber: { title: 'Камера', html: '<p>Дугогасительная камера. На переменном токе решётка, на постоянном ещё магнитное дутьё.</p>' },
-      th: { title: 'Биметалл', html: '<p>Тепловой расцепитель: пластина в цепи полюса, изгибается при перегрузке.</p>' },
-      em: { title: 'ЭМ катушка', html: '<p>Электромагнитный расцепитель: катушка последовательно, якорь бьёт по защёлке при КЗ.</p>' }
+      handle: { title: 'Рычаг', html: '<p>Рычаг взводит механизм и показывает состояние: вверх — включён, вниз — отключён, среднее — сработал расцепитель.</p>' },
+      latch: { title: 'Механизм', html: '<p>Механизм взвода и расцепления. Защёлка держит контакты замкнутыми. Удар расцепителя срывает её — пружина рвёт цепь.</p>' },
+      contact: { title: 'Контакты', html: '<p>Неподвижный контакт у верхней клеммы, подвижный — на рычаге механизма. При размыкании под током между ними дуга, её затягивает в камеру.</p>' },
+      chamber: { title: 'Камера', html: '<p>Дугогасительная камера: пакет пластин рядом с контактами. На переменном токе решётка, на постоянном ещё магнитное дутьё.</p>' },
+      th: { title: 'Тепловой', html: '<p>Тепловой расцепитель — биметалл в цепи полюса. При перегрузке гнётся и срывает защёлку. Винт задаёт ток срабатывания.</p>' },
+      em: { title: 'ЭМ расцепитель', html: '<p>Электромагнитный расцепитель: катушка последовательно с контактами. При КЗ якорь бьёт по механизму сразу.</p>' },
+      term: { title: 'Клеммы', html: '<p>Верхняя и нижняя клеммы — зажимы полюса. Ток идёт: клемма → неподвижный контакт → подвижный → катушка и биметалл → вторая клемма.</p>' },
+      case: { title: 'Корпус', html: '<p>В одном корпусе собраны силовые контакты, дугогасительная камера, механизм и оба расцепителя.</p>' }
     };
-    const tabs = ['intro', 'free', 'arc'];
+    const states = {
+      on: {
+        title: 'Включён',
+        html: '<p>Рычаг взведён, защёлка держит подвижный контакт прижатым к неподвижному.</p><p>Ток идёт через клеммы, контакты, катушку и биметалл.</p>',
+        live: 'Включён · контакты замкнуты',
+        arm: 'M408 128 L454 76',
+        handle: 'M348 175 L294 168',
+        knob: [294, 168],
+        tie: 'M348 175 L408 128',
+        lead: [274, 174, 228, 214],
+        bi: 'M360 372 Q410 348 468 378',
+        latch: 'M348 92 L392 78 L408 128',
+        arc: false
+      },
+      off: {
+        title: 'Отключён',
+        html: '<p>Рычаг вниз, контакты разомкнуты без дуги: цепь разомкнул оператор, не авария.</p>',
+        live: 'Отключён · рычаг вниз, дуги нет',
+        arm: 'M408 128 L434 172',
+        handle: 'M348 238 L292 252',
+        knob: [292, 252],
+        tie: 'M348 238 L408 128',
+        lead: [274, 248, 228, 222],
+        bi: 'M360 372 Q410 348 468 378',
+        latch: 'M348 92 L392 78 L408 128',
+        arc: false
+      },
+      ovl: {
+        title: 'Перегрузка',
+        html: '<p>Биметалл гнётся и срывает защёлку. Пружина размыкает контакты, даже если рычаг держат во «вкл»: он остаётся посередине.</p><p>Это свободное расцепление.</p>',
+        live: 'Перегрузка · биметалл сорвал защёлку',
+        arm: 'M408 128 L434 172',
+        handle: 'M348 202 L290 210',
+        knob: [290, 210],
+        tie: 'M348 202 L408 128',
+        lead: [272, 210, 228, 214],
+        bi: 'M360 384 Q392 314 470 346',
+        latch: 'M352 96 L374 78',
+        arc: false
+      },
+      sc: {
+        title: 'КЗ',
+        html: '<p>Катушка втягивает якорь и бьёт по механизму сразу, биметалл не успевает.</p><p>Контакты рвутся под током, дуга уходит в камеру. Рычаг снова посередине — свободное расцепление.</p>',
+        live: 'КЗ · дуга в камере',
+        arm: 'M408 128 L434 172',
+        handle: 'M348 202 L290 210',
+        knob: [290, 210],
+        tie: 'M348 202 L408 128',
+        lead: [272, 210, 228, 214],
+        bi: 'M360 372 Q410 348 468 378',
+        latch: 'M352 96 L374 78',
+        arc: true
+      }
+    };
+    const arm = cbCoreSlide.querySelector('#cbCoreArm');
+    const handle = cbCoreSlide.querySelector('#cbCoreHandle');
+    const knob = cbCoreSlide.querySelector('#cbCoreKnob');
+    const tie = cbCoreSlide.querySelector('#cbCoreTie');
+    const lead = cbCoreSlide.querySelector('#cbCoreHandleLead');
+    const bi = cbCoreSlide.querySelector('#cbCoreBi');
+    const latch = cbCoreSlide.querySelector('#cbCoreLatch');
+    const arc = cbCoreSlide.querySelector('#cbCoreArc');
+    const live = cbCoreSlide.querySelector('#cbCoreLive');
     const showCbCoreInfo = (key) => {
-      const data = info[key] || info.intro;
+      const data = info[key] || info.case;
       if (panel) panel.innerHTML = `<h3>${data.title}</h3>${data.html}`;
-      cbCoreSlide.querySelectorAll('.asutp-tab').forEach((btn) => {
-        btn.classList.toggle('active', tabs.includes(key) && btn.dataset.info === key);
-      });
       cbCoreSlide.querySelectorAll('.cb-block').forEach((b) => {
         b.classList.toggle('is-active', b.dataset.info === key);
       });
     };
+    const applyCbCoreState = (key) => {
+      const st = states[key] || states.on;
+      if (arm) arm.setAttribute('d', st.arm);
+      if (handle) handle.setAttribute('d', st.handle);
+      if (knob) {
+        knob.setAttribute('cx', st.knob[0]);
+        knob.setAttribute('cy', st.knob[1]);
+      }
+      if (tie && st.tie) tie.setAttribute('d', st.tie);
+      if (lead && st.lead) {
+        lead.setAttribute('x1', st.lead[0]);
+        lead.setAttribute('y1', st.lead[1]);
+        lead.setAttribute('x2', st.lead[2]);
+        lead.setAttribute('y2', st.lead[3]);
+      }
+      if (bi) bi.setAttribute('d', st.bi);
+      if (latch) latch.setAttribute('d', st.latch);
+      if (arc) arc.classList.toggle('is-on', st.arc);
+      if (live) live.textContent = st.live;
+      if (panel) panel.innerHTML = `<h3>${st.title}</h3>${st.html}`;
+      cbCoreSlide.querySelectorAll('.asutp-tab[data-state]').forEach((btn) => {
+        btn.classList.toggle('active', btn.dataset.state === key);
+      });
+      cbCoreSlide.querySelectorAll('.cb-block').forEach((b) => b.classList.remove('is-active'));
+    };
     cbCoreSlide.addEventListener('click', (e) => {
-      const tab = e.target.closest('.asutp-tab');
-      if (tab?.dataset.info) {
+      const tab = e.target.closest('.asutp-tab[data-state]');
+      if (tab?.dataset.state) {
         e.stopPropagation();
-        showCbCoreInfo(tab.dataset.info);
+        applyCbCoreState(tab.dataset.state);
         return;
       }
       const block = e.target.closest('.cb-block');
@@ -16511,7 +18811,7 @@
         showCbCoreInfo(block.dataset.info);
       }
     });
-    showCbCoreInfo('intro');
+    applyCbCoreState('on');
   }
 
   /* ===== Lecture 5: operating principle ===== */
@@ -16548,38 +18848,47 @@
       const thermal = iIn >= 1.2 && iIn < 7;
       const sc = iIn >= 7;
       const open = sc || iIn >= 2.4;
-      const left = cbActSlide.querySelector('.cb-act-left');
       const right = cbActSlide.querySelector('.cb-act-right');
       const bridge = cbActSlide.querySelector('.cb-act-bridge');
       const arc = cbActSlide.querySelector('.cb-act-arc');
       const bi = cbActSlide.querySelector('.cb-act-bi');
       const arm = cbActSlide.querySelector('.cb-act-arm');
+      const out = cbActSlide.querySelector('.cb-act-out');
       const lamp = cbActSlide.querySelector('.cb-act-load');
       const readout = cbActSlide.querySelector('.cb-act-readout');
       const val = cbActSlide.querySelector('.cb-act-val');
-      if (right) right.setAttribute('x', open ? '244' : '210');
+      const contactX = open ? 214 : 176;
+      if (right) right.setAttribute('x', String(contactX));
       if (bridge) bridge.setAttribute('opacity', open ? '0' : '1');
+      if (out) out.setAttribute('d', `M${contactX + 52} 88 H292`);
       if (arc) {
-        arc.setAttribute('d', open && sc ? 'M174 47 Q209 22 244 47' : '');
+        arc.setAttribute('d', open && sc ? `M144 88 Q${(144 + contactX) / 2} 58 ${contactX} 88` : '');
       }
-      const bend = thermal || (iIn >= 1.2) ? Math.min(1, (iIn - 1.2) / 1.4) : 0;
-      if (bi) bi.setAttribute('d', `M140 110 Q180 ${110 - bend * 22} 220 110`);
-      if (arm) arm.setAttribute('transform', sc ? 'translate(0 -14)' : '');
+      const bend = sc ? 0.12 : (iIn >= 1.2 ? Math.min(1, (iIn - 1.2) / 1.4) : 0);
+      if (bi) bi.setAttribute('d', `M292 88 Q346 ${88 - bend * 36} 400 88`);
+      if (arm) arm.setAttribute('transform', sc ? 'translate(0 -28)' : '');
       if (lamp) lamp.setAttribute('fill', open ? '#fff' : '#fde68a');
       if (readout) {
         readout.textContent = sc
-          ? `I = ${cbFmt(iIn, 1)} In · ЭМ сработал · контакты разомкнуты`
+          ? `I = ${cbFmt(iIn, 1)} In · электромагнит сработал · контакты разомкнуты`
           : open
             ? `I = ${cbFmt(iIn, 1)} In · тепловой сработал`
             : `I = ${cbFmt(iIn, 1)} In · контакты замкнуты`;
       }
       if (val) val.textContent = `${cbFmt(iIn, 1)} In`;
     };
+    const cbActPreset = { intro: 6, ovl: 20, sc: 67 };
     cbActSlide.addEventListener('click', (e) => {
       const tab = e.target.closest('.asutp-tab');
       if (!tab?.dataset.info) return;
       e.stopPropagation();
       showCbActInfo(tab.dataset.info);
+      const range = cbActSlide.querySelector('.cb-act-range');
+      const preset = cbActPreset[tab.dataset.info];
+      if (range && preset != null) {
+        range.value = String(preset);
+        updateCbAct();
+      }
     });
     cbActSlide.querySelector('.cb-act-range')?.addEventListener('input', updateCbAct);
     showCbActInfo('intro');
@@ -16620,22 +18929,38 @@
       const trip = iIn >= 8;
       const plunger = cbEmSlide.querySelector('.cb-em-plunger');
       const hit = cbEmSlide.querySelector('.cb-em-hit');
+      const latch = cbEmSlide.querySelector('.cb-em-latch');
       const readout = cbEmSlide.querySelector('.cb-em-readout');
       const val = cbEmSlide.querySelector('.cb-em-val');
-      if (plunger) plunger.setAttribute('y', trip ? '78' : '96');
-      if (hit) hit.setAttribute('stroke', trip ? '#1e40af' : '#94a3b8');
+      const py = trip ? 128 : 210;
+      if (plunger) plunger.setAttribute('y', String(py));
+      if (hit) {
+        hit.setAttribute('y1', String(py + 10));
+        hit.setAttribute('x2', trip ? '486' : '460');
+        hit.setAttribute('y2', trip ? '140' : '128');
+        hit.setAttribute('stroke', trip ? '#1e40af' : '#94a3b8');
+        hit.setAttribute('stroke-dasharray', trip ? '0' : '6 4');
+      }
+      if (latch) latch.setAttribute('transform', trip ? 'translate(26 12)' : '');
       if (readout) {
         readout.textContent = trip
-          ? `I = ${cbFmtE(iIn, 1)} In · удар по защёлке`
-          : `I = ${cbFmtE(iIn, 1)} In · якорь на месте`;
+          ? `I = ${cbFmtE(iIn, 1)} In · якорь ударил по защёлке`
+          : `I = ${cbFmtE(iIn, 1)} In · якорь на месте · уставка 8 In`;
       }
       if (val) val.textContent = `${cbFmtE(iIn, 1)} In`;
     };
+    const cbEmPreset = { intro: 7, why: 72, set: 50 };
     cbEmSlide.addEventListener('click', (e) => {
       const tab = e.target.closest('.asutp-tab');
       if (!tab?.dataset.info) return;
       e.stopPropagation();
       showCbEmInfo(tab.dataset.info);
+      const range = cbEmSlide.querySelector('.cb-em-range');
+      const preset = cbEmPreset[tab.dataset.info];
+      if (range && preset != null) {
+        range.value = String(preset);
+        updateCbEm();
+      }
     });
     cbEmSlide.querySelector('.cb-em-range')?.addEventListener('input', updateCbEm);
     showCbEmInfo('intro');
@@ -16679,11 +19004,15 @@
       const bend = Math.min(1, heat / 1.15);
       const bi = cbThSlide.querySelector('.cb-th-bi');
       const tLab = cbThSlide.querySelector('.cb-th-t');
+      const latch = cbThSlide.querySelector('.cb-th-latch');
       const readout = cbThSlide.querySelector('.cb-th-readout');
       const iVal = cbThSlide.querySelector('.cb-th-i-val');
       const tVal = cbThSlide.querySelector('.cb-th-t-val');
-      if (bi) bi.setAttribute('d', `M80 140 Q160 ${140 - bend * 48} 240 140`);
-      if (tLab) tLab.setAttribute('opacity', String(0.35 + bend * 0.65));
+      const tipY = 200 - bend * 70;
+      const ctrlY = 200 - bend * 110;
+      if (bi) bi.setAttribute('d', `M150 200 Q300 ${ctrlY.toFixed(1)} 520 ${tipY.toFixed(1)}`);
+      if (tLab) tLab.setAttribute('opacity', String(0.3 + bend * 0.7));
+      if (latch) latch.setAttribute('transform', trip ? 'translate(12 0)' : '');
       if (readout) {
         readout.textContent = trip
           ? `${cbFmtTh(iIn, 1)} In · пластина нажала защёлку`
@@ -16692,11 +19021,20 @@
       if (iVal) iVal.textContent = `${cbFmtTh(iIn, 1)} In`;
       if (tVal) tVal.textContent = tau < 0.33 ? 'мало' : (tau < 0.66 ? 'средне' : 'долго');
     };
+    const cbThPreset = { intro: [30, 25], inv: [30, 100], amb: [18, 55] };
     cbThSlide.addEventListener('click', (e) => {
       const tab = e.target.closest('.asutp-tab');
       if (!tab?.dataset.info) return;
       e.stopPropagation();
       showCbThInfo(tab.dataset.info);
+      const preset = cbThPreset[tab.dataset.info];
+      const iRange = cbThSlide.querySelector('.cb-th-i');
+      const tRange = cbThSlide.querySelector('.cb-th-t-range');
+      if (preset && iRange && tRange) {
+        iRange.value = String(preset[0]);
+        tRange.value = String(preset[1]);
+        updateCbTh();
+      }
     });
     cbThSlide.querySelector('.cb-th-i')?.addEventListener('input', updateCbTh);
     cbThSlide.querySelector('.cb-th-t-range')?.addEventListener('input', updateCbTh);
@@ -16704,223 +19042,226 @@
     updateCbTh();
   }
 
-  /* ===== Lecture 5: combined ===== */
+  /* ===== Lecture 5: time-current ===== */
   const cbCombSlide = document.querySelector('.slide-cb-comb-interactive');
   if (cbCombSlide) {
     const panel = document.getElementById('cbCombPanel');
     const info = {
       intro: {
         title: 'Обзор',
-        html: '<p>В бытовом и большинстве промышленных автоматов в каждом полюсе стоят <strong>оба</strong> расцепителя: тепловой от перегрузки, электромагнитный от КЗ.</p><p>Одна защёлка, две причины срыва — это комбинированный расцепитель.</p>'
+        html: '<p>Три кривые на одной сетке. Слева общая тепловая ветвь биметалла, дальше полосы отсечки: B — 3…5 In, C — 5…10 In, D — 10…20 In.</p><p>Границы отсечки — по МЭК 60898.</p>'
       },
-      th: {
-        title: 'Тепловой',
-        html: '<p>Левая ветвь характеристики: большое время при токе чуть выше In, секунды и доли секунды при 3…5 In.</p>'
-      },
-      em: {
-        title: 'Электромагнит',
-        html: '<p>Вертикаль отсечки: выше уставки ток не «ждёт» нагрева — отключение почти мгновенное.</p>'
-      }
-    };
-    const showCbCombInfo = (key) => {
-      const data = info[key] || info.intro;
-      if (panel) panel.innerHTML = `<h3>${data.title}</h3>${data.html}`;
-      cbCombSlide.querySelectorAll('.asutp-tab').forEach((btn) => {
-        btn.classList.toggle('active', btn.dataset.info === key);
-      });
-      cbCombSlide.querySelectorAll('.cb-comb-zone').forEach((z) => {
-        z.classList.toggle('is-active', z.dataset.info === key);
-      });
-      const readout = cbCombSlide.querySelector('.cb-comb-readout');
-      if (readout) {
-        readout.textContent = key === 'th'
-          ? 'тепловая ветвь · перегрузка'
-          : key === 'em'
-            ? 'отсечка · короткое замыкание'
-            : 'два расцепителя · одна защёлка';
-      }
-    };
-    cbCombSlide.addEventListener('click', (e) => {
-      const tab = e.target.closest('.asutp-tab');
-      if (tab?.dataset.info) {
-        e.stopPropagation();
-        showCbCombInfo(tab.dataset.info);
-        return;
-      }
-      const zone = e.target.closest('.cb-comb-zone');
-      if (zone?.dataset.info) {
-        e.stopPropagation();
-        showCbCombInfo(zone.dataset.info);
-      }
-    });
-    showCbCombInfo('intro');
-  }
-
-  /* ===== Lecture 5: IEC 60898 ===== */
-  const cbIecSlide = document.querySelector('.slide-cb-iec-interactive');
-  if (cbIecSlide) {
-    const panel = document.getElementById('cbIecPanel');
-    const info = {
       b: {
-        title: 'Тип B',
-        html: '<p>Отсечка <strong>3…5 In</strong>. Кабели с малым пусковым броском: освещение, электроника, длинные линии. Ложно не сработает на слабый бросок, но чувствительна к КЗ.</p>'
+        title: 'Кривая B',
+        html: '<p>Отсечка <strong>3…5 In</strong>. Слабый пусковой бросок: освещение, электроника, длинные линии.</p><p>Тепловая ветвь слева такая же, как у C и D.</p>'
       },
       c: {
-        title: 'Тип C',
-        html: '<p>Отсечка <strong>5…10 In</strong>. Универсальная кривая для розеток и смешанной нагрузки в зданиях и щитах САУ.</p>'
+        title: 'Кривая C',
+        html: '<p>Отсечка <strong>5…10 In</strong>. Розетки и смешанная нагрузка в зданиях и щитах.</p><p>До 5 In работает только биметалл.</p>'
       },
       d: {
-        title: 'Тип D',
-        html: '<p>Отсечка <strong>10…20 In</strong>. Трансформаторы, двигатели с тяжёлым пуском, лампы с большим броском. Иначе автомат выбьет на пуске.</p>'
-      },
-      th: {
-        title: 'Тепловой',
-        html: '<p>Для всех кривых B/C/D тепловая часть одна: 1,13 In — не отключает за 1 ч; 1,45 In — отключает за 1 ч (In ≤ 63 А).</p><p>Различаются только электромагнитные зоны.</p>'
+        title: 'Кривая D',
+        html: '<p>Отсечка <strong>10…20 In</strong>. Двигатели и трансформаторы с тяжёлым пуском.</p><p>Пока ток ниже 10 In, кривая D ещё на тепловой ветви.</p>'
       }
     };
-    const X0 = 70;
-    const X1 = 468;
-    const Y0 = 190;
-    const Y1 = 58;
-    const IMIN = 1;
-    const IMAX = 22;
-    const iecX = (i) => X0 + Math.log(i / IMIN) / Math.log(IMAX / IMIN) * (X1 - X0);
-    const iecYth = (i, iEnd) => {
-      const a = 1.13;
-      const u = Math.log(Math.max(i, a) / a) / Math.log(Math.max(iEnd, a + 0.4) / a);
-      const yTop = Y1 + 14;
-      const yJoin = Y0 - 32;
-      return yTop + Math.max(0, Math.min(1, u)) * (yJoin - yTop);
+    const x0 = 78;
+    const x1 = 700;
+    const y0 = 28;
+    const y1 = 352;
+    const xOf = (i) => x0 + (Math.log10(i) / 2) * (x1 - x0);
+    const yOf = (t) => {
+      const clamped = Math.min(10000, Math.max(0.001, t));
+      return y0 + ((4 - Math.log10(clamped)) / 7) * (y1 - y0);
     };
-    const ticks = cbIecSlide.querySelector('.cb-iec-ticks');
-    if (ticks) {
-      ticks.replaceChildren();
-      [1, 2, 3, 5, 10, 20].forEach((i) => {
-        const x = iecX(i);
-        const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-        line.setAttribute('x1', String(x));
-        line.setAttribute('x2', String(x));
-        line.setAttribute('y1', String(Y0));
-        line.setAttribute('y2', String(Y0 + 8));
-        line.setAttribute('stroke', '#1e293b');
-        line.setAttribute('stroke-width', '1.4');
-        ticks.appendChild(line);
-        const tx = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-        tx.setAttribute('x', String(i === 1 ? x + 8 : x));
-        tx.setAttribute('y', String(Y0 + 24));
-        tx.setAttribute('text-anchor', i === 1 ? 'start' : 'middle');
-        tx.setAttribute('data-tick', String(i));
-        tx.textContent = String(i);
-        ticks.appendChild(tx);
+    const fmtI = (i) => (i >= 10 ? i.toFixed(0) : i.toFixed(1).replace('.', ','));
+    const bands = {
+      b: {
+        up: [[1.12, 9000], [1.45, 2000], [2, 80], [3, 6], [3.15, 0.18], [5, 0.04], [20, 0.014], [100, 0.007]],
+        lo: [[1.35, 800], [1.45, 40], [2, 4], [3, 0.28], [3.4, 0.014], [5, 0.0045], [20, 0.0022], [100, 0.00115]]
+      },
+      c: {
+        up: [[1.12, 9000], [1.45, 2000], [2, 80], [3, 6], [5, 1.2], [5.3, 0.14], [10, 0.035], [20, 0.014], [100, 0.007]],
+        lo: [[1.35, 800], [1.45, 40], [2, 4], [3, 0.28], [5, 0.05], [6, 0.01], [10, 0.0038], [100, 0.00115]]
+      },
+      d: {
+        up: [[1.12, 9000], [1.45, 2000], [2, 80], [3, 6], [5, 1.2], [10, 0.32], [11, 0.07], [20, 0.022], [100, 0.007]],
+        lo: [[1.35, 800], [1.45, 40], [2, 4], [3, 0.28], [5, 0.05], [10, 0.018], [14, 0.005], [20, 0.0026], [100, 0.00115]]
+      }
+    };
+    const toD = (pts) => pts.map((pt, n) => `${n ? 'L' : 'M'}${xOf(pt[0]).toFixed(1)} ${yOf(pt[1]).toFixed(1)}`).join('');
+    cbCombSlide.querySelectorAll('.cb-tcc-band').forEach((path) => {
+      const spec = bands[path.dataset.curve];
+      if (!spec) return;
+      const back = spec.lo.slice().reverse();
+      path.setAttribute('d', `${toD(spec.up)}${back.map((pt) => `L${xOf(pt[0]).toFixed(1)} ${yOf(pt[1]).toFixed(1)}`).join('')}Z`);
+    });
+    const ticks = cbCombSlide.querySelector('.cb-tcc-ticks');
+    const grid = cbCombSlide.querySelector('.cb-tcc-grid');
+    const names = cbCombSlide.querySelector('.cb-tcc-names');
+    if (ticks && grid) {
+      [1, 2, 3, 5, 10, 20, 100].forEach((i) => {
+        const x = xOf(i);
+        grid.insertAdjacentHTML('beforeend', `<line x1="${x}" y1="${y0}" x2="${x}" y2="${y1}" stroke="#e2e8f0" stroke-width="1"/>`);
+        ticks.insertAdjacentHTML('beforeend', `<text x="${x}" y="368" text-anchor="middle" font-size="12" fill="#334155">${i}</text>`);
+      });
+      [[10000, '10 000'], [1000, '1000'], [100, '100'], [10, '10'], [1, '1'], [0.1, '0,1'], [0.01, '0,01'], [0.001, '0,001']].forEach(([t, lab]) => {
+        const y = yOf(t);
+        grid.insertAdjacentHTML('beforeend', `<line x1="${x0}" y1="${y}" x2="${x1}" y2="${y}" stroke="#e2e8f0" stroke-width="1"/>`);
+        ticks.insertAdjacentHTML('beforeend', `<text x="72" y="${y + 4}" text-anchor="end" font-size="12" fill="#334155">${lab}</text>`);
       });
     }
-    const showCbIecInfo = (key) => {
-      const data = info[key] || info.c;
-      if (panel) panel.innerHTML = `<h3>${data.title}</h3>${data.html}`;
-      cbIecSlide.querySelectorAll('.asutp-tab').forEach((btn) => {
-        btn.classList.toggle('active', btn.dataset.info === key);
+    if (names) {
+      [['B', 4, '#1d4ed8'], ['C', 7, '#c2410c'], ['D', 14, '#1e293b']].forEach(([lab, i, color]) => {
+        names.insertAdjacentHTML('beforeend', `<text x="${xOf(i)}" y="${yOf(0.06)}" text-anchor="middle" font-size="16" font-weight="700" fill="${color}">${lab}</text>`);
       });
-      const ranges = { b: [3, 5], c: [5, 10], d: [10, 20] };
-      const pair = ranges[key] || ranges.c;
-      const xLo = iecX(pair[0]);
-      const xHi = iecX(pair[1]);
-      const mid = (xLo + xHi) / 2;
-      const cut = cbIecSlide.querySelector('.cb-iec-cut');
-      const band = cbIecSlide.querySelector('.cb-iec-band');
-      const thermal = cbIecSlide.querySelector('.cb-iec-thermal');
-      const thLab = cbIecSlide.querySelector('.cb-iec-th-lab');
-      const readout = cbIecSlide.querySelector('.cb-iec-readout');
-      if (band) {
-        band.setAttribute('x', String(xLo));
-        band.setAttribute('width', String(Math.max(14, xHi - xLo)));
-        band.setAttribute('opacity', key === 'th' ? '0.16' : '0.5');
-      }
-      if (cut) {
-        cut.setAttribute('x1', String(mid));
-        cut.setAttribute('x2', String(mid));
-        cut.setAttribute('opacity', key === 'th' ? '0.22' : '1');
-      }
-      if (thermal) {
-        let d = '';
-        const iEnd = pair[0];
-        for (let k = 0; k <= 28; k += 1) {
-          const i = 1.13 + (k / 28) * (iEnd - 1.13);
-          d += `${k === 0 ? 'M' : 'L'}${iecX(i).toFixed(1)} ${iecYth(i, iEnd).toFixed(1)} `;
-        }
-        d += `L${xLo.toFixed(1)} ${Y0}`;
-        thermal.setAttribute('d', d.trim());
-        thermal.setAttribute('stroke-width', key === 'th' ? '3.4' : '2.8');
-      }
-      if (thLab) {
-        thLab.setAttribute('x', String(iecX(1.55)));
-        thLab.setAttribute('y', String(iecYth(1.55, pair[0]) - 14));
-        thLab.setAttribute('opacity', key === 'th' ? '1' : '0.95');
-      }
-      if (readout) {
-        if (key === 'th') {
-          readout.setAttribute('x', '270');
-          readout.setAttribute('y', '28');
-          readout.textContent = 'тепловой · 1,13 In не за 1 ч · 1,45 In за 1 ч';
-        } else {
-          readout.setAttribute('x', String(mid));
-          readout.setAttribute('y', '48');
-          readout.textContent = `тип ${key.toUpperCase()} · отсечка ${pair[0]}…${pair[1]} In`;
-        }
-      }
-      if (ticks) {
-        ticks.querySelectorAll('text').forEach((tx) => {
-          const n = Number(tx.getAttribute('data-tick'));
-          const on = key !== 'th' && (n === pair[0] || n === pair[1]);
-          tx.setAttribute('fill', on ? '#1e40af' : '#334155');
-          tx.setAttribute('font-weight', on ? '700' : '500');
-        });
-      }
+    }
+    const dot = cbCombSlide.querySelector('.cb-tcc-dot');
+    const guide = cbCombSlide.querySelector('.cb-tcc-guide');
+    const live = cbCombSlide.querySelector('.cb-tcc-live');
+    const val = cbCombSlide.querySelector('.cb-tcc-val');
+    let tccKey = 'intro';
+    const limits = { b: [3, 5], c: [5, 10], d: [10, 20] };
+    const showCbCombInfo = (key) => {
+      tccKey = info[key] ? key : 'intro';
+      const data = info[tccKey];
+      if (panel) panel.innerHTML = `<h3>${data.title}</h3>${data.html}`;
+      cbCombSlide.querySelectorAll('.asutp-tab').forEach((btn) => {
+        btn.classList.toggle('active', btn.dataset.info === tccKey);
+      });
+      cbCombSlide.querySelectorAll('.cb-tcc-band').forEach((path) => {
+        path.classList.toggle('is-dim', tccKey !== 'intro' && path.dataset.curve !== tccKey);
+      });
     };
-    cbIecSlide.addEventListener('click', (e) => {
+    const edgeAt = (pts, i) => {
+      if (i <= pts[0][0]) return pts[0][1];
+      for (let n = 1; n < pts.length; n += 1) {
+        if (i <= pts[n][0]) {
+          const u = (Math.log(i) - Math.log(pts[n - 1][0])) / (Math.log(pts[n][0]) - Math.log(pts[n - 1][0]));
+          return Math.exp(Math.log(pts[n - 1][1]) + u * (Math.log(pts[n][1]) - Math.log(pts[n - 1][1])));
+        }
+      }
+      return pts[pts.length - 1][1];
+    };
+    const midTime = (spec, i) => {
+      if (i < spec.up[0][0]) return null;
+      const tHi = edgeAt(spec.up, i);
+      let tLo;
+      if (i < spec.lo[0][0]) {
+        const u = (Math.log(i) - Math.log(spec.up[0][0])) / (Math.log(spec.lo[0][0]) - Math.log(spec.up[0][0]));
+        tLo = Math.exp(Math.log(spec.up[0][1]) + u * (Math.log(spec.lo[0][1]) - Math.log(spec.up[0][1])));
+      } else {
+        tLo = edgeAt(spec.lo, i);
+      }
+      const a = Math.min(tLo, tHi);
+      const b = Math.max(tLo, tHi);
+      return Math.sqrt(a * b);
+    };
+    const updateCbTcc = () => {
+      const raw = Number(cbCombSlide.querySelector('.cb-tcc-range')?.value);
+      const u = Number.isFinite(raw) ? raw / 100 : 0.15;
+      const i = 100 ** u;
+      let say;
+      let spec = bands.c;
+      if (tccKey === 'b' || tccKey === 'c' || tccKey === 'd') spec = bands[tccKey];
+      else if (i >= 10) spec = bands.d;
+      else if (i >= 5) spec = bands.c;
+      else spec = bands.b;
+      if (tccKey === 'intro') {
+        if (i < 1.13) say = 'не отключает';
+        else if (i < 3) say = 'тепловая ветвь, общая для B, C и D';
+        else if (i < 5) say = 'отсечка B · C и D ещё на биметалле';
+        else if (i < 10) say = 'отсечка C · B уже мгновенно';
+        else if (i < 20) say = 'отсечка D · B и C уже мгновенно';
+        else say = 'B, C и D мгновенно';
+      } else {
+        const [lo, hi] = limits[tccKey];
+        const name = tccKey.toUpperCase();
+        if (i < 1.13) say = `кривая ${name} · не отключает`;
+        else if (i < lo) say = `кривая ${name} · тепловой`;
+        else if (i <= hi) say = `кривая ${name} · отсечка ${lo}…${hi} In`;
+        else say = `кривая ${name} · мгновенно`;
+      }
+      const ty = midTime(spec, i);
+      const x = xOf(Math.min(Math.max(i, 1), 100));
+      const y = ty == null ? y0 + 6 : yOf(ty);
+      if (dot) {
+        dot.setAttribute('cx', String(x));
+        dot.setAttribute('cy', String(y));
+      }
+      if (guide) {
+        guide.setAttribute('x1', String(x));
+        guide.setAttribute('x2', String(x));
+        guide.setAttribute('y1', String(y0));
+        guide.setAttribute('y2', String(y1));
+      }
+      if (live) live.textContent = `I = ${fmtI(i)} In · ${say}`;
+      if (val) val.textContent = `${fmtI(i)} In`;
+    };
+    const cbTccPreset = { intro: 15, b: 30, c: 42, d: 59 };
+    cbCombSlide.addEventListener('click', (e) => {
       const tab = e.target.closest('.asutp-tab');
       if (!tab?.dataset.info) return;
       e.stopPropagation();
-      showCbIecInfo(tab.dataset.info);
+      showCbCombInfo(tab.dataset.info);
+      const range = cbCombSlide.querySelector('.cb-tcc-range');
+      const preset = cbTccPreset[tab.dataset.info];
+      if (range && preset != null) {
+        range.value = String(preset);
+        updateCbTcc();
+      }
     });
-    showCbIecInfo('c');
+    cbCombSlide.querySelector('.cb-tcc-range')?.addEventListener('input', () => {
+      updateCbTcc();
+    });
+    showCbCombInfo('intro');
+    updateCbTcc();
   }
 
   /* ===== Lecture 5: IEC 60947-2 ===== */
   const cbIndSlide = document.querySelector('.slide-cb-ind-interactive');
   if (cbIndSlide) {
     const panel = document.getElementById('cbIndPanel');
+    const live = document.getElementById('cbIndLive');
     const info = {
+      vs: {
+        title: 'Промышленный и бытовой',
+        html: '<p>Бытовой по МЭК 60898: кривая B, C или D выбрана на заводе, уставки не крутят.</p><p>Промышленный по МЭК 60947-2: уставки ставят на щите, аппарат рассчитан на больший ток короткого замыкания. В шкаф САУ с двигателем ставят его.</p>',
+        line: 'В шкаф с двигателем ставят промышленный, не бытовой с буквой C'
+      },
       icu: {
-        title: 'Icu и Ics',
-        html: '<p><strong>Icu</strong> — предельная коммутационная способность: автомат отключит КЗ и может после этого не работать.</p><p><strong>Ics</strong> — рабочая: после отключения такого тока аппарат снова готов. Для щита САУ берут Icu ≥ ток КЗ в точке установки.</p>'
+        title: 'После короткого замыкания',
+        html: '<p><strong>Предельный ток</strong> Icu — автомат обязан отключить такое КЗ, но после этого его можно менять.</p><p><strong>Рабочий ток</strong> Ics — отключил и снова включается. Для щита предельный ток берут не меньше тока КЗ в точке установки.</p>',
+        line: 'Предельный — отключил и может не включиться. Рабочий — снова готов'
       },
       cat: {
-        title: 'Категории A и B',
-        html: '<p><strong>A</strong> — без выдержки на КЗ, обычно токоограничивающий (модульные и многие MCCB).</p><p><strong>B</strong> — выдерживает ток КЗ время Icw, чтобы нижестоящие успели отключиться: селективность на вводе.</p>'
+        title: 'Кто отключится',
+        html: '<p><strong>Категория A</strong> отключает КЗ сразу, без выдержки. <strong>Категория B</strong> короткое время держит ток КЗ.</p><p>На вводе ставят B, на фидере A: замыкание на фидере гасит нижний автомат, весь шкаф остаётся под напряжением.</p>',
+        line: 'КЗ на фидере: ввод категории B ждёт, фидер категории A отключается'
       },
       adj: {
-        title: 'Регулировка',
-        html: '<p>Тепловую и электромагнитную уставки на промышленном автомате часто крутят в процентах In. Электронный блок задаёт L, S, I отдельно — это уже не фиксированные B/C/D.</p>'
-      },
-      vs: {
-        title: 'Не 60898',
-        html: '<p>МЭК 60898 — бытовые и аналогичные. МЭК 60947-2 — промышленные: выше Icu, другие испытания, категории применения, опции расцепителей.</p><p>В шкаф САУ с двигателями почти всегда 60947-2.</p>'
+        title: 'Уставки',
+        html: '<p>Тепловую и электромагнитную уставки задают в долях номинального тока.</p><p>Это не выбор кривой B, C или D: у бытового полоса отсечки зашита буквой, здесь стоят конкретные числа.</p>',
+        line: 'Ручки задают числа в долях In, буква кривой так не крутится'
       }
     };
     const showCbIndInfo = (key) => {
-      const data = info[key] || info.icu;
+      const data = info[key] || info.vs;
       if (panel) panel.innerHTML = `<h3>${data.title}</h3>${data.html}`;
-      cbIndSlide.querySelectorAll('.app-purpose-card').forEach((btn) => {
+      if (live) live.textContent = data.line;
+      cbIndSlide.querySelectorAll('.asutp-tab').forEach((btn) => {
         btn.classList.toggle('active', btn.dataset.info === key);
+      });
+      cbIndSlide.querySelectorAll('.cb-ind-scene').forEach((scene) => {
+        scene.classList.toggle('is-on', scene.dataset.scene === key);
       });
     };
     cbIndSlide.addEventListener('click', (e) => {
-      const card = e.target.closest('.app-purpose-card');
-      if (!card?.dataset.info) return;
+      const tab = e.target.closest('.asutp-tab');
+      if (!tab?.dataset.info) return;
       e.stopPropagation();
-      showCbIndInfo(card.dataset.info);
+      showCbIndInfo(tab.dataset.info);
     });
-    showCbIndInfo('icu');
+    showCbIndInfo('vs');
   }
 
   /* ===== Lecture 5: electronic trip ===== */
