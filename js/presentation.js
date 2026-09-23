@@ -19268,81 +19268,482 @@
   const cbElSlide = document.querySelector('.slide-cb-el-interactive');
   if (cbElSlide) {
     const panel = document.getElementById('cbElPanel');
+    const live = document.getElementById('cbElLive');
+    const controls = document.getElementById('cbElControls');
+    const range = cbElSlide.querySelector('.cb-el-range');
+    const nameEl = document.getElementById('cbElName');
+    const valEl = document.getElementById('cbElVal');
+    const arm = document.getElementById('cbElArm');
+    const tie = document.getElementById('cbElTie');
+    const latch = document.getElementById('cbElLatch');
+    const plunger = document.getElementById('cbElPlunger');
+    const pulse = document.getElementById('cbElPulse');
+    const one = document.getElementById('cbElOne');
+    const tri = document.getElementById('cbElTri');
+    const readout = document.getElementById('cbElReadout');
+    const sub = document.getElementById('cbElSub');
+    const mark = document.getElementById('cbElMark');
+    const timer = document.getElementById('cbElTimer');
     const info = {
-      l: {
+      dev: {
+        title: 'Устройство',
+        html: '<p>Электронный блок внутри автоматического выключателя (Electronic Trip Unit). Непрерывно измеряет ток и отдаёт команду на отключение, если ток выше уставки.</p><p>Трансформаторы тока измеряют. Микропроцессор сравнивает с уставками. Если ток больше — сигнал на катушку отключения, она размыкает контакты.</p>',
+        line: 'Измеряет ток и отключает, если ток выше уставки'
+      },
+      ovl: {
         title: 'L · перегрузка',
-        html: '<p>Long-time: уставка тока Ir и времени tr. Заменяет тепловой расцепитель, но не боится окружающей температуры так же сильно.</p><p>Ток измеряют трансформаторы в полюсах, решение принимает электронный блок.</p>'
+        html: '<p>Ток чуть выше уставки Ir. Блок отсчитывает долгое время tr и только потом срывает защёлку.</p><p>Так раньше работал тепловой расцепитель. Пластина здесь не гнётся, температура шкафа почти не влияет.</p>',
+        line: 'Ток выше Ir: блок ждёт tr, потом катушка срывает защёлку'
       },
-      s: {
-        title: 'S · КЗ с выдержкой',
-        html: '<p>Short-time: ток Isd и выдержка tsd. Нужна, чтобы нижестоящий автомат успел отключить КЗ на своём фидере — селективность.</p>'
-      },
-      i: {
-        title: 'I · мгновенно',
-        html: '<p>Instantaneous: ток Ii. Аналог электромагнитной отсечки, но уставка задаётся числом, не кривой B/C/D.</p>'
+      sc: {
+        title: 'S и I · короткое замыкание',
+        html: '<p>Две ступени. Выше Isd блок даёт короткую выдержку tsd, чтобы нижний автомат успел отключить свой фидер.</p><p>Выше Ii выдержки нет: та же отсечка, что у электромагнита, но порог задан числом, не кривой B, C или D.</p>',
+        line: 'Средний ток КЗ ждёт tsd. Большой ток Ii отключает сразу'
       },
       g: {
         title: 'G · земля',
-        html: '<p>Ground / earth fault: ток утечки на корпус по сумме фаз. Это не УЗО на 30 мА: уставки амперы, защита сети, не человека.</p>'
+        html: '<p>Блок складывает токи трёх фаз. Сумма не ноль — часть тока ушла на корпус, катушка срывает защёлку.</p><p>Уставка в амперах: защита кабеля и оборудования. Это не УЗО на 30 мА.</p>',
+        line: 'Сумма фаз не ноль: ток ушёл на корпус, защёлка сорвана'
+      },
+      n: {
+        title: 'N · нейтраль',
+        html: '<p>Блок измеряет ток нулевого провода. Уставка — доля фазного тока.</p><p>Нужна, когда из-за несимметрии или гармоник по нейтрали идёт ток больше, чем по фазе.</p>',
+        line: 'Ток нейтрали выше уставки, катушка срывает защёлку'
       }
     };
-    const showCbElInfo = (key) => {
-      const data = info[key] || info.l;
-      if (panel) panel.innerHTML = `<h3>${data.title}</h3>${data.html}`;
-      cbElSlide.querySelectorAll('.app-purpose-card').forEach((btn) => {
-        btn.classList.toggle('active', btn.dataset.info === key);
+    let elKey = 'dev';
+    const paintCbEl = (trip, waiting) => {
+      if (arm) arm.setAttribute('d', trip ? 'M230 156 L262 188' : 'M230 156 V214');
+      if (tie) tie.setAttribute('opacity', trip ? '0' : '1');
+      if (latch) latch.setAttribute('transform', trip ? 'translate(18 4)' : '');
+      if (plunger) {
+        plunger.setAttribute('y', trip ? '168' : '222');
+        plunger.setAttribute('height', trip ? '64' : '26');
+      }
+      if (pulse) {
+        pulse.setAttribute('stroke-dasharray', trip ? '' : '5 4');
+        pulse.setAttribute('stroke-width', trip ? '2.4' : '1.6');
+      }
+      if (readout) readout.setAttribute('fill', trip ? '#991b1b' : '#0f172a');
+      if (timer) timer.setAttribute('opacity', waiting ? '1' : '0');
+      cbElSlide.querySelectorAll('.cb-el-dial').forEach((dial) => {
+        const name = dial.dataset.dial;
+        const on = (elKey === 'ovl' && (name === 'ovl' || name === 'time')) || (elKey === 'sc' && name === 'sc') || (elKey === 'g' && name === 'g');
+        dial.classList.toggle('is-on', on);
+      });
+      cbElSlide.querySelectorAll('.cb-el-led').forEach((led) => {
+        const kind = led.dataset.led;
+        const on = (kind === 'ok' && !trip && !waiting) || (kind === 'ovl' && waiting) || (kind === 'trip' && trip);
+        led.classList.toggle('is-on', on);
       });
     };
+    const updateCbEl = () => {
+      const raw = Number(range?.value);
+      const u = Number.isFinite(raw) ? raw / 100 : 0.28;
+      const earth = elKey === 'g';
+      const neutral = elKey === 'n';
+      if (tri) tri.style.display = earth ? 'inline' : 'none';
+      const neu = document.getElementById('cbElN');
+      if (neu) neu.style.display = neutral ? 'inline' : 'none';
+      if (controls) controls.classList.toggle('is-off', elKey === 'dev' || earth || neutral);
+      let trip = false;
+      let waiting = false;
+      let say = info[elKey].line;
+      let head = 'ток в норме';
+      let note = 'порог не превышен';
+      let badge = '';
+      let val = '';
+      if (elKey === 'ovl') {
+        trip = u >= 0.62;
+        waiting = !trip;
+        head = trip ? 'выдержка tr вышла' : 'перегрузка · отсчёт tr';
+        note = trip ? 'импульс на катушку' : 'ток чуть выше Ir';
+        badge = 'L';
+        val = trip ? 'сработал' : 'отсчёт tr';
+        if (timer) timer.textContent = trip ? '' : 'долгое время tr';
+        say = trip
+          ? 'Выдержка tr кончилась, катушка сорвала защёлку'
+          : 'Ток выше Ir, блок отсчитывает tr и пока не отключает';
+      } else if (elKey === 'sc') {
+        const instant = u >= 0.55;
+        trip = instant;
+        waiting = !instant;
+        const i = 4 + u * 12;
+        head = instant ? 'мгновенно · Ii' : 'КЗ · выдержка tsd';
+        note = instant ? 'без ожидания' : 'ждёт нижний автомат';
+        badge = instant ? 'I' : 'S';
+        val = `${i.toFixed(0)} In`;
+        if (timer) timer.textContent = instant ? '' : 'короткая выдержка tsd';
+        say = instant
+          ? `Ток ${i.toFixed(0)} In выше Ii, катушка срывает защёлку сразу`
+          : `Ток ${i.toFixed(0)} In: короткая выдержка, чтобы успел нижний автомат`;
+      } else if (earth) {
+        trip = true;
+        head = 'сумма фаз не ноль';
+        note = 'утечка на корпус';
+        badge = 'G';
+        if (timer) timer.textContent = '';
+      } else if (elKey === 'n') {
+        trip = true;
+        head = 'ток нейтрали выше уставки';
+        note = 'функция N';
+        badge = 'N';
+        if (timer) timer.textContent = '';
+        say = info.n.line;
+      } else if (timer) {
+        timer.textContent = '';
+      }
+      paintCbEl(trip, waiting);
+      if (readout) readout.textContent = head;
+      if (sub) sub.textContent = note;
+      if (mark) mark.textContent = badge;
+      if (live) live.textContent = say;
+      if (valEl && val) valEl.textContent = val;
+    };
+    const showCbElInfo = (key) => {
+      elKey = info[key] ? key : 'dev';
+      const data = info[elKey];
+      if (panel) panel.innerHTML = `<h3>${data.title}</h3>${data.html}`;
+      cbElSlide.querySelectorAll('.asutp-tab').forEach((btn) => {
+        btn.classList.toggle('active', btn.dataset.info === elKey);
+      });
+      if (nameEl) nameEl.textContent = elKey === 'sc' ? 'ток КЗ' : 'выдержка';
+      const preset = { dev: 28, ovl: 28, sc: 32, g: 28, n: 28 }[elKey];
+      if (range && preset != null) range.value = String(preset);
+      updateCbEl();
+    };
     cbElSlide.addEventListener('click', (e) => {
-      const card = e.target.closest('.app-purpose-card');
-      if (!card?.dataset.info) return;
+      const tab = e.target.closest('.asutp-tab');
+      if (!tab?.dataset.info) return;
       e.stopPropagation();
-      showCbElInfo(card.dataset.info);
+      showCbElInfo(tab.dataset.info);
     });
-    showCbElInfo('l');
+    range?.addEventListener('input', () => updateCbEl());
+    showCbElInfo('dev');
+  }
+
+  /* ===== Lecture 5: L S I G N ===== */
+  const cbFnSlide = document.querySelector('.slide-cb-fn-interactive');
+  if (cbFnSlide) {
+    const panel = document.getElementById('cbFnPanel');
+    const live = document.getElementById('cbFnLive');
+    const info = {
+      l: {
+        title: 'L · перегрузка',
+        live: 'L: ток чуть выше Ir, блок долго ждёт и только потом отключает.',
+        html: '<p>Ток чуть выше уставки Ir. Блок отсчитывает долгое время tr и только потом отключает.</p><p>Раньше это делал тепловой расцепитель. Пластина здесь не гнётся, температура шкафа почти не влияет.</p>'
+      },
+      s: {
+        title: 'S · короткое замыкание',
+        live: 'S: ток выше Isd, короткая выдержка tsd — ждёт нижний автомат.',
+        html: '<p>Ток выше Isd, но ещё не дошёл до Ii. Блок даёт короткую выдержку tsd, чтобы нижний автомат успел отключить свой фидер.</p>'
+      },
+      i: {
+        title: 'I · мгновенно',
+        live: 'I: ток выше Ii, выдержки нет.',
+        html: '<p>Ток выше Ii. Выдержки нет: та же отсечка, что у электромагнита, но порог задан числом, не кривой B, C или D.</p>'
+      },
+      g: {
+        title: 'G · земля',
+        live: 'G: сумма фаз не ноль — ток ушёл на корпус.',
+        html: '<p>Блок складывает токи трёх фаз. Сумма не ноль — часть тока ушла на корпус, катушка срывает защёлку.</p><p>Уставка в амперах: защита кабеля и оборудования. Это не УЗО на 30 мА.</p>'
+      },
+      n: {
+        title: 'N · нейтраль',
+        live: 'N: ток нейтрали выше доли фазного тока.',
+        html: '<p>Блок измеряет ток нулевого провода. Уставка — доля фазного тока.</p><p>Нужна, когда из-за несимметрии или гармоник по нейтрали идёт ток больше, чем по фазе.</p>'
+      },
+      etc: {
+        title: 'Ещё',
+        live: 'Ещё бывают асимметрия фаз и ограничение I²t.',
+        html: '<p>Асимметрия фаз: блок сравнивает токи фаз между собой и отключает, если перекос выше уставки.</p><p>Ограничение I<sup>2</sup>t не даёт теплу в кабеле превысить допустимое, даже если ступени L и S ещё ждут.</p>'
+      }
+    };
+    const showCbFnInfo = (key) => {
+      const data = info[key] || info.l;
+      const id = info[key] ? key : 'l';
+      if (panel) panel.innerHTML = `<h3>${data.title}</h3>${data.html}`;
+      if (live) live.textContent = data.live;
+      cbFnSlide.querySelectorAll('.asutp-tab').forEach((btn) => {
+        btn.classList.toggle('active', btn.dataset.info === id);
+      });
+      cbFnSlide.querySelectorAll('.cb-fn-block').forEach((block) => {
+        block.classList.toggle('is-active', block.dataset.info === id);
+      });
+    };
+    cbFnSlide.addEventListener('click', (e) => {
+      const hit = e.target.closest('.asutp-tab, .cb-fn-block');
+      if (!hit?.dataset.info) return;
+      e.stopPropagation();
+      showCbFnInfo(hit.dataset.info);
+    });
+    showCbFnInfo('l');
+  }
+
+  /* ===== Lecture 5: inside the electronic trip ===== */
+  const cbInSlide = document.querySelector('.slide-cb-in-interactive');
+  if (cbInSlide) {
+    const panel = document.getElementById('cbInPanel');
+    const live = document.getElementById('cbInLive');
+    const info = {
+      cpu: {
+        title: 'Микропроцессор',
+        live: 'Микропроцессор считает ток, сравнивает с уставками и решает.',
+        html: '<p>Считает ток по сигналам датчиков, сравнивает его с уставками и принимает решение: отключать или нет.</p>'
+      },
+      ct: {
+        title: 'Датчики тока',
+        live: 'Трансформатор тока или датчик Холла меряет каждую фазу.',
+        html: '<p>Трансформаторы тока или датчики Холла стоят в каждой фазе и точно измеряют ток. Их сигнал идёт в микропроцессор.</p>'
+      },
+      mem: {
+        title: 'Память',
+        live: 'Память хранит журнал, параметры и настройки.',
+        html: '<p>Хранит журнал событий, параметры и настройки. После отключения по журналу видно, какая защита сработала.</p>'
+      },
+      ui: {
+        title: 'Интерфейс',
+        live: 'Дисплей или переключатели задают уставки.',
+        html: '<p>Дисплей или переключатели на лицевой панели. Ими задают уставки и смотрят ток и причину отключения.</p>'
+      },
+      link: {
+        title: 'Связь',
+        live: 'Modbus или Profibus отдаёт данные в мониторинг.',
+        html: '<p>Отдаёт измерения и журнал в систему мониторинга. Часто это Modbus или Profibus.</p>'
+      },
+      pwr: {
+        title: 'Питание',
+        live: 'Питание от измеряемой цепи или от отдельного источника.',
+        html: '<p>Питается от измеряемой цепи, обычно с тех же трансформаторов тока, или от отдельного источника.</p>'
+      }
+    };
+    const showCbInInfo = (key) => {
+      const data = info[key] || info.cpu;
+      const id = info[key] ? key : 'cpu';
+      if (panel) panel.innerHTML = `<h3>${data.title}</h3>${data.html}`;
+      if (live) live.textContent = data.live;
+      cbInSlide.querySelectorAll('.asutp-tab').forEach((btn) => {
+        btn.classList.toggle('active', btn.dataset.info === id);
+      });
+      cbInSlide.querySelectorAll('.cb-in-block').forEach((block) => {
+        block.classList.toggle('is-active', block.dataset.info === id);
+      });
+    };
+    cbInSlide.addEventListener('click', (e) => {
+      const hit = e.target.closest('.asutp-tab, .cb-in-block');
+      if (!hit?.dataset.info) return;
+      e.stopPropagation();
+      showCbInInfo(hit.dataset.info);
+    });
+    showCbInInfo('cpu');
+  }
+
+  /* ===== Lecture 5: electronic trip advantages ===== */
+  const cbAdvSlide = document.querySelector('.slide-cb-adv-interactive');
+  if (cbAdvSlide) {
+    const panel = document.getElementById('cbAdvPanel');
+    const live = document.getElementById('cbAdvLive');
+    const info = {
+      where: {
+        title: 'Где оправдано',
+        live: 'Промышленный объект: оборудование, селективность, мониторинг, удалённое управление.',
+        html: '<p>Электронный расцепитель ставят на промышленный объект, не в квартирный щиток.</p><p>Нужно точно защищать дорогое оборудование, согласовать защиты между собой, видеть сеть и управлять выключателем удалённо.</p>'
+      },
+      gear: {
+        title: 'Оборудование',
+        live: 'Точно защищать двигатели и трансформаторы.',
+        html: '<p>Нужно точно защищать дорогое оборудование: двигатели и трансформаторы.</p><p>Погрешность ±1–5% и уставки числом не отключают раньше времени и не оставляют перегруз без защиты.</p>'
+      },
+      sel: {
+        title: 'Селективность',
+        live: 'Согласовать защиты: нижний отключает свой фидер, ввод ждёт.',
+        html: '<p>Нужно согласовать защиты между собой.</p><p>Ступень S с выдержкой tsd даёт нижнему автомату отключить свой фидер. Ввод остаётся включённым.</p>'
+      },
+      mon: {
+        title: 'Мониторинг',
+        live: 'Видеть токи и журнал в системе мониторинга.',
+        html: '<p>Нужно видеть, что происходит в сети.</p><p>Блок отдаёт измерения и журнал событий в систему мониторинга.</p>'
+      },
+      rem: {
+        title: 'Удалённо',
+        live: 'Управлять выключателем командой из системы или с ПЛК.',
+        html: '<p>Нужно управлять выключателем удалённо.</p><p>Команда из системы мониторинга или с выхода ПЛК срывает защёлку, к щиту подходить не нужно.</p>'
+      },
+      acc: {
+        title: 'Точность',
+        live: 'Тепловой разброс ±20–30%. Электронный измеряет с погрешностью ±1–5%.',
+        html: '<p>Тепловой и электромагнитный расцепители дают разброс порядка ±20–30%: пластина и пружина зависят от разброса деталей и от температуры.</p><p>Электронный меряет ток трансформатором или датчиком Холла. Погрешность обычно ±1–5%.</p>'
+      },
+      set: {
+        title: 'Уставки',
+        live: 'У бытового кривая задана на заводе. У электронного каждую уставку ставят числом.',
+        html: '<p>У бытового автомата кривая B, C или D выбрана на заводе, крутить почти нечего.</p><p>У электронного ток и время каждой ступени задают отдельно.</p>'
+      },
+      fn: {
+        title: 'Защиты',
+        live: 'Обычный закрывает L и I. Электронный добавляет S, G, N и другие.',
+        html: '<p>Обычный автомат закрывает долгую перегрузку и мгновенную отсечку: L и I.</p><p>Электронный добавляет S, G, N, асимметрию фаз и ограничение I<sup>2</sup>t.</p>'
+      },
+      link: {
+        title: 'Связь',
+        live: 'У обычного нет сети. Электронный отдаёт данные по Modbus или Ethernet.',
+        html: '<p>Обычный автомат никуда не передаёт измерения.</p><p>Электронный отдаёт токи и журнал в систему мониторинга, часто по Modbus или Ethernet.</p>'
+      },
+      log: {
+        title: 'Журнал',
+        live: 'Обычный не помнит причину. Электронный пишет журнал с меткой времени.',
+        html: '<p>После отключения обычного автомата видно только, что он выключен.</p><p>Электронный хранит журнал: какая защита сработала и в какой момент.</p>'
+      },
+      life: {
+        title: 'Ресурс',
+        live: 'Механика изнашивается от нагрева. Промышленный блок рассчитан на щит.',
+        html: '<p>Биметалл и якорь изнашиваются от нагрева и от ударов при отключении.</p><p>Электронный блок промышленного исполнения рассчитан на долгую работу во вводном щите.</p>'
+      },
+      std: {
+        title: 'Стандарт',
+        live: 'Бытовой — МЭК 60898. Аппарат с электронным расцепителем — МЭК 60947-2.',
+        html: '<p>Квартирный автомат сертифицируют по МЭК 60898.</p><p>Выключатель с электронным расцепителем относят к промышленному стандарту МЭК 60947-2.</p>'
+      }
+    };
+    const whereKeys = new Set(['where', 'gear', 'sel', 'mon', 'rem']);
+    const showCbAdvInfo = (key) => {
+      const data = info[key] || info.where;
+      const id = info[key] ? key : 'where';
+      if (panel) panel.innerHTML = `<h3>${data.title}</h3>${data.html}`;
+      if (live) live.textContent = data.live;
+      const hint = document.getElementById('cbAdvHint');
+      if (hint) {
+        hint.textContent = whereKeys.has(id)
+          ? 'Четыре причины ставить электронный блок. Щёлкните карточку'
+          : 'Щёлкните строку. Справа — чем электронный блок отличается от обычного автомата';
+      }
+      const scene = whereKeys.has(id) ? 'where' : 'table';
+      cbAdvSlide.querySelectorAll('.cb-adv-scene').forEach((el) => {
+        el.classList.toggle('is-on', el.dataset.scene === scene);
+      });
+      cbAdvSlide.querySelectorAll('.asutp-tab').forEach((btn) => {
+        btn.classList.toggle('active', btn.dataset.info === id || (whereKeys.has(id) && id !== 'where' && btn.dataset.info === 'where' && !cbAdvSlide.querySelector(`.asutp-tab[data-info="${id}"]`)));
+      });
+      cbAdvSlide.querySelectorAll('.cb-adv-row').forEach((row) => {
+        row.classList.toggle('is-active', row.dataset.info === id);
+      });
+      cbAdvSlide.querySelectorAll('.cb-why').forEach((block) => {
+        block.classList.toggle('is-active', block.dataset.info === id);
+      });
+    };
+    cbAdvSlide.addEventListener('click', (e) => {
+      const hit = e.target.closest('.asutp-tab, .cb-adv-row, .cb-why');
+      if (!hit?.dataset.info) return;
+      e.stopPropagation();
+      showCbAdvInfo(hit.dataset.info);
+    });
+    showCbAdvInfo('where');
   }
 
   /* ===== Lecture 5: UVR and shunt ===== */
   const cbUvSlide = document.querySelector('.slide-cb-uv-interactive');
   if (cbUvSlide) {
     const panel = document.getElementById('cbUvPanel');
+    const live = document.getElementById('cbUvLive');
+    const range = cbUvSlide.querySelector('.cb-uv-range');
+    const nameEl = document.getElementById('cbUvName');
+    const valEl = document.getElementById('cbUvVal');
+    const src = document.getElementById('cbUvSrc');
+    const srcSub = document.getElementById('cbUvSrcSub');
+    const srcStat = document.getElementById('cbUvSrcStat');
+    const feed = document.getElementById('cbUvFeed');
+    const plunger = document.getElementById('cbUvPlunger');
+    const latch = document.getElementById('cbUvLatch');
+    const tie = document.getElementById('cbUvTie');
+    const arm = document.getElementById('cbUvArm');
+    const rule = document.getElementById('cbUvRule');
+    const spring = document.getElementById('cbUvSpring');
+    const springLab = document.getElementById('cbUvSpringLab');
     const info = {
       uv: {
         title: 'Минимум U',
-        html: '<p>Катушка питается от сети. Автомат <strong>держится</strong> включённым, пока есть напряжение. Провал ниже ~0,35…0,7 Un — расцепление.</p><p>Нужен, чтобы механизм не самозапустился после пропадания питания.</p>'
+        html: '<p>Пока напряжение Un в норме, ток идёт через катушку. Поле втягивает защёлку, она держит контакт включённым, ток идёт к потребителю.</p><p>Ниже примерно 0,35…0,7 Un поле слабеет. Пружина отпускает защёлку, контакт размыкается.</p><p>Когда питание вернётся, механизм сам не включится. Чтобы автомат снова работал, его взводят рычагом.</p>'
       },
       shunt: {
         title: 'Независимый',
-        html: '<p>Катушка в норме <strong>обесточена</strong>. Подали напряжение (кнопка «стоп», пожарка, выход ПЛК) — якорь срывает защёлку.</p><p>Полярность и длительность импульса — по паспорту; катушка не рассчитана на длительное включение.</p>'
+        html: '<p>Катушка в норме без напряжения, автомат включён. Подали напряжение с кнопки «стоп», пожарной сигнализации или с ПЛК — якорь срывает защёлку.</p><p>Импульс короткий: катушка не рассчитана стоять под напряжением постоянно.</p>'
       },
       plc: {
         title: 'Выход ПЛК',
-        html: '<p>Независимый расцепитель сажают на дискретный выход через реле: авария в программе → автомат отключил силовой ввод.</p><p>Минимум U обычно берут с той же сети, не с ПЛК: иначе пропадёт контроллер — и отключится питание.</p>'
+        html: '<p>Аварию в программе выводят на дискретный выход. Через реле он подаёт импульс на независимый расцепитель, и ввод отключается.</p><p>Расцепитель минимального напряжения к выходу ПЛК не сажают. Его питают от силовой сети: если питать от блока контроллера, пропажа контроллера отключит ввод.</p>'
       }
     };
+    let uvKey = 'uv';
+    const geom = {
+      hold: document.getElementById('cbUvGeomHold'),
+      drop: document.getElementById('cbUvGeomDrop'),
+      ready: document.getElementById('cbUvGeomReady'),
+      hit: document.getElementById('cbUvGeomHit')
+    };
+    const paintCbUv = (trip, energized) => {
+      const mode = uvKey === 'uv' ? (trip ? 'drop' : 'hold') : (trip ? 'hit' : 'ready');
+      Object.entries(geom).forEach(([key, el]) => {
+        if (el) el.setAttribute('display', key === mode ? 'inline' : 'none');
+      });
+      if (feed) {
+        feed.setAttribute('stroke', energized ? '#1d4ed8' : '#94a3b8');
+        feed.setAttribute('stroke-dasharray', energized ? '' : '6 4');
+      }
+    };
+    const updateCbUv = () => {
+      const raw = Number(range?.value);
+      const u = Number.isFinite(raw) ? raw / 100 : 0.72;
+      const data = info[uvKey] || info.uv;
+      const trip = uvKey === 'uv' ? u < 0.42 : u >= 0.55;
+      const energized = uvKey === 'uv' ? !trip : trip;
+      paintCbUv(trip, energized);
+      if (src) src.textContent = uvKey === 'uv' ? 'сеть' : (uvKey === 'plc' ? 'выход ПЛК' : 'кнопка');
+      if (srcSub) srcSub.textContent = uvKey === 'uv' ? 'напряжение Un' : (uvKey === 'plc' ? 'через реле' : 'стоп, пожарка');
+      if (srcStat) {
+        srcStat.textContent = uvKey === 'uv'
+          ? (energized ? 'ток в катушке' : 'поле ослабло')
+          : (energized ? 'напряжение есть' : 'напряжения нет');
+      }
+      if (rule) {
+        rule.textContent = uvKey === 'uv'
+          ? (trip ? 'поле ослабло, пружина отпустила защёлку' : 'поле втянуло защёлку, пружина сжата')
+          : (trip ? 'импульс сорвал защёлку, контакт разомкнут' : 'команды нет, контакт включён');
+      }
+      if (nameEl) nameEl.textContent = uvKey === 'uv' ? 'напряжение сети' : 'команда';
+      if (valEl) valEl.textContent = uvKey === 'uv' ? (trip ? 'провал U' : 'есть U') : (trip ? 'импульс' : 'нет');
+      let say = '';
+      if (uvKey === 'uv') {
+        say = trip
+          ? 'Ниже 0,35…0,7 Un поле слабеет, пружина отпускает защёлку.'
+          : 'Un в норме: ток в катушке, поле держит защёлку, контакт включён.';
+      } else if (uvKey === 'plc') {
+        say = trip
+          ? 'Программа дала аварию, реле подало импульс, ввод отключился.'
+          : 'Выхода ПЛК нет, независимый расцепитель молчит, ввод включён.';
+      } else {
+        say = trip
+          ? 'Пришёл импульс напряжения, якорь сорвал защёлку.'
+          : 'Команды нет, катушка без напряжения, автомат включён.';
+      }
+      if (live) live.textContent = say;
+      if (panel && !panel.dataset.lock) panel.innerHTML = `<h3>${data.title}</h3>${data.html}`;
+    };
     const showCbUvInfo = (key) => {
-      const data = info[key] || info.uv;
-      if (panel) panel.innerHTML = `<h3>${data.title}</h3>${data.html}`;
+      uvKey = info[key] ? key : 'uv';
       cbUvSlide.querySelectorAll('.asutp-tab').forEach((btn) => {
-        btn.classList.toggle('active', btn.dataset.info === key);
+        btn.classList.toggle('active', btn.dataset.info === uvKey);
       });
-      cbUvSlide.querySelectorAll('.cb-uv-block').forEach((b) => {
-        b.classList.toggle('is-active', b.dataset.info === key);
-      });
+      const preset = { uv: 72, shunt: 18, plc: 18 }[uvKey];
+      if (range && preset != null) range.value = String(preset);
+      updateCbUv();
     };
     cbUvSlide.addEventListener('click', (e) => {
       const tab = e.target.closest('.asutp-tab');
-      if (tab?.dataset.info) {
-        e.stopPropagation();
-        showCbUvInfo(tab.dataset.info);
-        return;
-      }
-      const block = e.target.closest('.cb-uv-block');
-      if (block?.dataset.info) {
-        e.stopPropagation();
-        showCbUvInfo(block.dataset.info);
-      }
+      if (!tab?.dataset.info) return;
+      e.stopPropagation();
+      showCbUvInfo(tab.dataset.info);
     });
+    range?.addEventListener('input', () => updateCbUv());
     showCbUvInfo('uv');
   }
 
@@ -19401,79 +19802,386 @@
     updateCbDiff();
   }
 
-  /* ===== Lecture 5: RCD vs RCBO ===== */
+  /* ===== Lecture 5: RCD construction ===== */
+  const cbUzSlide = document.querySelector('.slide-cb-uzo-interactive');
+  if (cbUzSlide) {
+    const panel = document.getElementById('cbUzPanel');
+    const live = document.getElementById('cbUzLive');
+    const closed = document.getElementById('cbUzClosed');
+    const opened = document.getElementById('cbUzOpen');
+    const testPath = document.getElementById('cbUzTest');
+    const leak = document.getElementById('cbUzLeak');
+    const info = {
+      dev: {
+        title: 'Устройство',
+        live: 'К нагрузке 200 мА, обратно 200 мА. Сумма в кольце 0.',
+        html: '<p>Сумма в кольце считается не потому, что фаз три. Кольцо складывает токи всех проводов, которые через него проходят. На одной фазе это фаза и нейтраль, на трёх — L1, L2, L3 и N.</p><p>В норме эта сумма равна нулю. Сколько тока ушло к нагрузке, столько же должно вернуться. На одной фазе ток фазы равен току нейтрали. На трёх фазах векторная сумма L1 + L2 + L3 + N тоже ноль, даже если фазы нагружены по-разному.</p><p>Если человек коснулся фазы, часть тока ΔI ушла в землю и по нейтрали не вернулась. Сумма в кольце становится равна ΔI, а не нулю. УЗО отключает, когда эта разница достигает уставки I<sub>Δn</sub>. Для защиты человека это обычно 30 мА: ниже примерно половины уставки аппарат не должен срабатывать, при I<sub>Δn</sub> обязан отключить.</p>'
+      },
+      n1: {
+        title: '1 · трансформатор',
+        live: 'К нагрузке и обратно — один и тот же ток. Сумма в кольце ноль.',
+        html: '<p>Сумма в кольце считается не потому, что фаз три. Кольцо складывает токи всех проводов, которые через него проходят. На одной фазе это фаза и нейтраль, на трёх — L1, L2, L3 и N.</p><p>В норме эта сумма равна нулю. Сколько тока ушло к нагрузке, столько же должно вернуться. На одной фазе ток фазы равен току нейтрали. На трёх фазах векторная сумма L1 + L2 + L3 + N тоже ноль, даже если фазы нагружены по-разному.</p><p>Если человек коснулся фазы, часть тока ΔI ушла в землю и по нейтрали не вернулась. Сумма становится равна ΔI. Ниже примерно половины I<sub>Δn</sub> аппарат не срабатывает, при I<sub>Δn</sub> обязан отключить. Для человека это обычно 30 мА.</p>'
+      },
+      n2: {
+        title: '2 · порог',
+        live: 'Порог сравнивает сигнал кольца с уставкой IΔn.',
+        html: '<p>Пороговый элемент решает, достаточно ли сигнала, чтобы отключать. Уставка — I<sub>Δn</sub>, для человека обычно 30 мА.</p><p>В электромеханическом УЗО это поляризованное реле: магнит держит якорь, ток обмотки его ослабляет, пружина отпускает. В электронном сигнал усиливают, и такому аппарату нужно питание.</p>'
+      },
+      n3: {
+        title: '3 · механизм',
+        live: 'Механизм размыкает силовые контакты.',
+        html: '<p>Исполнительный механизм получает команду от порога и срывает защёлку силовых контактов.</p><p>Сам по себе он не видит перегрузку и короткое замыкание. Перед УЗО ставят автомат.</p>'
+      },
+      n4: {
+        title: '4 · тест',
+        live: 'Кнопка T пускает ток через кольцо только в одну сторону.',
+        html: '<p>Цепь теста берёт ток с L1 после кольца и через резистор R, кнопку T и контакт 6 возвращает его в L1 до кольца. Обратно через кольцо этот ток не идёт.</p><p>Кольцо видит разницу, как при утечке, и контакты должны разомкнуться. Не разомкнулись — УЗО меняют.</p>'
+      },
+      n5: {
+        title: '5 · контакты',
+        live: 'Силовые контакты размыкают L1, L2, L3 и N.',
+        html: '<p>Контакты стоят на всех рабочих проводах, включая нейтраль. Сработал механизм — цепь нагрузки разомкнута.</p><p>Ток на корпусе УЗО — это ток, который выдерживают контакты, а не уставка перегрузки.</p>'
+      },
+      n6: {
+        title: '6 · контакт теста',
+        live: 'Контакт 6 замкнут вместе с силовыми: тест только на включённом УЗО.',
+        html: '<p>Защитный контакт цепи тестирования стоит последовательно с кнопкой T. Пока УЗО включено, цепь теста цела.</p><p>Аппарат отключился — разомкнулся и этот контакт. Кнопку проверяют при включённом УЗО.</p>'
+      },
+      leak: {
+        title: 'Утечка',
+        live: 'После нагрузки вернулось меньше, чем ушло. Сумма достигла 30 мА.',
+        html: '<p>К нагрузке ушло 200 мА, обратно по N пришло меньше: разница ушла через человека в землю.</p><p>Сумма в кольце равна этой разнице. На 30 мА порог пускает механизм, контакты размыкаются.</p>'
+      }
+    };
+    const range = document.getElementById('cbUzRange');
+    const valEl = document.getElementById('cbUzVal');
+    const toEl = document.getElementById('cbUzTo');
+    const backEl = document.getElementById('cbUzBack');
+    let uzMode = 'dev';
+    const paintUz = () => {
+      const ma = Math.max(0, Math.min(40, Number(range?.value) || 0));
+      const back = 200 - ma;
+      const tripLeak = ma >= 30;
+      const trip = tripLeak || uzMode === 'n4';
+      if (closed) closed.setAttribute('display', trip ? 'none' : 'inline');
+      if (opened) opened.setAttribute('display', trip ? 'inline' : 'none');
+      if (toEl) toEl.textContent = '↓ 200 мА';
+      if (backEl) {
+        backEl.textContent = `↑ ${back} мА`;
+        backEl.setAttribute('fill', tripLeak ? '#dc2626' : '#334155');
+      }
+      if (valEl) valEl.textContent = tripLeak ? `сумма ${ma} мА · сработало` : `сумма ${ma} мА`;
+      if (leak) {
+        leak.setAttribute('display', ma > 0 ? 'inline' : 'none');
+        leak.querySelectorAll('[data-leak]').forEach((el) => {
+          el.setAttribute('stroke-width', tripLeak ? '2.6' : '1.6');
+          el.setAttribute('stroke-dasharray', tripLeak ? '' : '6 4');
+          if (el.tagName === 'text') el.textContent = `ΔI ${ma}`;
+        });
+      }
+      if (testPath) {
+        const hot = uzMode === 'n4' || uzMode === 'n6';
+        testPath.setAttribute('stroke', hot ? '#dc2626' : '#94a3b8');
+        testPath.setAttribute('stroke-width', hot ? '2.4' : '1.6');
+        testPath.setAttribute('stroke-dasharray', hot ? '' : '5 4');
+      }
+      if (live && (uzMode === 'dev' || uzMode === 'n1' || uzMode === 'leak')) {
+        live.textContent = ma === 0
+          ? 'К нагрузке 200 мА, обратно 200 мА. Сумма в кольце 0.'
+          : tripLeak
+            ? `К нагрузке 200 мА, обратно ${back} мА. Сумма ${ma} мА — уставка 30 мА, контакты разомкнуты.`
+            : `К нагрузке 200 мА, обратно ${back} мА. Сумма ${ma} мА, ниже 30 мА.`;
+      }
+    };
+    const showCbUzInfo = (key) => {
+      const id = info[key] ? key : 'dev';
+      const data = info[id];
+      uzMode = id;
+      if (id === 'leak' && range && Number(range.value) < 30) range.value = '35';
+      if (id === 'dev' && range) range.value = '0';
+      if (panel) panel.innerHTML = `<h3>${data.title}</h3>${data.html}`;
+      if (live && id !== 'dev' && id !== 'n1' && id !== 'leak') live.textContent = data.live;
+      cbUzSlide.querySelector('.cb-svg')?.setAttribute('data-pick', id);
+      cbUzSlide.querySelectorAll('.asutp-tab').forEach((btn) => {
+        btn.classList.toggle('active', btn.dataset.info === id);
+      });
+      const mark = {
+        leak: ['leak', 'n1', 'n2', 'n3', 'n5'],
+        n4: ['n4', 'n6', 'n1'],
+        n6: ['n6', 'n4']
+      };
+      const on = mark[id] || [id];
+      cbUzSlide.querySelectorAll('.cb-uz-part').forEach((part) => {
+        part.classList.toggle('is-active', on.includes(part.dataset.info));
+      });
+      paintUz();
+    };
+    cbUzSlide.addEventListener('click', (e) => {
+      const hit = e.target.closest('.asutp-tab, .cb-uz-part');
+      if (!hit?.dataset.info) return;
+      e.stopPropagation();
+      showCbUzInfo(hit.dataset.info);
+    });
+    range?.addEventListener('input', paintUz);
+    showCbUzInfo('dev');
+  }
+
+  /* ===== Lecture 5: RCD photo ===== */
+  const cbUzPhSlide = document.querySelector('.slide-cb-uzo-photo');
+  if (cbUzPhSlide) {
+    const panel = document.getElementById('cbUzPhPanel');
+    const live = document.getElementById('cbUzPhLive');
+    const info = {
+      all: {
+        title: 'Внутри',
+        live: 'Электромагнит срывает защёлку. Резистор задаёт ток кнопки «Тест».',
+        html: '<p>Слева электромагнит — исполнительный механизм. Сверху флажок: аппарат отключился сам. Голубой резистор — R в цепи кнопки «Тест».</p><p>Медное кольцо внизу — дифференциальный трансформатор. Через него проходят рабочие провода.</p>'
+      },
+      mag: {
+        title: 'Электромагнит',
+        live: 'Катушка слева — механизм, который рвёт силовые контакты.',
+        html: '<p>Это блок 3 со схемы. Порог пускает ток в катушку, поле срывает защёлку, контакты размыкаются.</p><p>В электромеханическом УЗО катушка работает вместе с постоянным магнитом: пока утечки нет, магнит держит механизм.</p>'
+      },
+      flag: {
+        title: 'Флажок',
+        live: 'Флажок показывает, что УЗО отключилось само.',
+        html: '<p>Когда механизм сработал, цветная метка выходит в окошко. По ней видно: аппарат отключила утечка, а не рука на рычаге.</p><p>После включения рычагом флажок уходит обратно.</p>'
+      },
+      res: {
+        title: 'Резистор утечки',
+        live: 'Голубой резистор — это R в цепи кнопки «Тест».',
+        html: '<p>Он стоит последовательно с кнопкой T и задаёт ток искусственной утечки, больше уставки I<sub>Δn</sub>.</p><p>Нажали T — ток прошёл через кольцо только в одну сторону, УЗО должно отключиться.</p>'
+      }
+    };
+    const showCbUzPhInfo = (key) => {
+      const id = info[key] ? key : 'all';
+      const data = info[id];
+      if (panel) panel.innerHTML = `<h3>${data.title}</h3>${data.html}`;
+      if (live) live.textContent = data.live;
+      cbUzPhSlide.querySelectorAll('.asutp-tab').forEach((btn) => {
+        btn.classList.toggle('active', btn.dataset.info === id);
+      });
+    };
+    cbUzPhSlide.addEventListener('click', (e) => {
+      const hit = e.target.closest('.asutp-tab');
+      if (!hit?.dataset.info) return;
+      e.stopPropagation();
+      showCbUzPhInfo(hit.dataset.info);
+    });
+    showCbUzPhInfo('all');
+  }
+
+  /* ===== Lecture 5: AV, RCD, DIF ===== */
   const cbRcdSlide = document.querySelector('.slide-cb-rcd-interactive');
   if (cbRcdSlide) {
     const panel = document.getElementById('cbRcdPanel');
+    const live = document.getElementById('cbRcdLive');
+    const boxes = {
+      av: document.getElementById('cbTrioBoxAv'),
+      rcd: document.getElementById('cbTrioBoxRcd'),
+      dif: document.getElementById('cbTrioBoxDif')
+    };
+    const labels = {
+      av: document.getElementById('cbTrioAv'),
+      rcd: document.getElementById('cbTrioRcd'),
+      dif: document.getElementById('cbTrioDif')
+    };
     const info = {
+      all: {
+        title: 'Три аппарата',
+        live: 'АВ защищает кабель. УЗО — человека. ДИФ делает и то и другое.',
+        html: '<p>АВ защищает кабель от перегрузки и короткого замыкания. Утечку он не видит.</p><p>УЗО отключает утечку и само от КЗ не защищено: его ставят после автомата. ДИФ, он же АВДТ, делает и то и другое в одном корпусе.</p>'
+      },
+      av: {
+        title: 'АВ',
+        live: 'Автомат отключает перегрузку и КЗ. Утечку не видит.',
+        html: '<p>Автоматический выключатель. Тепловой и электромагнитный расцепители.</p><p>На корпусе ток In и кривая B, C или D. Буквы IΔn нет, кнопки T нет.</p>'
+      },
       rcd: {
         title: 'УЗО',
-        html: '<p>Устройство защитного отключения: только дифференциальный расцепитель. От перегрузки и КЗ <strong>не защищает</strong> — впереди ставят автомат.</p><p>Типовые IΔn: 10, 30, 100, 300 мА. 30 мА — защита человека.</p>'
+        live: 'УЗО отключает утечку. В линию его ставят после автомата.',
+        html: '<p>Только дифференциальный расцепитель. IΔn обычно 10, 30, 100 или 300 мА. 30 мА — защита человека.</p><p>Ток In на УЗО — сколько выдерживают контакты, это не уставка перегрузки. От КЗ УЗО не защищает. Есть кнопка T.</p>'
       },
-      rcbo: {
-        title: 'АВДТ',
-        html: '<p>Автоматический выключатель, управляемый дифференциальным током: в одном корпусе тепловой, электромагнитный и дифференциальный расцепители.</p><p>Один модуль вместо пары «автомат + УЗО». В щитах САУ — на розеточные и влажные линии.</p>'
+      dif: {
+        title: 'ДИФ',
+        live: 'Дифавтомат — автомат и УЗО в одном корпусе.',
+        html: '<p>АВДТ: тепловой, электромагнитный и дифференциальный расцепители вместе.</p><p>На корпусе и In с кривой, и IΔn, и кнопка T. В щите один аппарат вместо пары «АВ + УЗО».</p>'
       },
-      type: {
-        title: 'Типы A и AC',
-        html: '<p><strong>AC</strong> — только синусоидальная утечка. <strong>A</strong> — ещё и пульсирующий постоянный (частотный привод, импульсные БП).</p><p>У преобразователей частоты обычное УЗО типа AC может «не увидеть» утечку — берут A или B.</p>'
+      ovl: {
+        title: 'Перегрузка',
+        live: 'Перегрузку отключают АВ и ДИФ. УЗО её не отключает.',
+        html: '<p>Ток выше рабочего долгое время. Тепловой расцепитель есть у автомата и у дифавтомата.</p><p>УЗО такой расцепитель не содержит, перегрузку оно не отключает.</p>'
+      },
+      sc: {
+        title: 'Короткое замыкание',
+        live: 'КЗ отключают АВ и ДИФ. УЗО от КЗ не защищает.',
+        html: '<p>Электромагнитный расцепитель есть у автомата и у дифавтомата.</p><p>УЗО от тока КЗ не отключается. От большого тока КЗ оно само может выйти из строя, поэтому перед ним стоит автомат.</p>'
+      },
+      leak: {
+        title: 'Утечка',
+        live: 'Утечку отключают УЗО и ДИФ. Автомат её не видит.',
+        html: '<p>Часть тока ушла мимо нейтрали: на корпус или через человека. Сумма в дифференциальном кольце не ноль.</p><p>АВ этого не измеряет. УЗО и ДИФ отключают по IΔ.</p>'
       },
       test: {
         title: 'Кнопка T',
-        html: '<p>Искусственно создаёт IΔ. Проверяют ежемесячно: механизм не должен закисать. Нет отключения — аппарат в утиль, не «починят» настройкой.</p>'
+        live: 'Кнопка T есть у УЗО и у ДИФ. У автомата её нет.',
+        html: '<p>Кнопка создаёт искусственную утечку и проверяет, что дифференциальный расцепитель жив.</p><p>Не отключилось — аппарат меняют. У обычного автомата такой кнопки нет.</p>'
+      },
+      kind: {
+        title: 'Тип A и AC',
+        live: 'AC видит синус. Тип A нужен там, где есть выпрямитель или привод.',
+        html: '<p>Тип AC отключает синусоидальную утечку. Тип A — ещё и пульсирующий постоянный ток.</p><p>Это маркировка УЗО и ДИФ. У частотного привода тип AC может не увидеть утечку.</p>'
       }
     };
+    const verdict = {
+      all: { av: 'перегрузка и КЗ', rcd: 'только утечка', dif: 'кабель и человек', tone: {} },
+      av: { av: 'перегрузка и КЗ', rcd: 'только утечка', dif: 'кабель и человек', tone: { av: 'on' } },
+      rcd: { av: 'перегрузка и КЗ', rcd: 'только утечка', dif: 'кабель и человек', tone: { rcd: 'on' } },
+      dif: { av: 'перегрузка и КЗ', rcd: 'только утечка', dif: 'кабель и человек', tone: { dif: 'on' } },
+      ovl: { av: 'отключит', rcd: 'не отключит', dif: 'отключит', tone: { av: 'yes', rcd: 'no', dif: 'yes' } },
+      sc: { av: 'отключит', rcd: 'не отключит', dif: 'отключит', tone: { av: 'yes', rcd: 'no', dif: 'yes' } },
+      leak: { av: 'не видит', rcd: 'отключит', dif: 'отключит', tone: { av: 'no', rcd: 'yes', dif: 'yes' } },
+      test: { av: 'кнопки нет', rcd: 'кнопка T', dif: 'кнопка T', tone: { av: 'no', rcd: 'yes', dif: 'yes' } },
+      kind: { av: 'кривая B C D', rcd: 'тип A или AC', dif: 'тип A или AC', tone: { rcd: 'on', dif: 'on' } }
+    };
+    const toneFill = { yes: '#dcfce7', no: '#fee2e2', on: '#eff6ff' };
+    const toneStroke = { yes: '#15803d', no: '#b91c1c', on: '#2563eb' };
+    const toneText = { yes: '#14532d', no: '#991b1b', on: '#1e3a8a' };
     const showCbRcdInfo = (key) => {
-      const data = info[key] || info.rcd;
+      const id = info[key] ? key : 'all';
+      const data = info[id];
+      const mark = verdict[id];
       if (panel) panel.innerHTML = `<h3>${data.title}</h3>${data.html}`;
-      cbRcdSlide.querySelectorAll('.app-purpose-card').forEach((btn) => {
-        btn.classList.toggle('active', btn.dataset.info === key);
+      if (live) live.textContent = data.live;
+      cbRcdSlide.querySelectorAll('.asutp-tab').forEach((btn) => {
+        btn.classList.toggle('active', btn.dataset.info === id);
+      });
+      cbRcdSlide.querySelectorAll('.cb-trio').forEach((block) => {
+        block.classList.toggle('is-active', block.dataset.info === id);
+      });
+      ['av', 'rcd', 'dif'].forEach((name) => {
+        const tone = mark.tone[name] || '';
+        if (boxes[name]) {
+          boxes[name].setAttribute('fill', toneFill[tone] || '#f8fafc');
+          boxes[name].setAttribute('stroke', toneStroke[tone] || '#e2e8f0');
+        }
+        if (labels[name]) {
+          labels[name].textContent = mark[name];
+          labels[name].setAttribute('fill', toneText[tone] || '#1e293b');
+        }
       });
     };
     cbRcdSlide.addEventListener('click', (e) => {
-      const card = e.target.closest('.app-purpose-card');
-      if (!card?.dataset.info) return;
+      const hit = e.target.closest('.asutp-tab, .cb-trio');
+      if (!hit?.dataset.info) return;
       e.stopPropagation();
-      showCbRcdInfo(card.dataset.info);
+      showCbRcdInfo(hit.dataset.info);
     });
-    showCbRcdInfo('rcd');
+    showCbRcdInfo('all');
   }
 
   /* ===== Lecture 5: selection ===== */
   const cbSelSlide = document.querySelector('.slide-cb-sel-interactive');
   if (cbSelSlide) {
     const panel = document.getElementById('cbSelPanel');
+    const live = document.getElementById('cbSelLive');
+    const range = document.getElementById('cbSelRange');
+    const valEl = document.getElementById('cbSelVal');
+    const dot = document.getElementById('cbSelDot');
+    const ldA = document.getElementById('cbSelLdA');
+    const ctrl = document.getElementById('cbSelCtrl');
+    const scenes = {
+      in: document.getElementById('cbSelSceneIn'),
+      curve: document.getElementById('cbSelSceneCurve'),
+      icu: document.getElementById('cbSelSceneIcu'),
+      cable: document.getElementById('cbSelSceneCable')
+    };
+    const liveFixed = {
+      curve: 'На розетки ставят C. Для двигателя с пуском в несколько номиналов берут D',
+      icu: 'В щите короткое до 6 кА, автомат гасит 10 кА — дугу погасит',
+      cable: '20 А меньше 25 А: перегруз снимет автомат раньше, чем сгорит жила'
+    };
     const info = {
       in: {
-        title: 'Номинал In',
-        html: '<p>Ib ≤ In ≤ Iz: рабочий ток нагрузки не выше номинала автомата, номинал не выше длительно допустимого тока кабеля.</p><p>Для двигателя In берут с запасом на пуск, а кривую — D или специальную моторную.</p>'
+        title: 'Номинал',
+        html: '<p>Номинал — ток, который автомат держит часами и не отключает. Его ставят не меньше тока розеток и не больше тока, который кабель выдерживает долго.</p><p>Здесь розетки 16 А, автомат 20 А, кабель около 25 А: I<sub>b</sub> ≤ I<sub>n</sub> ≤ I<sub>z</sub>. Сдвиньте ползунок вправо — сначала линию снимет автомат, ещё правее не выдержит и жила.</p>'
       },
       curve: {
         title: 'Кривая',
-        html: '<p>B — слабый бросок, C — общий случай щита, D — тяжёлый пуск. Неверная кривая: либо ложные отключения, либо кабель не защищён при КЗ в конце линии.</p>'
+        html: '<p>Буква — порог, после которого автомат отключает сразу, не дожидаясь нагрева. Порог задан в разах от номинала.</p><p>B — свет, броска почти нет. C — розетки и обычный щит, эта линия. D — двигатель: пуск в несколько номиналов, B и C снимут его как короткое замыкание.</p>'
       },
       icu: {
-        title: 'Icu',
-        html: '<p>Icu (или Icn у 60898) не ниже расчётного тока КЗ в месте установки. Запас «на всякий» дороже, но 6 кА на вводе цеха при 25 кА — ошибка проекта.</p>'
+        title: 'Ток короткого замыкания',
+        html: '<p>Это не номинал. 20 А — ток, который автомат держит часами. 10 кА — какое короткое замыкание он способен погасить один раз. Обозначение этой способности — I<sub>cu</sub>.</p><p>Расчёт щита даёт 6 кА, автомат на 10 кА с этим справится. Аппарат на 4,5 кА здесь не подойдёт: дугу он не погасит.</p>'
       },
       cable: {
         title: 'Кабель',
-        html: '<p>Автомат защищает жилу: время-токовая характеристика должна лежать левее допустимой энергии кабеля k²S².</p><p>Сечение сначала по нагрузке и падению U, потом проверяют защиту автоматом.</p>'
+        html: '<p>Автомат стережёт жилу, не только розетки. Он должен разомкнуться раньше, чем изоляция перегреется, поэтому номинал не выше длительного тока кабеля.</p><p>Сечение сначала берут по нагрузке и падению напряжения. Для меди 2,5 мм² в коробе это около 25 А. Автомат 32 А на таком кабеле проверку не проходит: при 28 А жила уже сверх нормы, а аппарат ещё замкнут.</p>'
       }
+    };
+    let selMode = 'in';
+    const paintBox = (id, on) => {
+      const rect = cbSelSlide.querySelector(`#${id} rect`);
+      if (!rect) return;
+      rect.setAttribute('fill', on ? '#dbeafe' : '#fff');
+      rect.setAttribute('stroke', on ? '#2563eb' : '#1e293b');
+      rect.setAttribute('stroke-width', on ? '2.2' : '1.6');
+    };
+    const paintSel = () => {
+      const ib = Math.max(8, Math.min(36, Number(range?.value) || 16));
+      const x = 70 + (ib / 40) * 600;
+      const ok = ib <= 20;
+      const hot = ib > 25;
+      const color = ok ? '#166534' : hot ? '#991b1b' : '#b45309';
+      if (dot) {
+        dot.setAttribute('cx', String(x));
+        dot.setAttribute('fill', color);
+      }
+      if (valEl) valEl.textContent = `${ib} А`;
+      if (ldA && selMode !== 'in') {
+        ldA.textContent = 'берут 16 А';
+        ldA.setAttribute('fill', '#166534');
+      } else if (ldA) {
+        ldA.textContent = `берут ${ib} А`;
+        ldA.setAttribute('fill', color);
+      }
+      if (selMode !== 'in' || !live) return;
+      live.style.color = color;
+      if (ok) live.textContent = `${ib} А — норма: меньше автомата 20 А, кабель 25 А в запасе`;
+      else if (!hot) live.textContent = `${ib} А — автомат 20 А такую нагрузку отключит, кабель 25 А ещё держал бы`;
+      else live.textContent = `${ib} А — выше и автомата, и кабеля. Так линию не нагружают`;
     };
     const showCbSelInfo = (key) => {
       const data = info[key] || info.in;
+      selMode = info[key] ? key : 'in';
       if (panel) panel.innerHTML = `<h3>${data.title}</h3>${data.html}`;
-      cbSelSlide.querySelectorAll('.app-purpose-card').forEach((btn) => {
-        btn.classList.toggle('active', btn.dataset.info === key);
+      Object.entries(scenes).forEach(([name, node]) => {
+        if (node) node.setAttribute('display', name === selMode ? 'inline' : 'none');
       });
+      if (ctrl) {
+        ctrl.hidden = selMode !== 'in';
+        ctrl.classList.toggle('is-off', selMode !== 'in');
+      }
+      if (live && selMode !== 'in') {
+        live.style.color = '#1e40af';
+        live.textContent = liveFixed[selMode] || '';
+      }
+      paintBox('cbSelBoxSrc', selMode === 'icu');
+      paintBox('cbSelBoxBr', true);
+      paintBox('cbSelBoxCb', selMode === 'in' || selMode === 'cable');
+      paintBox('cbSelBoxLd', selMode === 'in');
+      cbSelSlide.querySelectorAll('.asutp-tab').forEach((btn) => {
+        btn.classList.toggle('active', btn.dataset.info === selMode);
+      });
+      paintSel();
     };
     cbSelSlide.addEventListener('click', (e) => {
-      const card = e.target.closest('.app-purpose-card');
-      if (!card?.dataset.info) return;
+      const hit = e.target.closest('.asutp-tab, .cb-sel-box');
+      if (!hit?.dataset.info) return;
       e.stopPropagation();
-      showCbSelInfo(card.dataset.info);
+      showCbSelInfo(hit.dataset.info);
     });
+    range?.addEventListener('input', paintSel);
     showCbSelInfo('in');
   }
 
@@ -19483,24 +20191,33 @@
     const panel = document.getElementById('cbCoordPanel');
     const info = {
       intro: {
-        title: 'Обзор',
-        html: '<p>Селективность: при КЗ на отходящей линии отключается <strong>Q2</strong>, ввод Q1 остаётся. Иначе падает весь щит.</p><p>Добиваются ступенью номиналов, кривыми и выдержкой электронных расцепителей. Каскад (backup) — когда верхний помогает гасить, если нижнему не хватает Icu.</p>'
+        title: 'Кто отключится',
+        html: '<p>Селективность: короткое замыкание на отходящей линии снимает ближайший автомат Q2. Ввод Q1 остаётся, остальные линии щита работают.</p><p>Сдвиньте ток вправо. Когда он слишком большой, Q2 один не справляется и отключается ещё ввод — гаснет весь щит.</p>'
       },
       time: {
         title: 'По времени',
-        html: '<p>Электронный S-блок на вводе с выдержкой tsd. Нижний автомат без выдержки успевает первым. Категория B и Icw как раз для этого.</p>'
+        html: '<p>На вводе ставят выдержку: Q1 специально не отключает сразу. Q2 без выдержки успевает первым.</p><p>Выдержку даёт электронный расцепитель, это доли секунды. Если линия аварию не сняла, ввод по окончании выдержки отключает щит сам.</p>'
       },
       curr: {
         title: 'По току',
-        html: '<p>Отсечка нижнего ниже, чем у верхнего, плюс разнос номиналов. На малых КЗ этого хватает; на больших токах токоограничение и таблицы селективности завода.</p>'
+        html: '<p>У линии порог мгновенного отключения ниже, чем у ввода. Небольшое короткое доходит до Q2 и не доходит до Q1.</p><p>Очень большой ток выше обоих порогов — по току селективности уже нет, отключаются оба. Тогда выручает выдержка на вводе.</p>'
       }
     };
-    const tabs = ['intro', 'time', 'curr'];
+    const scenes = {
+      intro: document.getElementById('cbCoordSceneIntro'),
+      time: document.getElementById('cbCoordSceneTime'),
+      curr: document.getElementById('cbCoordSceneCurr')
+    };
+    let coordMode = 'intro';
     const showCbCoordInfo = (key) => {
       const data = info[key] || info.intro;
+      coordMode = info[key] ? key : 'intro';
       if (panel) panel.innerHTML = `<h3>${data.title}</h3>${data.html}`;
+      Object.entries(scenes).forEach(([name, node]) => {
+        if (node) node.setAttribute('display', name === coordMode ? 'inline' : 'none');
+      });
       cbCoordSlide.querySelectorAll('.asutp-tab').forEach((btn) => {
-        btn.classList.toggle('active', tabs.includes(key) && btn.dataset.info === key);
+        btn.classList.toggle('active', btn.dataset.info === coordMode);
       });
     };
     const updateCbCoord = () => {
@@ -19508,17 +20225,57 @@
       const t = Number.isFinite(raw) ? raw / 100 : 0.25;
       const both = t >= 0.72;
       const up = cbCoordSlide.querySelector('.cb-coord-up');
-      const dn = cbCoordSlide.querySelector('.cb-coord-dn');
-      const readout = cbCoordSlide.querySelector('.cb-coord-readout');
+      const q1s = document.getElementById('cbCoordQ1s');
+      const q1a = document.getElementById('cbCoordQ1a');
+      const q1b = document.getElementById('cbCoordQ1b');
+      const bus = document.getElementById('cbCoordBus');
+      const tap = document.getElementById('cbCoordTap');
+      const rest = document.querySelector('#cbCoordRest rect');
+      const restS = document.getElementById('cbCoordRestS');
+      const mark = document.getElementById('cbCoordMark');
+      const live = document.getElementById('cbCoordLive');
       const val = cbCoordSlide.querySelector('.cb-coord-val');
-      if (dn) dn.setAttribute('stroke', '#dc2626');
-      if (up) up.setAttribute('stroke', both ? '#dc2626' : '#1e293b');
-      if (readout) {
-        readout.textContent = both
-          ? 'большой ток · сработали оба · селективности нет'
-          : 'малый ток · отключился Q2 · ввод жив';
+      const liveColor = both ? '#991b1b' : '#166534';
+      const arm = both ? '#dc2626' : '#166534';
+      if (up) {
+        up.setAttribute('fill', both ? '#fee2e2' : '#dcfce7');
+        up.setAttribute('stroke', both ? '#dc2626' : '#166534');
       }
-      if (val) val.textContent = both ? 'оба' : 'линия';
+      [q1a, q1b].forEach((line) => {
+        if (!line) return;
+        line.setAttribute('stroke', arm);
+        if (both) {
+          line.setAttribute('x2', line.id === 'cbCoordQ1a' ? '200' : '296');
+          line.setAttribute('x1', line.id === 'cbCoordQ1a' ? '152' : '248');
+        } else {
+          line.setAttribute('x1', '152');
+          line.setAttribute('x2', '296');
+        }
+      });
+      if (q1s) {
+        q1s.textContent = both ? 'отключился' : 'включён';
+        q1s.setAttribute('fill', both ? '#991b1b' : '#166534');
+      }
+      [bus, tap].forEach((line) => line?.setAttribute('stroke', both ? '#94a3b8' : '#166534'));
+      if (rest) {
+        rest.setAttribute('fill', both ? '#f1f5f9' : '#dcfce7');
+        rest.setAttribute('stroke', both ? '#94a3b8' : '#166534');
+      }
+      if (restS) {
+        restS.textContent = both ? 'погасли' : 'работают';
+        restS.setAttribute('fill', both ? '#64748b' : '#166534');
+      }
+      if (mark) {
+        mark.setAttribute('cx', String(80 + t * 600));
+        mark.setAttribute('fill', liveColor);
+      }
+      if (val) val.textContent = both ? 'весь щит' : 'только Q2';
+      if (live) {
+        live.style.color = liveColor;
+        live.textContent = both
+          ? 'Ток слишком большой: отключился и Q1. Весь щит погас'
+          : 'Короткое снял Q2. Ввод включён, другие линии работают';
+      }
     };
     cbCoordSlide.addEventListener('click', (e) => {
       const tab = e.target.closest('.asutp-tab');
