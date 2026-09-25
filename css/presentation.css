@@ -4644,6 +4644,20 @@ body.overview-mode .slide-diagram { display: none; }
 .slide-cb-sel-interactive .cb-sel-box { cursor: pointer; }
 .slide-cb-sel-interactive .cb-controls.is-off { display: none; }
 .slide-cb-coord-interactive .cb-svg { max-height: 46vh; }
+.px-part { cursor: pointer; }
+.px-part.active rect,
+.px-part.active circle,
+.px-part.active path,
+.px-part.active line { stroke: #2563eb; }
+.px-part.active .px-call { fill: #dbeafe; }
+.slide-px-build .cb-svg,
+.slide-px-work .cb-svg,
+.slide-px-dc .cb-svg,
+.slide-px-ac .cb-svg,
+.slide-px-ind .cb-svg,
+.slide-px-cap .cb-svg,
+.slide-px-opt .cb-svg,
+.slide-px-us .cb-svg { max-height: 42vh; }
 .slide-cb-adv-interactive .cb-adv-scene { display: none; }
 .slide-cb-adv-interactive .cb-adv-scene.is-on { display: block; }
 .cb-adv-row { cursor: pointer; }

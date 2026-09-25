@@ -5516,6 +5516,10 @@
     };
     const tabs = ['intro', 'kv', 'resid'];
     let emPicked = false;
+    const pickX0 = 50;
+    const pickX1 = 460;
+    const pickOff = (150 - pickX0) / (pickX1 - pickX0);
+    const pickOn = (210 - pickX0) / (pickX1 - pickX0);
     const showEmPickInfo = (key) => {
       const data = info[key] || info.intro;
       if (panel) panel.innerHTML = `<h3>${data.title}</h3>${data.html}`;
@@ -5526,9 +5530,9 @@
     const updateEmPick = () => {
       const raw = Number(emPickSlide.querySelector('.em-pick-range')?.value);
       const t = Number.isFinite(raw) ? raw / 100 : 0.25;
-      if (!emPicked && t >= 0.58) emPicked = true;
-      if (emPicked && t <= 0.34) emPicked = false;
-      const x = 50 + t * 410;
+      if (!emPicked && t >= pickOn) emPicked = true;
+      if (emPicked && t <= pickOff) emPicked = false;
+      const x = pickX0 + t * (pickX1 - pickX0);
       const y = emPicked ? 70 : 150;
       const pt = emPickSlide.querySelector('.em-pick-pt');
       const readout = emPickSlide.querySelector('.em-pick-readout');
@@ -5539,8 +5543,8 @@
       }
       if (readout) {
         readout.textContent = emPicked
-          ? (t > 0.34 ? 'якорь притянут · держится до Iотп' : 'якорь отпущен')
-          : (t < 0.58 ? 'I < Iср · якорь отпущен' : 'срабатывание');
+          ? (t >= pickOn ? 'I ≥ Iср · якорь притянут' : 'выше Iотп · якорь ещё держится')
+          : (t > pickOff ? 'I < Iср · якорь отпущен' : 'I ≤ Iотп · якорь отпущен');
       }
       if (val) val.textContent = `${t.toFixed(2).replace('.', ',')} Iн`;
     };

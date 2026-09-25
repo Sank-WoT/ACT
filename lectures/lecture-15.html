@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="UTF-8"><title>Лекция 15. Путевые и конечные выключатели. Датчики приближения</title>
+<link rel="stylesheet" href="../css/presentation.css"></head><body>
+<div class="deck">
+<section class="slide slide-title active"><span class="tag">Лекция 15</span>
+<h1>Путевые и конечные выключатели. Датчики приближения</h1>
+<p>Средства автоматизации и управления</p></section>
+
+<section class="slide slide-agenda"><h2>Содержание</h2><div class="slide-body"><ol>
+<li>Путевые и конечные выключатели</li>
+<li>Конструкция и принцип</li>
+<li>Датчики приближения</li>
+<li>Схемы на постоянном и переменном токе</li>
+<li>Индуктивные</li>
+<li>Ёмкостные</li>
+<li>Оптические</li>
+<li>Ультразвуковые</li>
+<li>Где в САУ</li>
+</ol></div></section>
+
+<section class="slide slide-px-lim-purpose">
+<h2>Путевые и конечные выключатели</h2>
+<div class="slide-body asutp-interactive">
+<div class="asutp-main">
+<p class="asutp-hint">По краям хода стоят конечные. Путевой — в промежуточной точке, не на упоре</p>
+<div class="asutp-diagram-wrap">
+<svg class="cb-svg" viewBox="0 0 760 230" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="Путевой и конечные на одном пути">
+<rect width="760" height="230" fill="#fafafa"/>
+<line x1="70" y1="118" x2="690" y2="118" stroke="#94a3b8" stroke-width="4" stroke-linecap="round"/>
+<g class="px-part" data-info="end">
+<rect x="36" y="78" width="128" height="72" rx="8" fill="#fee2e2" stroke="#dc2626" stroke-width="1.8"/>
+<text x="100" y="108" text-anchor="middle" font-size="15" font-weight="700" fill="#991b1b">конечный</text>
+<text x="100" y="130" text-anchor="middle" font-size="13" fill="#991b1b">край слева</text>
+</g>
+<g class="px-part" data-info="home">
+<rect x="316" y="78" width="128" height="72" rx="8" fill="#dbeafe" stroke="#2563eb" stroke-width="1.8"/>
+<text x="380" y="108" text-anchor="middle" font-size="15" font-weight="700" fill="#1e40af">путевой</text>
+<text x="380" y="130" text-anchor="middle" font-size="13" fill="#1e40af">точка пути</text>
+</g>
+<g class="px-part" data-info="end">
+<rect x="596" y="78" width="128" height="72" rx="8" fill="#fee2e2" stroke="#dc2626" stroke-width="1.8"/>
+<text x="660" y="108" text-anchor="middle" font-size="15" font-weight="700" fill="#991b1b">конечный</text>
+<text x="660" y="130" text-anchor="middle" font-size="13" fill="#991b1b">край справа</text>
+</g>
+<rect x="250" y="96" width="52" height="36" rx="6" fill="#fff" stroke="#1e293b" stroke-width="1.6"/>
+<text x="276" y="118" text-anchor="middle" font-size="12" fill="#334155">стол</text>
+<text x="380" y="190" text-anchor="middle" font-size="15" fill="#334155">Конечный запрещает ехать дальше. Путевой только отмечает место.</text>
+</svg>
+</div>
+<div class="asutp-tabs">
+<button type="button" class="asutp-tab active" data-info="end">Конец хода</button>
+<button type="button" class="asutp-tab" data-info="home">Исходное</button>
+<button type="button" class="asutp-tab" data-info="lock">Блокировка</button>
+<button type="button" class="asutp-tab" data-info="pos">Положение</button>
+</div>
+</div>
+<aside class="asutp-panel" id="pxLimPurposePanel">
+<h3>Конец хода</h3>
+<p>Конечный выключатель стоит в крайнем положении. Каретка доехала до упора — сигнал запрещает ход дальше.</p>
+<p>Путевой — общее имя: он срабатывает в заданной точке пути, не только на краю. Конечный является путевым, поставленным на конец хода. По-английски оба называют limit switch.</p>
+</aside>
+</div>
+</section>
+
+<section class="slide slide-px-build">
+<h2>Конструкция путевого и конечного выключателя</h2>
+<div class="slide-body asutp-interactive">
+<div class="asutp-main">
+<p class="asutp-hint">Нажмите пункт. Упор не нажат: верхняя пара замкнута, нижняя с зазором</p>
+<div class="asutp-diagram-wrap">
+<svg class="cb-svg" viewBox="0 0 760 300" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="Разрез концевого выключателя">
+<rect width="760" height="300" fill="#fafafa"/>
+<g class="px-part" data-info="body">
+<rect x="56" y="96" width="248" height="188" rx="4" fill="#e7eef6" stroke="#1e293b" stroke-width="2.4"/>
+<rect x="74" y="114" width="212" height="148" fill="#f8fafc"/>
+<text x="36" y="196" font-size="15" font-weight="700" fill="#1e40af">1</text>
+<rect class="px-call" x="360" y="8" width="380" height="26" rx="6" fill="#fff" stroke="#cbd5e1"/>
+<text x="372" y="26" font-size="14" fill="#1e293b">1 — корпус</text>
+</g>
+<g class="px-part" data-info="plug">
+<rect x="128" y="246" width="96" height="28" rx="3" fill="#94a3b8" stroke="#334155" stroke-width="1.6"/>
+<line x1="148" y1="260" x2="204" y2="260" stroke="#475569" stroke-width="2"/>
+<text x="176" y="266" text-anchor="middle" font-size="13" font-weight="700" fill="#fff">2</text>
+<rect class="px-call" x="360" y="36" width="380" height="26" rx="6" fill="#fff" stroke="#cbd5e1"/>
+<text x="372" y="54" font-size="14" fill="#1e293b">2 — заглушка</text>
+</g>
+<g class="px-part" data-info="ncFix">
+<rect x="206" y="132" width="58" height="16" rx="1" fill="#c2410c" stroke="#9a3412"/>
+<text x="276" y="144" font-size="15" font-weight="700" fill="#1e40af">6</text>
+<rect class="px-call" x="360" y="148" width="380" height="26" rx="6" fill="#fff" stroke="#cbd5e1"/>
+<text x="372" y="166" font-size="14" fill="#1e293b">6 — неподвижный размыкающий</text>
+</g>
+<g class="px-part" data-info="ncMov">
+<rect x="156" y="134" width="62" height="12" rx="1" fill="#166534"/>
+<text x="132" y="146" text-anchor="end" font-size="15" font-weight="700" fill="#1e40af">5</text>
+<rect class="px-call" x="360" y="120" width="380" height="26" rx="6" fill="#fff" stroke="#cbd5e1"/>
+<text x="372" y="138" font-size="14" fill="#1e293b">5 — подвижный размыкающий</text>
+</g>
+<g class="px-part" data-info="noMov">
+<rect x="156" y="198" width="36" height="12" rx="1" fill="#334155"/>
+<text x="132" y="210" text-anchor="end" font-size="15" font-weight="700" fill="#1e40af">4</text>
+<rect class="px-call" x="360" y="92" width="380" height="26" rx="6" fill="#fff" stroke="#cbd5e1"/>
+<text x="372" y="110" font-size="14" fill="#1e293b">4 — подвижный замыкающий</text>
+</g>
+<g class="px-part" data-info="noFix">
+<rect x="206" y="204" width="58" height="16" rx="1" fill="#c2410c" stroke="#9a3412"/>
+<text x="276" y="216" font-size="15" font-weight="700" fill="#1e40af">3</text>
+<rect class="px-call" x="360" y="64" width="380" height="26" rx="6" fill="#fff" stroke="#cbd5e1"/>
+<text x="372" y="82" font-size="14" fill="#1e293b">3 — неподвижный замыкающий</text>
+</g>
+<g class="px-part" data-info="rod">
+<rect x="158" y="78" width="16" height="86" fill="#475569"/>
+<path d="M166 168 q14 7 0 14 q-14 7 0 14" fill="none" stroke="#b45309" stroke-width="2"/>
+<text x="128" y="124" text-anchor="end" font-size="15" font-weight="700" fill="#1e40af">7</text>
+<rect class="px-call" x="360" y="176" width="380" height="26" rx="6" fill="#fff" stroke="#cbd5e1"/>
+<text x="372" y="194" font-size="14" fill="#1e293b">7 — шток</text>
+</g>
+<g class="px-part" data-info="lever">
+<line x1="166" y1="72" x2="248" y2="34" stroke="#1e293b" stroke-width="8" stroke-linecap="round"/>
+<text x="214" y="28" font-size="15" font-weight="700" fill="#1e40af">8</text>
+<rect class="px-call" x="360" y="204" width="380" height="26" rx="6" fill="#fff" stroke="#cbd5e1"/>
+<text x="372" y="222" font-size="14" fill="#1e293b">8 — рычаг</text>
+</g>
+<g class="px-part" data-info="axis">
+<circle cx="166" cy="72" r="9" fill="#fff" stroke="#1e293b" stroke-width="2"/>
+<circle cx="166" cy="72" r="3" fill="#1e293b"/>
+<text x="146" y="64" text-anchor="end" font-size="15" font-weight="700" fill="#1e40af">10</text>
+<rect class="px-call" x="360" y="260" width="380" height="26" rx="6" fill="#fff" stroke="#cbd5e1"/>
+<text x="372" y="278" font-size="14" fill="#1e293b">10 — ось рычага</text>
+</g>
+<g class="px-part" data-info="roll">
+<circle cx="262" cy="28" r="15" fill="#fff" stroke="#1e293b" stroke-width="2"/>
+<circle cx="262" cy="28" r="4" fill="#e2e8f0" stroke="#1e293b"/>
+<text x="286" y="24" font-size="15" font-weight="700" fill="#1e40af">9</text>
+<rect class="px-call" x="360" y="232" width="380" height="26" rx="6" fill="#fff" stroke="#cbd5e1"/>
+<text x="372" y="250" font-size="14" fill="#1e293b">9 — ролик</text>
+</g>
+</svg>
+</div>
+</div>
+<aside class="asutp-panel" id="pxBuildPanel">
+<h3>1. Корпус</h3>
+<p>Коробка выключателя. Внутри шток и контакты, снаружи рычаг с роликом.</p>
+<p>Корпус закрывает механизм от масла и стружки. Крепят на жёсткий кронштейн: если он гнётся, точка срабатывания смещается.</p>
+</aside>
+</div>
+</section>
+
+<section class="slide slide-px-work">
+<h2>Принцип работы путевого и конечного</h2>
+<div class="slide-body asutp-interactive">
+<div class="asutp-main">
+<p class="asutp-hint">Двигайте кулачок влево. Ролик нажимается, когда кулачок до него доезжает</p>
+<div class="asutp-diagram-wrap">
+<svg class="cb-svg" viewBox="0 0 760 300" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="Кулачок нажимает ролик конечного выключателя">
+<defs>
+<pattern id="pxSlat" width="14" height="96" patternUnits="userSpaceOnUse">
+<line x1="7" y1="0" x2="7" y2="96" stroke="#cbd5e1" stroke-width="1"/>
+</pattern>
+<marker id="pxWorkArr" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+<path d="M0 0 L8 4 L0 8 Z" fill="#7c3aed"/>
+</marker>
+</defs>
+<rect width="760" height="300" fill="#fafafa"/>
+<rect x="24" y="26" width="712" height="96" fill="url(#pxSlat)" stroke="#64748b" stroke-width="1.4"/>
+<g id="pxWorkCam">
+<line x1="518" y1="70" x2="430" y2="70" stroke="#7c3aed" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#pxWorkArr)"/>
+<rect x="530" y="38" width="148" height="70" fill="#fff" stroke="#64748b" stroke-width="2"/>
+<rect x="546" y="50" width="116" height="46" fill="none" stroke="#94a3b8" stroke-width="1.4"/>
+</g>
+<g id="pxWorkArm">
+<line id="pxWorkLever" x1="250" y1="186" x2="250" y2="136" stroke="#334155" stroke-width="4" stroke-linecap="round"/>
+<g id="pxWorkRoll">
+<circle cx="250" cy="120" r="14" fill="#fff" stroke="#1e293b" stroke-width="2"/>
+<circle cx="250" cy="120" r="4" fill="#e2e8f0" stroke="#1e293b"/>
+</g>
+</g>
+<rect x="214" y="186" width="72" height="72" rx="3" fill="#fff" stroke="#1e293b" stroke-width="1.6"/>
+<line id="pxWorkNoL" x1="226" y1="208" x2="246" y2="208" stroke="#1e293b" stroke-width="2.4" stroke-linecap="round"/>
+<line id="pxWorkNoR" x1="258" y1="208" x2="276" y2="208" stroke="#1e293b" stroke-width="2.4" stroke-linecap="round"/>
+<text x="292" y="212" font-size="13" fill="#475569">НО</text>
+<line id="pxWorkNcL" x1="226" y1="232" x2="276" y2="232" stroke="#166534" stroke-width="2.6" stroke-linecap="round"/>
+<line id="pxWorkNcR" x1="258" y1="232" x2="276" y2="232" stroke="#dc2626" stroke-width="2.6" stroke-linecap="round" display="none"/>
+<text x="292" y="236" font-size="13" fill="#166534">НЗ</text>
+<rect x="236" y="258" width="28" height="14" rx="2" fill="#e2e8f0" stroke="#64748b"/>
+<text x="250" y="292" text-anchor="middle" font-size="14" font-weight="700" fill="#1e293b">конечный</text>
+</svg>
+</div>
+<p class="cb-tcc-live" id="pxWorkLive">Ролик свободен. НО разомкнут, НЗ замкнут</p>
+<div class="cb-controls">
+<label class="cb-ctrl">
+<span>ход кулачка</span>
+<input type="range" id="pxWorkRange" min="0" max="100" value="12" aria-label="Ход кулачка">
+<span class="cb-coord-val" id="pxWorkVal">далеко</span>
+</label>
+</div>
+</div>
+<aside class="asutp-panel" id="pxWorkPanel">
+<h3>Мгновенное переключение</h3>
+<p>Пока ролик не дожат, контакты остаются в покое: нормально разомкнутый разомкнут, нормально замкнутый замкнут.</p>
+<p>Пружина перебрасывает контакт рывком, а не вслед за медленным ходом упора. Дуга короче, дребезга меньше. После схода упора пружина возвращает контакты назад.</p>
+</aside>
+</div>
+</section>
+
+<section class="slide slide-px-lim-use">
+<h2>Где стоит конечный, а где путевой</h2>
+<div class="slide-body asutp-interactive">
+<div class="asutp-main">
+<p class="asutp-hint">На одном механизме обычно оба: конечные по краям, путевой отмечает промежуточную точку</p>
+<div class="asutp-diagram-wrap">
+<svg class="cb-svg" viewBox="0 0 760 200" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="Конечные и путевой на столе станка">
+<rect width="760" height="200" fill="#fafafa"/>
+<rect x="48" y="78" width="664" height="28" rx="4" fill="#e2e8f0" stroke="#64748b"/>
+<text x="380" y="98" text-anchor="middle" font-size="14" fill="#334155">стол</text>
+<rect x="48" y="118" width="120" height="52" rx="8" fill="#fee2e2" stroke="#dc2626" stroke-width="1.6"/>
+<text x="108" y="140" text-anchor="middle" font-size="14" font-weight="700" fill="#991b1b">конечный</text>
+<text x="108" y="158" text-anchor="middle" font-size="12" fill="#991b1b">стоп влево</text>
+<rect x="320" y="118" width="120" height="52" rx="8" fill="#dbeafe" stroke="#2563eb" stroke-width="1.6"/>
+<text x="380" y="140" text-anchor="middle" font-size="14" font-weight="700" fill="#1e40af">путевой</text>
+<text x="380" y="158" text-anchor="middle" font-size="12" fill="#1e40af">ноль оси</text>
+<rect x="592" y="118" width="120" height="52" rx="8" fill="#fee2e2" stroke="#dc2626" stroke-width="1.6"/>
+<text x="652" y="140" text-anchor="middle" font-size="14" font-weight="700" fill="#991b1b">конечный</text>
+<text x="652" y="158" text-anchor="middle" font-size="12" fill="#991b1b">стоп вправо</text>
+</svg>
+</div>
+<div class="asutp-tabs">
+<button type="button" class="asutp-tab active" data-info="axis">Ось станка</button>
+<button type="button" class="asutp-tab" data-info="crane">Кран</button>
+<button type="button" class="asutp-tab" data-info="door">Дверь и кожух</button>
+<button type="button" class="asutp-tab" data-info="valve">Задвижка</button>
+</div>
+</div>
+<aside class="asutp-panel" id="pxLimUsePanel">
+<h3>Ось станка</h3>
+<p>Слева и справа — конечные: стол доехал до края, ПЛК снимает ход в эту сторону. Посередине путевой отмечает ноль, это не запрет ехать.</p>
+<p>Конечный ставят на нормально замкнутый контакт. Обрыв провода выглядит как «край достигнут», и ось останавливается.</p>
+</aside>
+</div>
+</section>
+
+<section class="slide slide-px-why">
+<h2>Чем датчик приближения отличается</h2>
+<div class="slide-body asutp-interactive">
+<div class="asutp-main">
+<p class="asutp-hint">Сигнал тот же: есть деталь или нет. Путевой ждёт удара, приближение — нет</p>
+<div class="asutp-diagram-wrap">
+<svg class="cb-svg" viewBox="0 0 760 220" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="Путевой с ударом и датчик приближения с зазором">
+<rect width="760" height="220" fill="#fafafa"/>
+<rect x="28" y="28" width="340" height="164" rx="10" fill="#fff" stroke="#1e293b" stroke-width="1.4"/>
+<text x="198" y="56" text-anchor="middle" font-size="16" font-weight="700" fill="#1e293b">путевой и конечный</text>
+<rect x="56" y="84" width="90" height="48" rx="6" fill="#dbeafe" stroke="#2563eb"/>
+<text x="101" y="114" text-anchor="middle" font-size="14" fill="#1e293b">упор</text>
+<line x1="146" y1="108" x2="190" y2="108" stroke="#dc2626" stroke-width="2"/>
+<circle cx="214" cy="108" r="16" fill="#fff" stroke="#1e293b" stroke-width="2"/>
+<text x="198" y="164" text-anchor="middle" font-size="14" fill="#991b1b">упор бьёт ролик</text>
+<rect x="392" y="28" width="340" height="164" rx="10" fill="#fff" stroke="#1e293b" stroke-width="1.4"/>
+<text x="562" y="56" text-anchor="middle" font-size="16" font-weight="700" fill="#1e293b">датчик приближения</text>
+<rect x="430" y="84" width="90" height="48" rx="6" fill="#dbeafe" stroke="#2563eb"/>
+<text x="475" y="114" text-anchor="middle" font-size="14" fill="#1e293b">деталь</text>
+<path d="M530 96 q28 12 28 12 M530 108 H570 M530 120 q28 -12 28 -12" fill="none" stroke="#2563eb" stroke-width="2"/>
+<rect x="578" y="86" width="70" height="44" rx="6" fill="#fff" stroke="#1e293b"/>
+<text x="613" y="114" text-anchor="middle" font-size="14" fill="#1e293b">датчик</text>
+<text x="562" y="164" text-anchor="middle" font-size="14" fill="#166534">между ними зазор</text>
+</svg>
+</div>
+<div class="asutp-tabs">
+<button type="button" class="asutp-tab active" data-info="touch">Нет удара</button>
+<button type="button" class="asutp-tab" data-info="rate">Чаще срабатывает</button>
+<button type="button" class="asutp-tab" data-info="seal">Закрытый корпус</button>
+<button type="button" class="asutp-tab" data-info="same">Тот же сигнал</button>
+</div>
+</div>
+<aside class="asutp-panel" id="pxWhyPanel">
+<h3>Нет удара</h3>
+<p>Путевой живёт ударами упора. Ролик и контакты изнашиваются. Датчик приближения срабатывает от поля, света или звука, пока деталь ещё не коснулась корпуса.</p>
+<p>Его ставят там, где циклов много, среда грязная или упор сделать нельзя.</p>
+</aside>
+</div>
+</section>
+
+<section class="slide slide-px-class">
+<h2>Четыре датчика приближения</h2>
+<div class="slide-body asutp-interactive">
+<div class="asutp-main">
+<p class="asutp-hint">Смотрите подпись под картинкой: это и есть правило, что датчик видит</p>
+<div class="asutp-diagram-wrap">
+<svg class="cb-svg" viewBox="0 0 760 250" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="Четыре принципа датчиков приближения">
+<rect width="760" height="250" fill="#fafafa"/>
+<g class="px-part" data-info="ind">
+<rect x="16" y="16" width="176" height="218" rx="10" fill="#fff" stroke="#cbd5e1"/>
+<text x="104" y="44" text-anchor="middle" font-size="15" font-weight="700" fill="#1e293b">индуктивный</text>
+<rect x="40" y="70" width="56" height="40" rx="4" fill="#fff" stroke="#1e293b"/>
+<ellipse cx="96" cy="90" rx="10" ry="16" fill="none" stroke="#1d4ed8" stroke-width="2"/>
+<rect x="124" y="74" width="16" height="32" fill="#94a3b8" stroke="#1e293b"/>
+<text x="104" y="140" text-anchor="middle" font-size="14" font-weight="700" fill="#1e40af">только металл</text>
+<text x="104" y="164" text-anchor="middle" font-size="13" fill="#475569">пластик не видит</text>
+<text x="104" y="200" text-anchor="middle" font-size="13" fill="#475569">зазор миллиметры</text>
+</g>
+<g class="px-part" data-info="cap">
+<rect x="200" y="16" width="176" height="218" rx="10" fill="#fff" stroke="#cbd5e1"/>
+<text x="288" y="44" text-anchor="middle" font-size="15" font-weight="700" fill="#1e293b">ёмкостный</text>
+<rect x="224" y="70" width="56" height="40" rx="4" fill="#fff" stroke="#1e293b"/>
+<rect x="274" y="78" width="10" height="24" fill="#1d4ed8"/>
+<rect x="312" y="70" width="36" height="40" rx="4" fill="#fde68a" stroke="#a16207"/>
+<text x="288" y="140" text-anchor="middle" font-size="14" font-weight="700" fill="#1e40af">почти любой</text>
+<text x="288" y="164" text-anchor="middle" font-size="13" fill="#475569">материал</text>
+<text x="288" y="200" text-anchor="middle" font-size="13" fill="#475569">вода сбивает зону</text>
+</g>
+<g class="px-part" data-info="opt">
+<rect x="384" y="16" width="176" height="218" rx="10" fill="#fff" stroke="#cbd5e1"/>
+<text x="472" y="44" text-anchor="middle" font-size="15" font-weight="700" fill="#1e293b">оптический</text>
+<rect x="400" y="78" width="36" height="28" rx="3" fill="#fff" stroke="#1e293b"/>
+<line x1="436" y1="92" x2="508" y2="92" stroke="#2563eb" stroke-width="2"/>
+<rect x="508" y="78" width="36" height="28" rx="3" fill="#fff" stroke="#1e293b"/>
+<text x="472" y="140" text-anchor="middle" font-size="14" font-weight="700" fill="#1e40af">перекрыл луч</text>
+<text x="472" y="164" text-anchor="middle" font-size="13" fill="#475569">или отразил</text>
+<text x="472" y="200" text-anchor="middle" font-size="13" fill="#475569">грязь на линзе мешает</text>
+</g>
+<g class="px-part" data-info="us">
+<rect x="568" y="16" width="176" height="218" rx="10" fill="#fff" stroke="#cbd5e1"/>
+<text x="656" y="44" text-anchor="middle" font-size="15" font-weight="700" fill="#1e293b">ультразвук</text>
+<rect x="590" y="78" width="36" height="28" rx="3" fill="#fff" stroke="#1e293b"/>
+<line x1="626" y1="86" x2="690" y2="78" stroke="#2563eb" stroke-width="1.6"/>
+<line x1="690" y1="106" x2="626" y2="98" stroke="#ea580c" stroke-width="1.6"/>
+<rect x="690" y="74" width="28" height="36" rx="3" fill="#1e293b"/>
+<text x="656" y="140" text-anchor="middle" font-size="14" font-weight="700" fill="#1e40af">поймал эхо</text>
+<text x="656" y="164" text-anchor="middle" font-size="13" fill="#475569">видит и стекло</text>
+<text x="656" y="200" text-anchor="middle" font-size="13" fill="#475569">пену не слышит</text>
+</g>
+</svg>
+</div>
+</div>
+<aside class="asutp-panel" id="pxClassPanel">
+<h3>Индуктивный</h3>
+<p>Видит металл. Катушка теряет колебания, когда в поле появляются вихревые токи.</p>
+<p>Пластик, стекло и жидкость для него пустое место.</p>
+</aside>
+</div>
+</section>
+
+<section class="slide slide-px-dc">
+<h2>Подключение на постоянном токе</h2>
+<div class="slide-body asutp-interactive">
+<div class="asutp-main">
+<p class="asutp-hint">Три провода — выход на вход ПЛК. Два провода — датчик стоит в разрыв нагрузки</p>
+<div class="asutp-diagram-wrap">
+<svg class="cb-svg" viewBox="0 0 760 250" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="Схемы датчика приближения на постоянном токе">
+<rect width="760" height="250" fill="#fafafa"/>
+<g id="pxDcPnp">
+<text x="380" y="28" text-anchor="middle" font-size="15" font-weight="700" fill="#1e293b">PNP · выход даёт плюс</text>
+<rect x="250" y="70" width="160" height="90" rx="8" fill="#fff" stroke="#1e293b" stroke-width="1.6"/>
+<text x="330" y="108" text-anchor="middle" font-size="16" font-weight="700" fill="#1e293b">датчик</text>
+<text x="330" y="132" text-anchor="middle" font-size="13" fill="#475569">ключ к +24 В</text>
+<line x1="90" y1="96" x2="250" y2="96" stroke="#b45309" stroke-width="2.4"/>
+<text x="78" y="100" text-anchor="end" font-size="14" font-weight="700" fill="#b45309">+24 В</text>
+<line x1="330" y1="160" x2="330" y2="210" stroke="#2563eb" stroke-width="2.4"/>
+<text x="344" y="206" font-size="14" font-weight="700" fill="#2563eb">0 В</text>
+<line x1="410" y1="115" x2="520" y2="115" stroke="#1e293b" stroke-width="2.4"/>
+<rect x="520" y="86" width="150" height="58" rx="8" fill="#dbeafe" stroke="#2563eb" stroke-width="1.6"/>
+<text x="595" y="120" text-anchor="middle" font-size="15" font-weight="700" fill="#1e293b">вход ПЛК</text>
+<line x1="595" y1="144" x2="595" y2="210" stroke="#2563eb" stroke-width="2.4"/>
+</g>
+<g id="pxDcNpn" display="none">
+<text x="380" y="28" text-anchor="middle" font-size="15" font-weight="700" fill="#1e293b">NPN · выход сажает на минус</text>
+<rect x="250" y="70" width="160" height="90" rx="8" fill="#fff" stroke="#1e293b" stroke-width="1.6"/>
+<text x="330" y="108" text-anchor="middle" font-size="16" font-weight="700" fill="#1e293b">датчик</text>
+<text x="330" y="132" text-anchor="middle" font-size="13" fill="#475569">ключ к 0 В</text>
+<line x1="90" y1="96" x2="250" y2="96" stroke="#b45309" stroke-width="2.4"/>
+<text x="78" y="100" text-anchor="end" font-size="14" font-weight="700" fill="#b45309">+24 В</text>
+<line x1="330" y1="160" x2="330" y2="210" stroke="#2563eb" stroke-width="2.4"/>
+<text x="344" y="206" font-size="14" font-weight="700" fill="#2563eb">0 В</text>
+<rect x="500" y="70" width="160" height="58" rx="8" fill="#dbeafe" stroke="#2563eb" stroke-width="1.6"/>
+<text x="580" y="104" text-anchor="middle" font-size="15" font-weight="700" fill="#1e293b">вход ПЛК</text>
+<line x1="580" y1="70" x2="580" y2="40" stroke="#b45309" stroke-width="2.4"/>
+<text x="592" y="36" font-size="14" font-weight="700" fill="#b45309">+24 В</text>
+<line x1="410" y1="130" x2="500" y2="130" stroke="#1e293b" stroke-width="2.4"/>
+</g>
+<g id="pxDc2" display="none">
+<text x="380" y="28" text-anchor="middle" font-size="15" font-weight="700" fill="#1e293b">два провода · датчик в разрыве нагрузки</text>
+<line x1="70" y1="120" x2="180" y2="120" stroke="#b45309" stroke-width="2.4"/>
+<text x="70" y="100" font-size="14" font-weight="700" fill="#b45309">+24 В</text>
+<rect x="180" y="88" width="150" height="64" rx="8" fill="#fff" stroke="#1e293b" stroke-width="1.6"/>
+<text x="255" y="126" text-anchor="middle" font-size="16" font-weight="700" fill="#1e293b">датчик</text>
+<line x1="330" y1="120" x2="430" y2="120" stroke="#1e293b" stroke-width="2.4"/>
+<rect x="430" y="88" width="150" height="64" rx="8" fill="#dbeafe" stroke="#2563eb" stroke-width="1.6"/>
+<text x="505" y="126" text-anchor="middle" font-size="16" font-weight="700" fill="#1e293b">нагрузка</text>
+<line x1="580" y1="120" x2="690" y2="120" stroke="#2563eb" stroke-width="2.4"/>
+<text x="640" y="108" font-size="14" font-weight="700" fill="#2563eb">0 В</text>
+</g>
+</svg>
+</div>
+<div class="asutp-tabs">
+<button type="button" class="asutp-tab active" data-info="pnp">PNP</button>
+<button type="button" class="asutp-tab" data-info="npn">NPN</button>
+<button type="button" class="asutp-tab" data-info="two">Два провода</button>
+</div>
+</div>
+<aside class="asutp-panel" id="pxDcPanel">
+<h3>PNP</h3>
+<p>Коричневый провод — плюс 24 В, синий — 0 В, чёрный — выход. При срабатывании чёрный соединяется с плюсом.</p>
+<p>Обычный дискретный вход ПЛК как раз ждёт плюс. Нагрузка или вход сидят между чёрным проводом и нулём.</p>
+</aside>
+</div>
+</section>
+
+<section class="slide slide-px-ac">
+<h2>Подключение на переменном токе</h2>
+<div class="slide-body asutp-interactive">
+<div class="asutp-main">
+<p class="asutp-hint">Датчик переменного тока почти всегда двухпроводный и стоит последовательно с нагрузкой</p>
+<div class="asutp-diagram-wrap">
+<svg class="cb-svg" viewBox="0 0 760 230" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="Двухпроводный датчик на переменном токе">
+<rect width="760" height="230" fill="#fafafa"/>
+<text x="70" y="78" font-size="16" font-weight="700" fill="#1e293b">L</text>
+<line x1="90" y1="74" x2="180" y2="74" stroke="#1e293b" stroke-width="2.4"/>
+<rect x="180" y="46" width="160" height="56" rx="8" fill="#fff" stroke="#1e293b" stroke-width="1.6"/>
+<text x="260" y="80" text-anchor="middle" font-size="16" font-weight="700" fill="#1e293b">датчик</text>
+<line x1="340" y1="74" x2="430" y2="74" stroke="#1e293b" stroke-width="2.4"/>
+<rect id="pxAcLoad" x="430" y="46" width="180" height="56" rx="8" fill="#dbeafe" stroke="#2563eb" stroke-width="1.6"/>
+<text id="pxAcLoadT" x="520" y="80" text-anchor="middle" font-size="16" font-weight="700" fill="#1e293b">катушка</text>
+<line x1="610" y1="74" x2="690" y2="74" stroke="#1e293b" stroke-width="2.4"/>
+<text x="700" y="78" font-size="16" font-weight="700" fill="#1e293b">N</text>
+<text id="pxAcNote" x="380" y="168" text-anchor="middle" font-size="15" fill="#334155">Ток катушки идёт сквозь датчик</text>
+</svg>
+</div>
+<div class="asutp-tabs">
+<button type="button" class="asutp-tab active" data-info="coil">Катушка</button>
+<button type="button" class="asutp-tab" data-info="lamp">Лампа</button>
+<button type="button" class="asutp-tab" data-info="bad">Чего нельзя</button>
+</div>
+</div>
+<aside class="asutp-panel" id="pxAcPanel">
+<h3>Катушка</h3>
+<p>Двухпроводный датчик на переменном токе включают в разрыв цепи катушки пускателя или контактора. Отдельного питания у него нет: ток нагрузки идёт сквозь него.</p>
+<p>Во включённом состоянии на датчике падает несколько вольт. В выключенном сквозь него всё равно течёт малый ток. Катушка должна этот ток выдерживать и не втягиваться от него.</p>
+</aside>
+</div>
+</section>
+
+<section class="slide slide-px-ind">
+<h2>Индуктивный датчик</h2>
+<div class="slide-body asutp-interactive">
+<div class="asutp-main">
+<p class="asutp-hint">Двигайте стальную пластину. Ближе номинального зазора генератор срывается</p>
+<div class="asutp-diagram-wrap">
+<svg class="cb-svg" viewBox="0 0 760 240" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="Индуктивный датчик приближения">
+<rect width="760" height="240" fill="#fafafa"/>
+<rect x="40" y="70" width="120" height="100" rx="8" fill="#fff" stroke="#1e293b" stroke-width="1.8"/>
+<ellipse cx="150" cy="120" rx="18" ry="36" fill="none" stroke="#1d4ed8" stroke-width="3"/>
+<text x="100" y="124" text-anchor="middle" font-size="15" font-weight="700" fill="#1e293b">катушка</text>
+<path id="pxIndField" d="M168 90 q70 30 70 30 M168 120 H250 M168 150 q70 -30 70 -30" fill="none" stroke="#93c5fd" stroke-width="2"/>
+<g id="pxIndPlate">
+<rect x="430" y="78" width="28" height="84" rx="3" fill="#94a3b8" stroke="#1e293b" stroke-width="1.4"/>
+<text x="444" y="188" text-anchor="middle" font-size="14" fill="#334155">сталь</text>
+</g>
+<text x="250" y="48" text-anchor="middle" font-size="14" fill="#64748b">поле катушки</text>
+</svg>
+</div>
+<p class="cb-tcc-live" id="pxIndLive">Зазор больше номинала. Генератор идёт, выхода нет</p>
+<div class="cb-controls">
+<label class="cb-ctrl">
+<span>зазор</span>
+<input type="range" id="pxIndRange" min="4" max="32" value="24" aria-label="Зазор до стали">
+<span class="cb-coord-val" id="pxIndVal">24 мм</span>
+</label>
+</div>
+</div>
+<aside class="asutp-panel" id="pxIndPanel">
+<h3>Вихревые токи</h3>
+<p>В торце датчика катушка колебательного контура. Пока перед ней пусто, колебания есть.</p>
+<p>Сталь в поле создаёт вихревые токи и забирает энергию. Амплитуда падает, порог переключается, выход замыкается. Номинальный зазор S<sub>n</sub> задают для стальной пластины. Цветной металл тот же датчик видит ближе.</p>
+</aside>
+</div>
+</section>
+
+<section class="slide slide-px-ind-char">
+<h2>Характеристики индуктивного</h2>
+<div class="slide-body asutp-interactive">
+<div class="asutp-main">
+<p class="asutp-hint">Зона, гистерезис, металл и посадка в металл — это разные ограничения</p>
+<div class="app-purpose-grid em-fast-grid">
+<button type="button" class="app-purpose-card active" data-info="sn">Зазор меньше номинала</button>
+<button type="button" class="app-purpose-card" data-info="hyst">У границы не дребезжит</button>
+<button type="button" class="app-purpose-card" data-info="metal">Цветной металл ближе</button>
+<button type="button" class="app-purpose-card" data-info="flush">В сталь утапливают не всякий</button>
+</div>
+</div>
+<aside class="asutp-panel" id="pxIndCharPanel">
+<h3>Номинальный зазор</h3>
+<p>S<sub>n</sub> — расстояние, на котором датчик гарантированно видит стальную пластину заданного размера. Реальный зазор меньше номинала: берут запас, обычно до 0,8 S<sub>n</sub>.</p>
+<p>Типичные значения — единицы миллиметров. Частота переключения — сотни и тысячи герц, у путевого выключателя это единицы герц.</p>
+</aside>
+</div>
+</section>
+
+<section class="slide slide-px-cap">
+<h2>Ёмкостный датчик</h2>
+<div class="slide-body asutp-interactive">
+<div class="asutp-main">
+<p class="asutp-hint">Тот же дискретный выход, но поле электрическое: материал может быть неметаллом</p>
+<div class="asutp-diagram-wrap">
+<svg class="cb-svg" viewBox="0 0 760 220" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="Ёмкостный датчик приближения">
+<rect width="760" height="220" fill="#fafafa"/>
+<rect x="48" y="60" width="130" height="100" rx="8" fill="#fff" stroke="#1e293b" stroke-width="1.8"/>
+<rect x="150" y="78" width="16" height="64" fill="#1d4ed8"/>
+<text x="112" y="116" text-anchor="middle" font-size="16" font-weight="700" fill="#1e293b">электрод</text>
+<path d="M166 86 q80 24 90 24 M166 110 H270 M166 134 q80 -24 90 -24" fill="none" stroke="#93c5fd" stroke-width="2"/>
+<g id="pxCapObj">
+<rect x="430" y="68" width="70" height="84" rx="6" fill="#fde68a" stroke="#a16207" stroke-width="1.6"/>
+<text id="pxCapObjT" x="465" y="116" text-anchor="middle" font-size="15" font-weight="700" fill="#1e293b">пластик</text>
+</g>
+<text id="pxCapOut" x="620" y="116" font-size="16" font-weight="700" fill="#166534">выход есть</text>
+</svg>
+</div>
+<p class="cb-tcc-live" id="pxCapLive">Диэлектрик меняет ёмкость. Порог переключается</p>
+<div class="asutp-tabs">
+<button type="button" class="asutp-tab active" data-info="plast">Пластик</button>
+<button type="button" class="asutp-tab" data-info="water">Жидкость</button>
+<button type="button" class="asutp-tab" data-info="steel">Сталь</button>
+<button type="button" class="asutp-tab" data-info="none">Пусто</button>
+</div>
+</div>
+<aside class="asutp-panel" id="pxCapPanel">
+<h3>Пластик</h3>
+<p>Электрод на торце создаёт электрическое поле. Любое тело с диэлектрической проницаемостью выше воздуха увеличивает ёмкость, и порог срабатывает.</p>
+<p>Поэтому ёмкостный датчик видит пластик, стекло, зерно, дерево и жидкость. Чувствительность крутят на корпусе. Вода и грязь на торце сбивают зону. Сквозь тонкую неметаллическую стенку бака им меряют уровень.</p>
+</aside>
+</div>
+</section>
+
+<section class="slide slide-px-opt">
+<h2>Оптический датчик</h2>
+<div class="slide-body asutp-interactive">
+<div class="asutp-main">
+<p class="asutp-hint">Три геометрии одного приёма: луч либо доходит до приёмника, либо нет</p>
+<div class="asutp-diagram-wrap">
+<svg class="cb-svg" viewBox="0 0 760 230" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="Оптические датчики приближения">
+<rect width="760" height="230" fill="#fafafa"/>
+<g id="pxOptBar">
+<rect x="40" y="80" width="140" height="70" rx="8" fill="#fff" stroke="#1e293b" stroke-width="1.6"/>
+<text x="110" y="122" text-anchor="middle" font-size="16" font-weight="700" fill="#1e293b">излучатель</text>
+<line x1="180" y1="115" x2="300" y2="115" stroke="#2563eb" stroke-width="2.4"/>
+<rect x="300" y="78" width="70" height="74" rx="6" fill="#fecaca" stroke="#b91c1c" stroke-width="1.6"/>
+<text x="335" y="122" text-anchor="middle" font-size="14" font-weight="700" fill="#991b1b">объект</text>
+<line x1="370" y1="115" x2="500" y2="115" stroke="#cbd5e1" stroke-width="2.4" stroke-dasharray="7 6"/>
+<rect x="500" y="80" width="140" height="70" rx="8" fill="#fff" stroke="#1e293b" stroke-width="1.6"/>
+<text x="570" y="122" text-anchor="middle" font-size="16" font-weight="700" fill="#1e293b">приёмник</text>
+</g>
+<g id="pxOptRetro" display="none">
+<rect x="40" y="80" width="170" height="70" rx="8" fill="#fff" stroke="#1e293b" stroke-width="1.6"/>
+<text x="125" y="112" text-anchor="middle" font-size="16" font-weight="700" fill="#1e293b">датчик</text>
+<text x="125" y="134" text-anchor="middle" font-size="13" fill="#475569">свет и приём</text>
+<line x1="210" y1="104" x2="560" y2="104" stroke="#2563eb" stroke-width="2.2"/>
+<line x1="560" y1="126" x2="210" y2="126" stroke="#ea580c" stroke-width="2.2"/>
+<rect x="560" y="78" width="140" height="74" rx="8" fill="#fef3c7" stroke="#a16207" stroke-width="1.6"/>
+<text x="630" y="122" text-anchor="middle" font-size="16" font-weight="700" fill="#1e293b">отражатель</text>
+</g>
+<g id="pxOptDiff" display="none">
+<rect x="40" y="80" width="170" height="70" rx="8" fill="#fff" stroke="#1e293b" stroke-width="1.6"/>
+<text x="125" y="112" text-anchor="middle" font-size="16" font-weight="700" fill="#1e293b">датчик</text>
+<text x="125" y="134" text-anchor="middle" font-size="13" fill="#475569">свет и приём</text>
+<line x1="210" y1="104" x2="470" y2="90" stroke="#2563eb" stroke-width="2.2"/>
+<line x1="470" y1="140" x2="210" y2="126" stroke="#ea580c" stroke-width="2.2"/>
+<rect x="470" y="70" width="120" height="90" rx="8" fill="#dbeafe" stroke="#2563eb" stroke-width="1.6"/>
+<text x="530" y="122" text-anchor="middle" font-size="16" font-weight="700" fill="#1e293b">объект</text>
+</g>
+</svg>
+</div>
+<div class="asutp-tabs">
+<button type="button" class="asutp-tab active" data-info="bar">Барьер</button>
+<button type="button" class="asutp-tab" data-info="retro">Рефлектор</button>
+<button type="button" class="asutp-tab" data-info="diff">От объекта</button>
+</div>
+</div>
+<aside class="asutp-panel" id="pxOptPanel">
+<h3>Барьер</h3>
+<p>Излучатель и приёмник стоят друг против друга. Объект разрывает луч. Дальность самая большая, объект должен быть непрозрачным.</p>
+<p>Нужны два корпуса и провод к обоим. Это не измерение координаты, а факт: луч есть или луча нет.</p>
+</aside>
+</div>
+</section>
+
+<section class="slide slide-px-opt-char">
+<h2>Особенности оптического</h2>
+<div class="slide-body asutp-interactive">
+<div class="asutp-main">
+<p class="asutp-hint">Луч видит контраст. Грязь, блеск и прозрачность ломают именно этот принцип</p>
+<div class="app-purpose-grid em-fast-grid">
+<button type="button" class="app-purpose-card active" data-info="color">Чёрное видно хуже</button>
+<button type="button" class="app-purpose-card" data-info="dirt">Грязь слепит линзу</button>
+<button type="button" class="app-purpose-card" data-info="shine">Блеск путает отражатель</button>
+<button type="button" class="app-purpose-card" data-info="clear">Стекло пропускает луч</button>
+</div>
+</div>
+<aside class="asutp-panel" id="pxOptCharPanel">
+<h3>Цвет</h3>
+<p>В схеме «от объекта» дальность зависит от поверхности. Белая и матовая возвращает свет дальше, чёрная — ближе или никак.</p>
+<p>Барьер от цвета объекта почти не зависит: ему важно только, что луч перекрыт.</p>
+</aside>
+</div>
+</section>
+
+<section class="slide slide-px-us">
+<h2>Ультразвуковой датчик</h2>
+<div class="slide-body asutp-interactive">
+<div class="asutp-main">
+<p class="asutp-hint">Двигайте объект. Выход есть только внутри окна, не в мёртвой зоне и не слишком далеко</p>
+<div class="asutp-diagram-wrap">
+<svg class="cb-svg" viewBox="0 0 760 230" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="Ультразвуковой датчик приближения">
+<rect width="760" height="230" fill="#fafafa"/>
+<rect x="36" y="78" width="70" height="74" rx="8" fill="#fff" stroke="#1e293b" stroke-width="1.8"/>
+<text x="71" y="120" text-anchor="middle" font-size="14" font-weight="700" fill="#1e293b">пьезо</text>
+<rect x="106" y="96" width="90" height="38" fill="#fee2e2"/>
+<text x="151" y="88" text-anchor="middle" font-size="13" fill="#991b1b">мёртвая</text>
+<rect x="196" y="96" width="280" height="38" fill="#dcfce7"/>
+<text x="336" y="88" text-anchor="middle" font-size="13" fill="#166534">окно срабатывания</text>
+<rect x="476" y="96" width="200" height="38" fill="#f1f5f9"/>
+<text x="576" y="88" text-anchor="middle" font-size="13" fill="#64748b">далеко</text>
+<g id="pxUsObj">
+<rect x="360" y="126" width="36" height="48" rx="4" fill="#1e293b"/>
+</g>
+<text x="71" y="190" text-anchor="middle" font-size="13" fill="#475569">датчик</text>
+</svg>
+</div>
+<p class="cb-tcc-live" id="pxUsLive">Объект в окне. Выход замкнут</p>
+<div class="cb-controls">
+<label class="cb-ctrl">
+<span>расстояние</span>
+<input type="range" id="pxUsRange" min="0" max="100" value="45" aria-label="Расстояние до объекта">
+<span class="cb-coord-val" id="pxUsVal">в окне</span>
+</label>
+</div>
+</div>
+<aside class="asutp-panel" id="pxUsPanel">
+<h3>Эхо</h3>
+<p>Пьезоэлемент посылает короткий ультразвуковой импульс и слушает отражение. Время туда и обратно пересчитывают в расстояние.</p>
+<p>У датчика приближения на выходе не число, а контакт: замкнут, только если эхо попало в заданное окно. Близко к торцу есть мёртвая зона — эхо ещё не отделилось от импульса. Пена, мягкая ткань и косой лист отражают плохо. Скорость звука зависит от температуры воздуха.</p>
+</aside>
+</div>
+</section>
+
+<section class="slide slide-px-cmp">
+<h2>Что какой датчик видит</h2>
+<div class="slide-body asutp-interactive">
+<div class="asutp-main">
+<p class="asutp-hint">Один объект — разные ответы. Выбирают по материалу, грязи и дистанции</p>
+<div class="app-purpose-grid em-fast-grid">
+<button type="button" class="app-purpose-card active" data-info="lim">Путевой: что нажало ролик</button>
+<button type="button" class="app-purpose-card" data-info="ind">Индуктивный: только металл</button>
+<button type="button" class="app-purpose-card" data-info="cap">Ёмкостный: почти любой материал</button>
+<button type="button" class="app-purpose-card" data-info="opt">Оптический: кто перекрыл луч</button>
+<button type="button" class="app-purpose-card" data-info="us">Ультразвук: кто вернул эхо</button>
+</div>
+</div>
+<aside class="asutp-panel" id="pxCmpPanel">
+<h3>Путевой</h3>
+<p>Видит всё, что способно нажать на ролик: металл, дерево, пластик. Жидкость и стекло «в воздухе» не видит.</p>
+<p>Дистанция — это ход упора, не поле. Пыль на контактах вредна, пыль перед роликом обычно нет. Циклов мало по сравнению с бесконтактными.</p>
+</aside>
+</div>
+</section>
+
+<section class="slide slide-px-where">
+<h2>Где это в САУ</h2>
+<div class="slide-body asutp-interactive">
+<div class="asutp-main">
+<p class="asutp-hint">Для программы ПЛК и путевой, и датчик приближения — дискретный вход</p>
+<div class="app-purpose-grid em-fast-grid">
+<button type="button" class="app-purpose-card active" data-info="di">На вход ПЛК приходит один бит</button>
+<button type="button" class="app-purpose-card" data-info="end">Край хода стережёт конечный</button>
+<button type="button" class="app-purpose-card" data-info="part">Деталь выбирают по материалу</button>
+<button type="button" class="app-purpose-card" data-info="level">Уровень здесь — порог, не число</button>
+</div>
+</div>
+<aside class="asutp-panel" id="pxWherePanel">
+<h3>Вход ПЛК</h3>
+<p>Трёхпроводный PNP на 24 В сажают на дискретный вход: чёрный провод даёт плюс, когда объект есть. НЗ-контакт путевого включают так, чтобы обрыв провода останавливал механизм.</p>
+<p>В программе это один бит. Разница датчиков остаётся снаружи: что они способны увидеть и как их подключили.</p>
+</aside>
+</div>
+</section>
+
+<section class="slide slide-title"><span class="tag">Конец лекции 15</span>
+<h1>Спасибо за внимание!</h1>
+<p><a href="lecture-14.html" class="link-home">← Лекция 14. Языки программирования ПЛК</a></p>
+<p><a href="lecture-3.html" class="link-home">← Лекция 3. Датчики температуры, положения и оптические</a></p>
+<p><a href="../index.html" class="link-home">← На главную</a></p></section>
+</div>
+
+<div class="controls">
+<div class="controls-left">
+<a href="../index.html" class="course-title-bar course-title-link">Средства автоматизации и управления</a>
+</div>
+<div class="controls-left">
+<a href="../index.html" class="btn-nav btn-home" title="На главную">⌂</a>
+<button class="btn-nav" id="prevBtn">← Назад</button>
+<button class="btn-nav" id="nextBtn">Вперёд →</button>
+</div>
+<div class="progress-wrap"><div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div></div>
+<span class="slide-counter" id="slideCounter">1 / 19</span>
+<div class="controls-right">
+<button class="btn-nav" id="overviewBtn">Обзор</button>
+<button class="btn-nav" id="fullscreenBtn">⛶</button>
+</div>
+</div>
+<script src="../js/presentation.js"></script>
+<script src="../js/lecture-15.js"></script>
+</body></html>
