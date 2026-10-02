@@ -4595,8 +4595,22 @@ body.overview-mode .slide-diagram { display: none; }
 .cb-uz-part.is-active ellipse,
 .cb-uz-part:hover rect,
 .cb-uz-part:hover ellipse { stroke: #2563eb; stroke-width: 2.2; }
+.cb-diff-part { cursor: pointer; }
+.cb-diff-part.is-active ellipse,
+.cb-diff-part.is-active rect,
+.cb-diff-part:hover ellipse,
+.cb-diff-part:hover rect { stroke: #2563eb; stroke-width: 2.4; }
+.slide-cb-diff-interactive .cb-svg line,
+.slide-cb-diff-interactive .cb-svg polygon { pointer-events: none; }
+.slide-cb-diff-interactive .cb-svg { max-height: 48vh; }
 .cb-trio { cursor: pointer; }
 .cb-trio.is-active > rect.cb-trio-card { stroke: #2563eb; stroke-width: 2.2; }
+.cb-rtype { cursor: pointer; }
+.cb-rtype.is-active > rect.cb-rtype-card { stroke: #2563eb; stroke-width: 2.4; }
+.cb-rtype.is-on > rect.cb-rtype-card { stroke: #15803d; stroke-width: 2.4; }
+.cb-rtype.is-off > rect.cb-rtype-card { stroke: #b91c1c; stroke-width: 2.4; }
+.slide-cb-rtype-interactive .cb-svg,
+.slide-cb-rsel-interactive .cb-svg { max-height: 46vh; }
 .slide-cb-el-interactive .cb-el-split {
   display: flex;
   gap: 0.55em;
@@ -4644,6 +4658,57 @@ body.overview-mode .slide-diagram { display: none; }
 .slide-cb-sel-interactive .cb-sel-box { cursor: pointer; }
 .slide-cb-sel-interactive .cb-controls.is-off { display: none; }
 .slide-cb-coord-interactive .cb-svg { max-height: 46vh; }
+.slide-cb-where-interactive .cb-where-split {
+  display: grid;
+  grid-template-columns: minmax(240px, 38%) minmax(0, 1fr);
+  gap: 0.55em;
+  align-items: stretch;
+  flex: 1;
+  min-height: 240px;
+}
+.slide-cb-where-interactive .cb-where-photo {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  min-width: 240px;
+  min-height: 220px;
+}
+.slide-cb-where-interactive .cb-where-photo img {
+  display: block;
+  width: 100%;
+  height: 34vh;
+  min-height: 200px;
+  flex: none;
+  object-fit: cover;
+  object-position: center;
+  background: #0f172a;
+  border: 1px solid var(--slide-border);
+  border-radius: 8px;
+}
+.slide-cb-where-interactive .cb-where-photo figcaption {
+  margin: 0.3em 0 0;
+  font-size: 0.72em;
+  line-height: 1.3;
+  color: #64748b;
+}
+.slide-cb-where-interactive .cb-where-split .asutp-diagram-wrap {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+}
+.slide-cb-where-interactive .cb-svg {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  height: auto;
+  max-height: 46vh;
+}
+.slide-cb-where-interactive .cb-where-hit.is-dim { opacity: 0.38; }
+.slide-cb-where-interactive .cb-where-hit.is-active rect,
+.slide-cb-where-interactive .cb-where-hit.is-active circle {
+  stroke: #2563eb;
+  stroke-width: 2.4;
+}
 .px-part { cursor: pointer; }
 .px-part.active rect,
 .px-part.active circle,

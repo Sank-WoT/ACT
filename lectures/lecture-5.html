@@ -12,6 +12,7 @@
 <li>Время-токовая</li><li>Промышленный автомат</li>
 <li>Электронный расцепитель</li><li>Защиты L, S, I, G, N</li><li>Что внутри</li><li>Преимущества</li><li>Минимальное U и независимый</li>
 <li>Дифференциальный</li><li>Устройство УЗО</li><li>УЗО в корпусе</li><li>АВ, УЗО и ДИФ</li>
+<li>Типы AC, A, B</li><li>Селективность УЗО</li>
 <li>Выбор</li><li>Согласование характеристик</li><li>Где в САУ</li>
 </ol></div></section>
 
@@ -871,42 +872,66 @@
 <h2>Дифференциальный расцепитель</h2>
 <div class="slide-body asutp-interactive">
 <div class="asutp-main">
-<p class="asutp-hint">Двигайте утечку — сумма токов в кольце не ноль, расцепитель срабатывает</p>
+<p class="asutp-hint">Двигайте утечку. Сколько тока не вернулось по нейтрали — столько видит кольцо</p>
+<p class="cb-tcc-live" id="cbDiffLive">К нагрузке 200 мА, обратно 200 мА. Сумма в кольце 0.</p>
 <div class="asutp-diagram-wrap">
-<svg class="cb-svg" viewBox="0 0 520 210" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="Дифференциальный расцепитель">
-<rect width="520" height="210" fill="#fafafa"/>
-<ellipse cx="200" cy="100" rx="70" ry="70" fill="#fff" stroke="#1e293b" stroke-width="1.7"/>
-<text x="200" y="104" text-anchor="middle" font-size="13" font-weight="700" fill="#1e40af">ТТ</text>
-<path d="M40 70 H270" stroke="#1e40af" stroke-width="2"/>
-<path d="M40 100 H270" stroke="#1e40af" stroke-width="2"/>
-<path d="M40 130 H270" stroke="#64748b" stroke-width="2"/>
-<text x="28" y="74" text-anchor="end" font-size="12" fill="#1e40af">L1</text>
-<text x="28" y="104" text-anchor="end" font-size="12" fill="#1e40af">L2</text>
-<text x="28" y="134" text-anchor="end" font-size="12" fill="#64748b">N</text>
-<path class="cb-diff-leak" d="M270 70 Q340 40 400 88" fill="none" stroke="#dc2626" stroke-width="1.8" opacity="0"/>
-<text class="cb-diff-ileak" x="400" y="80" font-size="13" font-weight="700" fill="#dc2626" opacity="0">IΔ</text>
-<rect x="360" y="120" width="100" height="36" fill="#fff" stroke="#1e293b" stroke-width="1.5"/>
-<text x="410" y="142" text-anchor="middle" font-size="13" font-weight="700" fill="#1e40af">расцепитель</text>
-<text class="cb-diff-readout" x="260" y="198" text-anchor="middle" font-size="13" font-weight="700" fill="#1e40af">IΔ = 0 · сумма токов ноль</text>
+<svg class="cb-svg" viewBox="0 0 760 300" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="Фаза и нейтраль через кольцо, утечка в землю">
+<rect width="760" height="300" fill="#fafafa"/>
+<g class="cb-diff-part" data-info="tor">
+<ellipse cx="310" cy="104" rx="50" ry="64" fill="#e2e8f0" stroke="#1e293b" stroke-width="2"/>
+<ellipse cx="310" cy="104" rx="34" ry="46" fill="#fafafa" stroke="#94a3b8" stroke-width="1.4"/>
+</g>
+<line x1="78" y1="72" x2="628" y2="72" stroke="#1e40af" stroke-width="2.6"/>
+<line x1="78" y1="136" x2="628" y2="136" stroke="#334155" stroke-width="2.6"/>
+<text x="46" y="40" text-anchor="middle" font-size="14" fill="#64748b">сеть</text>
+<text x="46" y="77" text-anchor="middle" font-size="16" font-weight="700" fill="#1e40af">L</text>
+<text x="46" y="141" text-anchor="middle" font-size="16" font-weight="700" fill="#334155">N</text>
+<polygon points="168,72 154,66 154,78" fill="#1e40af"/>
+<text id="cbDiffTo" x="176" y="62" font-size="15" font-weight="700" fill="#1e40af">200 мА</text>
+<polygon points="154,136 168,130 168,142" fill="#334155"/>
+<text id="cbDiffBack" x="176" y="158" font-size="15" font-weight="700" fill="#334155">200 мА</text>
+<text x="310" y="109" text-anchor="middle" font-size="15" font-weight="700" fill="#1e3a8a" class="cb-diff-part" data-info="tor">кольцо</text>
+<line id="cbDiffSec" x1="310" y1="168" x2="310" y2="188" stroke="#94a3b8" stroke-width="2"/>
+<text x="322" y="184" font-size="13" fill="#64748b">I₂</text>
+<g class="cb-diff-part" data-info="idn">
+<rect id="cbDiffTrip" x="230" y="188" width="160" height="62" rx="8" fill="#fff" stroke="#1e293b" stroke-width="1.6"/>
+<text id="cbDiffTripTx" x="310" y="214" text-anchor="middle" font-size="16" font-weight="700" fill="#1e293b">расцепитель</text>
+<text id="cbDiffTripSub" x="310" y="236" text-anchor="middle" font-size="13" fill="#64748b">IΔ = 0</text>
+</g>
+<rect x="628" y="48" width="112" height="112" rx="8" fill="#fff" stroke="#1e293b" stroke-width="1.6"/>
+<text x="684" y="110" text-anchor="middle" font-size="16" font-weight="700" fill="#1e293b">нагрузка</text>
+<g id="cbDiffLeak" display="none">
+<path d="M520 72 V198" fill="none" stroke="#dc2626" stroke-width="2.2" stroke-dasharray="6 4"/>
+<text id="cbDiffIleak" x="530" y="118" font-size="15" font-weight="700" fill="#dc2626">IΔ</text>
+<circle cx="520" cy="212" r="9" fill="#fff" stroke="#dc2626" stroke-width="2"/>
+<line x1="520" y1="221" x2="520" y2="246" stroke="#dc2626" stroke-width="2"/>
+<line x1="500" y1="234" x2="540" y2="234" stroke="#dc2626" stroke-width="2"/>
+<line x1="520" y1="246" x2="506" y2="266" stroke="#dc2626" stroke-width="2"/>
+<line x1="520" y1="246" x2="534" y2="266" stroke="#dc2626" stroke-width="2"/>
+<line x1="492" y1="278" x2="548" y2="278" stroke="#dc2626" stroke-width="2"/>
+<line x1="504" y1="284" x2="536" y2="284" stroke="#dc2626" stroke-width="2"/>
+<line x1="514" y1="290" x2="526" y2="290" stroke="#dc2626" stroke-width="2"/>
+<text x="556" y="270" font-size="14" font-weight="700" fill="#dc2626">земля</text>
+</g>
 </svg>
 </div>
 <div class="asutp-tabs">
 <button type="button" class="asutp-tab active" data-info="intro">Обзор</button>
 <button type="button" class="asutp-tab" data-info="tor">Кольцо</button>
-<button type="button" class="asutp-tab" data-info="idn">IΔn</button>
+<button type="button" class="asutp-tab" data-info="idn">Уставка 30 мА</button>
 </div>
 <div class="cb-controls">
 <label class="cb-ctrl">
-<span>ток утечки IΔ</span>
-<input type="range" class="cb-diff-range" min="0" max="100" value="0" aria-label="Ток утечки">
+<span>ток утечки в землю</span>
+<input type="range" class="cb-diff-range" min="0" max="40" value="0" step="1" aria-label="Ток утечки в землю">
 <span class="cb-diff-val">0 мА</span>
 </label>
 </div>
 </div>
 <aside class="asutp-panel" id="cbDiffPanel">
 <h3>Обзор</h3>
-<p>Все рабочие проводники проходят через одно магнитопроводное кольцо. Если утечки нет, сумма токов ноль — во вторичной обмотке ЭДС нет.</p>
-<p>Ток на землю (человек, повреждение изоляции) даёт IΔ — расцепитель срывает автомат.</p>
+<p>По фазе ток уходит к нагрузке. По нейтрали он должен вернуться весь. Оба провода проходят сквозь одно кольцо.</p>
+<p>Если часть тока ушла в землю, обратно пришло меньше. Эту разницу кольцо и отдаёт на расцепитель.</p>
 </aside>
 </div>
 </section>
@@ -1116,6 +1141,115 @@
 </div>
 </section>
 
+<section class="slide slide-cb-rtype-interactive">
+<h2>Типы AC, A и B</h2>
+<div class="slide-body asutp-interactive">
+<div class="asutp-main">
+<p class="asutp-hint">Буква — форма тока утечки. Щёлкните нагрузку: кто её увидит</p>
+<p class="cb-tcc-live" id="cbRtypeLive">AC видит синус. A — ещё пульсации. B — ещё и ровный постоянный ток.</p>
+<div class="asutp-diagram-wrap">
+<svg class="cb-svg" viewBox="0 0 760 268" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="Типы УЗО AC, A и B">
+<rect width="760" height="268" fill="#fafafa"/>
+<g class="cb-rtype" data-info="ac">
+<rect class="cb-rtype-card" x="16" y="8" width="236" height="252" rx="10" fill="#fff" stroke="#1e293b" stroke-width="1.5"/>
+<text x="134" y="40" text-anchor="middle" font-size="22" font-weight="700" fill="#1e3a8a">AC</text>
+<text x="134" y="62" text-anchor="middle" font-size="14" fill="#64748b">только синус</text>
+<path d="M50 118 C78 78 106 78 134 118 C162 158 190 158 218 118" fill="none" stroke="#1e40af" stroke-width="2.4"/>
+<text x="134" y="178" text-anchor="middle" font-size="14" fill="#334155">лампа, нагрев</text>
+<rect id="cbRtypeBoxAc" x="36" y="196" width="196" height="48" rx="8" fill="#f8fafc" stroke="#e2e8f0"/>
+<text id="cbRtypeAc" x="134" y="226" text-anchor="middle" font-size="16" font-weight="700" fill="#1e293b">видит синус</text>
+</g>
+<g class="cb-rtype" data-info="a">
+<rect class="cb-rtype-card" x="262" y="8" width="236" height="252" rx="10" fill="#fff" stroke="#1e293b" stroke-width="1.5"/>
+<text x="380" y="40" text-anchor="middle" font-size="22" font-weight="700" fill="#1e3a8a">A</text>
+<text x="380" y="62" text-anchor="middle" font-size="14" fill="#64748b">синус и пульсации</text>
+<path d="M300 104 C324 78 348 78 372 104 C396 130 420 130 444 104" fill="none" stroke="#1e40af" stroke-width="2.2"/>
+<path d="M300 150 Q336 112 372 150 Q408 112 444 150" fill="none" stroke="#c2410c" stroke-width="2.2"/>
+<text x="380" y="178" text-anchor="middle" font-size="14" fill="#334155">блоки питания</text>
+<rect id="cbRtypeBoxA" x="282" y="196" width="196" height="48" rx="8" fill="#f8fafc" stroke="#e2e8f0"/>
+<text id="cbRtypeA" x="380" y="226" text-anchor="middle" font-size="16" font-weight="700" fill="#1e293b">ещё пульсации</text>
+</g>
+<g class="cb-rtype" data-info="b">
+<rect class="cb-rtype-card" x="508" y="8" width="236" height="252" rx="10" fill="#fff" stroke="#1e293b" stroke-width="1.5"/>
+<text x="626" y="40" text-anchor="middle" font-size="22" font-weight="700" fill="#1e3a8a">B</text>
+<text x="626" y="62" text-anchor="middle" font-size="14" fill="#64748b">ещё и постоянный</text>
+<path d="M548 96 C570 76 592 76 614 96 C636 116 658 116 680 96" fill="none" stroke="#1e40af" stroke-width="2.2"/>
+<path d="M548 128 Q582 108 614 128 Q646 108 680 128" fill="none" stroke="#c2410c" stroke-width="2.2"/>
+<line x1="548" y1="156" x2="680" y2="156" stroke="#991b1b" stroke-width="2.4"/>
+<text x="626" y="178" text-anchor="middle" font-size="14" fill="#334155">частотник</text>
+<rect id="cbRtypeBoxB" x="528" y="196" width="196" height="48" rx="8" fill="#f8fafc" stroke="#e2e8f0"/>
+<text id="cbRtypeB" x="626" y="226" text-anchor="middle" font-size="16" font-weight="700" fill="#1e293b">ещё постоянный</text>
+</g>
+</svg>
+</div>
+<div class="asutp-tabs">
+<button type="button" class="asutp-tab active" data-info="overview">Буквы</button>
+<button type="button" class="asutp-tab" data-info="lamp">Лампа</button>
+<button type="button" class="asutp-tab" data-info="smps">Блок питания</button>
+<button type="button" class="asutp-tab" data-info="vfd">Частотник</button>
+</div>
+</div>
+<aside class="asutp-panel" id="cbRtypePanel">
+<h3>Три буквы</h3>
+<p>Буква на УЗО — форма тока утечки, которую кольцо обязано увидеть. Уставка IΔn при этом может быть той же, 30 мА.</p>
+<p>AC видит синус. A — синус и пульсации после диода. B — ещё и ровный постоянный ток.</p>
+</aside>
+</div>
+</section>
+
+<section class="slide slide-cb-rsel-interactive">
+<h2>Селективность УЗО</h2>
+<div class="slide-body asutp-interactive">
+<div class="asutp-main">
+<p class="asutp-hint">Щёлкните место повреждения — какое УЗО отключится</p>
+<p class="cb-tcc-live" id="cbRselLive">Утечка на розетке снимает только 30 мА. Ввод типа S не успевает, свет горит.</p>
+<div class="asutp-diagram-wrap">
+<svg class="cb-svg" viewBox="0 0 760 280" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="Вводное и групповое УЗО">
+<rect width="760" height="280" fill="#fafafa"/>
+<text x="385" y="18" text-anchor="middle" font-size="13" fill="#64748b">сеть</text>
+<line x1="385" y1="24" x2="385" y2="32" stroke="#1e293b" stroke-width="2"/>
+<rect id="cbRselUp" x="275" y="32" width="220" height="72" rx="8" fill="#fff" stroke="#1e293b" stroke-width="1.6"/>
+<text x="385" y="56" text-anchor="middle" font-size="15" font-weight="700" fill="#1e293b">ввод · 300 мА</text>
+<text x="385" y="74" text-anchor="middle" font-size="13" fill="#475569">тип S, с выдержкой</text>
+<text id="cbRselUpTx" x="385" y="94" text-anchor="middle" font-size="14" font-weight="700" fill="#1e293b">включено</text>
+<line x1="385" y1="104" x2="385" y2="124" stroke="#1e293b" stroke-width="2"/>
+<line x1="225" y1="124" x2="545" y2="124" stroke="#1e293b" stroke-width="2"/>
+<line x1="225" y1="124" x2="225" y2="142" stroke="#1e293b" stroke-width="2"/>
+<line x1="545" y1="124" x2="545" y2="142" stroke="#1e293b" stroke-width="2"/>
+<rect id="cbRselDn" x="115" y="142" width="220" height="72" rx="8" fill="#fff" stroke="#1e293b" stroke-width="1.6"/>
+<text x="225" y="166" text-anchor="middle" font-size="15" font-weight="700" fill="#1e293b">розетки · 30 мА</text>
+<text x="225" y="184" text-anchor="middle" font-size="13" fill="#475569">без выдержки</text>
+<text id="cbRselDnTx" x="225" y="204" text-anchor="middle" font-size="14" font-weight="700" fill="#1e293b">включено</text>
+<rect id="cbRselLt" x="435" y="142" width="220" height="72" rx="8" fill="#fff" stroke="#1e293b" stroke-width="1.6"/>
+<text x="545" y="166" text-anchor="middle" font-size="15" font-weight="700" fill="#1e293b">свет</text>
+<text x="545" y="184" text-anchor="middle" font-size="13" fill="#475569">своего УЗО нет</text>
+<text id="cbRselLtTx" x="545" y="204" text-anchor="middle" font-size="14" font-weight="700" fill="#1e293b">включено</text>
+<line x1="225" y1="214" x2="225" y2="230" stroke="#1e293b" stroke-width="2"/>
+<rect id="cbRselLoad" x="145" y="230" width="160" height="36" rx="8" fill="#fff" stroke="#1e293b" stroke-width="1.5"/>
+<text x="225" y="253" text-anchor="middle" font-size="14" font-weight="700" fill="#1e293b">розетки</text>
+<text id="cbRselLeakSock" x="318" y="253" font-size="14" font-weight="700" fill="#dc2626" display="none">утечка</text>
+<text id="cbRselLeakUp" x="398" y="118" font-size="14" font-weight="700" fill="#dc2626" display="none">утечка</text>
+<g id="cbRselBorrow" display="none">
+<text x="18" y="168" font-size="13" font-weight="700" fill="#dc2626">чужая N</text>
+<path d="M92 172 H115" fill="none" stroke="#dc2626" stroke-width="2" stroke-dasharray="5 3"/>
+<polygon points="115,172 105,167 105,177" fill="#dc2626"/>
+</g>
+</svg>
+</div>
+<div class="asutp-tabs">
+<button type="button" class="asutp-tab active" data-info="sock">Утечка на розетке</button>
+<button type="button" class="asutp-tab" data-info="feeder">Утечка на вводе</button>
+<button type="button" class="asutp-tab" data-info="borrow">Чужая нейтраль</button>
+</div>
+</div>
+<aside class="asutp-panel" id="cbRselPanel">
+<h3>Утечка на розетке</h3>
+<p>Групповое УЗО 30 мА отключает сразу. Вводное на 300 мА типа S специально ждёт.</p>
+<p>Свет на соседней линии остаётся. Так и задумана селективность: ближнее УЗО снимает свою группу, щит целиком не гаснет.</p>
+</aside>
+</div>
+</section>
+
 <section class="slide slide-cb-sel-interactive">
 <h2>Выбор автоматических выключателей</h2>
 <div class="slide-body asutp-interactive">
@@ -1319,12 +1453,63 @@
 <h2>Где это в САУ</h2>
 <div class="slide-body asutp-interactive">
 <div class="asutp-main">
-<p class="asutp-hint">Нажмите узел — автомат в силовом щите, ПЛК видит статус и может отключить</p>
-<div class="app-purpose-grid em-fast-grid">
-<button type="button" class="app-purpose-card active" data-info="in">Ввод щита</button>
-<button type="button" class="app-purpose-card" data-info="mot">Фидер двигателя</button>
-<button type="button" class="app-purpose-card" data-info="plc">Статус (плк)</button>
-<button type="button" class="app-purpose-card" data-info="estop">Авар. стоп</button>
+<p class="asutp-hint">Нажмите узел на схеме шкафа — ввод, фидер, статус для ПЛК или аварийный стоп</p>
+<div class="cb-where-split">
+<figure class="cb-where-photo">
+<img id="cbWhereImg" src="../assets/images/nsx-trip.jpg" alt="Силовой автомат Schneider NSX: белая панель с ручками — электронный расцепитель">
+<figcaption id="cbWhereCap">Ввод шкафа: автомат и белая панель электронного расцепителя. Фото: Dmitry G, CC BY-SA 3.0</figcaption>
+</figure>
+<div class="asutp-diagram-wrap">
+<svg class="cb-svg" viewBox="0 0 520 300" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="Автоматы в шкафу САУ">
+<rect width="520" height="300" fill="#fafafa"/>
+<g class="cb-where-hit is-active" data-info="in" style="cursor:pointer">
+<rect x="16" y="8" width="168" height="40" rx="8" fill="#fff" stroke="#1e293b" stroke-width="1.6"/>
+<text x="100" y="33" text-anchor="middle" font-size="15" font-weight="700" fill="#1e293b">подстанция</text>
+<line x1="100" y1="48" x2="100" y2="60" stroke="#1e293b" stroke-width="2.2"/>
+<rect x="16" y="60" width="168" height="58" rx="8" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/>
+<text x="100" y="84" text-anchor="middle" font-size="15" font-weight="700" fill="#1e293b">QF1 · ввод</text>
+<text x="100" y="104" text-anchor="middle" font-size="12" fill="#1e40af">шкаф · 60947-2</text>
+</g>
+<g class="cb-where-hit" data-info="mot" style="cursor:pointer">
+<line x1="100" y1="118" x2="100" y2="132" stroke="#1e293b" stroke-width="2.2"/>
+<text x="118" y="130" font-size="12" fill="#64748b">шина</text>
+<rect x="16" y="132" width="168" height="52" rx="8" fill="#fff" stroke="#1e293b" stroke-width="1.6"/>
+<text x="100" y="154" text-anchor="middle" font-size="15" font-weight="700" fill="#1e293b">QF2 · фидер</text>
+<text x="100" y="172" text-anchor="middle" font-size="12" fill="#475569">кривая D</text>
+<line x1="100" y1="184" x2="100" y2="198" stroke="#1e293b" stroke-width="2.2"/>
+<rect x="40" y="198" width="120" height="36" rx="8" fill="#fff" stroke="#1e293b" stroke-width="1.6"/>
+<text x="100" y="221" text-anchor="middle" font-size="15" font-weight="700" fill="#1e293b">KM</text>
+<line x1="100" y1="234" x2="100" y2="248" stroke="#1e293b" stroke-width="2.2"/>
+<circle cx="100" cy="270" r="20" fill="#fff" stroke="#1e293b" stroke-width="1.8"/>
+<text x="100" y="276" text-anchor="middle" font-size="16" font-weight="700" fill="#1e293b">M</text>
+</g>
+<g class="cb-where-hit" data-info="plc" style="cursor:pointer">
+<line x1="184" y1="88" x2="214" y2="88" stroke="#1e40af" stroke-width="1.6" stroke-dasharray="5 4"/>
+<polygon points="214,88 204,83 204,93" fill="#1e40af"/>
+<text x="214" y="78" font-size="12" font-weight="700" fill="#1e40af">OF</text>
+<rect x="214" y="48" width="290" height="78" rx="8" fill="#fff" stroke="#1e40af" stroke-width="1.6"/>
+<text x="359" y="78" text-anchor="middle" font-size="16" font-weight="700" fill="#1e293b">ПЛК</text>
+<text x="359" y="102" text-anchor="middle" font-size="13" fill="#1e40af">DI: включён / сработал</text>
+</g>
+<g class="cb-where-hit" data-info="estop" style="cursor:pointer">
+<rect x="214" y="168" width="290" height="108" rx="8" fill="#fee2e2" stroke="#dc2626" stroke-width="1.8"/>
+<text x="359" y="206" text-anchor="middle" font-size="16" font-weight="700" fill="#991b1b">аварийный стоп</text>
+<text x="359" y="230" text-anchor="middle" font-size="13" fill="#991b1b">кнопка или выход ПЛК</text>
+<text x="359" y="252" text-anchor="middle" font-size="13" font-weight="700" fill="#991b1b">расцепитель MX на QF1</text>
+<line x1="214" y1="222" x2="200" y2="222" stroke="#dc2626" stroke-width="1.8"/>
+<line x1="200" y1="222" x2="200" y2="89" stroke="#dc2626" stroke-width="1.8"/>
+<line x1="200" y1="89" x2="186" y2="89" stroke="#dc2626" stroke-width="1.8"/>
+<polygon points="186,89 196,84 196,94" fill="#dc2626"/>
+</g>
+</svg>
+</div>
+</div>
+<p class="cb-tcc-live" id="cbWhereLive">QF1 на вводе шкафа. Он согласован с автоматом подстанции</p>
+<div class="asutp-tabs">
+<button type="button" class="asutp-tab active" data-info="in">Ввод щита</button>
+<button type="button" class="asutp-tab" data-info="mot">Фидер двигателя</button>
+<button type="button" class="asutp-tab" data-info="plc">Статус на ПЛК</button>
+<button type="button" class="asutp-tab" data-info="estop">Аварийный стоп</button>
 </div>
 </div>
 <aside class="asutp-panel" id="cbWherePanel">

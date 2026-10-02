@@ -19758,48 +19758,77 @@
     const info = {
       intro: {
         title: 'Обзор',
-        html: '<p>Все рабочие проводники проходят через одно магнитопроводное кольцо. Если утечки нет, сумма токов ноль — во вторичной обмотке ЭДС нет.</p><p>Ток на землю (человек, повреждение изоляции) даёт IΔ — расцепитель срывает автомат.</p>'
+        html: '<p>По фазе ток уходит к нагрузке. По нейтрали он должен вернуться весь. Оба провода проходят сквозь одно кольцо.</p><p>Если часть тока ушла в землю, обратно пришло меньше. Эту разницу кольцо и отдаёт на расцепитель.</p>'
       },
       tor: {
         title: 'Кольцо',
-        html: '<p>Дифференциальный трансформатор тока. PE через кольцо <strong>не</strong> пропускают. N — пропускают, иначе бытовая однофазная схема не сбалансируется.</p>'
+        html: '<p>Кольцо сравнивает два тока. Пока они равны, поля гасят друг друга и на обмотке I₂ сигнала нет.</p><p>Нейтраль через кольцо проходит. Защитный провод PE — нет: иначе утечка на корпус осталась бы невидимой.</p>'
       },
       idn: {
-        title: 'IΔn',
-        html: '<p>Номинальный отключающий дифференциальный ток. Срабатывание обычно в диапазоне 0,5…1 IΔn.</p><p>30 мА — защита людей; 100…300 мА — пожарная защита линий.</p>'
+        title: 'Уставка 30 мА',
+        html: '<p>IΔn — ток, при котором аппарат обязан отключить. Для человека это обычно 30 мА.</p><p>Ниже примерно половины уставки он срабатывать не должен. 100 и 300 мА ставят на линию как пожарную защиту, не для человека.</p>'
       }
     };
-    const tabs = ['intro', 'tor', 'idn'];
     const showCbDiffInfo = (key) => {
       const data = info[key] || info.intro;
       if (panel) panel.innerHTML = `<h3>${data.title}</h3>${data.html}`;
       cbDiffSlide.querySelectorAll('.asutp-tab').forEach((btn) => {
-        btn.classList.toggle('active', tabs.includes(key) && btn.dataset.info === key);
+        btn.classList.toggle('active', btn.dataset.info === key);
+      });
+      cbDiffSlide.querySelectorAll('.cb-diff-part').forEach((el) => {
+        el.classList.toggle('is-active', el.dataset.info === key);
       });
     };
     const updateCbDiff = () => {
       const raw = Number(cbDiffSlide.querySelector('.cb-diff-range')?.value);
-      const t = Number.isFinite(raw) ? raw / 100 : 0;
-      const ma = Math.round(t * 40);
+      const ma = Number.isFinite(raw) ? Math.max(0, Math.min(40, Math.round(raw))) : 0;
+      const back = 200 - ma;
       const trip = ma >= 30;
-      const leak = cbDiffSlide.querySelector('.cb-diff-leak');
-      const lab = cbDiffSlide.querySelector('.cb-diff-ileak');
-      const readout = cbDiffSlide.querySelector('.cb-diff-readout');
+      const leak = cbDiffSlide.querySelector('#cbDiffLeak');
+      const toEl = cbDiffSlide.querySelector('#cbDiffTo');
+      const backEl = cbDiffSlide.querySelector('#cbDiffBack');
+      const sec = cbDiffSlide.querySelector('#cbDiffSec');
+      const tripBox = cbDiffSlide.querySelector('#cbDiffTrip');
+      const tripSub = cbDiffSlide.querySelector('#cbDiffTripSub');
+      const live = cbDiffSlide.querySelector('#cbDiffLive');
       const val = cbDiffSlide.querySelector('.cb-diff-val');
-      if (leak) leak.setAttribute('opacity', t > 0.05 ? String(0.3 + t * 0.7) : '0');
-      if (lab) lab.setAttribute('opacity', t > 0.05 ? '1' : '0');
-      if (readout) {
-        readout.textContent = trip
-          ? `IΔ = ${ma} мА · сработал (≥ IΔn 30 мА)`
-          : (ma === 0 ? 'IΔ = 0 · сумма токов ноль' : `IΔ = ${ma} мА · ниже уставки`);
+      const ileak = cbDiffSlide.querySelector('#cbDiffIleak');
+      if (leak) leak.setAttribute('display', ma > 0 ? 'inline' : 'none');
+      if (toEl) toEl.textContent = '200 мА →';
+      if (backEl) {
+        backEl.textContent = `← ${back} мА`;
+        backEl.setAttribute('fill', ma > 0 ? '#dc2626' : '#334155');
+      }
+      if (ileak) ileak.textContent = `${ma} мА`;
+      if (sec) sec.setAttribute('stroke', ma > 0 ? '#dc2626' : '#94a3b8');
+      if (tripBox) {
+        tripBox.setAttribute('fill', trip ? '#fee2e2' : '#fff');
+        tripBox.setAttribute('stroke', trip ? '#dc2626' : '#1e293b');
+      }
+      if (tripSub) {
+        tripSub.textContent = trip ? 'сработал' : (ma === 0 ? 'IΔ = 0' : `IΔ = ${ma} мА`);
+        tripSub.setAttribute('fill', trip ? '#991b1b' : '#64748b');
+      }
+      if (live) {
+        live.textContent = ma === 0
+          ? 'К нагрузке 200 мА, обратно 200 мА. Сумма в кольце 0.'
+          : (trip
+            ? `Обратно пришло ${back} мА. В земле ${ma} мА — расцепитель сработал.`
+            : `Обратно пришло ${back} мА. В земле ${ma} мА, это ещё ниже 30.`);
       }
       if (val) val.textContent = `${ma} мА`;
     };
     cbDiffSlide.addEventListener('click', (e) => {
       const tab = e.target.closest('.asutp-tab');
-      if (!tab?.dataset.info) return;
+      if (tab?.dataset.info) {
+        e.stopPropagation();
+        showCbDiffInfo(tab.dataset.info);
+        return;
+      }
+      const part = e.target.closest('.cb-diff-part');
+      if (!part?.dataset.info) return;
       e.stopPropagation();
-      showCbDiffInfo(tab.dataset.info);
+      showCbDiffInfo(part.dataset.info);
     });
     cbDiffSlide.querySelector('.cb-diff-range')?.addEventListener('input', updateCbDiff);
     showCbDiffInfo('intro');
@@ -20084,6 +20113,189 @@
     showCbRcdInfo('all');
   }
 
+  /* ===== Lecture 5: RCD types AC / A / B ===== */
+  const cbRtypeSlide = document.querySelector('.slide-cb-rtype-interactive');
+  if (cbRtypeSlide) {
+    const panel = document.getElementById('cbRtypePanel');
+    const live = document.getElementById('cbRtypeLive');
+    const names = ['ac', 'a', 'b'];
+    const boxes = {
+      ac: document.getElementById('cbRtypeBoxAc'),
+      a: document.getElementById('cbRtypeBoxA'),
+      b: document.getElementById('cbRtypeBoxB')
+    };
+    const labels = {
+      ac: document.getElementById('cbRtypeAc'),
+      a: document.getElementById('cbRtypeA'),
+      b: document.getElementById('cbRtypeB')
+    };
+    const info = {
+      overview: {
+        title: 'Три буквы',
+        live: 'AC видит синус. A — ещё пульсации. B — ещё и ровный постоянный ток.',
+        html: '<p>Буква на УЗО — форма тока утечки, которую кольцо обязано увидеть. Уставка IΔn при этом может быть той же, 30 мА.</p><p>AC видит синус. A — синус и пульсации после диода. B — ещё и ровный постоянный ток.</p>'
+      },
+      ac: {
+        title: 'Тип AC',
+        live: 'Тип AC обязан увидеть синусоидальную утечку.',
+        html: '<p>Лампа и нагрев дают утечку формы синуса. Для них хватает типа AC.</p><p>Пульсации после диода и ток частотника этот тип может не увидеть: аппарат останется включённым.</p>'
+      },
+      a: {
+        title: 'Тип A',
+        live: 'Тип A видит синус и пульсирующий постоянный ток.',
+        html: '<p>Пульсации — ток после однофазного выпрямителя: блоки питания, зарядки без корректора.</p><p>Ровный постоянный ток на выходе частотника тип A видеть не обязан.</p>'
+      },
+      b: {
+        title: 'Тип B',
+        live: 'Тип B видит синус, пульсации и ровный постоянный ток.',
+        html: '<p>Его ставят на частотный привод, инвертор, зарядку электромобиля.</p><p>Он крупнее и дороже типа A. На лампу ставить его незачем: синус увидит и AC.</p>'
+      },
+      lamp: {
+        title: 'Лампа',
+        live: 'Утечка лампы — синус. Её видят AC, A и B.',
+        html: '<p>Ток утечки лампы и нагревателя синусоидальный. Любая из трёх букв его отключит.</p><p>На такую линию обычно ставят AC или A.</p>'
+      },
+      smps: {
+        title: 'Блок питания',
+        live: 'Пульсации после диода тип AC не обязан увидеть.',
+        html: '<p>Диодный мост пускает ток толчками в одну сторону. Это пульсирующий постоянный ток.</p><p>Нужен тип A или B. Тип AC на такой форме может не отключить.</p>'
+      },
+      vfd: {
+        title: 'Частотник',
+        live: 'Ровный постоянный ток видит тип B. AC и A могут промолчать.',
+        html: '<p>На выходе преобразователя утечка бывает почти постоянным током, без перехода через ноль.</p><p>Такую форму обязан увидеть тип B. AC и A для привода не берут.</p>'
+      }
+    };
+    const verdict = {
+      overview: { ac: 'видит синус', a: 'ещё пульсации', b: 'ещё постоянный', tone: {} },
+      ac: { ac: 'видит синус', a: 'ещё пульсации', b: 'ещё постоянный', tone: { ac: 'on' } },
+      a: { ac: 'видит синус', a: 'ещё пульсации', b: 'ещё постоянный', tone: { a: 'on' } },
+      b: { ac: 'видит синус', a: 'ещё пульсации', b: 'ещё постоянный', tone: { b: 'on' } },
+      lamp: { ac: 'отключит', a: 'отключит', b: 'отключит', tone: { ac: 'yes', a: 'yes', b: 'yes' } },
+      smps: { ac: 'молчит', a: 'отключит', b: 'отключит', tone: { ac: 'no', a: 'yes', b: 'yes' } },
+      vfd: { ac: 'молчит', a: 'молчит', b: 'отключит', tone: { ac: 'no', a: 'no', b: 'yes' } }
+    };
+    const toneFill = { yes: '#dcfce7', no: '#fee2e2', on: '#eff6ff' };
+    const toneStroke = { yes: '#15803d', no: '#b91c1c', on: '#2563eb' };
+    const toneText = { yes: '#14532d', no: '#991b1b', on: '#1e3a8a' };
+    const cardClass = { yes: 'is-on', no: 'is-off', on: 'is-active' };
+    const showCbRtypeInfo = (key) => {
+      const id = info[key] ? key : 'overview';
+      const data = info[id];
+      const mark = verdict[id];
+      if (panel) panel.innerHTML = `<h3>${data.title}</h3>${data.html}`;
+      if (live) live.textContent = data.live;
+      cbRtypeSlide.querySelectorAll('.asutp-tab').forEach((btn) => {
+        btn.classList.toggle('active', btn.dataset.info === id);
+      });
+      cbRtypeSlide.querySelectorAll('.cb-rtype').forEach((card) => {
+        card.classList.remove('is-on', 'is-off', 'is-active');
+        const tone = mark.tone[card.dataset.info];
+        if (tone && cardClass[tone]) card.classList.add(cardClass[tone]);
+      });
+      names.forEach((name) => {
+        const tone = mark.tone[name] || '';
+        if (boxes[name]) {
+          boxes[name].setAttribute('fill', toneFill[tone] || '#f8fafc');
+          boxes[name].setAttribute('stroke', toneStroke[tone] || '#e2e8f0');
+        }
+        if (labels[name]) {
+          labels[name].textContent = mark[name];
+          labels[name].setAttribute('fill', toneText[tone] || '#1e293b');
+        }
+      });
+    };
+    cbRtypeSlide.addEventListener('click', (e) => {
+      const hit = e.target.closest('.asutp-tab, .cb-rtype');
+      if (!hit?.dataset.info) return;
+      e.stopPropagation();
+      showCbRtypeInfo(hit.dataset.info);
+    });
+    showCbRtypeInfo('overview');
+  }
+
+  /* ===== Lecture 5: RCD selectivity ===== */
+  const cbRselSlide = document.querySelector('.slide-cb-rsel-interactive');
+  if (cbRselSlide) {
+    const panel = document.getElementById('cbRselPanel');
+    const live = document.getElementById('cbRselLive');
+    const up = document.getElementById('cbRselUp');
+    const dn = document.getElementById('cbRselDn');
+    const lt = document.getElementById('cbRselLt');
+    const upTx = document.getElementById('cbRselUpTx');
+    const dnTx = document.getElementById('cbRselDnTx');
+    const ltTx = document.getElementById('cbRselLtTx');
+    const load = document.getElementById('cbRselLoad');
+    const leakSock = document.getElementById('cbRselLeakSock');
+    const leakUp = document.getElementById('cbRselLeakUp');
+    const borrow = document.getElementById('cbRselBorrow');
+    const paint = (el, tx, text, tone) => {
+      const fill = { trip: '#fee2e2', ok: '#dcfce7', dead: '#f1f5f9', wait: '#fff' };
+      const stroke = { trip: '#dc2626', ok: '#166534', dead: '#94a3b8', wait: '#1e293b' };
+      const color = { trip: '#991b1b', ok: '#14532d', dead: '#64748b', wait: '#1e293b' };
+      if (el) {
+        el.setAttribute('fill', fill[tone] || '#fff');
+        el.setAttribute('stroke', stroke[tone] || '#1e293b');
+      }
+      if (tx) {
+        tx.textContent = text;
+        tx.setAttribute('fill', color[tone] || '#1e293b');
+      }
+    };
+    const info = {
+      sock: {
+        title: 'Утечка на розетке',
+        live: 'Утечка на розетке снимает только 30 мА. Ввод типа S не успевает, свет горит.',
+        html: '<p>Групповое УЗО 30 мА отключает сразу. Вводное на 300 мА типа S специально ждёт.</p><p>Свет на соседней линии остаётся. Ближнее УЗО снимает свою группу, щит целиком не гаснет.</p>'
+      },
+      feeder: {
+        title: 'Утечка на вводе',
+        live: 'Утечка до групповых УЗО. Отключается ввод 300 мА, гаснет весь щит.',
+        html: '<p>Повреждение на кабеле между вводом и группами. Кольцо 30 мА эту утечку не видит: ток через него не шёл.</p><p>Срабатывает ввод 300 мА. Без питания остаются и розетки, и свет.</p>'
+      },
+      borrow: {
+        title: 'Чужая нейтраль',
+        live: 'Фаза прошла через своё УЗО, нейтраль взята сбоку. 30 мА отключает без человека.',
+        html: '<p>Ток ушёл к розетке по фазе этого аппарата, а вернулся по чужой нейтрали. В кольце сумма не ноль.</p><p>Человека нет, а УЗО всё равно срабатывает. Фазу и нейтраль нагрузки берут из одного и того же аппарата.</p>'
+      }
+    };
+    const showCbRselInfo = (key) => {
+      const id = info[key] ? key : 'sock';
+      const data = info[id];
+      if (panel) panel.innerHTML = `<h3>${data.title}</h3>${data.html}`;
+      if (live) live.textContent = data.live;
+      cbRselSlide.querySelectorAll('.asutp-tab').forEach((btn) => {
+        btn.classList.toggle('active', btn.dataset.info === id);
+      });
+      if (leakSock) leakSock.setAttribute('display', id === 'sock' ? 'inline' : 'none');
+      if (leakUp) leakUp.setAttribute('display', id === 'feeder' ? 'inline' : 'none');
+      if (borrow) borrow.setAttribute('display', id === 'borrow' ? 'inline' : 'none');
+      if (id === 'sock') {
+        paint(up, upTx, 'ждёт', 'wait');
+        paint(dn, dnTx, 'отключилось', 'trip');
+        paint(lt, ltTx, 'включено', 'ok');
+        paint(load, null, '', 'trip');
+      } else if (id === 'feeder') {
+        paint(up, upTx, 'отключилось', 'trip');
+        paint(dn, dnTx, 'без питания', 'dead');
+        paint(lt, ltTx, 'без питания', 'dead');
+        paint(load, null, '', 'dead');
+      } else {
+        paint(up, upTx, 'включено', 'ok');
+        paint(dn, dnTx, 'отключилось', 'trip');
+        paint(lt, ltTx, 'включено', 'ok');
+        paint(load, null, '', 'wait');
+      }
+    };
+    cbRselSlide.addEventListener('click', (e) => {
+      const hit = e.target.closest('.asutp-tab');
+      if (!hit?.dataset.info) return;
+      e.stopPropagation();
+      showCbRselInfo(hit.dataset.info);
+    });
+    showCbRselInfo('sock');
+  }
+
   /* ===== Lecture 5: selection ===== */
   const cbSelSlide = document.querySelector('.slide-cb-sel-interactive');
   if (cbSelSlide) {
@@ -20299,33 +20511,71 @@
     const info = {
       in: {
         title: 'Ввод щита',
-        html: '<p>Автомат на вводе шкафа САУ: Icu по расчёту КЗ, селективность к вышестоящему на подстанции.</p><p>Часто промышленный (МЭК 60947-2) с электронным расцепителем.</p>'
+        live: 'QF1 на вводе шкафа. Он согласован с автоматом подстанции',
+        img: '../assets/images/nsx-trip.jpg',
+        alt: 'Силовой автомат Schneider NSX: белая панель с ручками — электронный расцепитель',
+        cap: 'Ввод шкафа: автомат и белая панель электронного расцепителя. Фото: Dmitry G, CC BY-SA 3.0',
+        html: '<p>Автомат на вводе шкафа САУ: отключающую способность берут по расчёту короткого замыкания, характеристику согласовывают с автоматом подстанции.</p><p>Часто это промышленный аппарат по МЭК 60947-2 с электронным расцепителем.</p>'
       },
       mot: {
         title: 'Фидер двигателя',
-        html: '<p>Автомат (кривая D или моторный) + контактор + тепловое реле или электронная защита в ПЧ.</p><p>ПЛК включает контактор, автомат только защищает кабель и КЗ.</p>'
+        live: 'QF2 защищает кабель и короткое. Двигатель включает контактор KM',
+        img: '../assets/images/nsx-630n.jpg',
+        alt: 'Силовой автомат в шкафу: кабели уходят с клемм на нагрузку, линия подписана F4',
+        cap: 'Наклейка F4 — имя фидера. Кабели справа уходят на нагрузку. Двигатель включает контактор, не рычаг автомата. Фото: Dmitry G, CC BY-SA 3.0',
+        html: '<p>На отходящей линии — автомат кривой D или моторный, затем контактор и тепловое реле. Если стоит преобразователь, защиту двигателя часто берёт он.</p><p>ПЛК включает контактор. Автомат сам двигатель не пускает: он защищает кабель и отключает короткое замыкание.</p>'
       },
       plc: {
-        title: 'Статус (плк)',
-        html: '<p>Блок-контакт автомата на дискретный вход: «включен / сработал». Авария в SCADA без обхода шкафа.</p>'
+        title: 'Статус на ПЛК',
+        live: 'Блок-контакт QF1 на вход ПЛК: автомат включён или сработал',
+        img: '../assets/images/adam-6052.png',
+        alt: 'Модуль ADAM-6052: клеммы дискретных входов, Ethernet и питание',
+        cap: 'Блок-контакт автомата сажают на дискретный вход. На фото — модуль с клеммами таких входов.',
+        html: '<p>Вспомогательный контакт автомата заводят на дискретный вход: «включён» или «сработал».</p><p>Аварию видно в SCADA, шкаф для этого обходить не нужно.</p>'
       },
       estop: {
-        title: 'Авар. стоп',
-        html: '<p>Независимый расцепитель с кнопки или с выхода ПЛК снимает силовой ввод. Минимум U — чтобы после провала сети механизм не запустился сам.</p>'
+        title: 'Аварийный стоп',
+        live: 'Кнопка или выход ПЛК срывает QF1 независимым расцепителем MX',
+        img: '../assets/images/nsx-630n.jpg',
+        alt: 'Силовой автомат в шкафу: рычаг включения и клеммы силовых кабелей',
+        cap: 'Кнопки стоп на фото нет. Независимый расцепитель ставят внутрь такого автомата и ведут на кнопку. Фото: Dmitry G, CC BY-SA 3.0',
+        html: '<p>Независимый расцепитель с кнопки аварийного останова или с выхода ПЛК снимает силовой ввод.</p><p>Расцепитель минимального напряжения не даёт механизму запуститься самому после провала сети.</p>'
       }
     };
     const showCbWhereInfo = (key) => {
       const data = info[key] || info.in;
       if (panel) panel.innerHTML = `<h3>${data.title}</h3>${data.html}`;
-      cbWhereSlide.querySelectorAll('.app-purpose-card').forEach((btn) => {
+      const live = document.getElementById('cbWhereLive');
+      if (live) live.textContent = data.live;
+      const img = document.getElementById('cbWhereImg');
+      const cap = document.getElementById('cbWhereCap');
+      if (img && data.img) {
+        img.src = data.img;
+        img.alt = data.alt || '';
+        img.style.objectFit = key === 'plc' ? 'contain' : 'cover';
+        img.style.objectPosition = key === 'mot' ? '70% center' : 'center';
+      }
+      if (cap) cap.textContent = data.cap || '';
+      cbWhereSlide.querySelectorAll('.asutp-tab').forEach((btn) => {
         btn.classList.toggle('active', btn.dataset.info === key);
+      });
+      cbWhereSlide.querySelectorAll('.cb-where-hit').forEach((el) => {
+        const on = el.dataset.info === key;
+        el.classList.toggle('is-active', on);
+        el.classList.toggle('is-dim', !on);
       });
     };
     cbWhereSlide.addEventListener('click', (e) => {
-      const card = e.target.closest('.app-purpose-card');
-      if (!card?.dataset.info) return;
+      const tab = e.target.closest('.asutp-tab');
+      if (tab?.dataset.info) {
+        e.stopPropagation();
+        showCbWhereInfo(tab.dataset.info);
+        return;
+      }
+      const hit = e.target.closest('.cb-where-hit');
+      if (!hit?.dataset.info) return;
       e.stopPropagation();
-      showCbWhereInfo(card.dataset.info);
+      showCbWhereInfo(hit.dataset.info);
     });
     showCbWhereInfo('in');
   }
