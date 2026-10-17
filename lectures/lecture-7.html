@@ -1253,6 +1253,30 @@
 <text class="em-ac-2phm-note-fam" x="452" y="180" text-anchor="middle" font-size="12" fill="#64748b">поле круговое</text>
 <text x="452" y="200" text-anchor="middle" font-size="12" fill="#64748b">R ротора большое</text>
 </svg>
+<svg class="em-ac-2phm-field" viewBox="0 0 162 248" preserveAspectRatio="xMidYMid meet" aria-label="Поле: круг, эллипс или линия">
+<defs>
+<marker id="emAc2phmFwMk" markerWidth="8" markerHeight="7" refX="7" refY="3.5" orient="auto"><path d="M0 0 L8 3.5 L0 7 Z" fill="#1d4ed8"/></marker>
+<marker id="emAc2phmBwMk" markerWidth="8" markerHeight="7" refX="7" refY="3.5" orient="auto"><path d="M0 0 L8 3.5 L0 7 Z" fill="#ea580c"/></marker>
+</defs>
+<rect width="162" height="248" fill="#fafafa"/>
+<text x="81" y="16" text-anchor="middle" font-size="12" font-weight="700" fill="#1e3a8a">поле</text>
+<circle cx="81" cy="96" r="58" fill="#fff" stroke="#1e293b" stroke-width="1.4"/>
+<circle cx="81" cy="96" r="42" fill="none" stroke="#e2e8f0" stroke-width="1.2"/>
+<rect x="65" y="30" width="32" height="12" rx="2" fill="#fecaca" stroke="#991b1b" stroke-width="1.1"/>
+<text x="81" y="26" text-anchor="middle" font-size="11" font-weight="700" fill="#7f1d1d">A</text>
+<g id="emAc2phmBcoil">
+<rect x="132" y="84" width="12" height="24" rx="2" fill="#bbf7d0" stroke="#166534" stroke-width="1.1"/>
+</g>
+<text x="148" y="78" text-anchor="middle" font-size="11" font-weight="700" fill="#166534">B</text>
+<ellipse id="emAc2phmEll" cx="81" cy="96" rx="42" ry="42" fill="none" stroke="#c2410c" stroke-width="1.5" stroke-dasharray="4 3"/>
+<line id="emAc2phmFwArr" x1="81" y1="96" x2="81" y2="54" stroke="#1d4ed8" stroke-width="2.2" marker-end="url(#emAc2phmFwMk)"/>
+<line id="emAc2phmBwArr" x1="81" y1="96" x2="81" y2="96" stroke="#ea580c" stroke-width="2.2" marker-end="url(#emAc2phmBwMk)" opacity="0"/>
+<circle id="emAc2phmTip" cx="81" cy="54" r="4.5" fill="#c2410c" stroke="#7c2d12" stroke-width="1"/>
+<text class="em-ac-2phm-now" x="81" y="176" text-anchor="middle" font-size="14" font-weight="700" fill="#1d4ed8">Uном</text>
+<text class="em-ac-2phm-af" x="81" y="196" text-anchor="middle" font-size="12" fill="#1d4ed8">прямое 100%</text>
+<text class="em-ac-2phm-ar" x="81" y="214" text-anchor="middle" font-size="12" fill="#ea580c">обратное 0%</text>
+<text class="em-ac-2phm-note" x="81" y="234" text-anchor="middle" font-size="12" fill="#64748b">поле круговое</text>
+</svg>
 </div>
 <div class="asutp-tabs">
 <button type="button" class="asutp-tab active" data-info="sum">Сумма</button>
@@ -1625,17 +1649,26 @@ L40 144 Z"/>
 <text x="250" y="153" font-size="13" fill="#64748b">Φ общий</text>
 </svg>
 </div>
-<div class="em-ac-eq-side">
+<div class="em-ac-eq-side em-ac-eq-side-col">
 <div class="em-ac-eq-box">
 <span class="em-ac-eq-tag">дано</span>
 <p><var>s</var> = 1  <var>Z</var><sub>н</sub> = 0</p>
 <p class="em-ac-eq-note">скольжение полное · нагрузки снаружи нет</p>
 </div>
-<span class="em-ac-eq-arrow" aria-hidden="true">→</span>
+<span class="em-ac-eq-arrow em-ac-eq-arrow-down" aria-hidden="true">↓ закон Ома</span>
 <div class="em-ac-eq-box em-ac-eq-box-out">
 <span class="em-ac-eq-tag">ток статора</span>
-<p class="em-ac-eq-formula"><var>I</var><sub>1</sub> = <var>U</var><sub>1</sub> / √[(<var>r</var><sub>1</sub> + <var>r</var>′<sub>2</sub>)² + (<var>X</var><sub>1</sub> + <var>X</var>′<sub>2</sub>)²]</p>
+<p class="em-ac-eq-formula"><var>I</var><sub>1</sub> = <var>U</var><sub>1</sub> / √[<span class="em-ac-eq-chunk">(<var>r</var><sub>1</sub> + <var>r</var>′<sub>2</sub>)²</span> + <span class="em-ac-eq-chunk">(<var>X</var><sub>1</sub> + <var>X</var>′<sub>2</sub>)²</span>]</p>
 <p class="em-ac-eq-note">закон Ома для полной цепи статора · медь и X статора + приведённого ротора</p>
+<dl class="char-formula-legend em-ac-eq-legend">
+<div><dt><var>I</var><sub>1</sub></dt><dd>ток статора</dd></div>
+<div><dt><var>U</var><sub>1</sub></dt><dd>напряжение сети</dd></div>
+<div><dt><var>r</var><sub>1</sub></dt><dd>медь статора</dd></div>
+<div><dt><var>X</var><sub>1</sub></dt><dd>индуктивное статора</dd></div>
+<div><dt><var>r</var>′<sub>2</sub></dt><dd>медь ротора, к статору</dd></div>
+<div><dt><var>X</var>′<sub>2</sub></dt><dd>индуктивное ротора, к статору</dd></div>
+</dl>
+<p class="em-ac-eq-note">штрих — величина ротора, пересчитанная на обмотку статора</p>
 </div>
 </div>
 </div>
@@ -1750,7 +1783,7 @@ L40 144 Z"/>
 <span class="em-ac-eq-arrow em-ac-eq-arrow-down" aria-hidden="true">↓ подставляют в статор</span>
 <div class="em-ac-eq-box em-ac-eq-box-out">
 <span class="em-ac-eq-tag">ток сети при любом s</span>
-<p class="em-ac-eq-formula"><var>I</var><sub>1</sub> = <var>U</var><sub>1</sub> / √[(<var>r</var><sub>1</sub> + <var>r</var>′<sub>2</sub>/<var>s</var>)² + (<var>X</var><sub>1</sub> + <var>X</var>′<sub>2</sub>)²]</p>
+<p class="em-ac-eq-formula"><var>I</var><sub>1</sub> = <var>U</var><sub>1</sub> / √[<span class="em-ac-eq-chunk">(<var>r</var><sub>1</sub> + <var>r</var>′<sub>2</sub>/<var>s</var>)²</span> + <span class="em-ac-eq-chunk">(<var>X</var><sub>1</sub> + <var>X</var>′<sub>2</sub>)²</span>]</p>
 <p class="em-ac-eq-note">закон Ома для полной цепи статора · с пуском: <var>r</var>′<sub>2</sub> стало <var>r</var>′<sub>2</sub>/<var>s</var></p>
 </div>
 </div>
@@ -1818,6 +1851,7 @@ L40 144 Z"/>
 <h3>Пуск</h3>
 <p>Слева — трансформатор: статор жёлтый, ротор синий, справа жирная перемычка Zн = 0. Вал стоит → s = 1.</p>
 <p>Справа — <strong>закон Ома для полной цепи статора</strong>: ток сети как U₁ / полное сопротивление. Сталь не считаем.</p>
+<p><var>I</var><sub>1</sub> — ток статора, <var>U</var><sub>1</sub> — напряжение сети. <var>r</var><sub>1</sub> и <var>X</var><sub>1</sub> — медь и индуктивное статора. <var>r</var>′<sub>2</sub> и <var>X</var>′<sub>2</sub> — то же у ротора: штрих значит «пересчитано на статор».</p>
 </aside>
 </div>
 </section>
@@ -1847,23 +1881,23 @@ L40 144 Z"/>
 <text x="118" y="36" text-anchor="end" font-size="12" fill="#64748b">1</text>
 <text x="118" y="124" text-anchor="end" font-size="12" fill="#64748b">0</text>
 <text x="118" y="188" text-anchor="end" font-size="11" fill="#94a3b8">−</text>
-<path class="em-ac-ms-s" d="M100 206 L90 180 L78 158 L72 144 L80 134 L99 127 L130 120 L161 113 L180 106 L188 96 L182 82 L170 60 L160 36" fill="none" stroke="#1d4ed8" stroke-width="2.4"/>
-<path class="em-ac-ms-work" d="M130 120 L161 113 L180 106 L188 96" fill="none" stroke="#c2410c" stroke-width="3.2"/>
-<path class="em-ac-ms-bad" d="M188 96 L182 82 L170 60 L160 36" fill="none" stroke="#ea580c" stroke-width="3" stroke-dasharray="5 3"/>
-<path class="em-ac-ms-rheo" d="M130 120 L150 114 L168 104 L178 84 L174 66 L166 48 L158 34" fill="none" stroke="#b45309" stroke-width="2" stroke-dasharray="6 4"/>
-<line class="em-ac-ms-peak-guides" x1="188" y1="96" x2="188" y2="120" stroke="#94a3b8" stroke-width="1" stroke-dasharray="3 3"/>
-<line class="em-ac-ms-peak-guides" x1="130" y1="96" x2="188" y2="96" stroke="#94a3b8" stroke-width="1" stroke-dasharray="3 3"/>
+<path class="em-ac-ms-s" d="M81 149 L78 145 L76 141 L76 137 L80 133 L89 128 L107 124 L130 120 L153 116 L171 112 L180 107 L184 103 L184 99 L182 95 L179 91 L176 86 L173 82 L170 78 L167 74 L165 70 L163 65 L161 61 L159 57 L158 53 L156 49 L155 44 L154 40 L153 36" fill="none" stroke="#1d4ed8" stroke-width="2.4"/>
+<path class="em-ac-ms-work" d="M130 120 L155 115 L173 111 L182 106 L184 102" fill="none" stroke="#c2410c" stroke-width="3.2"/>
+<path class="em-ac-ms-bad" d="M184 102 L182 95 L177 88 L172 82 L168 75 L164 69 L161 62 L159 56 L156 49 L154 43 L153 36" fill="none" stroke="#ea580c" stroke-width="3" stroke-dasharray="5 3"/>
+<path class="em-ac-ms-rheo" d="M130 120 L149 112 L165 103 L175 95 L181 86 L184 78 L184 70 L183 61 L180 53 L178 44 L176 36" fill="none" stroke="#b45309" stroke-width="2" stroke-dasharray="6 4"/>
+<line class="em-ac-ms-peak-guides" x1="184" y1="102" x2="184" y2="120" stroke="#94a3b8" stroke-width="1" stroke-dasharray="3 3"/>
+<line class="em-ac-ms-peak-guides" x1="130" y1="102" x2="184" y2="102" stroke="#94a3b8" stroke-width="1" stroke-dasharray="3 3"/>
 <circle class="em-ac-ms-pt em-ac-ms-pt-idle" cx="130" cy="120" r="5" fill="#1e40af" stroke="#fff" stroke-width="1.5"/>
-<circle class="em-ac-ms-pt em-ac-ms-pt-peak" cx="188" cy="96" r="5" fill="#c2410c" stroke="#fff" stroke-width="1.5"/>
-<circle class="em-ac-ms-pt em-ac-ms-pt-start" cx="160" cy="36" r="5" fill="#7c2d12" stroke="#fff" stroke-width="1.5"/>
-<text class="em-ac-ms-lbl-peak" x="206" y="94" font-size="13" font-weight="700" fill="#c2410c">Mₘ</text>
-<text class="em-ac-ms-lbl-peak" x="196" y="114" font-size="13" fill="#64748b">sₘ</text>
-<text class="em-ac-ms-lbl-start" x="172" y="34" font-size="13" font-weight="700" fill="#7c2d12">пуск</text>
+<circle class="em-ac-ms-pt em-ac-ms-pt-peak" cx="184" cy="102" r="5" fill="#c2410c" stroke="#fff" stroke-width="1.5"/>
+<circle class="em-ac-ms-pt em-ac-ms-pt-start" cx="153" cy="36" r="5" fill="#7c2d12" stroke="#fff" stroke-width="1.5"/>
+<text class="em-ac-ms-lbl-peak" x="192" y="98" font-size="13" font-weight="700" fill="#c2410c">Mₘ</text>
+<text class="em-ac-ms-lbl-peak" x="118" y="98" text-anchor="end" font-size="13" fill="#64748b">sₘ</text>
+<text class="em-ac-ms-lbl-start" x="164" y="50" font-size="13" font-weight="700" fill="#7c2d12">пуск</text>
 <text class="em-ac-ms-lbl-idle" x="138" y="136" font-size="12" font-weight="700" fill="#1e40af">х.х.</text>
 <text x="130" y="216" text-anchor="middle" font-size="13" fill="#64748b">s(M)</text>
 <!-- right n(M) -->
 <rect x="276" y="8" width="252" height="200" fill="#fff" stroke="#e2e8f0" stroke-width="1"/>
-<rect class="em-ac-ms-bad-zone" x="390" y="85" width="120" height="115" fill="url(#emAcMsBadHatch)" opacity="0.45"/>
+<rect class="em-ac-ms-bad-zone" x="390" y="102" width="122" height="94" fill="url(#emAcMsBadHatch)" opacity="0.45"/>
 <line x1="292" y1="196" x2="512" y2="196" stroke="#1e293b" stroke-width="1.5" marker-end="url(#emAcMsArr)"/>
 <line x1="390" y1="204" x2="390" y2="20" stroke="#1e293b" stroke-width="1.5" marker-end="url(#emAcMsArr)"/>
 <text x="512" y="190" text-anchor="end" font-size="13" font-weight="700" fill="#1e3a8a">M</text>
@@ -1871,18 +1905,19 @@ L40 144 Z"/>
 <text x="402" y="28" font-size="13" font-weight="700" fill="#1e3a8a">n</text>
 <text x="416" y="28" font-size="11" fill="#64748b">скорость вала</text>
 <text x="378" y="200" text-anchor="end" font-size="12" fill="#64748b">0</text>
-<path class="em-ac-ms-n" d="M420 196 L430 141 L442 106 L448 82 L440 66 L421 50 L390 36 L360 24 L338 18" fill="none" stroke="#0369a1" stroke-width="2.4"/>
-<path class="em-ac-ms-work" d="M390 36 L421 50 L440 66 L448 82" fill="none" stroke="#c2410c" stroke-width="3.2"/>
-<path class="em-ac-ms-bad" d="M448 82 L442 106 L430 141 L420 196" fill="none" stroke="#ea580c" stroke-width="3" stroke-dasharray="5 3"/>
-<circle class="em-ac-ms-pt em-ac-ms-pt-idle" cx="390" cy="36" r="5" fill="#1e40af" stroke="#fff" stroke-width="1.5"/>
-<circle class="em-ac-ms-pt em-ac-ms-pt-peak" cx="448" cy="82" r="5" fill="#c2410c" stroke="#fff" stroke-width="1.5"/>
-<circle class="em-ac-ms-pt em-ac-ms-pt-start" cx="420" cy="196" r="5" fill="#7c2d12" stroke="#fff" stroke-width="1.5"/>
-<line x1="390" y1="36" x2="378" y2="36" stroke="#1e293b" stroke-width="1.3"/>
-<text x="368" y="32" text-anchor="end" font-size="13" font-weight="700" fill="#1e40af">n₁</text>
-<text x="368" y="46" text-anchor="end" font-size="11" fill="#64748b">поле</text>
-<text class="em-ac-ms-lbl-peak" x="458" y="78" font-size="13" font-weight="700" fill="#c2410c">Mₘ</text>
-<text class="em-ac-ms-lbl-start" x="432" y="194" font-size="13" font-weight="700" fill="#7c2d12">пуск</text>
-<text class="em-ac-ms-lbl-idle" x="398" y="30" font-size="12" font-weight="700" fill="#1e40af">х.х.</text>
+<path class="em-ac-ms-n" d="M413 196 L414 190 L415 184 L416 178 L418 172 L419 166 L421 160 L423 154 L425 148 L427 142 L430 136 L433 130 L436 124 L439 118 L442 112 L444 106 L444 100 L440 94 L431 88 L413 82 L390 76 L367 70 L349 64 L340 58 L336 52 L336 46 L338 40 L341 34" fill="none" stroke="#0369a1" stroke-width="2.4"/>
+<path class="em-ac-ms-work" d="M444 102 L442 96 L433 89 L415 83 L390 76" fill="none" stroke="#c2410c" stroke-width="3.2"/>
+<path class="em-ac-ms-bad" d="M413 196 L414 187 L416 177 L419 168 L421 159 L424 149 L428 140 L432 130 L437 121 L442 112 L444 102" fill="none" stroke="#ea580c" stroke-width="3" stroke-dasharray="5 3"/>
+<path class="em-ac-ms-rheo" d="M390 76 L409 88 L425 100 L435 112 L441 124 L444 136 L444 148 L443 160 L440 172 L438 184 L436 196" fill="none" stroke="#b45309" stroke-width="2" stroke-dasharray="6 4"/>
+<circle class="em-ac-ms-pt em-ac-ms-pt-idle" cx="390" cy="76" r="5" fill="#1e40af" stroke="#fff" stroke-width="1.5"/>
+<circle class="em-ac-ms-pt em-ac-ms-pt-peak" cx="444" cy="102" r="5" fill="#c2410c" stroke="#fff" stroke-width="1.5"/>
+<circle class="em-ac-ms-pt em-ac-ms-pt-start" cx="413" cy="196" r="5" fill="#7c2d12" stroke="#fff" stroke-width="1.5"/>
+<line x1="390" y1="76" x2="378" y2="76" stroke="#1e293b" stroke-width="1.3"/>
+<text x="368" y="72" text-anchor="end" font-size="13" font-weight="700" fill="#1e40af">n₁</text>
+<text x="368" y="86" text-anchor="end" font-size="11" fill="#64748b">поле</text>
+<text class="em-ac-ms-lbl-peak" x="452" y="98" font-size="13" font-weight="700" fill="#c2410c">Mₘ</text>
+<text class="em-ac-ms-lbl-start" x="426" y="186" font-size="13" font-weight="700" fill="#7c2d12">пуск</text>
+<text class="em-ac-ms-lbl-idle" x="398" y="70" font-size="12" font-weight="700" fill="#1e40af">х.х.</text>
 <text class="em-ac-ms-lbl-bad" x="500" y="150" text-anchor="end" font-size="12" font-weight="700" fill="#c2410c">срыв</text>
 <text x="390" y="216" text-anchor="middle" font-size="13" fill="#64748b">n(M)</text>
 <!-- captions -->
@@ -1899,25 +1934,26 @@ L40 144 Z"/>
 <rect class="em-ac-hit-pad" x="276" y="8" width="252" height="200" fill="transparent" stroke="none"/>
 </g>
 <g class="em-ac-hit" data-info="start" style="cursor:pointer">
-<rect class="em-ac-hit-pad" x="148" y="24" width="28" height="28" fill="transparent" stroke="none"/>
-<rect class="em-ac-hit-pad" x="406" y="180" width="32" height="28" fill="transparent" stroke="none"/>
+<rect class="em-ac-hit-pad" x="140" y="24" width="40" height="28" fill="transparent" stroke="none"/>
+<rect class="em-ac-hit-pad" x="400" y="176" width="40" height="28" fill="transparent" stroke="none"/>
 </g>
 <g class="em-ac-hit" data-info="mm" style="cursor:pointer">
-<rect class="em-ac-hit-pad" x="174" y="82" width="36" height="28" fill="transparent" stroke="none"/>
-<rect class="em-ac-hit-pad" x="432" y="68" width="36" height="28" fill="transparent" stroke="none"/>
+<rect class="em-ac-hit-pad" x="170" y="88" width="40" height="28" fill="transparent" stroke="none"/>
+<rect class="em-ac-hit-pad" x="428" y="88" width="40" height="28" fill="transparent" stroke="none"/>
 </g>
 <g class="em-ac-hit" data-info="work" style="cursor:pointer">
-<rect class="em-ac-hit-pad" x="128" y="96" width="62" height="28" fill="transparent" stroke="none"/>
-<rect class="em-ac-hit-pad" x="388" y="32" width="62" height="52" fill="transparent" stroke="none"/>
+<rect class="em-ac-hit-pad" x="126" y="98" width="64" height="28" fill="transparent" stroke="none"/>
+<rect class="em-ac-hit-pad" x="386" y="70" width="64" height="40" fill="transparent" stroke="none"/>
 </g>
 <g class="em-ac-hit" data-info="bad" style="cursor:pointer">
-<rect class="em-ac-hit-pad" x="152" y="36" width="44" height="56" fill="transparent" stroke="none"/>
-<rect class="em-ac-hit-pad" x="408" y="90" width="56" height="90" fill="transparent" stroke="none"/>
+<rect class="em-ac-hit-pad" x="148" y="32" width="40" height="74" fill="transparent" stroke="none"/>
+<rect class="em-ac-hit-pad" x="400" y="100" width="50" height="96" fill="transparent" stroke="none"/>
 </g>
 </svg>
 </div>
 <div class="highlight-box highlight-box-compact em-ac-live">
 <p class="em-math-eq em-ac-hit" data-info="link"><var>s</var> = (<var>n</var><sub>1</sub> − <var>n</var>) / <var>n</var><sub>1</sub></p>
+<p class="em-ac-ms-ex">поле 1500 об/мин, вал 1450 → <var>s</var> = (1500 − 1450) / 1500 ≈ 0,03</p>
 <dl class="char-formula-legend em-dc-legend em-ac-legend">
 <div class="em-ac-hit" data-info="start"><dt>пуск</dt><dd>n=0 · s=1</dd></div>
 <div class="em-ac-hit" data-info="mm"><dt>Mₘ</dt><dd>пик</dd></div>
@@ -1938,6 +1974,7 @@ L40 144 Z"/>
 <h3>Связь</h3>
 <p>Слева ось s вверх: чем выше, тем сильнее вал отстаёт. Справа ось n вверх: чем выше, тем быстрее вал.</p>
 <p>s = (n₁ − n) / n₁. Больше n — меньше s. Графики зеркальные: вверх налево — вниз направо.</p>
+<p>Пример: поле 1500 об/мин, вал 1450. Отставание 50 оборотов, s = 50 / 1500 ≈ 0,03.</p>
 </aside>
 </div>
 </section>

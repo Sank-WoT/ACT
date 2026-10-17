@@ -9740,8 +9740,63 @@
       nodes.forEach((el) => { el.textContent = text; });
     };
 
+    const fieldEll = emAc2phmSlide.querySelector('#emAc2phmEll');
+    const fieldFw = emAc2phmSlide.querySelector('#emAc2phmFwArr');
+    const fieldBw = emAc2phmSlide.querySelector('#emAc2phmBwArr');
+    const fieldTip = emAc2phmSlide.querySelector('#emAc2phmTip');
+    const fieldB = emAc2phmSlide.querySelector('#emAc2phmBcoil');
+    const FCX = 81;
+    const FCY = 96;
+    const FR = 42;
+    let fieldK = 1;
+    let fieldAng = 0;
+    let fieldRaf = 0;
+    const paintField = () => {
+      const k = fieldK;
+      const AfF = (1 + k) / 2;
+      const ArF = (1 - k) / 2;
+      const s = Math.sin(fieldAng);
+      const c = Math.cos(fieldAng);
+      if (fieldEll) {
+        fieldEll.setAttribute('rx', Math.max(0.6, FR * k).toFixed(2));
+        fieldEll.setAttribute('ry', String(FR));
+        fieldEll.setAttribute('stroke-dasharray', k < 0.04 ? '0' : '4 3');
+      }
+      const put = (el, x, y, on) => {
+        if (!el) return;
+        el.setAttribute('x2', x.toFixed(1));
+        el.setAttribute('y2', y.toFixed(1));
+        el.setAttribute('opacity', on ? '1' : '0');
+      };
+      put(fieldFw, FCX + FR * AfF * s, FCY - FR * AfF * c, AfF > 0.02);
+      put(fieldBw, FCX - FR * ArF * s, FCY - FR * ArF * c, ArF > 0.02);
+      if (fieldTip) {
+        fieldTip.setAttribute('cx', (FCX + FR * k * s).toFixed(1));
+        fieldTip.setAttribute('cy', (FCY - FR * c).toFixed(1));
+      }
+      if (fieldB) {
+        const sc = Math.max(k, 0.12);
+        fieldB.setAttribute('transform', `translate(138 96) scale(${sc} 1) translate(-138 -96)`);
+      }
+    };
+    const fieldTick = () => {
+      if (!emAc2phmSlide.classList.contains('active')) {
+        fieldRaf = 0;
+        return;
+      }
+      fieldAng += 0.04;
+      paintField();
+      fieldRaf = requestAnimationFrame(fieldTick);
+    };
+    const startField = () => {
+      if (fieldRaf) return;
+      fieldRaf = requestAnimationFrame(fieldTick);
+    };
+
     const update = () => {
       const pct = Number(range?.value) || 0;
+      fieldK = Math.max(0, Math.min(1, pct / 100));
+      paintField();
       const { Af, Ar } = amps(pct);
       const aNom = amps(100);
       const nIdleNom = findIdle(aNom.Af, aNom.Ar);
@@ -9839,8 +9894,8 @@
       if (!hint) return;
       const view = emAc2phmSlide.dataset.ac === 'fam' ? 'fam' : 'sum';
       hint.textContent = view === 'fam'
-        ? 'Семейство n(M): меньше Uу — кривая ближе к нулю'
-        : 'Эллипс = прямое + обратное. Крутите Uу — смотрите сумму на графике';
+        ? 'Семейство n(M): меньше Uу — кривая ближе к нулю. Справа то же поле'
+        : 'Справа поле: круг, эллипс или линия. Крутите Uу';
     };
     emAc2phmSlide.addEventListener('click', (e) => {
       if (e.target.closest('.asutp-tab')) {
@@ -9852,6 +9907,10 @@
     range?.addEventListener('click', (e) => e.stopPropagation());
     update();
     syncHint();
+    new MutationObserver(() => {
+      if (emAc2phmSlide.classList.contains('active')) startField();
+    }).observe(emAc2phmSlide, { attributes: true, attributeFilter: ['class'] });
+    if (emAc2phmSlide.classList.contains('active')) startField();
   }
 
   bindEmAcSlide('.slide-em-ac-wnd-interactive', 'emAcWndPanel', {
@@ -11463,7 +11522,7 @@
   bindEmAcSlide('.slide-em-ac-srot-interactive', 'emAcSrotPanel', {
     sal: {
       title: 'Торчат',
-      html: '<p>Полюса торчат из ротора — как отдельные магниты. Обмотку на них питают постоянным током через <strong>два кольца</strong>.</p><p>Вал медленный, пар полюсов много: гидрогенератор. В учебнике это явнополюсный ротор.</p>'
+      html: '<p>Полюса торчат из ротора — как отдельные магниты. Обмотку на них питают постоянным током через <strong>два кольца</strong>.</p><p>Вал медленный, пар полюсов много: гидрогенератор.</p>'
     },
     cyl: {
       title: 'Гладкий',
@@ -11547,7 +11606,7 @@
   bindEmAcSlide('.slide-em-ac-eq-interactive', 'emAcEqPanel', {
     start: {
       title: 'Пуск',
-      html: '<p>Слева — трансформатор: статор жёлтый, ротор синий, справа жирная перемычка Zн = 0. Вал стоит → s = 1.</p><p>Справа — <strong>закон Ома для полной цепи статора</strong>: ток сети как U₁ / полное сопротивление. Сталь не считаем.</p>'
+      html: '<p>Слева — трансформатор: статор жёлтый, ротор синий, справа жирная перемычка Zн = 0. Вал стоит → s = 1.</p><p>Справа — <strong>закон Ома для полной цепи статора</strong>: ток сети как U₁ / полное сопротивление. Сталь не считаем.</p><p><var>I</var><sub>1</sub> — ток статора, <var>U</var><sub>1</sub> — напряжение сети. <var>r</var><sub>1</sub> и <var>X</var><sub>1</sub> — медь и индуктивное статора. <var>r</var>′<sub>2</sub> и <var>X</var>′<sub>2</sub> — то же у ротора: штрих значит «пересчитано на статор».</p>'
     },
     e: {
       title: 'На s',
@@ -11566,7 +11625,7 @@
   bindEmAcSlide('.slide-em-ac-ms-interactive', 'emAcMsPanel', {
     link: {
       title: 'Связь',
-      html: '<p>Слева ось s вверх: чем выше, тем сильнее вал отстаёт. Справа ось n вверх: чем выше, тем быстрее вал.</p><p><var>s</var> = (<var>n</var><sub>1</sub> − <var>n</var>) / <var>n</var><sub>1</sub>. Больше n — меньше s. Графики зеркальные: ушло вверх налево — ушло вниз направо.</p>'
+      html: '<p>Слева ось s вверх: чем выше, тем сильнее вал отстаёт. Справа ось n вверх: чем выше, тем быстрее вал.</p><p><var>s</var> = (<var>n</var><sub>1</sub> − <var>n</var>) / <var>n</var><sub>1</sub>. Больше n — меньше s. Графики зеркальные: ушло вверх налево — ушло вниз направо.</p><p>Пример: поле 1500 об/мин, вал 1450. Отставание 50 оборотов, <var>s</var> = 50 / 1500 ≈ 0,03.</p>'
     },
     start: {
       title: 'Пуск',
@@ -11574,7 +11633,7 @@
     },
     mm: {
       title: 'Пик',
-      html: '<p>Разгон: скорость растёт, s падает. Момент сначала растёт — до максимума Mₘ при sₘ.</p><p>Дальше по кривой момент уже падает, хотя s ещё растёт (или n ещё падает). Это «носик» на обоих графиках.</p>'
+      html: '<p>Разгон: скорость растёт, s падает. Момент сначала растёт — до максимума Mₘ при sₘ.</p><p>Дальше, к рабочему ходу, момент падает вместе со скольжением. Носик — один и тот же максимум на обоих графиках.</p>'
     },
     work: {
       title: 'Ход',
