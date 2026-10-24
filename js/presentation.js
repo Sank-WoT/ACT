@@ -11987,19 +11987,19 @@
   }, 'eq');
 
   bindEm2phSlide('.slide-em-2ph-same-interactive', 'em2phSamePanel', {
-    same: { title: 'Одинаково', html: '<p>Динамика двухфазного асинхронного такая же по форме, как у двигателя постоянного тока.</p><p>Структурную схему можно брать ту же: U → Kдв → сумма с −Kм Mн → инерция → ω.</p>' },
-    dc: { title: 'МПТ', html: '<p>В лекции 6 для МПТ писали то же якорное управление. Часто ещё вычитали момент потерь M₀.</p>' },
-    ac: { title: 'Двухфазный', html: '<p>Здесь M₀ в модель не ставят. Управление — Uупр на обмотку, не Uя постоянного тока.</p>' }
+    same: { title: 'Одинаково', html: '<p>Слайд говорит одно: схему из лекции 6 рисуют заново не нужно. Каркас тот же — инерция, Kдв и просадка от Mн.</p><p>Буквы Tм и Tдв — одна инерция вала. Дальше только две подстановки: какое U и есть ли M₀.</p>' },
+    dc: { title: 'МПТ', html: '<p>В лекции 6 на место U ставили напряжение якоря Uя — постоянный ток.</p><p>Часто ещё вычитали момент потерь Kм·M₀, трение. Знак у него тот же, что у скорости.</p>' },
+    ac: { title: 'Двигатель', html: '<p>Справа — двухфазный асинхронный двигатель: две обмотки на статоре под 90°.</p><p>На место U ставят Uупр — напряжение обмотки управления, не якоря. Ветвь M₀ не рисуют: в этой модели её нет.</p>' }
   }, 'same');
 
   bindEm2phSlide('.slide-em-2ph-str-interactive', 'em2phStrPanel', {
-    chain: { title: 'Цепочка', html: '<p>Uупр через Kдв. Момент нагрузки вычитается через −Kм. Дальше инерционное звено — скорость вала.</p>' },
+    chain: { title: 'Цепочка', html: '<p>Uупр через Kдв. Момент нагрузки вычитается через −Kм. Дальше инерционное звено — скорость вала.</p><p>M₀ — момент потерь, трение самого двигателя. На этой схеме его нет: вычитают только Mн.</p>' },
     u: { title: 'Uупр', html: '<p>Напряжение управления — выход усилителя переменного тока, вход этой модели.</p>' },
     kd: { title: 'Kдв', html: '<p>Масштаб: вольты управления → вклад в скорость.</p>' },
     sum: { title: 'Сумматор', html: '<p>Складывает полезный вклад от Uупр и вычитание от нагрузки.</p>' },
     iner: { title: 'Инерция', html: '<p>Звено 1/(Tдв p + 1): вал не прыгает мгновенно — разгон и торможение затягиваются.</p>' },
     om: { title: 'ω', html: '<p>Угловая скорость ротора — выход модели. Для угла вала после неё ставят ещё 1/p.</p>' },
-    mn: { title: 'Нагрузка', html: '<p>Mн через −Kм уменьшает вход инерционного звена — скорость падает.</p>' }
+    mn: { title: 'Нагрузка', html: '<p>Mн — момент, который просит вал: заслонка, редуктор. Через −Kм он уменьшает скорость.</p><p>M₀ — другое: трение внутри двигателя. Эту ветвь здесь не рисуют.</p>' }
   }, 'chain');
 
   bindEm2phSlide('.slide-em-2ph-tr-interactive', 'em2phTrPanel', {
@@ -12009,31 +12009,102 @@
   }, 'u');
 
   bindEm2phSlide('.slide-em-2ph-why-pp-interactive', 'em2phWhyPpPanel', {
-    why: { title: 'Зачем', html: '<p>Обмотке управления нужна заметная мощность при малом искажении формы. Двухтакт с трансформаторами это умеет.</p>' },
-    pp: { title: 'Двухтакт', html: '<p>Два плеча работают по полупериодам: симметричнее форма, выше отдача в нагрузку.</p>' },
-    tr: { title: 'Трансформатор', html: '<p>На входе — развязка и деление сигнала. На выходе — согласование с обмоткой и средняя точка для питания.</p>' },
-    load: { title: 'Нагрузка', html: '<p>Нагрузка усилителя — обмотка управления двухфазного двигателя (и её активное сопротивление).</p>' }
+    why: { title: 'Зачем', html: '<p>Слева входной синус Uс. Точка 1 — его верх, точка 2 — низ. Усилитель не открывает оба транзистора сразу.</p><p>На каждый момент периода работает свой транзистор. Так слабый сигнал превращается в ток обмотки.</p>' },
+    pp: { title: 'Двухтакт', html: '<p>Момент 1, верх синуса. Открыт только VT1, VT2 молчит. Ток в обмотке идёт в одну сторону.</p><p>Момент 2, низ. VT1 закрылся, открыт VT2. Ток идёт обратно. Один транзистор дал бы только половину периода.</p>' },
+    tr: { title: 'Трансформатор', html: '<p>Tr1 решает, кого открыть: на верху синуса подаёт сигнал на VT1, на низу — на VT2.</p><p>Tr2 из двух толчков, вперёд и назад, собирает на обмотке одну волну. Провода — на следующем слайде.</p>' },
+    load: { title: 'Обмотка', html: '<p>Нижние стрелки — ток обмотки управления. В момент 1 в одну сторону, в момент 2 в другую.</p><p>Туда и обратно за период — это переменное Uу. Размах больше, чем у Uс, поэтому катушку уже тянет. На схеме динамики это Uупр.</p>' }
   }, 'why');
 
   bindEm2phSlide('.slide-em-2ph-sch-interactive', 'em2phSchPanel', {
-    ov: { title: 'Обзор', html: '<p>Слева — входной трансформатор, в центре — два транзистора в двухтакте, справа — выходной трансформатор на обмотку управления.</p><p>Питание — в среднюю точку выходного трансформатора.</p>' },
-    in: { title: 'Вход', html: '<p>Входной трансформатор принимает сигнал управления и отдаёт два противофазных напряжения на базы транзисторов.</p>' },
-    tr: { title: 'Транзисторы', html: '<p>VT1 и VT2 работают по очереди. Каждый полупериод ток идёт через свою половину первички выходного трансформатора.</p>' },
-    r: { title: 'Резисторы', html: '<p>Задают режимы баз/эмиттеров. На схеме — обвязка плеч.</p>' },
-    ps: { title: 'Питание', html: '<p>Источник постоянного питания подключен к средней точке первичной обмотки выходного трансформатора.</p>' },
-    out: { title: 'Выход', html: '<p>Выходной трансформатор собирает двухтакт в переменное напряжение нужной амплитуды.</p>' },
-    load: { title: 'Обмотка', html: '<p>Со вторички — на обмотку управления двигателя. Это и есть Uу.</p>' }
-  }, 'ov');
+    m1: { title: 'Момент 1', html: '<p>Верх синуса. Tr1 открывает VT1, VT2 погашен. Ток питания идёт из средней точки вверх по первичке Tr2 и через VT1.</p><p>На обмотке ток в одну сторону: по верхней линии вправо. Это плюс на Uу.</p>' },
+    m2: { title: 'Момент 2', html: '<p>Низ синуса. Открыт VT2, VT1 погашен. Ток из средней точки идёт вниз по нижней половине первички и через VT2.</p><p>На обмотке ток разворачивается. Минус на Uу. За период оба момента — целый синус.</p>' },
+    ov: { title: 'Обзор', html: '<p>Слева Tr1 делит сигнал на два противоположных. В центре VT1 и VT2 по очереди. Справа Tr2 собирает их в Uу.</p><p>Питание — в среднюю точку Tr2. Нажмите момент или Пуск, чтобы увидеть путь тока.</p>' },
+    in: { title: 'Вход', html: '<p>Tr1 принимает Uс и отдаёт два противоположных напряжения на базы. В момент 1 сигнал идёт на VT1, в момент 2 — на VT2.</p><p>Ручка Uс вниз до нуля: оба транзистора закрыты. Питанию некуда идти, обмотка молчит.</p>' },
+    tr: { title: 'Транзисторы', html: '<p>Открыт только один. Его ток идёт через свою половину первички Tr2: верх — VT1, низ — VT2.</p><p>Закрытый на схеме погашен, тока через него нет.</p>' },
+    r: { title: 'Резисторы', html: '<p>Задают режимы баз и эмиттеров. Силовой ток полупериода идёт по коллекторной линии, не через эти резисторы как через нагрузку.</p>' },
+    ps: { title: 'Питание', html: '<p>Плюс источника сидит на средней точке первички Tr2. Отсюда ток уходит вверх в момент 1 и вниз в момент 2.</p><p>Ручка питания вниз до нуля: Uс ещё доходит до базы, а тока в обмотке нет. Ватты берутся отсюда.</p>' },
+    out: { title: 'Выход', html: '<p>Две половины первички создают в сердечнике поток то в одну, то в другую сторону. Вторичка отдаёт это в обмотку уже одним переменным напряжением.</p>' },
+    load: { title: 'Обмотка', html: '<p>Справа обмотка управления двигателя. В момент 1 ток по верхней линии вправо, в момент 2 — обратно.</p><p>Это и есть Uупр: форма синуса сохранилась, размах вырос.</p>' }
+  }, 'm1');
+
+  (function () {
+    const slide = document.querySelector('.slide-em-2ph-sch-interactive');
+    const play = slide?.querySelector('.em-2ph-sch-play');
+    if (!slide || !play) return;
+    let timer = null;
+    let which = 'm1';
+    let fromPlay = false;
+    const step = () => {
+      which = which === 'm1' ? 'm2' : 'm1';
+      fromPlay = true;
+      slide.querySelector(`.em-2ph-sch-moment[data-info="${which}"]`)?.click();
+      fromPlay = false;
+    };
+    play.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (timer) {
+        clearInterval(timer);
+        timer = null;
+        play.textContent = 'Пуск';
+        return;
+      }
+      play.textContent = 'Пауза';
+      step();
+      timer = setInterval(() => {
+        if (!slide.classList.contains('active')) return;
+        step();
+      }, 1500);
+    });
+    slide.addEventListener('click', (e) => {
+      if (fromPlay || !timer) return;
+      if (e.target.closest('.em-2ph-sch-knob, .em-2ph-sch-play')) return;
+      clearInterval(timer);
+      timer = null;
+      play.textContent = 'Пуск';
+    });
+    const uc = slide.querySelector('.em-2ph-sch-uc');
+    const ps = slide.querySelector('.em-2ph-sch-ps');
+    const ucVal = slide.querySelector('.em-2ph-sch-uc-val');
+    const psVal = slide.querySelector('.em-2ph-sch-ps-val');
+    const barBase = slide.querySelector('.em-2ph-sch-bar-base');
+    const barOut = slide.querySelector('.em-2ph-sch-bar-out');
+    const read = slide.querySelector('.em-2ph-sch-read');
+    const flows = slide.querySelectorAll('.em-2ph-sch-flow');
+    const paintKnobs = () => {
+      const u = Number(uc?.value || 0);
+      const p = Number(ps?.value || 0);
+      const gain = (u / 100) * (p / 100);
+      if (ucVal) ucVal.textContent = `${u}%`;
+      if (psVal) psVal.textContent = `${p}%`;
+      if (barBase) barBase.style.height = `${Math.round(u * 0.28)}%`;
+      if (barOut) barOut.style.height = `${Math.round(gain * 100)}%`;
+      slide.classList.toggle('is-no-drive', u === 0);
+      slide.classList.toggle('is-no-power', p === 0);
+      flows.forEach((path) => {
+        const base = path.classList.contains('em-2ph-flow-base');
+        path.style.strokeWidth = (base ? 1.1 + 1.6 * (u / 100) : 1.1 + 4.2 * gain).toFixed(2);
+      });
+      if (!read) return;
+      if (u === 0) read.textContent = 'Uс = 0: оба транзистора закрыты, питанию некуда идти.';
+      else if (p === 0) read.textContent = 'Питания нет: Uс доходит до базы, тока в обмотке нет.';
+      else read.textContent = `Ток базы ${Math.round(u * 0.28)}% шкалы, ток обмотки ${Math.round(gain * 100)}%. Ватты даёт питание.`;
+    };
+    uc?.addEventListener('input', paintKnobs);
+    ps?.addEventListener('input', paintKnobs);
+    uc?.addEventListener('click', (e) => e.stopPropagation());
+    ps?.addEventListener('click', (e) => e.stopPropagation());
+    paintKnobs();
+  })();
 
   bindEm2phSlide('.slide-em-2ph-mu-intro-interactive', 'em2phMuIntroPanel', {
-    why: { title: 'Зачем', html: '<p>Маленький сигнал постоянного тока задаёт, сколько переменного тока пройдёт из сети в нагрузку — например в обмотку управления двигателя.</p>' },
-    kinds: { title: 'Виды', html: '<p>Бывают магнитные усилители переменного и постоянного тока. Для двухфазного АД часто берут переменного тока.</p>' },
-    simple: { title: 'Простейший', html: '<p>Простейший МУ переменного тока — дроссель насыщения: замкнутое железо, рабочая и управляющая обмотки.</p>' },
-    vs: { title: 'Vs двухтакт', html: '<p>Та же задача — дать Uу на обмотку. Здесь усиливает насыщение железа, а не пара транзисторов.</p>' }
+    why: { title: 'Зачем', html: '<p>Обмотке опять нужна мощность. Ручка здесь — не напряжение на базу, а маленький постоянный ток Iу.</p><p>Сам Iу обмотку не кормит. Он задаёт, сколько переменного тока сеть пропустит в неё.</p>' },
+    kinds: { title: 'Выход', html: '<p>Для двухфазного двигателя берут магнитный усилитель переменного тока: на выходе сразу переменное, его и отдают в обмотку.</p><p>Чем больше Iу, тем больший переменный ток сети доходит до обмотки. Бывает и усилитель постоянного тока — на выходе тогда постоянное.</p>' },
+    simple: { title: 'Железо', html: '<p>Простейший такой усилитель — дроссель насыщения. Замкнутое железо и две обмотки: управляющая с постоянным Iу и рабочая в цепи сети.</p><p>Iу подмагничивает железо. Оно насыщается, дроссель хуже держит сеть, и переменный ток в нагрузку растёт. Устройство — следующий слайд.</p>' },
+    vs: { title: 'Сравнение', html: '<p>Задача та же, что у двухтакта: слабым входом пустить мощный ток в обмотку.</p><p>Там кран — транзистор, энергию даёт источник питания. Здесь кран — насыщение железа, энергию даёт сеть.</p>' }
   }, 'why');
 
   bindEm2phSlide('.slide-em-2ph-mu-choke-interactive', 'em2phMuChokePanel', {
-    dev: { title: 'Обзор', html: '<p>Простейший МУ — дроссель насыщения: замкнутое железо, обмотка управления <span class="char-eq"><var>w</var><sub>у</sub></span> и рабочая <span class="char-eq"><var>w</var><sub>р</sub></span> в цепи сети и <span class="char-eq"><var>R</var><sub>н</sub></span>.</p><p>Справа — вид снаружи: слабый <span class="char-eq"><var>I</var><sub>у</sub></span> управляет током нагрузки. Почему так — на следующем слайде.</p>' },
+    dev: { title: 'Обзор', html: '<p>Дроссель — катушка на железе. Переменный ток она держит, постоянный пропускает.</p><p>Дроссель насыщения — тот же дроссель с обмоткой постоянного тока. Iу доводит железо до насыщения, и переменный ток рабочая обмотка уже почти не держит. На схеме: wу, wр и Rн.</p>' },
     core: { title: 'Железо', html: '<p>Замкнутый магнитопровод — «рычаг» усилителя. Меняем подмагничивание — меняем, сколько переменного тока пройдёт в нагрузку.</p>' },
     wy: { title: 'wу', html: '<p>Обмотка управления: постоянный ток <span class="char-eq"><var>I</var><sub>у</sub></span>. Слабый вход — задаёт режим железа.</p>' },
     wp: { title: 'wр', html: '<p>Рабочая обмотка в цепи переменного тока сети. Через неё идёт мощность в <span class="char-eq"><var>R</var><sub>н</sub></span>.</p>' },
@@ -12067,8 +12138,62 @@
         dot.setAttribute('cy', Math.max(38, Math.min(158, y)).toFixed(1));
       }
     };
-    const updateChoke = () => setChokeDot(Number(range?.value) || 0);
-    range?.addEventListener('input', updateChoke);
+    const updateChoke = () => {
+      const pct = Number(range?.value) || 0;
+      setChokeDot(pct);
+      const k = Math.max(0, Math.min(100, pct)) / 100;
+      const cy = Number(dot?.getAttribute('cy')) || 158;
+      const inK = Math.max(0, Math.min(1, (168 - cy) / (168 - 38)));
+      const iron = em2phMuChoke.querySelector('.em-2ph-choke-iron');
+      const wy = em2phMuChoke.querySelector('.em-2ph-choke-wy');
+      const ac = em2phMuChoke.querySelector('.em-2ph-choke-ac');
+      const note = em2phMuChoke.querySelector('.em-2ph-choke-note');
+      const mix = (a, b, t) => Math.round(a + (b - a) * t);
+      if (iron) {
+        iron.setAttribute('fill', `rgb(${mix(248, 253, k)},${mix(250, 186, k)},${mix(252, 36, k)})`);
+      }
+      if (wy) wy.setAttribute('stroke-width', (1.4 + 2.4 * k).toFixed(2));
+      if (ac) {
+        ac.setAttribute('stroke-width', (0.8 + 4.4 * inK).toFixed(2));
+        ac.setAttribute('opacity', (0.2 + 0.8 * inK).toFixed(2));
+      }
+      if (note) {
+        note.textContent = k < 0.18
+          ? 'Iу мал · ток в Rн мал'
+          : k < 0.62
+            ? 'подмагничивание · Iн растёт'
+            : 'насыщено · ток в Rн большой';
+      }
+    };
+    const play = em2phMuChoke.querySelector('.em-2ph-choke-play');
+    let chokeTimer = null;
+    let chokeDir = 1;
+    const stopChokePlay = () => {
+      if (!chokeTimer) return;
+      clearInterval(chokeTimer);
+      chokeTimer = null;
+      if (play) play.textContent = 'Пуск';
+    };
+    play?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (chokeTimer) {
+        stopChokePlay();
+        return;
+      }
+      play.textContent = 'Пауза';
+      chokeTimer = setInterval(() => {
+        if (!em2phMuChoke.classList.contains('active')) return;
+        let v = Number(range.value) + chokeDir * 2;
+        if (v >= 100) { v = 100; chokeDir = -1; }
+        if (v <= 0) { v = 0; chokeDir = 1; }
+        range.value = String(v);
+        updateChoke();
+      }, 50);
+    });
+    range?.addEventListener('input', () => {
+      stopChokePlay();
+      updateChoke();
+    });
     range?.addEventListener('click', (e) => e.stopPropagation());
     updateChoke();
   }
@@ -12171,18 +12296,145 @@
   }
 
   bindEm2phSlide('.slide-em-2ph-mu-mu-interactive', 'em2phMuMuPanel', {
-    mu: { title: 'μ', html: '<p><span class="char-eq">μ</span> падает, потому что магнитопровод входит в насыщение. Когда все магнитные домены уже выстроены по полю, дальше намагничивать материал «нечем» — прирост <span class="char-eq"><var>B</var></span> замедляется, а <span class="char-eq"><var>H</var></span> продолжает расти. Отношение <span class="char-eq">μ = <var>B</var>/<var>H</var></span> падает.</p>' },
-    shift: { title: 'Сдвиг', html: '<p>Ток <span class="char-eq"><var>I</var><sub>у</sub></span> сдвигает рабочую точку вдоль H: от крутого участка (домены ещё «свободны», μ велика) к полке насыщения (μ мала).</p>' },
-    l: { title: 'L и XL', html: '<p>Упала <span class="char-eq">μ</span> — упала <span class="char-eq"><var>L</var></span> — упала <span class="char-eq"><var>X</var><sub>L</sub></span>.</p><p class="cap-eq"><span class="char-eq"><var>L</var> ∼ <var>w</var><sub>р</sub><sup>2</sup>&thinsp;μ · <var>X</var><sub>L</sub> = ω<var>L</var></span></p>' },
-    u: { title: 'Усиление', html: '<p>Меньше <span class="char-eq"><var>X</var><sub>L</sub></span> — больше <span class="char-eq"><var>I</var><sub>н</sub></span>. Слабый постоянный вход усиливает переменный ток. Энергию даёт сеть ~.</p>' },
-    chain: { title: 'Цепочка', html: '<p><span class="char-eq"><var>I</var><sub>у</sub> ↑ → H ↑ → μ ↓ → L ↓ → <var>X</var><sub>L</sub> ↓ → <var>I</var><sub>н</sub> ↑</span></p><p>Вся логика дросселя — в одной строке.</p>' }
+    mu: { title: 'μ', html: '<p><span class="char-eq">μ</span> — наклон кривой намагничивания, <span class="char-eq">μ = <var>B</var>/<var>H</var></span>. Пунктир — самый крутой наклон у начала. Синяя черта — наклон в текущей точке.</p><p>Крутите Iу: точка уезжает на полку, синяя черта ложится, μ падает.</p>' },
+    shift: { title: 'Сдвиг', html: '<p>Ток <span class="char-eq"><var>I</var><sub>у</sub></span> двигает точку вправо по H. С крутого участка она переходит на полку насыщения.</p>' },
+    l: { title: 'L и XL', html: '<p>Оранжевые шкалы μ и XL падают вместе: <span class="char-eq"><var>L</var> ∼ <var>w</var><sub>р</sub><sup>2</sup>&thinsp;μ</span>, <span class="char-eq"><var>X</var><sub>L</sub> = ω<var>L</var></span>.</p>' },
+    u: { title: 'Усиление', html: '<p>Синяя шкала Iн растёт, когда XL падает. Слабый постоянный Iу пускает в нагрузку переменный ток сети.</p>' },
+    chain: { title: 'Цепочка', html: '<p><span class="char-eq"><var>I</var><sub>у</sub> ↑ → H ↑ → μ ↓ → L ↓ → <var>X</var><sub>L</sub> ↓ → <var>I</var><sub>н</sub> ↑</span></p><p>Шкалы справа повторяют эту строку при движении ручки.</p>' }
   }, 'mu');
 
+  const em2phMuMu = document.querySelector('.slide-em-2ph-mu-mu-interactive');
+  if (em2phMuMu) {
+    const range = em2phMuMu.querySelector('.em-2ph-mu-mu-range');
+    const val = em2phMuMu.querySelector('.em-2ph-mu-mu-val');
+    const curve = em2phMuMu.querySelector('.em-2ph-mu-bh');
+    const tan = em2phMuMu.querySelector('.em-2ph-mu-tan');
+    const tanMax = em2phMuMu.querySelector('.em-2ph-mu-tan-max');
+    const tanMaxLabel = em2phMuMu.querySelector('.em-2ph-mu-tan-max-label');
+    const dot = em2phMuMu.querySelector('.em-2ph-mu-dot');
+    const dotLabel = em2phMuMu.querySelector('.em-2ph-mu-dot-label');
+    const barH = em2phMuMu.querySelector('.em-2ph-mu-bar-h');
+    const barMu = em2phMuMu.querySelector('.em-2ph-mu-bar-mu');
+    const barXl = em2phMuMu.querySelector('.em-2ph-mu-bar-xl');
+    const barI = em2phMuMu.querySelector('.em-2ph-mu-bar-i');
+    const now = em2phMuMu.querySelector('.em-2ph-mu-now');
+    const setLine = (line, x, y, dx, dy, len) => {
+      const n = Math.hypot(dx, dy) || 1;
+      const ux = dx / n;
+      const uy = dy / n;
+      const reach = (vx, vy) => {
+        let m = len;
+        if (vx > 1e-4) m = Math.min(m, (268 - x) / vx);
+        else if (vx < -1e-4) m = Math.min(m, (46 - x) / vx);
+        if (vy > 1e-4) m = Math.min(m, (162 - y) / vy);
+        else if (vy < -1e-4) m = Math.min(m, (30 - y) / vy);
+        return Math.max(0, m);
+      };
+      const back = reach(-ux, -uy);
+      const fwd = reach(ux, uy);
+      line.setAttribute('x1', (x - ux * back).toFixed(1));
+      line.setAttribute('y1', (y - uy * back).toFixed(1));
+      line.setAttribute('x2', (x + ux * fwd).toFixed(1));
+      line.setAttribute('y2', (y + uy * fwd).toFixed(1));
+    };
+    const paintMu = () => {
+      const pct = Number(range?.value) || 0;
+      const k = Math.max(0, Math.min(100, pct)) / 100;
+      if (val) val.textContent = `${Math.round(pct)}%`;
+      if (!curve || typeof curve.getTotalLength !== 'function') return;
+      const len = curve.getTotalLength();
+      const at = (s) => curve.getPointAtLength(Math.max(0, Math.min(len, s)));
+      const p = at(k * len);
+      const p0 = at(k * len - 10);
+      const p1 = at(k * len + 10);
+      const dx = p1.x - p0.x;
+      const dy = p1.y - p0.y;
+      const slope = Math.abs(dy / (dx || 1));
+      const slope0 = (() => {
+        const a = at(0);
+        const b = at(14);
+        return Math.abs((b.y - a.y) / ((b.x - a.x) || 1));
+      })();
+      const muRel = Math.max(0.08, Math.min(1, slope / (slope0 || 1)));
+      const inK = (1 / Math.hypot(0.28, muRel)) / (1 / 0.28);
+      if (dot) {
+        dot.setAttribute('cx', p.x.toFixed(1));
+        dot.setAttribute('cy', p.y.toFixed(1));
+      }
+      if (tan) setLine(tan, p.x, p.y, dx, dy, 34);
+      if (tanMax) {
+        const a = at(0);
+        const b = at(16);
+        setLine(tanMax, a.x, a.y, b.x - a.x, b.y - a.y, 150);
+      }
+      if (tanMaxLabel) {
+        const a = at(0);
+        const b = at(16);
+        const dx0 = b.x - a.x;
+        const dy0 = b.y - a.y;
+        const n0 = Math.hypot(dx0, dy0) || 1;
+        tanMaxLabel.setAttribute('x', (a.x + (dx0 / n0) * 86 - 8).toFixed(1));
+        tanMaxLabel.setAttribute('y', (a.y + (dy0 / n0) * 86 + 4).toFixed(1));
+      }
+      if (dotLabel) {
+        const below = p.y < 72;
+        dotLabel.setAttribute('x', (p.x + (below ? -16 : 10)).toFixed(1));
+        dotLabel.setAttribute('y', (p.y + (below ? 18 : -10)).toFixed(1));
+      }
+      const w = (bar, frac) => {
+        if (!bar) return;
+        bar.setAttribute('width', Math.max(4, 150 * Math.max(0, Math.min(1, frac))).toFixed(1));
+      };
+      w(barH, 0.12 + 0.88 * k);
+      w(barMu, muRel);
+      w(barXl, muRel);
+      w(barI, inK);
+      if (now) {
+        now.textContent = muRel > 0.72
+          ? 'наклон большой · Iн мал'
+          : muRel > 0.32
+            ? 'наклон падает · Iн растёт'
+            : 'наклон мал · Iн большой';
+      }
+    };
+    const play = em2phMuMu.querySelector('.em-2ph-mu-mu-play');
+    let muTimer = null;
+    let muDir = 1;
+    const stopMuPlay = () => {
+      if (!muTimer) return;
+      clearInterval(muTimer);
+      muTimer = null;
+      if (play) play.textContent = 'Пуск';
+    };
+    play?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (muTimer) {
+        stopMuPlay();
+        return;
+      }
+      play.textContent = 'Пауза';
+      muTimer = setInterval(() => {
+        if (!em2phMuMu.classList.contains('active')) return;
+        let v = Number(range.value) + muDir * 2;
+        if (v >= 100) { v = 100; muDir = -1; }
+        if (v <= 0) { v = 0; muDir = 1; }
+        range.value = String(v);
+        paintMu();
+      }, 50);
+    });
+    range?.addEventListener('input', () => {
+      stopMuPlay();
+      paintMu();
+    });
+    range?.addEventListener('click', (e) => e.stopPropagation());
+    paintMu();
+  }
+
   bindEm2phSlide('.slide-em-2ph-mu-bad-interactive', 'em2phMuBadPanel', {
-    slow: { title: 'Инерция', html: '<p>Существенный недостаток — большая инерционность: обмотки управления медленно меняют поток в железе. На графике — оранжевая кривая.</p>' },
+    slow: { title: 'Инерция', html: '<p>Оранжевая кривая — длинный переход МУ. Обмотка управления медленно меняет поток в железе, выход догоняет задание гораздо позже двухтакта.</p>' },
     sau: { title: 'В САУ', html: '<p>В быстром контуре регулирования МУ «вязнет». Постоянная времени сравнима с самим двигателем — запас устойчивости хуже.</p>' },
     rev: { title: 'Реверс', html: '<p>МУ делают реверсивными и нереверсивными — можно или нельзя менять знак выхода. Это не минус, а вариант исполнения.</p>' },
-    alt: { title: 'Альтернатива', html: '<p>Где нужна скорость отклика — транзисторный двухтакт или преобразователь частоты: без тяжёлого железа в контуре управления. На графике — синий скачок.</p>' }
+    alt: { title: 'Альтернатива', html: '<p>Синяя кривая — не скачок. У двухтакта переход тоже есть: выход догоняет задание, только без тяжёлого железа, поэтому короче, чем у МУ.</p>' }
   }, 'slow');
 
   bindEm2phSlide('.slide-em-2ph-fc-intro-interactive', 'em2phFcIntroPanel', {
@@ -12203,24 +12455,235 @@
   }, 'chain');
 
   bindEm2phSlide('.slide-em-2ph-fc-lar-interactive', 'em2phFcLarPanel', {
-    how: { title: 'Как работает', html: '<p>В схеме Ларионова в каждый момент открыты три диода: один из верхней группы и два из нижней — или наоборот, в зависимости от фазных напряжений.</p><p>Открытые диоды с более высокими потенциалами не дают открыться остальным. При изменении фазных напряжений открытые и закрытые диоды перераспределяются.</p>' },
-    ph: { title: 'A B C', html: '<p>Три фазы сети заходят в средние точки стоек моста — между верхним и нижним диодом каждой стойки.</p>' },
-    top: { title: 'VD1–3', html: '<p>Верхняя группа: катоды на шине «+». В любой момент обычно открыт один из них — тот, чья фаза в данный миг «самая положительная».</p>' },
-    bot: { title: 'VD4–6', html: '<p>Нижняя группа: аноды на шине «−». Одновременно с верхним открываются два нижних (или наоборот) — так замыкается путь тока через нагрузку.</p>' },
-    out: { title: 'Iн', html: '<p>Ток нагрузки идёт от шины «+» к «−». Нагрузка здесь — следующее звено ПЧ (фильтр / инвертор), на схеме показана пунктиром.</p>' },
-    'wave-in': { title: 'Вход', html: '<p>Трёхфазное напряжение на входе: синусоиды <span class="char-eq"><var>A</var>, <var>B</var>, <var>C</var></span> со сдвигом 120°.</p>' },
-    'wave-out': { title: 'Выход', html: '<p>Напряжение на нагрузке — выпрямленное, с характерной «шестипульсной» пульсацией: мост каждый миг выбирает наибольшую разность потенциалов между фазами.</p>' }
+    how: { title: 'Как работает', html: '<p>Мост смотрит на три синуса. На шину «+» пропускает фазу, которая сейчас выше всех, на шину «−» — которая ниже всех. Открыты два диода.</p><p>Крутите момент: курсор идёт по сигналу, пара диодов меняется каждые 60°. Отрезок между крайней верхней и крайней нижней точкой — это Uн.</p>' },
+    ph: { title: 'A B C', html: '<p>Три фазы сети заходят в средние точки стоек моста — между верхним и нижним диодом каждой стойки. Цвет провода совпадает с цветом синуса.</p>' },
+    top: { title: 'VD1–3', html: '<p>Верхняя группа: катоды на шине «+». Открыт один диод — той фазы, которая сейчас выше остальных. Через него ток идёт в нагрузку.</p>' },
+    bot: { title: 'VD4–6', html: '<p>Нижняя группа: аноды на шине «−». Открыт один диод — той фазы, которая сейчас ниже остальных. Через него ток возвращается в сеть.</p>' },
+    out: { title: 'Iн', html: '<p>Ток нагрузки идёт от шины «+» к «−» по пунктиру. Нагрузка здесь — следующее звено ПЧ, фильтр или инвертор.</p>' },
+    'wave-in': { title: 'Вход', html: '<p>Три синуса со сдвигом 120°. Точка на верхней кривой — фаза, которую мост берёт на «+». Точка на нижней — фаза, куда ток возвращается. Отрезок между ними — напряжение на нагрузке.</p>' },
+    'wave-out': { title: 'Выход', html: '<p>Uн — тот самый отрезок: самая высокая фаза минус самая низкая. За период таких кусков шесть, поэтому пульсация мелкая и частая.</p>' }
   }, 'how');
 
+  const em2phLar = document.querySelector('.slide-em-2ph-fc-lar-interactive');
+  if (em2phLar) {
+    const range = em2phLar.querySelector('.em-2ph-lar-range');
+    const val = em2phLar.querySelector('.em-2ph-lar-val');
+    const now = em2phLar.querySelector('.em-2ph-lar-now');
+    const flow = em2phLar.querySelector('.em-2ph-lar-flow');
+    const cursor = em2phLar.querySelector('.em-2ph-lar-cursor');
+    const cursorOut = em2phLar.querySelector('.em-2ph-lar-cursor-out');
+    const gap = em2phLar.querySelector('.em-2ph-lar-gap');
+    const gapLabel = em2phLar.querySelector('.em-2ph-lar-gap-label');
+    const udDot = em2phLar.querySelector('.em-2ph-lar-ud-dot');
+    const diodes = [...em2phLar.querySelectorAll('.em-2ph-lar-vd')];
+    const wires = [...em2phLar.querySelectorAll('.em-2ph-lar-wire')];
+    const dots = [...em2phLar.querySelectorAll('.em-2ph-lar-dot')];
+    const names = ['A', 'B', 'C'];
+    const legX = [90, 140, 190];
+    const legY = [66, 116, 166];
+    const wireColor = ['#1d4ed8', '#c2410c', '#059669'];
+    const x0 = 302;
+    const x1 = 532;
+    const y0 = 88;
+    const amp = 30;
+    const yZero = 230;
+    const yPeak = 168;
+    const volts = (deg) => {
+      const th = deg * Math.PI / 180;
+      return [Math.sin(th), Math.sin(th - 2 * Math.PI / 3), Math.sin(th + 2 * Math.PI / 3)];
+    };
+    const paintLar = () => {
+      const deg = Math.max(0, Math.min(359, Number(range?.value) || 0));
+      if (val) val.textContent = `${deg}°`;
+      const v = volts(deg);
+      let imax = 0;
+      let imin = 0;
+      v.forEach((n, i) => {
+        if (n > v[imax]) imax = i;
+        if (n < v[imin]) imin = i;
+      });
+      const top = imax + 1;
+      const bot = imin + 4;
+      diodes.forEach((diode) => {
+        const id = Number(diode.dataset.vd);
+        const on = id === top || id === bot;
+        diode.classList.toggle('is-plus', id === top);
+        diode.classList.toggle('is-minus', id === bot);
+        diode.classList.toggle('is-off', !on);
+      });
+      wires.forEach((wire) => {
+        const i = Number(wire.dataset.ph);
+        wire.style.stroke = wireColor[i];
+        wire.style.strokeWidth = i === imax || i === imin ? '2.8' : '1.5';
+      });
+      if (flow) {
+        const px = legX[imax];
+        const py = legY[imax];
+        const nx = legX[imin];
+        const ny = legY[imin];
+        flow.setAttribute('d', `M${px} ${py} L${px} 30 L242 30 L242 200 L${nx} 200 L${nx} ${ny}`);
+      }
+      const x = x0 + (deg / 360) * (x1 - x0);
+      if (cursor) {
+        cursor.setAttribute('x1', x.toFixed(1));
+        cursor.setAttribute('x2', x.toFixed(1));
+      }
+      if (cursorOut) {
+        cursorOut.setAttribute('x1', x.toFixed(1));
+        cursorOut.setAttribute('x2', x.toFixed(1));
+      }
+      const yMax = y0 - amp * v[imax];
+      const yMin = y0 - amp * v[imin];
+      if (gap) {
+        gap.setAttribute('x1', x.toFixed(1));
+        gap.setAttribute('x2', x.toFixed(1));
+        gap.setAttribute('y1', yMax.toFixed(1));
+        gap.setAttribute('y2', yMin.toFixed(1));
+      }
+      if (gapLabel) {
+        const labelX = Math.max(318, Math.min(516, x));
+        gapLabel.setAttribute('x', labelX.toFixed(1));
+        gapLabel.setAttribute('text-anchor', 'middle');
+        gapLabel.setAttribute('y', '132');
+      }
+      dots.forEach((dot) => {
+        const i = Number(dot.dataset.ph);
+        dot.setAttribute('cx', x.toFixed(1));
+        dot.setAttribute('cy', (y0 - amp * v[i]).toFixed(1));
+        dot.setAttribute('r', i === imax || i === imin ? '4.5' : '3.2');
+      });
+      if (udDot) {
+        const ud = v[imax] - v[imin];
+        const yOut = yZero - (ud / Math.sqrt(3)) * (yZero - yPeak);
+        udDot.setAttribute('cx', x.toFixed(1));
+        udDot.setAttribute('cy', yOut.toFixed(1));
+      }
+      if (now) {
+        now.textContent = `${deg}° · ток идёт: ${names[imax]} → VD${top} → нагрузка → VD${bot} → ${names[imin]}`;
+      }
+    };
+    const play = em2phLar.querySelector('.em-2ph-lar-play');
+    let larTimer = null;
+    const stopLarPlay = () => {
+      if (!larTimer) return;
+      clearInterval(larTimer);
+      larTimer = null;
+      if (play) play.textContent = 'Пуск';
+    };
+    play?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (larTimer) {
+        stopLarPlay();
+        return;
+      }
+      play.textContent = 'Пауза';
+      larTimer = setInterval(() => {
+        if (!em2phLar.classList.contains('active')) return;
+        const next = (Number(range.value) + 2) % 360;
+        range.value = String(next);
+        paintLar();
+      }, 45);
+    });
+    range?.addEventListener('input', () => {
+      stopLarPlay();
+      paintLar();
+    });
+    range?.addEventListener('click', (e) => e.stopPropagation());
+    paintLar();
+  }
+
   bindEm2phSlide('.slide-em-2ph-fc-inv-interactive', 'em2phFcInvPanel', {
-    idea: { title: 'Идея', html: '<p>Схема инвертора — как «зеркальное отражение» трёхфазного выпрямителя по схеме Ларионова, только вместо диодов — управляемые транзисторы.</p><p>Силовые ключи — <span class="char-eq">IGBT</span>, работают в ключевом режиме.</p>' },
-    dc: { title: 'Шины =', html: '<p>На вход инвертора приходит постоянное напряжение со звена постоянного тока ПЧ — шины «+» и «−».</p>' },
-    top: { title: 'VT1–3', html: '<p>Верхняя тройка ключей подключена к шине «+». Коммутируя их по очереди, формируют положительные участки токов фаз статора.</p>' },
-    bot: { title: 'VT4–6', html: '<p>Нижняя тройка — к шине «−». Вместе с верхней группой собирают трёхфазные токи нужной частоты и фазы.</p>' },
-    diode: { title: 'Диоды', html: '<p>Параллельно каждому транзистору стоит шунтирующий диод: защищает ключ от пробоя при запирании, когда ток обмотки ещё не успел спасть.</p>' },
-    stator: { title: 'Статор', html: '<p>Нагрузка инвертора — обмотки статора асинхронного двигателя, соединённые звездой (<span class="char-eq"><var>A</var>, <var>B</var>, <var>C</var></span>).</p>' },
-    field: { title: 'Поле 120°', html: '<p>Равномерное вращение магнитного поля внутри статора получается, если токи в трёхфазной обмотке сдвинуты друг относительно друга на 120°.</p>' }
+    idea: { title: 'Идея', html: '<p>Инвертор берёт постоянное напряжение с шин и ключами пускает его в обмотки статора. На каждом шаге открыты два ключа: верхний сажает обмотку на «+», нижний — другую на «−».</p><p>Ток входит в одну обмотку и выходит через другую. Шесть шагов поворачивают этот ток — поле в статоре крутится.</p>' },
+    dc: { title: 'Шины =', html: '<p>Шины «+» и «−» — выход моста Ларионова, уже постоянное напряжение. Инвертор его не выпрямляет: ключи по очереди отдают его в обмотки.</p>' },
+    top: { title: 'VT1–3', html: '<p>Верхний ключ открыт — его обмотка сидит на «+», ток втекает в статор. На одном шаге горит только один из VT1, VT2, VT3.</p>' },
+    bot: { title: 'VT4–6', html: '<p>Нижний ключ открыт — его обмотка сидит на «−», ток из статора уходит в минус. Вместе с верхним ключом получается один путь через две обмотки.</p>' },
+    diode: { title: 'Диоды', html: '<p>Серые диоды рядом с ключами — шунтирующие. Когда ключ закрывается, ток обмотки ещё не исчез: он на миг идёт через диод, и ключ не пробивает.</p>' },
+    stator: { title: 'Статор', html: '<p>Три обмотки соединены звездой. На шаге ток входит в одну и выходит через другую. Третья обмотка в этот момент без тока.</p>' },
+    field: { title: 'Поле 120°', html: '<p>Следующий шаг сдвигает пару обмоток. За шесть шагов ток обходит статор по кругу — поле поворачивается. Как часто листают шаги, такую частоту получает двигатель.</p>' }
   }, 'idea');
+
+  const em2phInv = document.querySelector('.slide-em-2ph-fc-inv-interactive');
+  if (em2phInv) {
+    const range = em2phInv.querySelector('.em-2ph-inv-range');
+    const val = em2phInv.querySelector('.em-2ph-inv-val');
+    const now = em2phInv.querySelector('.em-2ph-inv-now');
+    const flow = em2phInv.querySelector('.em-2ph-inv-flow');
+    const boxes = [...em2phInv.querySelectorAll('.em-2ph-inv-box')];
+    const winds = [...em2phInv.querySelectorAll('.em-2ph-inv-wind')];
+    const names = ['A', 'B', 'C'];
+    const legX = [80, 160, 240];
+    const toStar = [
+      'L360 78 Q370 86 380 78 Q390 70 400 78 Q410 86 420 78 L440 116',
+      'L400 116 Q410 108 420 116 Q430 124 440 116 Q450 108 460 116 L440 116',
+      'L360 154 Q370 146 380 154 Q390 162 400 154 Q410 146 420 154 L440 116'
+    ];
+    const fromStar = [
+      'L420 78 Q410 86 400 78 Q390 70 380 78 Q370 86 360 78 L80 116',
+      'L460 116 Q450 108 440 116 Q430 124 420 116 Q410 108 400 116 L160 116',
+      'L420 154 Q410 146 400 154 Q390 162 380 154 Q370 146 360 154 L240 116'
+    ];
+    const steps = [
+      { plus: 1, minus: 6, top: 0, bot: 2 },
+      { plus: 2, minus: 6, top: 1, bot: 2 },
+      { plus: 2, minus: 4, top: 1, bot: 0 },
+      { plus: 3, minus: 4, top: 2, bot: 0 },
+      { plus: 3, minus: 5, top: 2, bot: 1 },
+      { plus: 1, minus: 5, top: 0, bot: 1 }
+    ];
+    const paintInv = () => {
+      const step = Math.max(1, Math.min(6, Number(range?.value) || 1));
+      const s = steps[step - 1];
+      if (val) val.textContent = `${step} из 6`;
+      boxes.forEach((box) => {
+        const id = Number(box.dataset.vt);
+        box.classList.toggle('is-plus', id === s.plus);
+        box.classList.toggle('is-minus', id === s.minus);
+        box.classList.toggle('is-off', id !== s.plus && id !== s.minus);
+      });
+      winds.forEach((wind) => {
+        const i = Number(wind.dataset.ph);
+        const on = i === s.top || i === s.bot;
+        wind.style.stroke = i === s.top ? '#1d4ed8' : i === s.bot ? '#c2410c' : '#cbd5e1';
+        wind.style.strokeWidth = on ? '2.6' : '1.3';
+      });
+      if (flow) {
+        const tx = legX[s.top];
+        const bx = legX[s.bot];
+        flow.setAttribute('d', `M${tx} 34 L${tx} 116 ${toStar[s.top]} ${fromStar[s.bot]} L${bx} 198`);
+      }
+      if (now) {
+        now.textContent = `шаг ${step} · открыты VT${s.plus} и VT${s.minus} · ток из «+» в обмотку ${names[s.top]} и назад через ${names[s.bot]} на «−»`;
+      }
+    };
+    const play = em2phInv.querySelector('.em-2ph-inv-play');
+    let invTimer = null;
+    const stopInvPlay = () => {
+      if (!invTimer) return;
+      clearInterval(invTimer);
+      invTimer = null;
+      if (play) play.textContent = 'Пуск';
+    };
+    play?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (invTimer) {
+        stopInvPlay();
+        return;
+      }
+      play.textContent = 'Пауза';
+      invTimer = setInterval(() => {
+        if (!em2phInv.classList.contains('active')) return;
+        const next = (Number(range.value) % 6) + 1;
+        range.value = String(next);
+        paintInv();
+      }, 700);
+    });
+    range?.addEventListener('input', () => {
+      stopInvPlay();
+      paintInv();
+    });
+    range?.addEventListener('click', (e) => e.stopPropagation());
+    paintInv();
+  }
 
   bindEm2phSlide('.slide-em-2ph-igbt-interactive', 'em2phIgbtPanel', {
     what: { title: 'Что это', html: '<p><span class="char-eq">IGBT</span> (Insulated Gate Bipolar Transistor) — биполярный транзистор с изолированным затвором.</p><p>Три вывода: затвор <span class="char-eq"><var>G</var></span>, эмиттер <span class="char-eq"><var>E</var></span>, коллектор <span class="char-eq"><var>C</var></span>. Управляется напряжением на затворе, как МОП-транзистор, а ток несёт как биполярный — большие токи при умеренных потерях.</p>' },
@@ -12233,7 +12696,7 @@
     symbol: { title: 'Обозначение', html: '<p>На схемах — символ с затвором сбоку, коллектором сверху и эмиттером снизу (стрелка у эмиттера у n-канального IGBT).</p>' },
     eq: { title: 'Эквивалент', html: '<p>Упрощённо IGBT = n-канальный MOSFET, который «гоняет» биполярный PNP. Затвор управляет МОП-частью, а через коллектор–эмиттер идёт большой ток PNP.</p>' },
     why: { title: 'Зачем в ПЧ', html: '<p>В инверторе ПЧ нужны быстрые ключи на высокое напряжение и большой ток. IGBT как раз совмещает удобное управление затвором и силовую способность биполярного транзистора — поэтому VT1…VT6 на схеме инвертора обычно IGBT.</p>' }
-  }, 'what');
+  }, 'photo');
 
 
 
