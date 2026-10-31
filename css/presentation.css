@@ -8041,6 +8041,26 @@ body.overview-mode .slide-diagram { display: none; }
   height: 100%;
   max-height: none;
 }
+.slide-ir-pot-pair-interactive .em-ir-pot-pair-ctrl {
+  display: flex;
+  align-items: center;
+  gap: 0.55em;
+  flex-shrink: 0;
+  font-weight: 700;
+  color: #1e3a8a;
+}
+.slide-ir-pot-pair-interactive .em-ir-pot-pair-ctrl input[type="range"] {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+.slide-ir-pot-pair-interactive .em-ir-pot-pair-live {
+  margin: 0;
+  flex-shrink: 0;
+  text-align: center;
+  font-weight: 700;
+  color: #1e3a8a;
+  font-size: 0.95em;
+}
 .slide-ir-pot-balance-interactive .slide-body.asutp-interactive,
 .slide-ir-pot-cont-interactive .slide-body.asutp-interactive {
   justify-content: stretch;
@@ -8118,6 +8138,26 @@ body.overview-mode .slide-diagram { display: none; }
   width: 100%;
   height: 100%;
   max-height: none;
+}
+.slide-ir-pot-cont-interactive .em-ir-pot-cont-ctrl {
+  display: flex;
+  align-items: center;
+  gap: 0.55em;
+  flex-shrink: 0;
+  font-weight: 700;
+  color: #1e3a8a;
+}
+.slide-ir-pot-cont-interactive .em-ir-pot-cont-ctrl input[type="range"] {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+.slide-ir-pot-cont-interactive .em-ir-pot-cont-live {
+  margin: 0;
+  flex-shrink: 0;
+  text-align: center;
+  font-weight: 700;
+  color: #1e3a8a;
+  font-size: 0.95em;
 }
 .slide-ir-pot-offset-interactive .slide-body.asutp-interactive,
 .slide-ir-pot-pros-interactive .slide-body.asutp-interactive {
@@ -8244,6 +8284,13 @@ body.overview-mode .slide-diagram { display: none; }
   color: #1e3a8a;
   font-weight: 700;
 }
+.slide-ir-pot-class-interactive .em-ir-pot-class-f {
+  display: block;
+  margin-top: 0.25em;
+  font-size: 0.78em;
+  font-weight: 600;
+  color: #64748b;
+}
 .slide-ir-pot-class-interactive .em-ir-pot-class-table tr.em-ac-hit:hover td {
   background: #f8fafc;
 }
@@ -8363,7 +8410,43 @@ body.overview-mode .slide-diagram { display: none; }
   flex-direction: column;
   justify-content: center;
 }
-.slide-ir-selsyn-intro-interactive .em-ir-selsyn-intro-svg,
+.slide-ir-selsyn-intro-interactive .asutp-diagram-wrap {
+  display: flex;
+  align-items: stretch;
+  gap: 0.7em;
+}
+.slide-ir-selsyn-intro-interactive .em-ir-selsyn-photo {
+  margin: 0;
+  flex: 0 0 34%;
+  max-width: 240px;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+.slide-ir-selsyn-intro-interactive .em-ir-selsyn-photo img {
+  flex: 1 1 auto;
+  min-height: 0;
+  width: 100%;
+  object-fit: contain;
+  background: #f8fafc;
+  border: 1px solid var(--slide-border);
+  border-radius: 8px;
+}
+.slide-ir-selsyn-intro-interactive .em-ir-selsyn-photo figcaption {
+  flex-shrink: 0;
+  margin-top: 0.3em;
+  font-size: 0.72em;
+  line-height: 1.3;
+  color: var(--slide-muted);
+  text-align: center;
+}
+.slide-ir-selsyn-intro-interactive .em-ir-selsyn-intro-svg {
+  flex: 1 1 auto;
+  min-width: 0;
+  width: 100%;
+  height: 100%;
+  max-height: none;
+}
 .slide-ir-selsyn-types-interactive .em-ir-selsyn-types-svg {
   width: 100%;
   height: 100%;
@@ -8547,6 +8630,12 @@ body.overview-mode .slide-diagram { display: none; }
   margin: 0;
   font-weight: 700;
   color: #1e293b;
+}
+.slide-ir-selsyn-princ-interactive .em-ir-selsyn-princ-arc {
+  margin: 0.2em 0 0;
+  font-weight: 700;
+  font-size: 0.92em;
+  color: #1e3a8a;
 }
 .slide-ir-selsyn-princ-interactive .asutp-diagram-wrap {
   flex: 1 1 0;

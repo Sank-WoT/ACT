@@ -12858,11 +12858,11 @@
     const info = {
       pot: {
         title: 'Потенциометрические',
-        html: '<p>Угол двигает движок делителя — напряжение пропорционально углу.</p><p>Два датчика (задание и нагрузка) дают разность — сигнал рассогласования.</p>'
+        html: '<p>Оба потенциометра сидят на одном питании. Угол поворачивает движок, и с него снимается доля этого напряжения.</p><p>Задание и нагрузка стоят на разных углах. Между движками получается разность — это сигнал рассогласования.</p>'
       },
       tr: {
         title: 'Трансформаторные',
-        html: '<p>Сельсины, вращающиеся трансформаторы: угол меняет магнитную связь обмоток.</p><p>На выходе переменное напряжение, зависящее от рассогласования.</p>'
+        html: '<p>Сельсины и вращающиеся трансформаторы связывают обмотки. Угол сидит на роторе и меняет эту связь.</p><p>Если углы датчика и приёмника не совпали, на выходе появляется переменное напряжение.</p>'
       }
     };
     const show = (key) => {
@@ -12921,7 +12921,7 @@
   bindEmAcSlide('.slide-ir-pot-pair-interactive', 'irPotPairPanel', {
     idea: {
       title: 'Идея',
-      html: '<p>Классическая схема <strong>дистанционной передачи угла</strong>: датчик задаёт положение, приёмник его повторяет.</p><p>Поворот движка на датчике меняет доли <strong>R1</strong> и <strong>R2</strong> — между движками появляется <strong>Uизм</strong>. По этому напряжению приёмник доворачивается, пока положения не совпадут.</p><p>В равновесии <strong>Uизм ≈ 0</strong>: приёмник копирует движение датчика.</p>'
+      html: '<p>Крутите <strong>φвх</strong>. Движок датчика уходит, доли <strong>R1</strong> и <strong>R2</strong> меняются, между движками появляется <strong>Uизм</strong>.</p><p>Кнопка «Догон» крутит приёмник на тот же угол. Углы совпали — <strong>Uизм ≈ 0</strong>, приёмник копирует датчик.</p>'
     },
     sense: {
       title: 'Датчик',
@@ -12942,26 +12942,118 @@
   }, 'idea');
 
   (() => {
+    const slide = document.querySelector('.slide-ir-pot-pair-interactive');
+    if (!slide) return;
+    const range = slide.querySelector('.em-ir-pot-pair-range');
+    const val = slide.querySelector('.em-ir-pot-pair-val');
+    const live = slide.querySelector('.em-ir-pot-pair-live');
+    const catchBtn = slide.querySelector('.em-ir-pot-pair-catch');
+    if (!range) return;
+    let phiN = 40;
+    let timer = 0;
+    const pot = (prefix, cx, deg, lab1, lab2) => {
+      const rad = (d) => d * Math.PI / 180;
+      const pt = (r, d) => [cx + r * Math.sin(rad(d)), 105 - r * Math.cos(rad(d))];
+      const arc = (a0, a1) => {
+        const [x0, y0] = pt(46, a0);
+        const [x1, y1] = pt(46, a1);
+        const large = a1 - a0 > 180 ? 1 : 0;
+        return 'M' + x0 + ' ' + y0 + ' A46 46 0 ' + large + ' 1 ' + x1 + ' ' + y1;
+      };
+      const arm = slide.querySelector('.em-ir-pot-pair-' + prefix + '-arm');
+      const tip = slide.querySelector('.em-ir-pot-pair-' + prefix + '-tip');
+      const a1 = slide.querySelector('.em-ir-pot-pair-' + prefix + '-r1');
+      const a2 = slide.querySelector('.em-ir-pot-pair-' + prefix + '-r2');
+      const t1 = slide.querySelector('.em-ir-pot-pair-' + prefix + '-lab1');
+      const t2 = slide.querySelector('.em-ir-pot-pair-' + prefix + '-lab2');
+      const phi = slide.querySelector('.em-ir-pot-pair-' + prefix + '-phi');
+      if (a1) a1.setAttribute('d', arc(0, deg));
+      if (a2) a2.setAttribute('d', arc(deg, 180));
+      const [x, y] = pt(46, deg);
+      if (arm) {
+        arm.setAttribute('x2', String(x));
+        arm.setAttribute('y2', String(y));
+      }
+      if (tip) {
+        tip.setAttribute('cx', String(x));
+        tip.setAttribute('cy', String(y));
+      }
+      const put = (node, mid) => {
+        if (!node) return;
+        const [lx, ly] = pt(64, mid);
+        node.setAttribute('x', String(lx));
+        node.setAttribute('y', String(ly));
+      };
+      put(t1, deg / 2);
+      put(t2, (deg + 180) / 2);
+      if (phi) phi.textContent = lab1 + ' ' + Math.round(deg) + '°';
+      if (t1) t1.textContent = lab2[0];
+      if (t2) t2.textContent = lab2[1];
+    };
+    const paint = () => {
+      const phiIn = Number(range.value);
+      if (val) val.textContent = Math.round(phiIn) + '°';
+      pot('in', 160, phiIn, 'φвх', ['R1', 'R2']);
+      pot('out', 400, phiN, 'φн', ['R3', 'R4']);
+      if (!live) return;
+      const gap = Math.abs(phiIn - phiN);
+      live.textContent = gap < 2
+        ? 'φвх ' + Math.round(phiIn) + '° · φн ' + Math.round(phiN) + '° · углы совпали · Uизм ≈ 0'
+        : 'φвх ' + Math.round(phiIn) + '° · φн ' + Math.round(phiN) + '° · движки на разных углах · Uизм есть';
+    };
+    range.addEventListener('input', () => {
+      if (timer) clearInterval(timer);
+      timer = 0;
+      paint();
+    });
+    if (catchBtn) {
+      catchBtn.addEventListener('click', () => {
+        if (timer) clearInterval(timer);
+        const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        if (reduce) {
+          phiN = Number(range.value);
+          paint();
+          return;
+        }
+        timer = setInterval(() => {
+          if (!slide.classList.contains('active')) return;
+          const target = Number(range.value);
+          if (Math.abs(phiN - target) < 1.5) {
+            phiN = target;
+            paint();
+            clearInterval(timer);
+            timer = 0;
+            return;
+          }
+          phiN += Math.sign(target - phiN) * 4;
+          paint();
+        }, 40);
+      });
+    }
+    paint();
+  })();
+
+  (() => {
     const slide = document.querySelector('.slide-ir-pot-balance-interactive');
     if (!slide) return;
     const live = document.getElementById('irPotBalanceLive');
     const texts = {
-      bal: 'Uизм = 0 → R1/R2 = R3/R4',
-      eq: 'R1 + R2 = R3 + R4 → R1 = R3, R2 = R4',
-      dead: 'угол < 360° → мёртвая зона'
+      bal: 'доли совпали · R1/R2 = R3/R4 · Uизм ≈ 0',
+      eq: 'обмотки одинаковые · R1 = R3 · R2 = R4',
+      dead: 'в пустом секторе проволоки нет · U не меняется'
     };
     bindEmAcSlide('.slide-ir-pot-balance-interactive', 'irPotBalancePanel', {
       bal: {
         title: 'Равновесие',
-        html: '<p>При <strong>Uизм = 0</strong> выполняется <span class="char-eq">R1/R2 = R3/R4</span>.</p><p>Углы задания и нагрузки совпали — мост в равновесии.</p>'
+        html: '<p>Движки стоят на одном и том же месте обмотки. Напряжения на них равны, между ними <strong>Uизм ≈ 0</strong>.</p><p>Одинаковое место — это одинаковые доли: <span class="char-eq">R1/R2 = R3/R4</span>.</p>'
       },
       eq: {
         title: 'Следствие',
-        html: '<p>Так как <span class="char-eq">R1 + R2 = R3 + R4</span>, из равенства отношений следует <strong>R1 = R3</strong> и <strong>R2 = R4</strong>.</p><p>Движки «стоят» на одинаковых долях обмоток.</p>'
+        html: '<p>Обе обмотки одинаковые: <span class="char-eq">R1 + R2 = R3 + R4</span>.</p><p>Доли уже равны, значит равны и сами куски: <strong>R1 = R3</strong>, <strong>R2 = R4</strong>. Тёмные дуги одной длины, светлые — тоже.</p>'
       },
       dead: {
         title: 'Мёртвая зона',
-        html: '<p>Обычный потенциометр не поворачивается на полный оборот (&lt; 360°).</p><p>Сектор без обмотки выпадает из зоны управления — <strong>мёртвая зона</strong>.</p>'
+        html: '<p>Концы обмотки не смыкаются: между ними сектор без проволоки. Полного оборота нет.</p><p>Движок в этом секторе проволоки не касается. Крутить его там можно, напряжение от угла не меняется.</p>'
       }
     }, 'bal');
     slide.addEventListener('click', (e) => {
@@ -12974,21 +13066,110 @@
   bindEmAcSlide('.slide-ir-pot-cont-interactive', 'irPotContPanel', {
     why: {
       title: 'Зачем',
-      html: '<p>Обычный потенциометр не крутится на полный оборот — появляется <strong>мёртвая зона</strong>.</p><p>Непрерывная обмотка с тремя отводами даёт управление на все <strong>360°</strong>.</p>'
+      html: '<p>Крутите угол. Два движка датчика едут по кольцу напротив друг друга и проволоку не покидают.</p><p>Вверху кольца раньше был разрыв. Движок проходит это место — под ним по-прежнему проволока, мёртвой зоны нет.</p>'
     },
     taps: {
       title: 'Отводы 1–2–3',
-      html: '<p>Три отвода обмотки расположены через <strong>120°</strong>.</p><p>Одинаковые номера датчика и приёмника соединены проводами линии.</p>'
+      html: '<p>Три отвода сидят на кольце через <strong>120°</strong>. Одинаковые номера датчика и приёмника соединены своим проводом.</p><p>По этим трём проводам угол уходит на приёмник.</p>'
     },
     wipers: {
       title: 'Движки',
-      html: '<p>На каждом потенциометре — <strong>два движка</strong> напротив друг друга, электрически изолированные.</p><p>На датчике к ним подают <strong>Uсети</strong>, с движков приёмника снимают <strong>Uизм</strong>.</p>'
+      html: '<p>Два движка стоят напротив друг друга и в центре не соединены. Повернули вал — оба съехали по кольцу на один угол.</p><p>У датчика на движки подают <strong>Uсети</strong>. У приёмника с движков снимают <strong>Uизм</strong>.</p>'
     },
     line: {
       title: '3 провода',
-      html: '<p>Между корпусами датчика и приёмника — <strong>трёхпроводная</strong> линия (отводы 1, 2, 3).</p><p>Так передают угол на расстояние без механической связи валов.</p>'
+      html: '<p>Провод 1 соединяет верхние отводы, провод 2 — правые, провод 3 — левые.</p><p>Валы механически не связаны: угол передают эти три провода.</p>'
     }
   }, 'why');
+
+  (() => {
+    const slide = document.querySelector('.slide-ir-pot-cont-interactive');
+    if (!slide) return;
+    const range = slide.querySelector('.em-ir-pot-cont-range');
+    const val = slide.querySelector('.em-ir-pot-cont-val');
+    const live = slide.querySelector('.em-ir-pot-cont-live');
+    const phi = slide.querySelector('.em-ir-pot-cont-phi');
+    const play = slide.querySelector('.em-ir-pot-cont-play');
+    const arm1 = slide.querySelector('.em-ir-pot-cont-arm1');
+    const arm2 = slide.querySelector('.em-ir-pot-cont-arm2');
+    const tip1 = slide.querySelector('.em-ir-pot-cont-tip1');
+    const tip2 = slide.querySelector('.em-ir-pot-cont-tip2');
+    const plus = slide.querySelector('.em-ir-pot-cont-plus');
+    const minus = slide.querySelector('.em-ir-pot-cont-minus');
+    if (!range || !arm1) return;
+    let timer = 0;
+    let left = 0;
+    const pt = (deg) => {
+      const a = deg * Math.PI / 180;
+      return [148 + 46 * Math.sin(a), 112 - 46 * Math.cos(a)];
+    };
+    const nearOldGap = (deg) => {
+      const a = ((deg % 360) + 360) % 360;
+      const dist = (d) => {
+        const x = ((d % 360) + 360) % 360;
+        return Math.min(x, 360 - x);
+      };
+      return dist(a) < 28 || dist(a + 180) < 28;
+    };
+    const put = (arm, tip, mark, deg) => {
+      const [x, y] = pt(deg);
+      const a = deg * Math.PI / 180;
+      arm.setAttribute('x1', String(x));
+      arm.setAttribute('y1', String(y));
+      tip.setAttribute('cx', String(x));
+      tip.setAttribute('cy', String(y));
+      if (mark) {
+        mark.setAttribute('x', String(148 + 30 * Math.sin(a) + 14 * Math.cos(a)));
+        mark.setAttribute('y', String(112 - 30 * Math.cos(a) + 14 * Math.sin(a) + 5));
+      }
+    };
+    const paint = () => {
+      const deg = Number(range.value);
+      if (val) val.textContent = deg + '°';
+      put(arm1, tip1, plus, deg);
+      put(arm2, tip2, minus, deg + 180);
+      if (phi) phi.textContent = 'Датчик · φвх ' + deg + '°';
+      if (!live) return;
+      live.textContent = nearOldGap(deg)
+        ? deg + '° · движок на месте старого разрыва · под ним проволока есть'
+        : deg + '° · оба движка на замкнутом кольце · пустого сектора нет';
+    };
+    const stop = () => {
+      if (timer) clearInterval(timer);
+      timer = 0;
+      left = 0;
+      if (play) play.textContent = 'Оборот';
+    };
+    range.addEventListener('input', () => {
+      stop();
+      paint();
+    });
+    if (play) {
+      play.addEventListener('click', () => {
+        if (timer) {
+          stop();
+          return;
+        }
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+          range.value = '0';
+          paint();
+          return;
+        }
+        play.textContent = 'Стоп';
+        left = 360;
+        timer = setInterval(() => {
+          if (!slide.classList.contains('active')) return;
+          let deg = Number(range.value) + 4;
+          if (deg >= 360) deg -= 360;
+          range.value = String(deg);
+          left -= 4;
+          paint();
+          if (left <= 0) stop();
+        }, 40);
+      });
+    }
+    paint();
+  })();
 
   (() => {
     const slide = document.querySelector('.slide-ir-pot-offset-interactive');
@@ -13038,31 +13219,31 @@
   bindEmAcSlide('.slide-ir-pot-class-interactive', 'irPotClassPanel', {
     lin: {
       title: 'Нелинейность',
-      html: '<p>Погрешность от отклонения статической характеристики от прямой:</p><p><span class="char-eq">± |(ΔR/Δφ)max − Kп| / Kп · 100 %</span>, где <span class="char-eq">Kп = Rном / φмакс</span>.</p>'
+      html: '<p>При повороте сопротивление должно расти по прямой. Kп = Rном / φмакс — наклон этой прямой.</p><p>Живая намотка чуть гуще и реже. Берут самый кривой кусок: <span class="char-eq">± |(ΔR/Δφ)max − Kп| / Kп · 100 %</span>.</p>'
     },
     r: {
-      title: 'ΔR / Rном',
-      html: '<p>Отклонение полного сопротивления от номинала: <span class="char-eq">± (ΔR / Rном) · 100 %</span>.</p><p>Класс I: ±0.25 %, II: ±0.5 %, III: ±1 %.</p>'
+      title: 'Полное R',
+      html: '<p>На бирке написано Rном. Измерили всю проволоку — вышло другое. Это <span class="char-eq">± (ΔR / Rном) · 100 %</span>.</p><p>I держит ±0.25 %, II — ±0.5 %, III — ±1 %.</p>'
     },
     tab: {
       title: 'Классы I–III',
-      html: '<p>При изготовлении потенциометры проверяют и относят к классам точности по табл. 3.3.</p><p>Нелинейность: I и II — ±5 %, III — ±10 %.</p>'
+      html: '<p>Класс точности — клеймо допуска. Его ставят после проверки готового потенциометра.</p><p><strong>I</strong> ближе всех к бирке: сопротивление ±0.25 %, кривизна ±5 %. <strong>II</strong> — ±0.5 % и ±5 %. <strong>III</strong> — ±1 % и ±10 %.</p>'
     },
     scrap: {
       title: 'Брак',
-      html: '<p>Всё, что не попадает в III класс точности, относится к браку и отправляется на переделку.</p>'
+      html: '<p>Хуже III класса по сопротивлению или по кривизне — брак. Потенциометр отправляют на переделку.</p>'
     }
-  }, 'lin');
+  }, 'tab');
 
   (() => {
     const slide = document.querySelector('.slide-ir-pot-class-interactive');
     if (!slide) return;
     const live = document.getElementById('irPotClassLive');
     const texts = {
-      lin: '± |(ΔR/Δφ)max − Kп| / Kп · 100 % · Kп = Rном/φмакс',
-      r: '± (ΔR / Rном) · 100 %',
-      tab: 'табл. 3.3 · классы I / II / III',
-      scrap: 'ниже III класса → брак → переделка'
+      lin: 'кривизна · ± |(ΔR/Δφ)max − Kп| / Kп · 100 % · Kп = Rном/φмакс',
+      r: 'полное R · ± (ΔR / Rном) · 100 %',
+      tab: 'I — самый строгий допуск · III — последний годный',
+      scrap: 'хуже III класса → брак → переделка'
     };
     slide.addEventListener('click', (e) => {
       const el = e.target.closest('[data-info]');
@@ -13083,7 +13264,7 @@
     bindEmAcSlide('.slide-ir-derr-interactive', 'irDerrPanel', {
       all: {
         title: 'δир',
-        html: '<p>Погрешность измерителя рассогласования <strong>любого типа</strong> оценивается как</p><p><span class="char-eq">δир = √(δдат² + δпр²)</span> — формула (3.28).</p>'
+        html: '<p>Погрешность измерителя рассогласования <strong>любого типа</strong> оценивается как</p><p><span class="char-eq">δир = √(δдат² + δпр²)</span></p>'
       },
       dat: {
         title: 'δдат',
@@ -13104,19 +13285,19 @@
   bindEmAcSlide('.slide-ir-selsyn-intro-interactive', 'irSelsynIntroPanel', {
     what: {
       title: 'Сельсин',
-      html: '<p>Сельсин для измерителя рассогласования — электрическая машина, по конструкции схожая с синхронным генератором или синхронным двигателем.</p>'
+      html: '<p>Сельсин — машина со статором и ротором, по конструкции как синхронный генератор или двигатель. Угол сидит на роторе и меняет связь обмоток.</p><p>На фото вал сверху: его поворот и есть передаваемый угол. Углы датчика и приёмника не совпали — появляется переменное напряжение.</p>'
     },
-    like: {
-      title: 'Как машина',
-      html: '<p>Есть статор и ротор с обмотками — как у синхронной машины.</p><p>Разница в том, <strong>где</strong> лежит трёхфазная обмотка, а где однофазная.</p>'
+    pair: {
+      title: 'Пара',
+      html: '<p>Ставят две машины. Вал датчика — задание <strong>φвх</strong>, вал приёмника — нагрузка <strong>φн</strong>. Общего вала нет.</p><p>Между ними <strong>три провода</strong>. По ним угол уходит на приёмник.</p>'
+    },
+    ind: {
+      title: 'Индикатор',
+      html: '<p>Индикаторный режим — синхронная связь. Оба ротора питают от сети, статоры соединяют тремя проводами.</p><p>Углы разошлись — в линии есть токи, ротор приёмника догоняет датчик.</p>'
     },
     ir: {
       title: 'Для ИР',
-      html: '<p>Оба типа сельсинов годятся в <strong>индикаторном</strong> режиме (синхронная связь).</p><p>Для ИР следящих систем берут <strong>первый тип</strong>: 3∅ на статоре, 1∅ на роторе.</p>'
-    },
-    vt: {
-      title: 'ВТ',
-      html: '<p>Рядом с сельсинами в учебнике показывают и <strong>вращающийся трансформатор</strong> (ВТ) — другой трансформаторный датчик угла.</p><p>Его разберём отдельно; сейчас — сельсины.</p>'
+      html: '<p>Для ИР следящей системы питание оставляют только на роторе датчика. С ротора приёмника снимают <strong>Uизм</strong> — сигнал, что нагрузка ещё не на угле задания.</p><p>Берут сельсин первого типа. Вращающийся трансформатор — другой датчик того же класса, его разберём отдельно.</p>'
     }
   }, 'what');
 
@@ -13274,7 +13455,7 @@
         paint();
         return;
       }
-      phi2 += d * 0.12;
+      phi2 += d * 0.045;
       paint();
       raf = requestAnimationFrame(tick);
     };
@@ -13345,39 +13526,43 @@
     const slider = document.getElementById('irSelsynPrincTheta');
     const valEl = document.getElementById('irSelsynPrincThetaVal');
     const live = document.getElementById('irSelsynPrincLive');
+    const arc = document.getElementById('irSelsynPrincArc');
     const uc = document.getElementById('irPrincUc');
+    const mark = document.getElementById('irPrincMark');
+    const share = document.getElementById('irPrincShare');
+    const shareTip = document.getElementById('irPrincShareTip');
     const geomLbl = document.getElementById('irPrincGeomLbl');
+    const supply = document.getElementById('irPrincSupply');
     const wave = document.getElementById('irPrincWave');
-    const waveGhost = document.getElementById('irPrincWaveGhost');
     const waveLbl = document.getElementById('irPrincWaveLbl');
 
     const info = {
       align: {
         title: 'Согласовано',
-        html: '<p>За согласованное положение принимают <strong>взаимно перпендикулярное</strong> положение обмоток роторов.</p><p>Крутите <strong>θ</strong> — смотрите фазу и амплитуду <strong>UΔ</strong>.</p>',
+        html: '<p>Поле датчика смотрит поперёк приёмника и сквозь его обмотку не проходит. Толстой черты нет, с приёмника тишина.</p><p>Крутите угол. Синяя ось — поле датчика. Толстая черта на оранжевой — та доля, которую приёмник поймал.</p>',
         theta: 0
       },
       inph: {
-        title: 'Фаза 0°',
-        html: '<p>При <strong>θ &gt; 0</strong> напряжение UΔ совпадает по фазе с <strong>Uсети</strong>.</p><p>Знак рассогласования читают по фазе: 0° или 180°.</p>',
+        title: 'Вместе',
+        html: '<p>Синяя ось ушла в плюс. Вдоль приёмника появилась доля <span class="char-eq">sin θ</span> — это толстая черта вверх.</p><p>Волна с приёмника качается вместе с сетью. Это фаза 0°.</p>',
         theta: 45
       },
       opp: {
-        title: 'Фаза 180°',
-        html: '<p>При <strong>θ &lt; 0</strong> UΔ в противофазе с Uсети — рассогласование в другую сторону.</p><p>Фазовый сдвиг бывает только <strong>0°</strong> или <strong>180°</strong>.</p>',
+        title: 'Наоборот',
+        html: '<p>Синяя ось ушла в минус. Доля та же по длине, но толстая черта смотрит вниз.</p><p>Волна с приёмника переворачивается. Это фаза 180°. Другой фазы нет.</p>',
         theta: -45
       },
       amp: {
-        title: 'Амплитуда',
-        html: '<p><span class="char-eq">|UΔ| ∼ |sin θ|</span>: чем дальше от согласованного положения, тем больше амплитуда.</p><p>Максимум при параллельных осях (|θ| = 90°).</p>',
+        title: 'Высота',
+        html: '<p>Высота волны — длина толстой черты, доля <span class="char-eq">sin θ</span>. Угол из неё: <span class="char-eq">|θ| = arcsin(доля)</span>.</p><p>Знак отдельно. Волна вместе с сетью — плюс, перевёрнута — минус. От −90° до +90° так получается один угол. Дальше одна высота у двух углов: sin 30° = sin 150°.</p>',
         theta: 90
       }
     };
 
     const wavePath = (amp, phaseOpp) => {
-      const y0 = 120;
-      const x0 = 310;
-      const x1 = 490;
+      const y0 = 112;
+      const x0 = 300;
+      const x1 = 524;
       const n = 48;
       let d = '';
       for (let i = 0; i <= n; i += 1) {
@@ -13390,52 +13575,70 @@
       return d;
     };
 
+    if (supply) supply.setAttribute('d', wavePath(42, false));
+
     const paint = (theta) => {
       const th = Number(theta);
-      if (uc) uc.setAttribute('transform', `rotate(${th} 100 120)`);
+      if (uc) uc.setAttribute('transform', `rotate(${-th} 140 118)`);
+      if (mark) mark.setAttribute('opacity', Math.abs(th) < 8 ? '1' : '0');
+      const signed = Math.sin((th * Math.PI) / 180);
+      const shareY = 118 - 46 * signed;
+      const shareOn = Math.abs(signed) >= 0.02;
+      if (share) {
+        share.setAttribute('y2', shareY.toFixed(1));
+        share.setAttribute('opacity', shareOn ? '1' : '0');
+      }
+      if (shareTip) {
+        shareTip.setAttribute('cy', shareY.toFixed(1));
+        shareTip.setAttribute('opacity', shareOn ? '1' : '0');
+      }
       if (valEl) valEl.textContent = `${th}°`;
       const mag = Math.abs(Math.sin((th * Math.PI) / 180));
-      const ampPx = 48 * mag;
+      const ampPx = 42 * mag;
       const opp = th < 0;
       if (wave) {
         if (mag < 0.02) {
-          wave.setAttribute('d', 'M310 120 H490');
+          wave.setAttribute('d', 'M300 112 H524');
           wave.setAttribute('stroke', '#16a34a');
         } else {
           wave.setAttribute('d', wavePath(ampPx, opp));
           wave.setAttribute('stroke', opp ? '#c2410c' : '#1d4ed8');
         }
       }
-      if (waveGhost) {
-        waveGhost.setAttribute('opacity', mag > 0.05 && mag < 0.95 ? '0.7' : '0');
-      }
       if (waveLbl) {
         if (mag < 0.02) {
-          waveLbl.textContent = 'UΔ = 0';
+          waveLbl.textContent = 'приёмник молчит';
           waveLbl.setAttribute('fill', '#166534');
         } else {
-          waveLbl.textContent = opp ? `UΔ · фаза 180° · |sin θ|=${mag.toFixed(2)}` : `UΔ · фаза 0° · |sin θ|=${mag.toFixed(2)}`;
+          waveLbl.textContent = opp
+            ? `наоборот · доля ${mag.toFixed(2)}`
+            : `вместе с сетью · доля ${mag.toFixed(2)}`;
           waveLbl.setAttribute('fill', opp ? '#9a3412' : '#1e3a8a');
         }
       }
       if (geomLbl) {
         if (mag < 0.02) {
-          geomLbl.textContent = '⊥ · согласовано';
+          geomLbl.textContent = 'поле поперёк · приёмник молчит';
           geomLbl.setAttribute('fill', '#166534');
         } else if (Math.abs(th) >= 85) {
-          geomLbl.textContent = '∥ · максимум |UΔ|';
+          geomLbl.textContent = 'всё поле на приёмнике';
           geomLbl.setAttribute('fill', '#9a3412');
         } else {
-          geomLbl.textContent = `угол связи · θ = ${th}°`;
+          geomLbl.textContent = opp ? `доля ${mag.toFixed(2)} вниз` : `доля ${mag.toFixed(2)} вверх`;
           geomLbl.setAttribute('fill', '#475569');
         }
       }
       if (live) {
-        if (mag < 0.02) live.textContent = 'θ = 0° · |UΔ| = 0 · согласовано (оси ⊥)';
-        else live.textContent = `θ = ${th}° · |UΔ| ∼ |sin θ| = ${mag.toFixed(2)} · фаза ${opp ? '180°' : '0°'}`;
+        if (mag < 0.02) live.textContent = 'θ = 0° · поле поперёк приёмника · волна на нуле';
+        else live.textContent = `θ = ${th}° · доля ${mag.toFixed(2)} ${opp ? 'вниз · волна наоборот' : 'вверх · волна вместе с сетью'}`;
+      }
+      if (arc) {
+        if (mag < 0.02) arc.textContent = 'arcsin(0) = 0° · вместе с сетью — плюс, перевёрнута — минус';
+        else arc.textContent = `${opp ? '−' : '+'}arcsin(${mag.toFixed(2)}) = ${opp ? '−' : '+'}${Math.abs(th)}° · ${opp ? 'волна перевёрнута' : 'волна вместе с сетью'}`;
       }
       let mode = 'amp';
       if (mag < 0.02) mode = 'align';
+      else if (Math.abs(th) >= 85) mode = 'amp';
       else if (th > 0) mode = 'inph';
       else if (th < 0) mode = 'opp';
       slide.querySelectorAll('.app-purpose-card').forEach((b) => {
@@ -13579,19 +13782,19 @@
     const info = {
       load: {
         title: 'Нагрузка',
-        html: '<p>Обмотку ротора СП замыкают на <strong>RH</strong> — течёт ток <strong>I₂</strong>, появляется поток реакции <strong>Φ₂</strong>.</p><p>На нагрузке снимают <strong>UΔ</strong>.</p>'
+        html: '<p>Ротор приёмника замкнули на резистор <strong>RH</strong>, чтобы снять <strong>UΔ</strong>. По обмотке пошёл ток <strong>I₂</strong>.</p><p>Ток сделал свой магнит <strong>Φ₂</strong> вдоль ротора. Серая стрелка слева — поле датчика <strong>Φ₀</strong>.</p>'
       },
       phi2: {
         title: 'Φ₂',
-        html: '<p>Поток реакции <strong>Φ₂</strong> направлен по оси обмотки ротора приёмника.</p><p>Его раскладывают на продольную и поперечную составляющие.</p>'
+        html: '<p><strong>Φ₂</strong> — свой магнит ротора. Он лежит вдоль обмотки и поворачивается вместе с углом φ.</p><p>Справа его разложили: зелёная часть против поля датчика, синяя — в сторону.</p>'
       },
       d: {
         title: 'Φ₂d',
-        html: '<p><span class="char-eq">Φ₂d = Φ₂ · sin φ</span> — продольная составляющая.</p><p>Она <strong>ослабляет</strong> основной поток <strong>Φ₀</strong> от датчика. Ослабление зависит от угла рассогласования — погрешность <strong>нелинейна</strong>.</p>'
+        html: '<p>Зелёная стрелка: <span class="char-eq">Φ₂d = Φ₂ · sin φ</span>. Она смотрит против <strong>Φ₀</strong> и ослабляет поле датчика.</p><p>Угол больше — зелёная длиннее — поле проседает сильнее. Ошибка из-за этого растёт не линейно.</p>'
       },
       hi: {
         title: 'Высокоомная',
-        html: '<p>Чем больше <strong>RH</strong>, тем меньше I₂ и Φ₂ — меньше погрешность.</p><p>Поэтому сельсинные ИР работают на <strong>высокоомную</strong> нагрузку.</p>'
+        html: '<p>Резистор больше — ток меньше — свой магнит короче — зелёная стрелка слабее.</p><p>Поэтому сельсинный измеритель работает на <strong>высокоомную</strong> нагрузку.</p>'
       }
     };
 
@@ -13601,7 +13804,7 @@
       const phi = Number(phiSl?.value || 40);
       const rh = Number(rhSl?.value || 6);
       const phiRad = (phi * Math.PI) / 180;
-      const phi2Mag = 70 * (11 - rh) / 10;
+      const phi2Mag = Math.min(72, 130 * (11 - rh) / 10);
       const dMag = phi2Mag * Math.sin(phiRad);
       const qMag = phi2Mag * Math.cos(phiRad);
 
@@ -13611,28 +13814,35 @@
       }
       if (rotor) rotor.setAttribute('transform', `rotate(${-phi} 140 150)`);
 
-      const ox = 470;
-      const oy = 140;
+      const ox = 455;
+      const oy = 118;
       const x2 = ox - qMag;
       const y2 = oy - dMag;
       if (phi2d) phi2d.setAttribute('d', `M${ox} ${oy} V${(oy - dMag).toFixed(1)}`);
       if (phi2q) phi2q.setAttribute('d', `M${ox} ${oy} H${x2.toFixed(1)}`);
       if (phi2vec) phi2vec.setAttribute('d', `M${ox} ${oy} L${x2.toFixed(1)} ${y2.toFixed(1)}`);
 
+      const story = document.getElementById('irLoadStory');
       const sinV = Math.sin(phiRad).toFixed(2);
       if (eqLbl) eqLbl.textContent = `Φ₂d = Φ₂ · sin φ = Φ₂ · ${sinV}`;
+      if (story) {
+        story.textContent = rh >= 8
+          ? 'резистор большой · ток маленький'
+          : rh <= 3
+            ? 'резистор маленький · ток большой'
+            : 'ток создал магнит вдоль ротора';
+      }
       if (live) {
-        const err = (dMag / 70 * 100).toFixed(0);
         live.textContent = rh >= 8
-          ? `RH высокая · I₂ мал · Φ₂d слабее · погрешность ≈ ${err}% шкалы`
-          : `Φ₂d = Φ₂·sin φ · ослабляет Φ₀ · оценка влияния ≈ ${err}%`;
+          ? `резистор высокий · магнит короткий · гашение sin φ = ${sinV}`
+          : `против поля датчика кусок sin φ = ${sinV}`;
       }
       if (rhBox) {
         rhBox.setAttribute('fill', rh >= 8 ? '#ecfdf5' : rh <= 3 ? '#fef2f2' : '#fff7ed');
         rhBox.setAttribute('stroke', rh >= 8 ? '#16a34a' : rh <= 3 ? '#ef4444' : '#fb923c');
       }
       if (i2Lbl) {
-        i2Lbl.textContent = rh >= 8 ? 'I₂↓' : rh <= 3 ? 'I₂↑' : 'I₂';
+        i2Lbl.textContent = rh >= 8 ? 'ток мал' : rh <= 3 ? 'ток большой' : 'ток I₂';
         i2Lbl.setAttribute('fill', rh <= 3 ? '#b91c1c' : '#1e3a8a');
       }
 
@@ -13677,19 +13887,19 @@
     const info = {
       what: {
         title: 'Суть',
-        html: '<p>Динамическая погрешность связана с <strong>переходными процессами</strong>, которые фиксирует обмотка ротора сельсина-приёмника.</p>'
+        html: '<p>Одно напряжение <strong>UΔ</strong>, в нём две части. Приёмник стоит, датчик крутится, угол между ними меняется.</p><p>Пунктир — размах от поворота. Синяя — переменный ток сети: качается и при большом размахе, и при маленьком.</p>'
       },
       setup: {
         title: 'Опыт',
-        html: '<p>Ротор <strong>СД</strong> вращают с частотой <strong>ωвр</strong>, ротор <strong>СП</strong> зафиксирован.</p><p>С обмотки ротора СП снимают <strong>UΔ</strong> — как на рис. 3.72.</p>'
+        html: '<p>Ротор датчика вращают, ротор приёмника закреплён. С обмотки приёмника снимают <strong>UΔ</strong>.</p><p>Поле датчика крутится мимо неподвижной обмотки: то вдоль неё, то поперёк. От этого размах то больше, то меньше.</p>'
       },
       w0: {
-        title: 'ω₀',
-        html: '<p><strong>ω₀</strong> — частота сети (несущая). Внутри огибающей — быстрые колебания с частотой питания.</p>'
+        title: 'Синяя',
+        html: '<p>Синяя линия — переменный ток сети, частота <strong>ω₀</strong>.</p><p>Он быстро качается вверх-вниз и при большом размахе, и при маленьком.</p>'
       },
       wvr: {
-        title: 'ωвр',
-        html: '<p><strong>ωвр</strong> — частота вращения датчика. Задаёт <strong>огибающую</strong>: период <span class="char-eq">2π / ωвр</span>.</p><p>Чем быстрее крутят СД — тем чаще «лепестки» UΔ.</p>'
+        title: 'Пунктир',
+        html: '<p>Пунктир — поворот датчика, частота <strong>ωвр</strong>. Это размах синей линии.</p><p>Период <span class="char-eq">2π / ωвр</span>. Быстрее крутят датчик — лепестки чаще.</p>'
       }
     };
 
@@ -13724,9 +13934,9 @@
       if (wave) wave.setAttribute('d', dw);
       if (envP) envP.setAttribute('d', de);
       if (envN) envN.setAttribute('d', den);
-      if (period) period.textContent = '2π / ωвр';
+      if (period) period.textContent = 'период поворота 2π / ωвр';
       if (live) {
-        live.textContent = `UΔ ∼ sin(ωвр·t)·sin(ω₀·t) · лепестков за период: ${wvr}`;
+        live.textContent = `синяя — ток сети · пунктир — размах от поворота · sin(ωвр·t)·sin(ω₀·t)`;
       }
       slide.querySelectorAll('.app-purpose-card').forEach((b) => {
         b.classList.toggle('active', b.dataset.info === mode);
